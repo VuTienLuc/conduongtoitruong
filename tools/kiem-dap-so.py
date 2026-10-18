@@ -410,5 +410,69 @@ chk('LĐ4 đề 9: giá', sp.solve(sp.Eq(sp.Rational(235, 100) * xx, 1410000), x
 chk('LĐ4 đề 10: biểu thức', sp.expand((24 - xx) * (16 - xx) - (xx ** 2 - 40 * xx + 384)), 0)
 chk('LĐ4 đề 10: x', [r_ for r_ in sp.solve(sp.Eq(xx ** 2 - 40 * xx + 384, 273), xx) if r_ < 16], [3])
 
+# ---------- Luyện đề Bài 7a, 7b, 7c (data/vao-10/luyen-de/ld07-hinh-7.js): dựng toạ độ thật, kiểm mọi kết luận số ----------
+from math import sqrt as _sq, hypot as _hy, acos as _ac, degrees as _dg
+def _cut(P, Q, c, rad):  # giao điểm thứ hai (khác P) của đường thẳng PQ với đường tròn tâm c
+    dx, dy = Q[0] - P[0], Q[1] - P[1]; fx, fy = P[0] - c[0], P[1] - c[1]
+    a = dx * dx + dy * dy; b = 2 * (fx * dx + fy * dy); cc = fx * fx + fy * fy - rad * rad; dd = _sq(b * b - 4 * a * cc)
+    ts = [(-b - dd) / (2 * a), (-b + dd) / (2 * a)]; return [(P[0] + t * dx, P[1] + t * dy) for t in ts]
+def _ft(P, Q, S):
+    dx, dy = S[0] - Q[0], S[1] - Q[1]; t = ((P[0] - Q[0]) * dx + (P[1] - Q[1]) * dy) / (dx * dx + dy * dy); return (Q[0] + t * dx, Q[1] + t * dy)
+def _ar(*P): return abs(sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1] for i in range(len(P)))) / 2
+_d = math.dist; Rr_ = 1.0; O_ = (0, 0)
+# Cấu hình 1 (OA = 2R)
+A1, B1, C1 = (2, 0), (0.5, _sq(3) / 2), (0.5, -_sq(3) / 2); D1 = (-B1[0], -B1[1]); H1 = (0.5, 0)
+E1 = [p_ for p_ in _cut(A1, D1, O_, 1) if _d(p_, D1) > 1e-6][0]
+chk('B7 cấu hình 1: AE·AD = AH·AO', _d(A1, E1) * _d(A1, D1), _d(A1, H1) * _d(A1, O_), 1e-9)
+chk('B7 cấu hình 1c: AE = 3√7R/7', _d(A1, E1), 3 * _sq(7) / 7, 1e-9); chk('B7 cấu hình 1c: S(ABE) = 3√3R²/7', _ar(A1, B1, E1), 3 * _sq(3) / 7, 1e-9)
+# Cấu hình 2 (góc A = 60°)
+P_ = lambda t: (math.cos(math.radians(t)), math.sin(math.radians(t)))
+A2, B2, C2 = P_(105), P_(215), P_(335); E2, F2, D2 = _ft(B2, A2, C2), _ft(C2, A2, B2), _ft(A2, B2, C2); K2 = (-A2[0], -A2[1])
+M2 = ((B2[0] + C2[0]) / 2, (B2[1] + C2[1]) / 2)
+chk('B7 cấu hình 2a: ME = MF = MB', (round(_d(M2, E2), 9), round(_d(M2, F2), 9)), (round(_d(M2, B2), 9),) * 2)
+chk('B7 cấu hình 2b: AB·AC = 2R·AD', _d(A2, B2) * _d(A2, C2), 2 * _d(A2, D2), 1e-9)
+chk('B7 cấu hình 2c: BC = R√3', _d(B2, C2), _sq(3), 1e-9); chk('B7 cấu hình 2c: EF = R√3/2', _d(E2, F2), _sq(3) / 2, 1e-9)
+# Cấu hình 3 (AC = R/2)
+th = 2 * math.atan(0.5); M3 = (-math.cos(th), math.sin(th)); C3, D3 = (-1, 0.5), (1, 2)
+chk('B7 cấu hình 3: C, M, D thẳng hàng và CM = CA', (round(_ar(C3, M3, D3), 9), round(_d(C3, M3), 9)), (0.0, 0.5))
+chk('B7 cấu hình 3b: AC·BD = R²', 0.5 * _d((1, 0), D3), 1, 1e-9); chk('B7 cấu hình 3c: CD = 5R/2', _d(C3, D3), 2.5, 1e-9)
+chk('B7 cấu hình 3c: S(ABDC) = 5R²/2', _ar((-1, 0), (1, 0), D3, C3), 2.5, 1e-9)
+# Cấu hình 4 (R = 5, OM = 13, BC = 8): dựng cát tuyến cách O đúng 3
+Mx = 13; th4 = math.asin(3 / 13); u4 = (-math.cos(th4), -math.sin(th4)); I4 = (Mx + 12.649110640673518 * u4[0], 12.649110640673518 * u4[1])
+chk('B7 cấu hình 4: OI = 3', _hy(*I4), 3, 1e-9); B4 = (I4[0] - 4 * u4[0], I4[1] - 4 * u4[1]); C4 = (I4[0] + 4 * u4[0], I4[1] + 4 * u4[1])
+chk('B7 cấu hình 4: B, C trên đường tròn', (round(_hy(*B4), 9), round(_hy(*C4), 9)), (5.0, 5.0))
+chk('B7 cấu hình 4c: MB, MC', (round(_d((13, 0), B4), 6), round(_d((13, 0), C4), 6)), (round(4 * _sq(10) - 4, 6), round(4 * _sq(10) + 4, 6)))
+chk('B7 cấu hình 4: MB·MC = MA² = 144', _d((13, 0), B4) * _d((13, 0), C4), 144, 1e-9)
+# Cấu hình 5 (AB = 6, AC = 8)
+A5, B5, C5 = (0, 4.8), (-3.6, 0), (6.4, 0); H5 = _ft(A5, B5, C5); I5 = ((A5[0] + H5[0]) / 2, (A5[1] + H5[1]) / 2)
+E5 = _ft(H5, A5, B5); F5 = _ft(H5, A5, C5)
+chk('B7 cấu hình 5: E, F trên đường tròn đường kính AH', (round(_d(I5, E5), 9), round(_d(I5, F5), 9)), (2.4, 2.4))
+chk('B7 cấu hình 5c: AE, AF', (round(_d(A5, E5), 6), round(_d(A5, F5), 6)), (3.84, 2.88)); chk('B7 cấu hình 5c: S(AEHF)', _ar(A5, E5, H5, F5), 11.0592, 1e-9)
+# Cấu hình 6 (R = 3, OA = 5)
+A6 = (5, 0); B6 = (9 / 5, 12 / 5); C6 = (9 / 5, -12 / 5); D6 = (-C6[0], -C6[1])
+chk('B7 cấu hình 6: OB ⊥ AB', (B6[0] - 0) * (A6[0] - B6[0]) + B6[1] * (A6[1] - B6[1]), 0, 1e-9)
+chk('B7 cấu hình 6b: BD // OA', B6[1] - D6[1], 0, 1e-9); chk('B7 cấu hình 6c: BC, BD', (round(_d(B6, C6), 9), round(_d(B6, D6), 9)), (4.8, 3.6))
+chk('B7 cấu hình 6c: S(ABDO)', _ar(A6, B6, D6, O_), 10.32, 1e-9)
+# Cấu hình 7 (AC = 2R)
+A7, B7, C7 = (-1, 0), (1, 0), (-1, 2); D7 = [p_ for p_ in _cut(B7, C7, O_, 1) if _d(p_, B7) > 1e-6][0]; E7 = (-1, 1)
+chk('B7 cấu hình 7b: ED ⊥ OD', (D7[0] - E7[0]) * D7[0] + (D7[1] - E7[1]) * D7[1], 0, 1e-9)
+chk('B7 cấu hình 7c: CD = AD = √2R', (round(_d(C7, D7), 9), round(_d(A7, D7), 9)), (round(_sq(2), 9),) * 2); chk('B7 cấu hình 7c: S(ACD) = R²', _ar(A7, C7, D7), 1, 1e-9)
+# Cấu hình 8 (R = 5, BC = 8)
+A8, B8, C8, D8, H8 = (0, 5), (-4, -3), (4, -3), (0, -5), (0, -3)
+chk('B7 cấu hình 8: B trên đường tròn', _hy(*B8), 5, 1e-9); chk('B7 cấu hình 8b: AB² = AH·AD', _d(A8, B8) ** 2, _d(A8, H8) * _d(A8, D8), 1e-9)
+chk('B7 cấu hình 8b: BH² = AH·HD', _d(B8, H8) ** 2, _d(A8, H8) * _d(H8, D8), 1e-9); chk('B7 cấu hình 8c: S(ABC)', _ar(A8, B8, C8), 32, 1e-9)
+# Cấu hình 9 (OA = 2R): mọi vị trí M trên cung nhỏ BC cho cùng chu vi và cùng góc DOE
+def _tg(M_, T_):
+    a, b, c, d = M_[0], M_[1], T_[0], T_[1]; det = a * d - b * c; return ((d - b) / det, (a - c) / det)
+okc = True
+for deg in (-40, -10, 20, 45):
+    M9 = P_(deg); D9, E9 = _tg(M9, B1), _tg(M9, C1)
+    per = _d(A1, D9) + _d(D9, E9) + _d(E9, A1); ang = _dg(_ac((D9[0] * E9[0] + D9[1] * E9[1]) / (_hy(*D9) * _hy(*E9))))
+    okc &= abs(per - 2 * _sq(3)) < 1e-9 and abs(ang - 60) < 1e-9
+chk('B7 cấu hình 9: chu vi ADE = 2√3R, góc DOE = 60° (4 vị trí M)', okc, True)
+# Cấu hình 10 (R = 5, OH = 3)
+C10, D10 = (3, 4), (3, -4)
+chk('B7 cấu hình 10: CD, AC', (_d(C10, D10), round(_d((-5, 0), C10), 9)), (8.0, round(4 * _sq(5), 9))); chk('B7 cấu hình 10c: S(ACBD)', _ar((-5, 0), C10, (5, 0), D10), 40, 1e-9)
+
 print('\nKẾT QUẢ:', 'ĐẠT ✓ – mọi đáp số khớp phép tính độc lập' if ok_all else 'CHƯA ĐẠT ✗')
 raise SystemExit(0 if ok_all else 1)

@@ -205,6 +205,7 @@ mjx-container[display="true"].mjx-wide{display:block}
 .sh-fig{display:flex;justify-content:center;margin:4px 0}
 .sh-fig .fig{max-width:62mm}
 .sh-fig .fig.fig-sm{max-width:40mm}
+.ld-page .sh-fig .fig{max-height:58mm;width:auto}
 .sh-model{margin:6px 0 10px;break-inside:avoid-page}
 .sh-model p{margin:0 0 4px}
 .sh-steps{margin:2px 0;padding-left:0;list-style:none;font-size:11pt}
@@ -4496,6 +4497,221 @@ LuyenDe.add('he-phuong-trinh-thuc-te', {
       loi: ['Quên cộng 54 phút vào thời gian của xe đi trước', 'Đổi 54 phút thành 0,54 giờ'] },
   ],
 });
+
+</script>
+<script>/* data/vao-10/luyen-de/ld07-hinh-7.js */
+/* Luyện đề – Bài 7 (3,0 điểm) hình học phẳng, tách thành ba bộ: 7a, 7b, 7c (mỗi câu khoảng 1,0 điểm), mỗi bộ 10 đề.
+   Mười cấu hình dùng chung cho ba bộ: đề 7a số k hỏi câu a của cấu hình k (học sinh tự vẽ hình; hình có ở trang đáp án);
+   đề 7b số k cho sẵn hình và kết quả câu a, hỏi câu b; đề 7c số k cho sẵn hình và kết quả câu a, b, hỏi câu c.
+   Ưu tiên kiến thức lớp 9 học kì I: tiếp tuyến, tính chất hai tiếp tuyến cắt nhau, đường kính và dây (chứng minh lại bằng tam giác cân),
+   tam giác vuông nội tiếp đường tròn đường kính cạnh huyền, hệ thức lượng (chứng minh lại bằng tam giác đồng dạng).
+   Tuân thủ quy định chấm thống nhất (RULES trong app.js): không dùng ba dấu hiệu tứ giác nội tiếp, không dùng trực tiếp hệ thức lượng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop9/Lớp 9 - Tài liệu/Đề thi/ (số liệu đã đổi, kiểm bằng toạ độ trong tools/kiem-dap-so.py).
+   - Đề tuyển sinh lớp 10 môn Toán năm 2025 – 2026 và 2026 – 2027 sở GD&ĐT TP HCM (Bài 7) – cấu hình 1, 2
+   - Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 3, 6, 10, 11, 12, 13, 14, 15) – cấu hình 3–10
+   Họ cấu hình gặp nhiều nhất trong tài liệu: hai tiếp tuyến từ điểm ngoài; tam giác nhọn nội tiếp có các đường cao; nửa đường tròn với tiếp tuyến Ax, By;
+   tiếp tuyến – cát tuyến; đường kính và dây. Câu c thường là tính độ dài, diện tích theo R hoặc số liệu cụ thể. */
+(() => {
+  const G = Fig.geo, s3 = Math.sqrt(3);
+  const q4 = (a, b, c, d) => [[a, 0.25], [b, 0.25], [c, 0.25], [d, 0.25]];
+  const CFG = [
+    { ten: 'Hai tiếp tuyến, đường kính BD, cát tuyến AD', nguon: 'Đề tuyển sinh lớp 10 môn Toán năm 2025 – 2026 sở GD&ĐT TP Hồ Chí Minh, Bài 7',
+      ch: S`Từ điểm \(A\) nằm ngoài đường tròn \((O;\ R)\) với \(OA = 2R\), kẻ hai tiếp tuyến \(AB, AC\) (\(B, C\) là tiếp điểm). Vẽ đường kính \(BD\) của \((O)\). Đường thẳng \(AD\) cắt \((O)\) tại điểm thứ hai \(E\). Gọi \(H\) là giao điểm của \(BC\) và \(AO\).`,
+      fig: G({ pts: { A: [4, 0], B: [1, 1.732], C: [1, -1.732], D: [-1, -1.732], E: [1.857, -0.742], H: [1, 0], O: [0, 0] }, circles: [{ c: 'O', r: 2 }], segs: 'A-B A-C B-D A-D B-C A-O B-E', dots: 'O', rights: [['A', 'B', 'O'], ['B', 'H', 'A']], rs: 0.18, lab: { O: [-10, 12], H: [8, 14], E: [6, 14] }, w: 250 }),
+      a: { q: S`Chứng minh bốn điểm \(A, B, O, C\) cùng thuộc một đường tròn và \(OA \perp BC\) tại \(H\).`,
+        ans: S`\(A, B, O, C\) thuộc đường tròn đường kính \(AO\); \(OA\) là trung trực của \(BC\).`,
+        barem: q4(S`\(AB, AC\) là tiếp tuyến nên \(\widehat{ABO} = \widehat{ACO} = 90^\circ\)`, S`Tam giác \(ABO\), \(ACO\) vuông tại \(B, C\) nên \(B, C\) thuộc đường tròn đường kính \(AO\) (tâm là trung điểm \(AO\)). Vậy \(A, B, O, C\) cùng thuộc một đường tròn`,
+          S`\(AB = AC\) (tính chất hai tiếp tuyến cắt nhau) và \(OB = OC = R\)`, S`Nên \(A\), \(O\) cùng thuộc trung trực của \(BC\), tức \(OA\) là trung trực của \(BC\): \(OA \perp BC\) tại \(H\) (\(H\) là trung điểm \(BC\))`),
+        loi: ['Không nêu tâm, bán kính đường tròn đi qua bốn điểm', 'Dùng dấu hiệu "tổng hai góc đối bằng 180°" (bị cấm)'] },
+      b: { q: S`Chứng minh \(\widehat{BED} = 90^\circ\) và \(AE \cdot AD = AH \cdot AO\).`,
+        ans: S`\(AE \cdot AD = AB^2 = AH \cdot AO\).`,
+        barem: q4(S`\(\widehat{BED}\) là góc nội tiếp chắn nửa đường tròn nên \(\widehat{BED} = 90^\circ\), tức \(BE \perp AD\)`, S`\(\triangle AEB \backsim \triangle ABD\) (\(\widehat A\) chung, \(\widehat{AEB} = \widehat{ABD} = 90^\circ\)) \(\Rightarrow AB^2 = AE \cdot AD\)`,
+          S`\(\triangle AHB \backsim \triangle ABO\) (\(\widehat A\) chung, \(\widehat{AHB} = \widehat{ABO} = 90^\circ\)) \(\Rightarrow AB^2 = AH \cdot AO\)`, S`Vậy \(AE \cdot AD = AH \cdot AO\)`),
+        loi: ['Viết thẳng AB² = AE·AD là "hệ thức lượng" mà không chứng minh đồng dạng', 'Không chỉ ra góc ABD vuông (tiếp tuyến vuông góc bán kính)'] },
+      c: { q: S`Tính theo \(R\) độ dài \(AE\) và diện tích tam giác \(ABE\).`,
+        ans: S`\(AE = \dfrac{3R}{\sqrt7} = \dfrac{3\sqrt7R}{7}\); \(S_{ABE} = \dfrac{3\sqrt3R^2}{7}\).`,
+        barem: q4(S`\(AB = \sqrt{OA^2 - OB^2} = \sqrt{4R^2 - R^2} = R\sqrt3\); \(BD = 2R\)`, S`Tam giác \(ABD\) vuông tại \(B\): \(AD = \sqrt{3R^2 + 4R^2} = R\sqrt7\)`,
+          S`\(AE = \dfrac{AB^2}{AD} = \dfrac{3R^2}{R\sqrt7} = \dfrac{3\sqrt7R}{7}\); \(BE = \dfrac{AB \cdot BD}{AD} = \dfrac{2\sqrt3R}{\sqrt7}\) (từ \(\triangle AEB \backsim \triangle ABD\))`, S`\(S_{ABE} = \tfrac12 AE \cdot BE = \tfrac12 \cdot \dfrac{3R}{\sqrt7} \cdot \dfrac{2\sqrt3R}{\sqrt7} = \dfrac{3\sqrt3R^2}{7}\)`),
+        loi: ['Dùng BE = AB·BD/AD mà không nêu tam giác đồng dạng', 'Không trục căn ở mẫu khi kết luận (vẫn được điểm nhưng dễ tính sai)'] } },
+
+    { ten: 'Tam giác nhọn nội tiếp, ba đường cao', nguon: 'Đề tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM, Bài 7',
+      ch: S`Cho tam giác \(ABC\) nhọn (\(AB \lt AC\)) nội tiếp đường tròn \((O;\ R)\), có ba đường cao \(AD, BE, CF\) cắt nhau tại \(H\). Kẻ đường kính \(AK\) của \((O)\).`,
+      fig: G({ pts: { A: [-0.518, 1.932], B: [-1.638, -1.147], C: [1.813, -0.845], D: [-0.259, -1.026], E: [0.535, 0.677], F: [-1.138, 0.229], H: [-0.343, -0.061], K: [0.518, -1.932], O: [0, 0] }, circles: [{ c: 'O', r: 2 }], segs: 'A-B B-C C-A A-D B-E C-F A-K K-C', dots: 'O H', lab: { O: [10, 6], H: [12, 4], D: [2, 14], K: [6, 14] }, w: 240 }),
+      a: { q: S`Chứng minh bốn điểm \(B, F, E, C\) cùng thuộc đường tròn tâm \(M\) là trung điểm của \(BC\).`,
+        ans: S`\(B, F, E, C\) thuộc đường tròn đường kính \(BC\), tâm là trung điểm \(M\) của \(BC\).`,
+        barem: q4(S`\(BE, CF\) là đường cao nên \(\widehat{BEC} = \widehat{BFC} = 90^\circ\)`, S`Gọi \(M\) là trung điểm \(BC\). Tam giác \(BEC\) vuông tại \(E\) có \(EM\) là trung tuyến nên \(ME = \dfrac{BC}{2}\)`,
+          S`Tương tự \(MF = \dfrac{BC}{2}\); lại có \(MB = MC = \dfrac{BC}{2}\)`, S`Vậy \(B, F, E, C\) cùng thuộc đường tròn tâm \(M\), bán kính \(\dfrac{BC}{2}\)`),
+        loi: ['Dùng "hai góc bằng nhau cùng nhìn cạnh BC" (dấu hiệu bị cấm)', 'Không chỉ rõ tâm M'] },
+      b: { q: S`Chứng minh \(\triangle ABD \backsim \triangle AKC\) và \(AB \cdot AC = 2R \cdot AD\).`,
+        ans: S`\(AB \cdot AC = AD \cdot AK = 2R \cdot AD\).`,
+        barem: q4(S`\(\widehat{ACK} = 90^\circ\) (góc nội tiếp chắn nửa đường tròn); \(\widehat{ADB} = 90^\circ\). Vậy \(\widehat{ADB} = \widehat{ACK}\)`, S`\(\widehat{ABD} = \widehat{ABC} = \widehat{AKC}\) (hai góc nội tiếp cùng chắn cung \(AC\))`,
+          S`Do đó \(\triangle ABD \backsim \triangle AKC\) (g.g)`, S`\(\Rightarrow \dfrac{AB}{AK} = \dfrac{AD}{AC} \Rightarrow AB \cdot AC = AD \cdot AK = 2R \cdot AD\)`),
+        loi: ['Viết sai thứ tự đỉnh tương ứng khi lập tỉ số', 'Không giải thích vì sao hai góc nội tiếp bằng nhau'] },
+      c: { q: S`Biết \(\widehat{BAC} = 60^\circ\). Tính độ dài \(BC\) và \(EF\) theo \(R\).`,
+        ans: S`\(BC = R\sqrt3\); \(EF = \dfrac{R\sqrt3}{2}\).`,
+        barem: q4(S`\(\widehat{BOC} = 2\widehat{BAC} = 120^\circ\) (góc ở tâm và góc nội tiếp cùng chắn cung \(BC\)). Tam giác \(OBC\) cân tại \(O\), kẻ \(OM \perp BC\) thì \(M\) là trung điểm \(BC\), \(\widehat{BOM} = 60^\circ\)`, S`\(BM = OB \sin 60^\circ = \dfrac{R\sqrt3}{2}\), nên \(BC = R\sqrt3\)`,
+          S`Tam giác \(ABE\) vuông tại \(E\) có \(\widehat A = 60^\circ\): \(AE = AB\cos 60^\circ = \tfrac12 AB\); tương tự \(AF = \tfrac12 AC\). Suy ra \(\dfrac{AE}{AB} = \dfrac{AF}{AC} = \dfrac12\)`, S`\(\triangle AEF \backsim \triangle ABC\) (c.g.c, \(\widehat A\) chung) \(\Rightarrow EF = \tfrac12 BC = \dfrac{R\sqrt3}{2}\)`),
+        loi: ['Dùng "đường kính vuông góc dây đi qua trung điểm" mà không chứng minh lại bằng tam giác cân', 'Lấy tỉ số đồng dạng AE/AC (sai cặp tương ứng)'] } },
+
+    { ten: 'Nửa đường tròn, hai tiếp tuyến Ax, By', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 10, đề 1: nửa đường tròn, tiếp tuyến Ax, By)',
+      ch: S`Cho nửa đường tròn tâm \(O\), đường kính \(AB = 2R\). Vẽ các tiếp tuyến \(Ax, By\) với nửa đường tròn (cùng phía với nửa đường tròn). Lấy điểm \(M\) trên nửa đường tròn (\(M \ne A, B\)); tiếp tuyến tại \(M\) cắt \(Ax, By\) lần lượt tại \(C, D\).`,
+      fig: G({ pts: { A: [-2, 0], B: [2, 0], O: [0, 0], M: [-1.2, 1.6], C: [-2, 1], D: [2, 4] }, segs: 'A-B A-C B-D C-D O-C O-D O-M', dots: 'O', rights: [['C', 'M', 'O']], rs: 0.18, lab: { O: [0, 14], M: [-8, -6], C: [-12, 0], D: [10, 0] }, fill: [], w: 220, texts: [] }),
+      a: { q: S`Chứng minh \(CD = AC + BD\) và \(\widehat{COD} = 90^\circ\).`,
+        ans: S`\(CM = CA\), \(DM = DB\); \(OC, OD\) là phân giác của hai góc kề bù \(\widehat{AOM}\), \(\widehat{MOB}\).`,
+        barem: q4(S`Theo tính chất hai tiếp tuyến cắt nhau: \(CA = CM\), \(DB = DM\)`, S`Suy ra \(CD = CM + MD = AC + BD\)`,
+          S`Cũng theo tính chất đó: \(OC\) là phân giác \(\widehat{AOM}\), \(OD\) là phân giác \(\widehat{MOB}\)`, S`Mà \(\widehat{AOM} + \widehat{MOB} = 180^\circ\) nên \(\widehat{COD} = \tfrac12 \cdot 180^\circ = 90^\circ\)`),
+        loi: ['Chỉ viết "theo tính chất" mà không nêu hai tiếp tuyến xuất phát từ điểm nào', 'Quên giải thích hai góc AOM, MOB kề bù'] },
+      b: { q: S`Chứng minh \(AC \cdot BD = R^2\).`,
+        ans: S`\(AC \cdot BD = CM \cdot MD = OM^2 = R^2\).`,
+        barem: q4(S`\(OM \perp CD\) (tiếp tuyến vuông góc bán kính) và \(\widehat{COD} = 90^\circ\)`, S`\(\triangle CMO \backsim \triangle OMD\) (\(\widehat{CMO} = \widehat{OMD} = 90^\circ\), \(\widehat{MCO} = \widehat{MOD}\) cùng phụ \(\widehat{MOC}\))`,
+          S`\(\Rightarrow \dfrac{CM}{OM} = \dfrac{OM}{MD} \Rightarrow CM \cdot MD = OM^2 = R^2\)`, S`Mà \(CM = AC\), \(MD = BD\) nên \(AC \cdot BD = R^2\)`),
+        loi: ['Dùng thẳng hệ thức h² = b′c′ (phải chứng minh đồng dạng)', 'Không đổi CM, MD về AC, BD ở bước cuối'] },
+      c: { q: S`Biết \(AC = \dfrac R2\). Tính \(BD\), \(CD\) và diện tích tứ giác \(ABDC\) theo \(R\).`,
+        ans: S`\(BD = 2R\), \(CD = \dfrac{5R}{2}\), \(S_{ABDC} = \dfrac{5R^2}{2}\).`,
+        barem: q4(S`Từ \(AC \cdot BD = R^2\): \(BD = \dfrac{R^2}{R/2} = 2R\)`, S`\(CD = AC + BD = \dfrac R2 + 2R = \dfrac{5R}{2}\)`,
+          S`\(AC \perp AB\), \(BD \perp AB\) nên \(AC \parallel BD\): \(ABDC\) là hình thang vuông, chiều cao \(AB = 2R\)`, S`\(S_{ABDC} = \dfrac{(AC + BD) \cdot AB}{2} = \dfrac{\tfrac{5R}{2} \cdot 2R}{2} = \dfrac{5R^2}{2}\)`),
+        loi: ['Không chứng minh ABDC là hình thang trước khi dùng công thức', 'Nhầm chiều cao là CD'] } },
+
+    { ten: 'Tiếp tuyến và cát tuyến từ một điểm', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 14, đề 3: tiếp tuyến và cát tuyến MAB, I trung điểm AB; Cụm 6, đề 2)',
+      ch: S`Từ điểm \(M\) nằm ngoài đường tròn \((O;\ R)\), kẻ tiếp tuyến \(MA\) (\(A\) là tiếp điểm) và cát tuyến \(MBC\) không đi qua \(O\) (\(B\) nằm giữa \(M\) và \(C\)). Gọi \(I\) là trung điểm của \(BC\).`,
+      fig: G({ pts: { O: [0, 0], M: [5.2, 0], A: [0.769, 1.846], B: [1.834, -0.798], C: [-1.28, -1.537], I: [0.277, -1.168] }, circles: [{ c: 'O', r: 2 }], segs: 'M-A M-C O-A O-I O-M O-B O-C', dots: 'O I', rights: [['M', 'A', 'O'], ['M', 'I', 'O']], rs: 0.2, lab: { O: [-12, 6], I: [0, 16], B: [8, 14], C: [-10, 12] }, w: 260 }),
+      a: { q: S`Chứng minh \(OI \perp BC\) và bốn điểm \(M, A, O, I\) cùng thuộc một đường tròn.`,
+        ans: S`\(M, A, O, I\) thuộc đường tròn đường kính \(MO\).`,
+        barem: q4(S`\(OB = OC = R\) nên tam giác \(OBC\) cân tại \(O\); \(OI\) là trung tuyến nên cũng là đường cao: \(OI \perp BC\)`, S`\(MA\) là tiếp tuyến nên \(\widehat{MAO} = 90^\circ\); \(\widehat{MIO} = 90^\circ\)`,
+          S`Tam giác \(MAO\), \(MIO\) vuông tại \(A, I\) nên \(A, I\) thuộc đường tròn đường kính \(MO\)`, S`Vậy \(M, A, O, I\) cùng thuộc đường tròn tâm là trung điểm \(MO\), bán kính \(\dfrac{MO}{2}\)`),
+        loi: ['Viết "đường kính đi qua trung điểm dây thì vuông góc với dây" (bị cấm, phải chứng minh lại)', 'Không nêu tâm, bán kính'] },
+      b: { q: S`Chứng minh \(MA^2 = MB \cdot MC = MO^2 - R^2\).`,
+        ans: S`Cả hai đều bằng \(MO^2 - R^2\).`,
+        barem: q4(S`Tam giác \(MAO\) vuông tại \(A\): \(MA^2 = MO^2 - OA^2 = MO^2 - R^2\)`, S`\(MB \cdot MC = (MI - IB)(MI + IC) = (MI - IB)(MI + IB) = MI^2 - IB^2\) (vì \(IB = IC\))`,
+          S`Pythagore: \(MI^2 = MO^2 - OI^2\), \(IB^2 = OB^2 - OI^2 = R^2 - OI^2\)`, S`\(\Rightarrow MB \cdot MC = MO^2 - R^2 = MA^2\)`),
+        loi: ['Dùng góc tạo bởi tiếp tuyến và dây cung (không có trong chương trình) mà không giải thích', 'Quên IB = IC khi khai triển'] },
+      c: { q: S`Cho \(R = 5\) cm, \(OM = 13\) cm và \(BC = 8\) cm. Tính \(MA\), \(MB\), \(MC\).`,
+        ans: S`\(MA = 12\) cm; \(MB = 4\sqrt{10} - 4 \approx 8{,}65\) cm; \(MC = 4\sqrt{10} + 4 \approx 16{,}65\) cm.`,
+        barem: q4(S`\(MA = \sqrt{13^2 - 5^2} = 12\) (cm)`, S`\(IB = 4\), \(OI = \sqrt{OB^2 - IB^2} = \sqrt{25 - 16} = 3\) (cm)`,
+          S`\(MI = \sqrt{OM^2 - OI^2} = \sqrt{169 - 9} = 4\sqrt{10}\) (cm)`, S`\(MB = MI - IB = 4\sqrt{10} - 4 \approx 8{,}65\) cm; \(MC = 4\sqrt{10} + 4 \approx 16{,}65\) cm (thử lại \(MB \cdot MC = 160 - 16 = 144 = MA^2\))`),
+        loi: ['Nhầm MI = MO − OI', 'Làm tròn √10 quá sớm'] } },
+
+    { ten: 'Tam giác vuông, đường tròn đường kính đường cao', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 13, đề 3: đường cao AH, hình chiếu của H trên AB, AC)',
+      ch: S`Cho tam giác \(ABC\) vuông tại \(A\) (\(AB \lt AC\)), đường cao \(AH\). Đường tròn đường kính \(AH\) cắt \(AB, AC\) lần lượt tại \(E, F\) (khác \(A\)).`,
+      fig: G({ pts: { A: [0, 4.8], B: [-3.6, 0], C: [6.4, 0], H: [0, 0], E: [-2.304, 1.728], F: [2.304, 3.072], I: [0, 2.4] }, circles: [{ c: 'I', r: 2.4, dash: true }], segs: 'A-B B-C C-A A-H H-E H-F E-F', dots: 'I', rights: [['A', 'H', 'C'], ['B', 'A', 'C']], rs: 0.18, rsUnit: 2, lab: { I: [10, 4], H: [0, 14] }, w: 260 }),
+      a: { q: S`Chứng minh tứ giác \(AEHF\) là hình chữ nhật và \(EF = AH\).`,
+        ans: S`Tứ giác có ba góc vuông là hình chữ nhật; hai đường chéo bằng nhau.`,
+        barem: q4(S`\(\widehat{AEH} = 90^\circ\) (góc nội tiếp chắn nửa đường tròn đường kính \(AH\))`, S`Tương tự \(\widehat{AFH} = 90^\circ\); lại có \(\widehat{EAF} = 90^\circ\)`,
+          S`Tứ giác \(AEHF\) có ba góc vuông nên là hình chữ nhật`, S`Hai đường chéo của hình chữ nhật bằng nhau: \(EF = AH\)`),
+        loi: ['Chỉ nêu hai góc vuông mà kết luận hình chữ nhật', 'Không giải thích vì sao góc AEH vuông'] },
+      b: { q: S`Chứng minh \(AE \cdot AB = AF \cdot AC\).`,
+        ans: S`Cả hai tích đều bằng \(AH^2\).`,
+        barem: q4(S`\(\triangle AEH \backsim \triangle AHB\) (\(\widehat A\) chung, \(\widehat{AEH} = \widehat{AHB} = 90^\circ\))`, S`\(\Rightarrow \dfrac{AE}{AH} = \dfrac{AH}{AB} \Rightarrow AE \cdot AB = AH^2\)`,
+          S`Tương tự \(\triangle AFH \backsim \triangle AHC\) \(\Rightarrow AF \cdot AC = AH^2\)`, S`Vậy \(AE \cdot AB = AF \cdot AC\)`),
+        loi: ['Dùng thẳng hệ thức lượng AE·AB = AH² mà không chứng minh', 'Ghép sai cặp tam giác đồng dạng'] },
+      c: { q: S`Cho \(AB = 6\) cm, \(AC = 8\) cm. Tính \(AH\), \(AE\), \(AF\) và diện tích hình chữ nhật \(AEHF\).`,
+        ans: S`\(AH = 4{,}8\); \(AE = 3{,}84\); \(AF = 2{,}88\) (cm); \(S = 11{,}0592\) cm².`,
+        barem: q4(S`\(BC = \sqrt{36 + 64} = 10\); \(AH \cdot BC = AB \cdot AC\) (cùng bằng hai lần diện tích) \(\Rightarrow AH = \dfrac{48}{10} = 4{,}8\) (cm)`, S`\(AE = \dfrac{AH^2}{AB} = \dfrac{23{,}04}{6} = 3{,}84\) (cm)`,
+          S`\(AF = \dfrac{AH^2}{AC} = \dfrac{23{,}04}{8} = 2{,}88\) (cm)`, S`\(S_{AEHF} = AE \cdot AF = 3{,}84 \cdot 2{,}88 = 11{,}0592\) (cm²)`),
+        loi: ['Tính AH = AB·AC/BC mà không giải thích (dùng diện tích)', 'Nhầm AE với AF'] } },
+
+    { ten: 'Hai tiếp tuyến, đường kính CD song song với OA', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 11, đề 3: hai tiếp tuyến, đường kính CD, BD // OA)',
+      ch: S`Từ điểm \(A\) nằm ngoài đường tròn \((O;\ R)\), kẻ hai tiếp tuyến \(AB, AC\) (\(B, C\) là tiếp điểm). Gọi \(H\) là giao điểm của \(OA\) và \(BC\). Vẽ đường kính \(CD\) của \((O)\).`,
+      fig: G({ pts: { A: [3.333, 0], B: [1.2, 1.6], C: [1.2, -1.6], D: [-1.2, 1.6], O: [0, 0], H: [1.2, 0] }, circles: [{ c: 'O', r: 2 }], segs: 'A-B A-C B-C O-A C-D B-D O-B', dots: 'O', rights: [['A', 'B', 'O'], ['B', 'H', 'A']], rs: 0.18, lab: { O: [-10, 12], H: [9, 14] }, w: 240 }),
+      a: { q: S`Chứng minh \(OA\) là đường trung trực của \(BC\) và \(OA \perp BC\) tại \(H\).`,
+        ans: S`\(AB = AC\), \(OB = OC\) nên \(OA\) là trung trực của \(BC\).`,
+        barem: q4(S`Theo tính chất hai tiếp tuyến cắt nhau: \(AB = AC\)`, S`\(OB = OC = R\)`,
+          S`Hai điểm \(A, O\) cách đều \(B, C\) nên \(OA\) là đường trung trực của \(BC\)`, S`Do đó \(OA \perp BC\) tại trung điểm \(H\) của \(BC\)`),
+        loi: ['Chỉ nêu AB = AC mà quên OB = OC', 'Kết luận vuông góc nhưng không nêu H là trung điểm'] },
+      b: { q: S`Chứng minh \(BD \parallel OA\).`,
+        ans: S`Cùng vuông góc với \(BC\).`,
+        barem: q4(S`\(\widehat{CBD}\) là góc nội tiếp chắn nửa đường tròn đường kính \(CD\)`, S`nên \(\widehat{CBD} = 90^\circ\), tức \(BD \perp BC\)`,
+          S`Theo câu a, \(OA \perp BC\)`, S`Hai đường thẳng \(BD\), \(OA\) cùng vuông góc với \(BC\) nên \(BD \parallel OA\)`),
+        loi: ['Không giải thích vì sao góc CBD vuông', 'Dùng OH là đường trung bình mà không chứng minh'] },
+      c: { q: S`Cho \(R = 3\) cm, \(OA = 5\) cm. Tính \(AB\), \(BC\), \(BD\) và diện tích tứ giác \(ABDO\).`,
+        ans: S`\(AB = 4\); \(BC = 4{,}8\); \(BD = 3{,}6\) (cm); \(S_{ABDO} = 10{,}32\) cm².`,
+        barem: q4(S`\(AB = \sqrt{5^2 - 3^2} = 4\) (cm). \(BH \cdot OA = AB \cdot OB\) (hai lần diện tích tam giác \(ABO\)) \(\Rightarrow BH = 2{,}4\), \(BC = 4{,}8\) (cm)`, S`Tam giác \(BCD\) vuông tại \(B\): \(BD = \sqrt{CD^2 - BC^2} = \sqrt{36 - 23{,}04} = 3{,}6\) (cm)`,
+          S`\(BD \parallel OA\) nên \(ABDO\) là hình thang, chiều cao bằng khoảng cách từ \(B\) đến \(OA\) là \(BH = 2{,}4\) cm`, S`\(S_{ABDO} = \dfrac{(BD + OA) \cdot BH}{2} = \dfrac{(3{,}6 + 5) \cdot 2{,}4}{2} = 10{,}32\) (cm²)`),
+        loi: ['Lấy chiều cao hình thang là AB', 'Tính BC = 2·AB·OB/OA mà không giải thích'] } },
+
+    { ten: 'Đường kính AB, tiếp tuyến tại A, trung điểm E', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 15, đề 1: tiếp tuyến tại A, MA² = MB·MC)',
+      ch: S`Cho đường tròn \((O;\ R)\) đường kính \(AB\). Trên tiếp tuyến tại \(A\) của \((O)\) lấy điểm \(C\) (\(C \ne A\)). Đoạn \(BC\) cắt \((O)\) tại \(D\) (\(D \ne B\)). Gọi \(E\) là trung điểm của \(AC\).`,
+      fig: G({ pts: { A: [-2, 0], B: [2, 0], O: [0, 0], C: [-2, 4], D: [0, 2], E: [-2, 2] }, circles: [{ c: 'O', r: 2 }], segs: 'A-B A-C B-C A-D E-D O-D', dots: 'O E', rights: [['C', 'A', 'B'], ['A', 'D', 'B']], rs: 0.2, lab: { O: [0, 14], D: [10, -6], E: [-12, 4] }, w: 165 }),
+      a: { q: S`Chứng minh \(AD \perp BC\) và \(CA^2 = CD \cdot CB\).`,
+        ans: S`\(\widehat{ADB} = 90^\circ\); \(\triangle CDA \backsim \triangle CAB\).`,
+        barem: q4(S`\(\widehat{ADB}\) là góc nội tiếp chắn nửa đường tròn nên \(\widehat{ADB} = 90^\circ\): \(AD \perp BC\)`, S`\(CA\) là tiếp tuyến nên \(\widehat{CAB} = 90^\circ\)`,
+          S`\(\triangle CDA \backsim \triangle CAB\) (\(\widehat C\) chung, \(\widehat{CDA} = \widehat{CAB} = 90^\circ\))`, S`\(\Rightarrow \dfrac{CD}{CA} = \dfrac{CA}{CB} \Rightarrow CA^2 = CD \cdot CB\)`),
+        loi: ['Viết thẳng CA² = CD·CB là hệ thức lượng', 'Không nêu vì sao góc CAB vuông'] },
+      b: { q: S`Chứng minh \(ED\) là tiếp tuyến của \((O)\).`,
+        ans: S`\(\triangle EAO = \triangle EDO\) (c.c.c) nên \(\widehat{EDO} = \widehat{EAO} = 90^\circ\).`,
+        barem: q4(S`Tam giác \(ADC\) vuông tại \(D\) có \(DE\) là trung tuyến nên \(ED = EA = \dfrac{AC}{2}\)`, S`\(\triangle EAO\) và \(\triangle EDO\) có \(EA = ED\), \(OA = OD = R\), \(EO\) chung nên \(\triangle EAO = \triangle EDO\) (c.c.c)`,
+          S`\(\Rightarrow \widehat{EDO} = \widehat{EAO} = 90^\circ\)`, S`\(ED \perp OD\) tại \(D \in (O)\) nên \(ED\) là tiếp tuyến của \((O)\)`),
+        loi: ['Quên chỉ ra D thuộc (O) khi kết luận tiếp tuyến', 'Chứng minh bằng nhau thiếu cạnh chung'] },
+      c: { q: S`Biết \(AC = 2R\). Tính \(BC\), \(CD\), \(AD\) và diện tích tam giác \(ACD\) theo \(R\).`,
+        ans: S`\(BC = 2\sqrt2R\); \(CD = AD = \sqrt2R\); \(S_{ACD} = R^2\).`,
+        barem: q4(S`\(BC = \sqrt{AC^2 + AB^2} = \sqrt{4R^2 + 4R^2} = 2\sqrt2R\)`, S`\(CD = \dfrac{CA^2}{CB} = \dfrac{4R^2}{2\sqrt2R} = \sqrt2R\)`,
+          S`\(AD = \sqrt{AC^2 - CD^2} = \sqrt{4R^2 - 2R^2} = \sqrt2R\)`, S`\(S_{ACD} = \tfrac12 AD \cdot CD = \tfrac12 \cdot \sqrt2R \cdot \sqrt2R = R^2\)`),
+        loi: ['Dùng AB = R (quên AB là đường kính)', 'Tính diện tích tam giác ACD bằng ½·AC·AD'] } },
+
+    { ten: 'Tam giác cân nội tiếp, đường kính qua đỉnh', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 3, đề 1: đường kính AK, R = 5 cm, BC = 8 cm)',
+      ch: S`Cho tam giác \(ABC\) cân tại \(A\) nội tiếp đường tròn \((O;\ R)\) (\(\widehat A\) nhọn). Kẻ đường kính \(AD\) của \((O)\); \(AD\) cắt \(BC\) tại \(H\).`,
+      fig: G({ pts: { A: [0, 2], B: [-1.6, -1.2], C: [1.6, -1.2], D: [0, -2], H: [0, -1.2], O: [0, 0] }, circles: [{ c: 'O', r: 2 }], segs: 'A-B A-C B-C A-D B-D C-D', dots: 'O', rights: [['A', 'H', 'C'], ['A', 'B', 'D']], rs: 0.18, lab: { O: [12, 4], H: [10, 12] }, w: 200 }),
+      a: { q: S`Chứng minh \(AD \perp BC\) tại trung điểm \(H\) của \(BC\) và \(\widehat{ABD} = 90^\circ\).`,
+        ans: S`\(AO\) là trung trực của \(BC\); \(\widehat{ABD}\) chắn nửa đường tròn.`,
+        barem: q4(S`\(AB = AC\) (tam giác cân) và \(OB = OC = R\)`, S`Nên \(AO\) (tức \(AD\)) là trung trực của \(BC\): \(AD \perp BC\) tại trung điểm \(H\) của \(BC\)`,
+          S`\(\widehat{ABD}\) là góc nội tiếp chắn nửa đường tròn đường kính \(AD\)`, S`nên \(\widehat{ABD} = 90^\circ\)`),
+        loi: ['Dùng "đường kính vuông góc dây" (bị cấm) thay vì trung trực', 'Không nêu H là trung điểm'] },
+      b: { q: S`Chứng minh \(AB^2 = AH \cdot AD\) và \(BH^2 = AH \cdot HD\).`,
+        ans: S`\(\triangle AHB \backsim \triangle ABD\); \(\triangle BHA \backsim \triangle DHB\).`,
+        barem: q4(S`\(\triangle AHB \backsim \triangle ABD\) (\(\widehat A\) chung, \(\widehat{AHB} = \widehat{ABD} = 90^\circ\))`, S`\(\Rightarrow \dfrac{AH}{AB} = \dfrac{AB}{AD} \Rightarrow AB^2 = AH \cdot AD\)`,
+          S`\(\triangle BHA \backsim \triangle DHB\) (\(\widehat{BHA} = \widehat{DHB} = 90^\circ\), \(\widehat{BAH} = \widehat{DBH}\) cùng phụ \(\widehat{ABH}\))`, S`\(\Rightarrow \dfrac{BH}{DH} = \dfrac{AH}{BH} \Rightarrow BH^2 = AH \cdot HD\)`),
+        loi: ['Dùng thẳng hệ thức lượng trong tam giác vuông ABD', 'Không chỉ ra hai góc cùng phụ một góc'] },
+      c: { q: S`Cho \(R = 5\) cm, \(BC = 8\) cm. Tính \(OH\), \(AH\), \(AB\) và diện tích tam giác \(ABC\).`,
+        ans: S`\(OH = 3\); \(AH = 8\); \(AB = 4\sqrt5\) (cm); \(S_{ABC} = 32\) cm².`,
+        barem: q4(S`\(BH = 4\); tam giác \(OBH\) vuông tại \(H\): \(OH = \sqrt{25 - 16} = 3\) (cm)`, S`\(\widehat A\) nhọn nên \(O\) nằm giữa \(A\) và \(H\): \(AH = AO + OH = 8\) (cm)`,
+          S`\(AB = \sqrt{AH^2 + BH^2} = \sqrt{64 + 16} = 4\sqrt5\) (cm) (thử lại: \(AB^2 = 80 = AH \cdot AD = 8 \cdot 10\))`, S`\(S_{ABC} = \tfrac12 AH \cdot BC = \tfrac12 \cdot 8 \cdot 8 = 32\) (cm²)`),
+        loi: ['Lấy AH = R − OH (sai vị trí của O)', 'Quên đơn vị'] } },
+
+    { ten: 'Hai tiếp tuyến, tiếp tuyến tại điểm trên cung nhỏ', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 6, đề 1 câu b và Cụm 10, đề 1: tính chất hai tiếp tuyến cắt nhau)',
+      ch: S`Từ điểm \(A\) nằm ngoài đường tròn \((O;\ R)\), kẻ hai tiếp tuyến \(AB, AC\) (\(B, C\) là tiếp điểm). Lấy điểm \(M\) trên cung nhỏ \(BC\); tiếp tuyến của \((O)\) tại \(M\) cắt \(AB, AC\) lần lượt tại \(D, E\).`,
+      fig: G({ pts: { A: [4, 0], B: [1, 1.732], C: [1, -1.732], O: [0, 0], M: [1.879, 0.684], D: [1.63, 1.368], E: [2.453, -0.893] }, circles: [{ c: 'O', r: 2 }], segs: 'A-B A-C D-E O-B O-C O-M O-D O-E', dots: 'O', lab: { O: [-12, 4], M: [12, 6], D: [4, -8], E: [8, 12] }, w: 240 }),
+      a: { q: S`Chứng minh chu vi tam giác \(ADE\) bằng \(2AB\).`,
+        ans: S`\(DM = DB\), \(EM = EC\) nên chu vi \(= AB + AC = 2AB\).`,
+        barem: q4(S`Theo tính chất hai tiếp tuyến cắt nhau tại \(D\): \(DM = DB\); tại \(E\): \(EM = EC\)`, S`Chu vi \(\triangle ADE = AD + DE + EA = AD + DM + ME + EA\)`,
+          S`\(= (AD + DB) + (EC + EA) = AB + AC\)`, S`Mà \(AB = AC\) (hai tiếp tuyến từ \(A\)) nên chu vi \(\triangle ADE = 2AB\)`),
+        loi: ['Không nêu M nằm giữa D và E nên DE = DM + ME', 'Thiếu lí do AB = AC'] },
+      b: { q: S`Chứng minh \(\widehat{DOE} = \dfrac12\widehat{BOC}\).`,
+        ans: S`\(OD\), \(OE\) là phân giác của \(\widehat{BOM}\), \(\widehat{MOC}\).`,
+        barem: q4(S`Hai tiếp tuyến \(DB, DM\) cắt nhau tại \(D\) nên \(OD\) là phân giác \(\widehat{BOM}\): \(\widehat{DOM} = \tfrac12\widehat{BOM}\)`, S`Tương tự \(OE\) là phân giác \(\widehat{MOC}\): \(\widehat{MOE} = \tfrac12\widehat{MOC}\)`,
+          S`\(M\) thuộc cung nhỏ \(BC\) nên tia \(OM\) nằm giữa hai tia \(OB, OC\): \(\widehat{BOM} + \widehat{MOC} = \widehat{BOC}\)`, S`\(\widehat{DOE} = \widehat{DOM} + \widehat{MOE} = \tfrac12\widehat{BOC}\)`),
+        loi: ['Không giải thích vì sao tia OM nằm giữa OB, OC', 'Nhầm phân giác của góc BDM'] },
+      c: { q: S`Cho \(OA = 2R\). Tính chu vi tam giác \(ADE\) và số đo \(\widehat{DOE}\).`,
+        ans: S`Chu vi \(= 2\sqrt3R\); \(\widehat{DOE} = 60^\circ\).`,
+        barem: q4(S`\(AB = \sqrt{OA^2 - OB^2} = \sqrt{4R^2 - R^2} = R\sqrt3\)`, S`Chu vi \(\triangle ADE = 2AB = 2\sqrt3R\)`,
+          S`\(\cos\widehat{AOB} = \dfrac{OB}{OA} = \dfrac12 \Rightarrow \widehat{AOB} = 60^\circ\); \(OA\) là phân giác \(\widehat{BOC}\) nên \(\widehat{BOC} = 120^\circ\)`, S`\(\widehat{DOE} = \tfrac12 \cdot 120^\circ = 60^\circ\)`),
+        loi: ['Lấy góc BOC = 60°', 'Quên nhân 2 khi tính chu vi'] } },
+
+    { ten: 'Đường kính vuông góc với dây, hệ thức trong tam giác vuông', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 12, đề 3: dây CD vuông góc đường kính AB tại H, AH·AB = AD²)',
+      ch: S`Cho đường tròn \((O;\ R)\) đường kính \(AB\). Dây \(CD\) vuông góc với \(AB\) tại \(H\) (\(H\) nằm giữa \(O\) và \(B\)).`,
+      fig: G({ pts: { A: [-2, 0], B: [2, 0], O: [0, 0], H: [1.2, 0], C: [1.2, 1.6], D: [1.2, -1.6] }, circles: [{ c: 'O', r: 2 }], segs: 'A-B C-D A-C B-C A-D B-D O-C O-D', dots: 'O', rights: [['C', 'H', 'B'], ['A', 'C', 'B']], rs: 0.18, lab: { O: [0, 14], H: [10, 14] }, w: 200 }),
+      a: { q: S`Chứng minh \(H\) là trung điểm của \(CD\) và \(\widehat{ACB} = 90^\circ\).`,
+        ans: S`Tam giác \(OCD\) cân nên đường cao \(OH\) cũng là trung tuyến; góc chắn nửa đường tròn.`,
+        barem: q4(S`\(OC = OD = R\) nên tam giác \(OCD\) cân tại \(O\)`, S`\(OH\) là đường cao nên cũng là trung tuyến: \(H\) là trung điểm \(CD\)`,
+          S`\(\widehat{ACB}\) là góc nội tiếp chắn nửa đường tròn đường kính \(AB\)`, S`nên \(\widehat{ACB} = 90^\circ\)`),
+        loi: ['Viết "đường kính vuông góc với dây thì đi qua trung điểm" (bị cấm, phải chứng minh lại)', 'Thiếu lí do OC = OD'] },
+      b: { q: S`Chứng minh \(CH^2 = HA \cdot HB\) và \(AC^2 = AH \cdot AB\).`,
+        ans: S`\(\triangle AHC \backsim \triangle CHB\); \(\triangle AHC \backsim \triangle ACB\).`,
+        barem: q4(S`\(\triangle AHC \backsim \triangle CHB\) (\(\widehat{AHC} = \widehat{CHB} = 90^\circ\), \(\widehat{HAC} = \widehat{HCB}\) cùng phụ \(\widehat{ACH}\))`, S`\(\Rightarrow \dfrac{CH}{HB} = \dfrac{HA}{CH} \Rightarrow CH^2 = HA \cdot HB\)`,
+          S`\(\triangle AHC \backsim \triangle ACB\) (\(\widehat A\) chung, \(\widehat{AHC} = \widehat{ACB} = 90^\circ\))`, S`\(\Rightarrow \dfrac{AH}{AC} = \dfrac{AC}{AB} \Rightarrow AC^2 = AH \cdot AB\)`),
+        loi: ['Dùng thẳng hệ thức h² = b′c′', 'Sai cặp góc tương ứng'] },
+      c: { q: S`Cho \(R = 5\) cm và \(OH = 3\) cm. Tính \(CD\), \(AC\) và diện tích tứ giác \(ACBD\).`,
+        ans: S`\(CD = 8\) cm; \(AC = 4\sqrt5\) cm; \(S_{ACBD} = 40\) cm².`,
+        barem: q4(S`\(HB = R - OH = 2\), \(HA = R + OH = 8\) (cm)`, S`\(CH^2 = HA \cdot HB = 16 \Rightarrow CH = 4\), \(CD = 8\) (cm)`,
+          S`\(AC^2 = AH \cdot AB = 8 \cdot 10 = 80 \Rightarrow AC = 4\sqrt5\) (cm)`, S`Tứ giác \(ACBD\) có hai đường chéo \(AB \perp CD\): \(S = \tfrac12 AB \cdot CD = \tfrac12 \cdot 10 \cdot 8 = 40\) (cm²)`),
+        loi: ['Nhầm HA = R − OH', 'Dùng công thức ½·d₁·d₂ mà không nêu hai đường chéo vuông góc'] } },
+  ];
+  const SOAT = ['Vẽ hình đúng, đủ kí hiệu', 'Mỗi bước có lí do (định lí, tính chất)', 'Không dùng kiến thức bị cấm – chứng minh lại', 'Kết luận đúng điều cần chứng minh / tính'];
+  const mk = (part, build, h) => CFG.map(c => ({ ten: c.ten, nguon: c.nguon, pts: 1, h, de: build(c), figQ: part === 'a' ? undefined : c.fig, fig: part === 'a' ? c.fig : undefined,
+    ans: c[part].ans, barem: c[part].barem, loi: c[part].loi }));
+  LuyenDe.add('hinh-7a', { phut: 15, soat: SOAT, de: mk('a', c => `${c.ch}<br><b>a)</b> ${c.a.q} <i>(Vẽ hình trước khi làm.)</i>`, 150) });
+  LuyenDe.add('hinh-7b', { phut: 15, soat: SOAT, de: mk('b', c => `${c.ch}<br><i>Đã chứng minh ở câu a:</i> ${c.a.q.replace(/^Chứng minh /, '')}<br><b>b)</b> ${c.b.q}`, 115) });
+  LuyenDe.add('hinh-7c', { phut: 15, soat: SOAT, de: mk('c', c => `${c.ch}<br><i>Đã chứng minh:</i> a) ${c.a.q.replace(/^Chứng minh /, '')} b) ${c.b.q.replace(/^Chứng minh /, '')}<br><b>c)</b> ${c.c.q}`, 110) });
+})();
 
 </script>
 <!-- LỚP 10 – 11 – 12: vận dụng, vận dụng cao. Thêm chủ đề = thêm một dòng ở đây. -->

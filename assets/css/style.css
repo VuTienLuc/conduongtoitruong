@@ -192,6 +192,7 @@ mjx-container[display="true"].mjx-wide{display:block}
 .sh-fig{display:flex;justify-content:center;margin:4px 0}
 .sh-fig .fig{max-width:62mm}
 .sh-fig .fig.fig-sm{max-width:40mm}
+.ld-page .sh-fig .fig{max-height:58mm;width:auto}
 .sh-model{margin:6px 0 10px;break-inside:avoid-page}
 .sh-model p{margin:0 0 4px}
 .sh-steps{margin:2px 0;padding-left:0;list-style:none;font-size:11pt}
