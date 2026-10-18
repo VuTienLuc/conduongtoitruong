@@ -15,6 +15,7 @@ Mỗi chủ đề có 6 tab: 📘 Lý thuyết · 💡 Mẹo nhớ · ✅ Hiểu
 | `data/vao-10/cdNN-*.js` | **Nội dung Toán vào 10** – mỗi chủ đề một tệp, gọi `Topics.add({...})` |
 | `data/lop10/`, `data/lop11/`, `data/lop12/` | Dành sẵn cho nội dung lớp 10–12 (đang trống) |
 | `docs/` | Tài liệu kèm theo: kế hoạch 6 tháng luyện thi vào 10 |
+| `tai-lieu/lop9`, `lop10`, `lop11`, `lop12` | **Tài liệu gốc thầy cung cấp** (SGK, mục lục, đề, ma trận, hướng dẫn chấm). Chỉ ở trên máy thầy, không đưa lên GitHub |
 | `assets/js/core.js` | `Topics`, tiện ích `U` (lưu trữ, sao chép, chuyển HTML → văn bản cho prompt), `S` = `String.raw` |
 | `assets/js/figures.js` | Hình SVG: `Fig.parab`, `Fig.geo` (toạ độ thực, y hướng lên), `Fig.solid('tru'|'non'|'cau'|'kem'|'coc-bi')` |
 | `assets/js/app.js` | Điều hướng, 6 tab, phiếu in (`App.sheetHTML`), prompt (`App.promptGrade/promptHint`), `STRUCT`, `RULES`, `ROADMAP` |
@@ -54,3 +55,10 @@ Thêm chủ đề vào 10 = thêm tệp `data/vao-10/cdNN-*.js` + một dòng `<
 - Nội dung đặt trong `data/lop10/`, `data/lop11/`, `data/lop12/`, mỗi chủ đề một tệp; bám SGK Kết nối tri thức, chương trình GDPT 2018; đề thi tốt nghiệp THPT cho lớp 12 theo cấu trúc 3 phần (TN, Đúng–Sai, Trả lời ngắn).
 - Khi có khối thứ hai: thêm trang chọn khối ở `#/` và đường link `#/<khối>/cd/<mã>/<tab>`; `Topics.list` lọc theo `grade`; `STRUCT`, `ROADMAP`, `RULES` chuyển thành dữ liệu theo khối (tệp `data/<khối>/_khoi.js`). Bản vào 10 hiện tại là khối đầu tiên, link cũ `#/cd/...` vẫn phải chạy.
 - Phiếu in, prompt AI, kiểm tra (`kiem-tra.js`, `kiem-dap-so.py`, `test_web.py`) dùng chung cho mọi khối.
+
+## 6. Soạn nội dung từ tài liệu gốc (thầy yêu cầu 18/10/2026)
+- Trước khi soạn chủ đề của lớp nào, **đọc hết tài liệu trong `tai-lieu/<lớp>/`** (lớp 9 → `data/vao-10/`, lớp 10 → `data/lop10/`, lớp 11 → `data/lop11/`, lớp 12 → `data/lop12/`).
+- Bám **đúng chương trình** trong tài liệu: tên chương, tên bài, thứ tự, yêu cầu cần đạt, cấu trúc đề. Không tự thêm nội dung ngoài chương trình; không bịa số trang, số bài.
+- Tài liệu thiếu hoặc mâu thuẫn: hỏi thầy, không đoán. Đề lấy từ tài liệu thì ghi nguồn (tên tệp) trong chú thích của tệp dữ liệu.
+- Không chép nguyên văn dài từ SGK; diễn đạt lại, giữ đúng thuật ngữ và kí hiệu của SGK.
+- Tệp trong `tai-lieu/` không commit (đã có `.gitignore`); chỉ commit phần web soạn ra.

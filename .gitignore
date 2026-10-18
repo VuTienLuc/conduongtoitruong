@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 .DS_Store
 node_modules/
+
+# Tài liệu gốc của thầy: chỉ giữ trên máy, không đưa lên GitHub
+tai-lieu/**
+!tai-lieu/**/
+!tai-lieu/**/README.md
