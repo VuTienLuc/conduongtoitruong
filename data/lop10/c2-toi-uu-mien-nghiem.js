@@ -1,10 +1,17 @@
-/* Toán 10 – Chương II. Vận dụng: giá trị lớn nhất, nhỏ nhất trên miền nghiệm và bài toán tối ưu thực tế.
-   MẪU MINH HỌA (mau:true) – soạn trước khi có tài liệu; sẽ đối chiếu, sửa theo tai-lieu/lop10/ của thầy.
-   Đáp số đã kiểm bằng tools/kiem-dap-so.py (đỉnh miền nghiệm, vét cạn nghiệm nguyên). */
+/* Toán 10 – Chương II. Vận dụng, vận dụng cao: giá trị lớn nhất, nhỏ nhất trên miền nghiệm và bài toán tối ưu thực tế.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-3 (Vận dụng cao), Đúng–Sai ĐS-2 – hệ bất phương trình bậc nhất hai ẩn.
+   Dạng bài lấy theo các đề trong tai-lieu/lop10/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Tôn Thất Tùng – Đà Nẵng.pdf (thực đơn trà sữa, bánh)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Xuân Trường – Ninh Bình.pdf (m nhỏ nhất để BPT đúng trên miền)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường chuyên Vĩnh Phúc – Phú Thọ.pdf (đầu tư ba loại trái phiếu)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Phan Bội Châu – Đà Nẵng.pdf (khẩu phần thịt, chi phí nhỏ nhất)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Lạng Giang 1 – Bắc Ninh.pdf (nghiệm nguyên)
+   - Đề giữa HK1/Đề ôn tập GK1 Toán 10 năm 2026 – 2027 trường THPT Lê Thị Hồng Gấm – TP HCM.pdf (xưởng may hai máy) */
 (() => {
   const P = Fig.plane;
   Vdc.add({
-    grade: 'lop10', id: 'c2-toi-uu-mien-nghiem', ky: ['Giữa kì I'], mau: true,
+    grade: 'lop10', id: 'c2-toi-uu-mien-nghiem', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Tôn Thất Tùng – Đà Nẵng; THPT Xuân Trường – Ninh Bình; THPT chuyên Vĩnh Phúc; THPT Phan Bội Châu – Đà Nẵng; THPT Lạng Giang 1 – Bắc Ninh (2025 – 2026); THPT Lê Thị Hồng Gấm – TP HCM (2026 – 2027)',
     chuong: 'Chương II. Bất phương trình và hệ bất phương trình bậc nhất hai ẩn',
     bai: 'Bài 4. Hệ bất phương trình bậc nhất hai ẩn',
     title: S`Giá trị lớn nhất, nhỏ nhất của \(F = ax + by\) và bài toán tối ưu`,
@@ -52,6 +59,15 @@
               S`\(F(O) = 0\), \(F(A) = 4\), \(F(B) = 4m\). Do đó GTLN của \(F\) trên \(D\) là \(\max\{4;\ 4m\}\) (vì \(4 \gt 0\)).`,
               S`GTLN bằng 8 mà \(4 \ne 8\), nên phải có \(4m = 8\) và \(4m \ge 4\), tức \(m = 2\).`, S`Thử lại: \(m = 2\) thì \(F(B) = 8 \gt 4\). Vậy \(m = 2\).`],
             ds: S`\(m = 2\).` },
+          { muc: 'VDC', dong: 10,
+            de: S`Cho hệ bất phương trình \(\begin{cases} x + y \ge 4 \\ x - 2y \le 1 \\ y \le 3 \end{cases}\) (I). Tìm giá trị nhỏ nhất của tham số \(m\) để bất phương trình \(3x - 4y + m \ge 0\) đúng với mọi \((x;\, y)\) thỏa mãn (I).`,
+            goiY: S`Bất phương trình đúng với mọi điểm của miền \(\iff m \ge -(3x - 4y)\) với mọi điểm \(\iff m \ge -\min(3x - 4y)\). Tìm GTNN của \(3x - 4y\) tại các đỉnh.`,
+            fig: P({ xr: [-0.6, 8], yr: [-0.6, 4.5], w: 250, lines: [{ a: 1, b: 1, c: 4 }, { a: 1, b: -2, c: 1 }, { a: 0, b: 1, c: 3 }], poly: [[1, 3], [7, 3], [3, 1]], pts: [[1, 3, '(1; 3)', -12, -8], [7, 3, '(7; 3)', -8, -8], [3, 1, '(3; 1)', 6, 12]] }),
+            lg: [S`Miền nghiệm của (I) là tam giác có các đỉnh: giao của \(x + y = 4\) và \(y = 3\) là \((1;\, 3)\); giao của \(x - 2y = 1\) và \(y = 3\) là \((7;\, 3)\); giao của \(x + y = 4\) và \(x - 2y = 1\) là \((3;\, 1)\).`,
+              S`Đặt \(G = 3x - 4y\): \(G(1;\,3) = -9\), \(G(7;\,3) = 9\), \(G(3;\,1) = 5\). GTNN của \(G\) trên miền là \(-9\).`,
+              S`\(3x - 4y + m \ge 0\) với mọi \((x;\, y)\) thuộc miền \(\iff m \ge -G\) với mọi điểm \(\iff m \ge -(-9) = 9\).`,
+              S`Giá trị nhỏ nhất của \(m\) là 9.`],
+            ds: S`\(m_{\min} = 9\).` },
         ] },
       { ten: 'Bài toán thực tế tối ưu (lợi nhuận, chi phí, nghiệm nguyên)', muc: 'VD – VDC',
         pp: [S`Gọi ẩn \(x, y\): ghi rõ đại lượng, đơn vị, điều kiện (không âm, không vượt quá giới hạn, nguyên nếu đếm số lượng).`, 'Lập hệ bất phương trình từ từng ràng buộc (giờ máy, nguyên liệu, nhu cầu tối thiểu…).', S`Lập biểu thức \(F\) cần tìm giá trị lớn nhất (lãi) hoặc nhỏ nhất (chi phí).`, S`Vẽ miền nghiệm, tìm các đỉnh, tính \(F\) tại các đỉnh. Ẩn nguyên mà đỉnh tối ưu không nguyên thì xét các điểm nguyên lân cận trong miền.`, 'Trả lời đúng câu hỏi, có đơn vị.'],
@@ -85,6 +101,26 @@
               S`Xét nghiệm nguyên. \(y = 6\): cần \(3x \ge 2\) nên \(x \ge 1\), \(F \ge 4 + 18 = 22\). \(y = 5\): cần \(x \ge 2\), \(F \ge 8 + 15 = 23\). \(y \le 4\): cần \(x \ge 12 - 2y\), \(F \ge 4(12 - 2y) + 3y = 48 - 5y \ge 28\).`,
               S`Chi phí nhỏ nhất là 22 triệu đồng khi thuê 1 xe A và 6 xe B (kiểm tra: 150 người, 13 tấn hàng).`],
             ds: '1 xe loại A và 6 xe loại B; chi phí thấp nhất 22 triệu đồng.' },
+          { muc: 'VD', dong: 12,
+            de: S`Để gây quỹ, câu lạc bộ thiện nguyện bán hai thực đơn. Thực đơn 1 gồm 2 ly trà sữa và 1 chiếc bánh, giá 45 nghìn đồng; thực đơn 2 gồm 1 ly trà sữa và 2 chiếc bánh, giá 50 nghìn đồng. Câu lạc bộ làm được không quá 160 ly trà sữa và 110 chiếc bánh. Hỏi bán bao nhiêu suất mỗi thực đơn để thu được nhiều tiền nhất (giả sử bán hết)?`,
+            goiY: S`Gọi \(x, y\) là số suất thực đơn 1, 2. Trà sữa: \(2x + y \le 160\); bánh: \(x + 2y \le 110\); tiền thu \(F = 45x + 50y\).`,
+            fig: P({ xr: [-5, 100], yr: [-5, 170], w: 220, step: 20, lines: [{ a: 2, b: 1, c: 160 }, { a: 1, b: 2, c: 110 }], poly: [[0, 0], [80, 0], [70, 20], [0, 55]], pts: [[70, 20, '(70; 20)', 6, -6]] }),
+            lg: [S`Gọi \(x, y\) (\(x, y \in \mathbb N\)) là số suất thực đơn 1, 2. Ràng buộc: \(2x + y \le 160\), \(x + 2y \le 110\), \(x \ge 0\), \(y \ge 0\).`,
+              S`Tiền thu được \(F = 45x + 50y\) (nghìn đồng).`,
+              S`Miền nghiệm là tứ giác có các đỉnh \(O(0;\,0)\), \((80;\, 0)\), \((0;\, 55)\) và giao của \(2x + y = 160\), \(x + 2y = 110\) là \((70;\, 20)\).`,
+              S`\(F(80;\,0) = 3600\); \(F(70;\,20) = 3150 + 1000 = 4150\); \(F(0;\,55) = 2750\); \(F(0;\,0) = 0\).`,
+              'Bán 70 suất thực đơn 1 và 20 suất thực đơn 2, thu nhiều nhất 4150 nghìn đồng (4,15 triệu đồng).'],
+            ds: '70 suất thực đơn 1, 20 suất thực đơn 2; thu nhiều nhất 4 150 nghìn đồng.' },
+          { muc: 'VDC', dong: 14,
+            de: S`Cô Lan đầu tư toàn bộ 1,5 tỉ đồng vào ba loại trái phiếu: trái phiếu chính phủ lãi 6%/năm, trái phiếu ngân hàng lãi 8%/năm và trái phiếu doanh nghiệp lãi 11%/năm. Cô muốn số tiền mua trái phiếu chính phủ ít nhất gấp 3 lần số tiền mua trái phiếu ngân hàng, và mua trái phiếu doanh nghiệp không quá 300 triệu đồng. Hỏi cô nên đầu tư mỗi loại bao nhiêu để tiền lãi sau một năm lớn nhất?`,
+            goiY: S`Ba ẩn nhưng tổng cố định: gọi \(x, y\) (triệu đồng) là tiền mua trái phiếu chính phủ, ngân hàng thì trái phiếu doanh nghiệp là \(1500 - x - y\). Đưa về bài toán hai ẩn.`,
+            lg: [S`Gọi \(x, y\) (triệu đồng) là tiền mua trái phiếu chính phủ, ngân hàng; tiền mua trái phiếu doanh nghiệp là \(1500 - x - y\).`,
+              S`Ràng buộc: \(x \ge 3y\), \(y \ge 0\), \(0 \le 1500 - x - y \le 300 \iff 1200 \le x + y \le 1500\).`,
+              S`Tiền lãi: \(L = 0{,}06x + 0{,}08y + 0{,}11(1500 - x - y) = 165 - 0{,}05x - 0{,}03y\).`,
+              S`Miền nghiệm là tứ giác có các đỉnh \((1200;\, 0)\), \((1500;\, 0)\), \((1125;\, 375)\) và \((900;\, 300)\) (giao của \(x = 3y\) với \(x + y = 1500\) và \(x + y = 1200\)).`,
+              S`\(L(1200;\,0) = 105\); \(L(1500;\,0) = 90\); \(L(1125;\,375) = 97{,}5\); \(L(900;\,300) = 165 - 45 - 9 = 111\).`,
+              'Đầu tư 900 triệu trái phiếu chính phủ, 300 triệu trái phiếu ngân hàng, 300 triệu trái phiếu doanh nghiệp; lãi lớn nhất 111 triệu đồng.'],
+            ds: 'Chính phủ 900 triệu, ngân hàng 300 triệu, doanh nghiệp 300 triệu; lãi lớn nhất 111 triệu đồng/năm.' },
         ] },
     ],
   });

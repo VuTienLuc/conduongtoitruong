@@ -143,6 +143,10 @@ table.struct th[scope=row]{white-space:nowrap}
 .sheet table:not(.sh-barem){border-collapse:collapse;margin:4px 0}
 .sheet table:not(.sh-barem) td,.sheet table:not(.sh-barem) th{border:1px solid #888;padding:2px 8px;text-align:center}
 .tbl-wrap{overflow-x:auto}
+mjx-container.mjx-wide{display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:middle;padding:2px 0}
+mjx-container[display="true"].mjx-wide{display:block}
+@media print{mjx-container.mjx-wide{overflow:visible;max-width:none}}
+.sheet table.tbl{margin:3px 0;font-size:10.5pt}
 
 /* ---------- Trắc nghiệm ---------- */
 .qtext{margin:0 0 12px}
@@ -192,7 +196,7 @@ table.struct th[scope=row]{white-space:nowrap}
 .sh-remind ul{margin:2px 0;padding-left:18px;columns:2;column-gap:18px}
 .sh-remind li{break-inside:avoid}
 .sh-q{margin:8px 0 0;break-inside:avoid}
-.sh-q p{margin:0 0 4px}
+.sh-q p,.sh-q .sh-de{margin:0 0 4px}
 .sh-write{border:1px solid #9aa0aa;background-color:#fff;background-image:linear-gradient(#d3d8e0 1px,transparent 1px),linear-gradient(90deg,#d3d8e0 1px,transparent 1px);
   background-size:5mm 5mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .sh-check{margin:8px 0 4px;font-size:10.5pt;display:flex;flex-wrap:wrap;gap:2px 14px;break-inside:avoid}
@@ -278,15 +282,16 @@ h3.sub{margin:22px 0 0}
 .sh-kt-i{margin:2px 0 4px}
 .sh-dang{font-weight:700;font-style:italic;margin:8px 0 2px}
 .sh-vd{font-size:11pt;margin:4px 0 8px;break-inside:avoid}
-.sh-vd p{margin:0 0 3px}
+.sh-vd p,.sh-vd .sh-de{margin:0 0 3px}
 .sh-lg{margin:2px 0;padding-left:20px}
 .sh-lines{margin-top:2px}
 .sh-lines i{display:block;height:8mm;border-bottom:1px solid #8d939d}
-.sh-dang,.sh-q > p,.sh-h{break-after:avoid;page-break-after:avoid}
+.sh-dang,.sh-q > .sh-de,.sh-h{break-after:avoid;page-break-after:avoid}
 .sh-hints{margin-top:10px;break-inside:avoid-page}
 .sh-note{font:italic 400 9.5pt/1.3 "Times New Roman",serif;letter-spacing:0}
-.sh-hgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
-.sh-hint{display:flex;gap:8px;align-items:flex-start;font-size:10.5pt;border:1px dashed #777;border-radius:6px;padding:5px 7px;break-inside:avoid}
+.sh-hgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 14px}
+.sh-hint{display:flex;gap:8px;align-items:flex-start;min-width:0;font-size:10.5pt;border:1px dashed #777;border-radius:6px;padding:5px 7px;break-inside:avoid}
+.sh-hint > div{min-width:0}
 .sh-qr{flex:none;width:21mm;height:21mm}
 .sh-qr .qr{width:100%;height:100%;display:block}
 
@@ -303,7 +308,7 @@ h3.sub{margin:22px 0 0}
   .sheet{font-size:11pt}
   table.struct{font-size:15px}
   table.struct th,table.struct td{padding:8px}
-  .sh-hgrid{grid-template-columns:1fr}
+  .sh-hgrid{grid-template-columns:minmax(0,1fr)}
   .tog.small{margin-left:0}
   .card table:not(.struct){display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
@@ -585,7 +590,64 @@ const Fig = (() => {
     return s + '</svg>';
   }
 
-  return { parab, geo, solid, plane };
+  /* ---------- Biểu đồ Ven: 2 hoặc 3 tập ----------
+     o = { sets:['A','B'(,'C')], vals:{ a:'..', b:'..', ab:'..', … , out:'..' } (số ghi trong từng miền, tuỳ chọn),
+           shade:['ab', …] (các miền tô), w }. Miền: a, b, c, ab, ac, bc, abc (chỉ thuộc đúng các tập đó), out. */
+  function venn(o) {
+    const three = o.sets.length === 3, W = o.w || 280, H = three ? 230 : 170, r = three ? 62 : 64;
+    const C = three ? { a: [W / 2 - 42, 88], b: [W / 2 + 42, 88], c: [W / 2, 158] } : { a: [W / 2 - 40, 85], b: [W / 2 + 40, 85] };
+    const P = three
+      ? { a: [W / 2 - 78, 70], b: [W / 2 + 78, 70], c: [W / 2, 196], ab: [W / 2, 62], ac: [W / 2 - 46, 140], bc: [W / 2 + 46, 140], abc: [W / 2, 112], out: [W - 22, 20] }
+      : { a: [W / 2 - 74, 90], b: [W / 2 + 74, 90], ab: [W / 2, 90], out: [W - 22, 20] };
+    const keys = Object.keys(C);
+    let s = `<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="Biểu đồ Ven">`;
+    s += `<rect class="f-stroke" x="2" y="2" width="${W - 4}" height="${H - 4}" rx="8" fill="none"/>`;
+    const sh = new Set(o.shade || []);
+    // tô từng miền bằng mặt nạ: miền = giao các hình tròn trong khoá, trừ các hình tròn còn lại
+    sh.forEach(reg => {
+      const inn = reg.split(''), outs = keys.filter(k => !inn.includes(k));
+      const id = 'v' + Math.random().toString(36).slice(2, 8);
+      s += `<defs><mask id="${id}"><rect x="0" y="0" width="${W}" height="${H}" fill="${reg === 'out' ? '#fff' : '#000'}"/>`;
+      if (reg !== 'out') s += `<circle cx="${C[inn[0]][0]}" cy="${C[inn[0]][1]}" r="${r}" fill="#fff"/>`;
+      (reg === 'out' ? keys : outs).forEach(k => { s += `<circle cx="${C[k][0]}" cy="${C[k][1]}" r="${r}" fill="#000"/>`; });
+      s += '</mask>';
+      inn.slice(1).forEach((k, j) => { s += `<clipPath id="${id}c${j}"><circle cx="${C[k][0]}" cy="${C[k][1]}" r="${r}"/></clipPath>`; });
+      s += '</defs>';
+      let rect = `<rect class="f-shade" x="0" y="0" width="${W}" height="${H}" mask="url(#${id})"/>`;
+      if (reg !== 'out') inn.slice(1).forEach((k, j) => { rect = `<g clip-path="url(#${id}c${j})">${rect}</g>`; });
+      s += rect;
+    });
+    keys.forEach((k, i) => {
+      s += `<circle class="f-stroke" cx="${C[k][0]}" cy="${C[k][1]}" r="${r}" fill="none"/>`;
+      const lx = C[k][0] + (k === 'a' ? -r + 6 : k === 'b' ? r - 14 : r - 6), ly = C[k][1] + (k === 'c' ? r - 4 : -r + 14);
+      s += `<text class="f-lab" x="${lx}" y="${ly}">${o.sets[i]}</text>`;
+    });
+    Object.entries(o.vals || {}).forEach(([k, v]) => { if (P[k]) s += `<text class="f-num" x="${P[k][0]}" y="${P[k][1] + 4}" text-anchor="middle">${v}</text>`; });
+    return s + '</svg>';
+  }
+
+  /* ---------- Đồ thị hàm số y = f(x) (dùng cho hàm số lượng giác, mô hình thực tế) ----------
+     o = { f, xr:[x0,x1], yr:[y0,y1], w, h, xt:[[giá trị, 'nhãn'], …], yt:[[giá trị,'nhãn'],…], pts:[[x,y,'nhãn',dx,dy]],
+           hl:[y…] (đường ngang nét đứt), xl:'x', yl:'y' } */
+  function func(o) {
+    const [x0, x1] = o.xr, [y0, y1] = o.yr, W = o.w || 320, H = o.h || 180;
+    const X = x => f2((x - x0) / (x1 - x0) * W), Y = y => f2((y1 - y) / (y1 - y0) * H);
+    let s = `<svg class="fig" viewBox="-36 -16 ${W + 58} ${H + 34}" role="img" aria-label="${o.label || 'Đồ thị'}">`;
+    const ox = x0 <= 0 && x1 >= 0 ? X(0) : 0, oy = y0 <= 0 && y1 >= 0 ? Y(0) : H;
+    (o.hl || []).forEach(y => { s += `<line class="f-dash" x1="0" y1="${Y(y)}" x2="${W}" y2="${Y(y)}"/>`; });
+    s += `<g class="f-axis"><line x1="0" y1="${oy}" x2="${W + 10}" y2="${oy}"/><line x1="${ox}" y1="${H}" x2="${ox}" y2="-10"/>`;
+    s += `<path d="M${W + 10} ${oy}l-7 -4v8z" class="f-fill"/><path d="M${ox} -10l-4 7h8z" class="f-fill"/></g>`;
+    s += `<text class="f-lab" x="${W + 6}" y="${oy + 16}">${o.xl || 'x'}</text><text class="f-lab" x="${ox + 8}" y="-4">${o.yl || 'y'}</text>`;
+    (o.xt || []).forEach(([x, t]) => { s += `<line class="f-axis" x1="${X(x)}" y1="${oy - 3}" x2="${X(x)}" y2="${oy + 3}"/><text class="f-num" x="${X(x)}" y="${oy + 15}" text-anchor="middle">${t}</text>`; });
+    (o.yt || []).forEach(([y, t]) => { s += `<line class="f-axis" x1="${ox - 3}" y1="${Y(y)}" x2="${ox + 3}" y2="${Y(y)}"/><text class="f-num" x="${ox - 6}" y="${Y(y) + 4}" text-anchor="end">${t}</text>`; });
+    let d = '';
+    for (let i = 0; i <= 300; i++) { const x = x0 + (x1 - x0) * i / 300, y = o.f(x); d += (i ? 'L' : 'M') + X(x) + ' ' + Y(y); }
+    s += `<path class="f-curve" d="${d}"/>`;
+    (o.pts || []).forEach(([x, y, lab, dx = 6, dy = -6]) => { s += `<circle class="f-dot" cx="${X(x)}" cy="${Y(y)}" r="3.4"/>${lab ? `<text class="f-lab" x="${X(x) + dx}" y="${Y(y) + dy}">${lab}</text>` : ''}`; });
+    return s + '</svg>';
+  }
+
+  return { parab, geo, solid, plane, venn, func };
 })();
 
 </script>
@@ -3031,12 +3093,12 @@ const Vdc = (() => {
     let s = `<section class="sh-page">${head}<h1 class="sh-title">PHIẾU LUYỆN TẬP</h1><p class="sh-sub">${t.title}</p>
       <p class="sh-info">Họ và tên: .......................................................... Lớp: .............. Ngày: ......../......../........</p>
       <div class="sh-kt"><p class="sh-h">KIẾN THỨC TRỌNG TÂM</p>${t.kt.map(k => `<div class="sh-kt-i"><b>${k.t}.</b> ${k.b}</div>`).join('')}</div>`;
-    if (o.vd) s += `<p class="sh-h">VÍ DỤ MẪU</p>${t.dang.map((d, i) => d.vd.map(v => `<div class="sh-vd"><p><b>Dạng ${i + 1} – Ví dụ.</b> ${v.de}</p>${v.fig ? `<div class="sh-fig">${v.fig}</div>` : ''}<ol class="sh-lg">${v.lg.map(x => `<li>${x}</li>`).join('')}</ol><p><b>Đáp số:</b> ${v.ds}</p></div>`).join('')).join('')}`;
+    if (o.vd) s += `<p class="sh-h">VÍ DỤ MẪU</p>${t.dang.map((d, i) => d.vd.map(v => `<div class="sh-vd"><div class="sh-de"><b>Dạng ${i + 1} – Ví dụ.</b> ${v.de}</div>${v.fig ? `<div class="sh-fig">${v.fig}</div>` : ''}<ol class="sh-lg">${v.lg.map(x => `<li>${x}</li>`).join('')}</ol><p><b>Đáp số:</b> ${v.ds}</p></div>`).join('')).join('')}`;
     s += `<p class="sh-h">ĐỀ LUYỆN TẬP</p>`;
     t.dang.forEach((d, i) => {
       s += `<p class="sh-dang">Dạng ${i + 1}. ${d.ten}</p>`;
       d.bt.forEach(b => {
-        s += `<div class="sh-q"><p><b>Bài ${b.n}</b> <i>(${esc(b.muc)})</i>. ${b.de}</p>${b.figQ ? `<div class="sh-fig">${b.figQ}</div>` : ''}<div class="sh-lines">${'<i></i>'.repeat(b.dong || 8)}</div></div>`;
+        s += `<div class="sh-q"><div class="sh-de"><b>Bài ${b.n}</b> <i>(${esc(b.muc)})</i>. ${b.de}</div>${b.figQ ? `<div class="sh-fig">${b.figQ}</div>` : ''}<div class="sh-lines">${'<i></i>'.repeat(b.dong || 8)}</div></div>`;
       });
     });
     const qrNote = base ? `Quét mã QR để xem lời giải từng bài.` : `Chưa có địa chỉ web nên chưa in được mã QR – thầy điền <code>siteUrl</code> trong config.js sau khi đưa web lên mạng.`;
@@ -3113,11 +3175,22 @@ const MathTS = (() => {
     busy = busy.then(async () => {
       for (const n of nodes) {
         if (!n.isConnected || !HAS.test(n.textContent)) continue;
-        try { await MathJax.typesetPromise([n]); }
+        try { await MathJax.typesetPromise([n]); fit(n); }
         catch (e) { if (n.isConnected) setTimeout(() => add(n), 30); }
       }
     });
   }
+  // Công thức dài hơn khung (điện thoại): cho cuộn ngang riêng công thức đó, trang không bị tràn.
+  function fit(root) {
+    (root || document.body).querySelectorAll('mjx-container').forEach(c => {
+      c.classList.remove('mjx-wide');
+      const box = c.parentElement && c.parentElement.closest('li, p, div, td, th, section, article');
+      const inner = c.firstElementChild, w = Math.max(c.getBoundingClientRect().width, inner ? inner.getBoundingClientRect().width : 0);
+      if (box && w > box.clientWidth + 1) c.classList.add('mjx-wide');
+    });
+  }
+  let rz = null;
+  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => fit(document.body), 150); });
   function add(n) {
     if (!n || n.nodeType !== 1) n = n && n.parentElement;
     if (!n || n.closest('mjx-container')) return;
@@ -3134,9 +3207,9 @@ const MathTS = (() => {
     for (let i = 0; i < 100 && !started; i++) await new Promise(r => setTimeout(r, 100));
     if (!window.MathJax || !MathJax.typesetPromise) return;
     await busy;
-    try { await MathJax.typesetPromise([node || document.body]); } catch (e) { /* bỏ qua */ }
+    try { await MathJax.typesetPromise([node || document.body]); fit(node); } catch (e) { /* bỏ qua */ }
   }
-  return { start, typeset: add, done };
+  return { start, typeset: add, done, fit };
 })();
 
 </script>
@@ -4125,14 +4198,229 @@ Topics.add({
 
 </script>
 <!-- LỚP 10 – 11 – 12: vận dụng, vận dụng cao. Thêm chủ đề = thêm một dòng ở đây. -->
+<script>/* data/lop10/c1-tap-hop-ven.js */
+/* Toán 10 – Chương I. Vận dụng: bài toán thực tế đếm số phần tử bằng biểu đồ Ven (2 tập, 3 tập, có tham số).
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-1, TLN-2 và Đúng–Sai ĐS-1 – mức Vận dụng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop10/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Hướng Hóa – Quảng Trị.pdf (thích đúng hai môn)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Nguyễn Trãi – Đà Nẵng.pdf (chỉ thích một môn)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Hồ Thị Kỷ – Cà Mau.pdf (cà phê đường, sữa)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Thái Phiên – Hải Phòng.pdf (Ven có tham số m)
+   - Đề giữa HK1/Đề GK1 Toán 10 năm 2025 – 2026 trường THPT Ninh Bình – Bạc Liêu – Ninh Bình.pdf (ba môn thể thao) */
+(() => {
+  const V = Fig.venn;
+  Vdc.add({
+    grade: 'lop10', id: 'c1-tap-hop-ven', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Hướng Hóa – Quảng Trị; THPT Nguyễn Trãi – Đà Nẵng; THPT Hồ Thị Kỷ – Cà Mau; THPT Thái Phiên – Hải Phòng; THPT Ninh Bình – Bạc Liêu (2025 – 2026)',
+    chuong: 'Chương I. Mệnh đề và tập hợp',
+    bai: 'Bài 2. Tập hợp và các phép toán trên tập hợp',
+    title: 'Bài toán thực tế dùng biểu đồ Ven',
+    desc: 'Đếm số phần tử của hợp, giao; "chỉ thuộc đúng một / đúng hai tập"; ba tập hợp; số liệu chứa tham số.',
+    kt: [
+      { t: 'Số phần tử của hợp hai tập',
+        b: S`Với hai tập hữu hạn \(A, B\): \[n(A \cup B) = n(A) + n(B) - n(A \cap B).\] Số phần tử <b>chỉ thuộc</b> \(A\) là \(n(A) - n(A \cap B)\). Nếu tập "toàn thể" (cả lớp) có \(N\) phần tử thì số phần tử không thuộc tập nào là \(N - n(A \cup B)\).`,
+        fig: V({ sets: ['A', 'B'], vals: { a: 'chỉ A', ab: 'A∩B', b: 'chỉ B' }, w: 260 }) },
+      { t: 'Số phần tử của hợp ba tập',
+        b: S`\[n(A \cup B \cup C) = n(A) + n(B) + n(C) - n(A \cap B) - n(B \cap C) - n(C \cap A) + n(A \cap B \cap C).\] Đặt \(x\) là số thuộc cả ba tập. Số thuộc <b>đúng hai</b> tập: \(\big[n(A\cap B) + n(B \cap C) + n(C \cap A)\big] - 3x\). Số thuộc <b>đúng một</b> tập: \(n(A \cup B \cup C)\) trừ số thuộc đúng hai tập và trừ \(x\).` },
+      { t: 'Điền biểu đồ Ven từ trong ra ngoài',
+        b: S`Vẽ biểu đồ Ven, điền số vào miền giữa (thuộc cả ba tập) trước, rồi các miền "đúng hai tập", sau cùng các miền "chỉ một tập". Mỗi miền phải là số tự nhiên – đây cũng là cách thử lại đáp số. Cẩn thận với từ ngữ: "thích Toán và Lí" thường gồm cả người thích ba môn; "<b>chỉ</b> thích Toán và Lí" thì không.`,
+        fig: V({ sets: ['A', 'B', 'C'], vals: { abc: 'x' }, shade: ['abc'], w: 250 }) },
+    ],
+    dang: [
+      { ten: 'Bài toán thực tế với hai tập hợp', muc: 'VD',
+        pp: ['Gọi tên các tập (A: học sinh thích bóng đá, …), ghi rõ số phần tử đã biết.', S`Dùng \(n(A \cup B) = n(A) + n(B) - n(A \cap B)\) để tìm đại lượng chưa biết.`, 'Đọc kĩ câu hỏi: hỏi "ít nhất một", "cả hai", "chỉ một" hay "không thuộc tập nào".', 'Thử lại bằng biểu đồ Ven: các miền đều là số tự nhiên và cộng lại đúng tổng.'],
+        vd: [{
+          de: 'Lớp 10A có 45 học sinh, trong đó có 25 em thích bóng đá, 20 em thích cầu lông và 8 em thích cả hai môn. Hỏi lớp 10A có bao nhiêu em không thích môn nào trong hai môn trên? Có bao nhiêu em chỉ thích đúng một môn?',
+          fig: V({ sets: ['Bóng đá', 'Cầu lông'], vals: { a: '17', ab: '8', b: '12', out: '8' }, shade: ['ab'], w: 260 }),
+          lg: [S`Gọi \(A\), \(B\) lần lượt là tập học sinh thích bóng đá, thích cầu lông: \(n(A) = 25\), \(n(B) = 20\), \(n(A \cap B) = 8\).`,
+            S`Số em thích ít nhất một môn: \(n(A \cup B) = 25 + 20 - 8 = 37\).`,
+            S`Số em không thích môn nào: \(45 - 37 = 8\).`,
+            S`Chỉ thích bóng đá: \(25 - 8 = 17\); chỉ thích cầu lông: \(20 - 8 = 12\). Chỉ thích đúng một môn: \(17 + 12 = 29\) em.`],
+          ds: '8 em không thích môn nào; 29 em chỉ thích đúng một môn.' }],
+        bt: [
+          { muc: 'VD', dong: 7,
+            de: 'Lớp 10B có 40 học sinh, mỗi em đăng kí ít nhất một trong hai câu lạc bộ Tiếng Anh và Tin học. Có 26 em đăng kí Tiếng Anh, 21 em đăng kí Tin học. Hỏi có bao nhiêu em đăng kí cả hai câu lạc bộ? Bao nhiêu em chỉ đăng kí Tin học?',
+            goiY: S`"Mỗi em đăng kí ít nhất một câu lạc bộ" nghĩa là \(n(A \cup B) = 40\). Từ công thức tìm \(n(A \cap B)\).`,
+            lg: [S`Gọi \(A\), \(B\) là tập học sinh đăng kí Tiếng Anh, Tin học; \(n(A \cup B) = 40\).`,
+              S`\(n(A \cap B) = n(A) + n(B) - n(A \cup B) = 26 + 21 - 40 = 7\).`,
+              S`Chỉ đăng kí Tin học: \(21 - 7 = 14\) em.`],
+            ds: '7 em đăng kí cả hai; 14 em chỉ đăng kí Tin học.' },
+          { muc: 'VD', dong: 7,
+            de: 'Khảo sát 120 khách uống cà phê: 70 người thêm đường, 65 người thêm sữa và 15 người không thêm gì. Hỏi có bao nhiêu người thêm cả đường và sữa? Bao nhiêu người chỉ thêm đường?',
+            goiY: S`Số người thêm ít nhất một thứ là \(120 - 15\).`,
+            lg: [S`Gọi \(A\), \(B\) là tập khách thêm đường, thêm sữa. \(n(A \cup B) = 120 - 15 = 105\).`,
+              S`\(n(A \cap B) = 70 + 65 - 105 = 30\).`, S`Chỉ thêm đường: \(70 - 30 = 40\) người.`],
+            ds: '30 người thêm cả đường và sữa; 40 người chỉ thêm đường.' },
+          { muc: 'VDC', dong: 9,
+            de: S`Lớp 10C có 42 học sinh. Số học sinh giỏi Toán là \(2a\), giỏi Văn là \(a + 6\), giỏi cả hai môn là \(a - 3\) và có 9 em không giỏi môn nào trong hai môn đó. Tìm \(a\) và số học sinh chỉ giỏi đúng một môn.`,
+            goiY: S`Lập phương trình: \(n(A) + n(B) - n(A \cap B) + 9 = 42\). Sau khi tìm \(a\) nhớ kiểm tra các miền của biểu đồ Ven không âm.`,
+            lg: [S`Số học sinh giỏi ít nhất một môn: \(2a + (a + 6) - (a - 3) = 2a + 9\).`,
+              S`Cả lớp: \(2a + 9 + 9 = 42 \Rightarrow a = 12\).`,
+              S`Giỏi Toán 24 em, giỏi Văn 18 em, giỏi cả hai 9 em (đều hợp lí vì \(9 \le 18 \le 24\)).`,
+              S`Chỉ giỏi Toán: \(24 - 9 = 15\); chỉ giỏi Văn: \(18 - 9 = 9\). Chỉ giỏi đúng một môn: \(15 + 9 = 24\) em.`],
+            ds: S`\(a = 12\); 24 học sinh chỉ giỏi đúng một môn.` },
+        ] },
+      { ten: 'Bài toán thực tế với ba tập hợp (có tham số)', muc: 'VD – VDC',
+        pp: [S`Gọi ba tập \(A, B, C\) và ghi các số đã biết: \(n(A), n(B), n(C)\), các giao từng đôi, giao cả ba, số không thuộc tập nào.`,
+          'Dùng công thức số phần tử của hợp ba tập để tìm đại lượng chưa biết (thường là giao cả ba hoặc tổng các giao từng đôi).',
+          'Muốn biết "đúng hai", "đúng một": điền biểu đồ Ven từ miền giữa ra ngoài.',
+          'Bài có tham số: lập phương trình theo tham số từ tổng số phần tử, giải rồi kiểm tra mọi miền không âm.'],
+        vd: [{
+          de: 'Lớp 10D có 40 học sinh. Có 20 em chơi bóng đá, 18 em chơi cầu lông, 15 em chơi bóng chuyền; 7 em chơi bóng đá và cầu lông, 6 em chơi bóng đá và bóng chuyền, 5 em chơi cầu lông và bóng chuyền, 3 em chơi cả ba môn. Hỏi có bao nhiêu em không chơi môn nào? Bao nhiêu em chơi đúng một môn?',
+          fig: V({ sets: ['BĐ', 'CL', 'BC'], vals: { a: '10', b: '9', c: '7', ab: '4', ac: '3', bc: '2', abc: '3', out: '2' }, shade: ['abc'], w: 260 }),
+          lg: [S`Gọi \(A, B, C\) là tập học sinh chơi bóng đá, cầu lông, bóng chuyền.`,
+            S`\(n(A \cup B \cup C) = 20 + 18 + 15 - 7 - 6 - 5 + 3 = 38\). Số em không chơi môn nào: \(40 - 38 = 2\).`,
+            S`Điền Ven: miền giữa 3; chỉ BĐ và CL: \(7 - 3 = 4\); chỉ BĐ và BC: \(6 - 3 = 3\); chỉ CL và BC: \(5 - 3 = 2\).`,
+            S`Chỉ BĐ: \(20 - 4 - 3 - 3 = 10\); chỉ CL: \(18 - 4 - 2 - 3 = 9\); chỉ BC: \(15 - 3 - 2 - 3 = 7\).`,
+            S`Chơi đúng một môn: \(10 + 9 + 7 = 26\) em. Thử lại: \(26 + (4 + 3 + 2) + 3 = 38\).`],
+          ds: '2 em không chơi môn nào; 26 em chơi đúng một môn.' }],
+        bt: [
+          { muc: 'VD', dong: 9,
+            de: 'Lớp 10E có 45 học sinh: 22 em thích Toán, 20 em thích Văn, 18 em thích Tiếng Anh, 4 em không thích môn nào và 5 em thích cả ba môn. Hỏi có bao nhiêu em thích đúng hai trong ba môn?',
+            goiY: S`Tìm \(n(A \cup B \cup C)\), suy ra tổng ba giao từng đôi \(s\). Số thích đúng hai môn là \(s - 3 \cdot 5\).`,
+            lg: [S`\(n(A \cup B \cup C) = 45 - 4 = 41\).`,
+              S`Đặt \(s = n(A \cap B) + n(B \cap C) + n(C \cap A)\). Theo công thức: \(41 = 22 + 20 + 18 - s + 5 \Rightarrow s = 24\).`,
+              S`Mỗi em thích cả ba môn được đếm 3 lần trong \(s\), nên số em thích đúng hai môn là \(24 - 3 \cdot 5 = 9\).`],
+            ds: '9 em thích đúng hai môn.' },
+          { muc: 'VD', dong: 9,
+            de: S`Câu lạc bộ thể thao của trường có 32 em thích bóng đá, 26 em thích bóng bàn, 22 em thích cầu lông; 14 em thích bóng đá và bóng bàn, 10 em thích bóng bàn và cầu lông, 12 em thích bóng đá và cầu lông, 6 em thích cả ba môn. Mỗi thành viên thích ít nhất một môn. Gọi \(m, n, p\) lần lượt là số em chỉ thích bóng đá, chỉ thích bóng bàn, chỉ thích cầu lông. Tính \(S = m + n + p\) và số thành viên của câu lạc bộ.`,
+            goiY: S`Chỉ thích bóng đá \(= n(A) - n(A \cap B) - n(A \cap C) + n(A \cap B \cap C)\) (vì phần giữa bị trừ hai lần).`,
+            lg: [S`\(m = 32 - 14 - 12 + 6 = 12\); \(n = 26 - 14 - 10 + 6 = 8\); \(p = 22 - 10 - 12 + 6 = 6\).`,
+              S`\(S = 12 + 8 + 6 = 26\).`,
+              S`Số thành viên: \(32 + 26 + 22 - 14 - 10 - 12 + 6 = 50\).`],
+            ds: S`\(S = 26\); câu lạc bộ có 50 thành viên.` },
+          { muc: 'VDC', dong: 11,
+            de: S`Đội tuyển học sinh giỏi của trường có 100 em. Số em thích Toán là \(40 + m\), thích Lí là \(35 + m\), thích Hóa là 30; thích Toán và Lí là \(12 + 2m\), thích Toán và Hóa là 10, thích Lí và Hóa là \(8 + m\); 4 em thích cả ba môn và 25 em không thích môn nào trong ba môn đó (\(m\) là số nguyên). Hỏi có bao nhiêu em chỉ thích đúng một môn?`,
+            goiY: S`Số em thích ít nhất một môn là 75. Thay vào công thức hợp ba tập để được phương trình bậc nhất theo \(m\).`,
+            lg: [S`\(n(A \cup B \cup C) = 100 - 25 = 75\).`,
+              S`\((40 + m) + (35 + m) + 30 - (12 + 2m) - 10 - (8 + m) + 4 = 79 - m\). Vậy \(79 - m = 75 \Rightarrow m = 4\).`,
+              S`Khi đó: Toán 44, Lí 39, Hóa 30; Toán–Lí 20, Toán–Hóa 10, Lí–Hóa 12, cả ba 4.`,
+              S`Chỉ Toán: \(44 - 20 - 10 + 4 = 18\); chỉ Lí: \(39 - 20 - 12 + 4 = 11\); chỉ Hóa: \(30 - 10 - 12 + 4 = 12\).`,
+              S`Thử lại các miền đúng hai môn: \(16,\ 6,\ 8\) (không âm) và \(18 + 11 + 12 + 16 + 6 + 8 + 4 = 75\). Chỉ thích đúng một môn: \(18 + 11 + 12 = 41\) em.`],
+            ds: S`\(m = 4\); 41 em chỉ thích đúng một môn.` },
+        ] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/lop10/c1-tap-hop-tham-so.js */
+/* Toán 10 – Chương I. Vận dụng, vận dụng cao: phép toán trên khoảng, đoạn có tham số m.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-1/TLN-2, Đúng–Sai ĐS-1 – mức Vận dụng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop10/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Nguyễn Văn Cừ – Hải Phòng.pdf (A ∩ B = ∅, đếm m nguyên)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Lê Hồng Phong 1 – Đắk Lắk.pdf (B ⊂ A)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Chu Văn An – Thái Nguyên.pdf (A ⊂ B)
+   - Đề giữa HK1/Đề giữa học kì 1 Toán 10 năm 2025 – 2026 trường THPT Lê Chân – Hải Phòng.pdf (B ⊂ A, đếm m)
+   - Đề giữa HK1/Đề ôn tập giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Việt Đức – Hà Nội.pdf ((A ∪ B) ∩ C có k số nguyên) */
+(() => {
+  Vdc.add({
+    grade: 'lop10', id: 'c1-tap-hop-tham-so', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Nguyễn Văn Cừ – Hải Phòng; THPT Lê Hồng Phong 1 – Đắk Lắk; THPT Chu Văn An – Thái Nguyên; THPT Lê Chân – Hải Phòng; THPT Việt Đức – Hà Nội (2025 – 2026)',
+    chuong: 'Chương I. Mệnh đề và tập hợp',
+    bai: 'Bài 2. Tập hợp và các phép toán trên tập hợp',
+    title: 'Khoảng, đoạn có tham số: giao rỗng, tập con, đếm số nguyên',
+    desc: 'Tìm m để A ∩ B = ∅ (hoặc khác rỗng), A ⊂ B (có xét tập rỗng), tập hợp chứa đúng k số nguyên.',
+    kt: [
+      { t: 'Biểu diễn trên trục số',
+        b: S`Vẽ hai tập trên cùng một trục số; dấu ngoặc tròn "(" là không lấy đầu mút, ngoặc vuông "[" là lấy đầu mút. Phần bù: \(C_{\mathbb R}[a;\, b) = (-\infty;\, a) \cup [b;\, +\infty)\).` },
+      { t: 'Hai khoảng giao nhau bằng rỗng',
+        b: S`\(A \cap B = \varnothing\) khi \(A\) nằm hẳn bên trái hoặc hẳn bên phải \(B\). Ví dụ \(A = (m;\, m + 3)\), \(B = [-1;\, 5]\): \(A \cap B = \varnothing \iff m + 3 \le -1\) hoặc \(m \ge 5\). <b>Dấu bằng</b> được lấy khi ít nhất một trong hai đầu mút "chạm nhau" là ngoặc tròn. Muốn \(A \cap B \ne \varnothing\) thì lấy phần bù của kết quả.` },
+      { t: 'Tập con và tập rỗng',
+        b: S`\([a;\, b] \subset (c;\, d] \iff c \lt a\) và \(b \le d\) (so sánh từng đầu mút, chú ý ngoặc). Nếu \(A = \{x \in \mathbb R \mid p \le x \le q\}\) với \(p, q\) chứa \(m\) thì phải xét riêng trường hợp \(A = \varnothing\) (khi \(p \gt q\)): tập rỗng là tập con của mọi tập.` },
+      { t: 'Đếm số nguyên',
+        b: S`Số các số nguyên \(m\) với \(a \le m \le b\) (\(a, b\) nguyên) là \(b - a + 1\). Đếm hai phía rời nhau thì cộng lại.` },
+    ],
+    dang: [
+      { ten: S`Tìm \(m\) để \(A \cap B = \varnothing\) hoặc \(A \cap B \ne \varnothing\)`, muc: 'VD',
+        pp: ['Vẽ hai tập trên trục số, xác định khi nào chúng tách rời nhau (một tập nằm hẳn bên trái hoặc hẳn bên phải tập kia).',
+          'Viết điều kiện bằng các đầu mút, cân nhắc dấu bằng theo loại ngoặc.',
+          S`Nếu hỏi \(A \cap B \ne \varnothing\): lấy phần bù của điều kiện \(A \cap B = \varnothing\).`,
+          S`Nếu hỏi số giá trị nguyên của \(m\) trong một đoạn cho trước: đếm từng phần rồi cộng.`],
+        vd: [{
+          de: S`Cho \(A = (m;\, m + 3)\) và \(B = [-1;\, 5]\). Tìm tất cả số thực \(m\) để \(A \cap B \ne \varnothing\). Có bao nhiêu số nguyên \(m\) thỏa mãn?`,
+          lg: [S`Tìm điều kiện để \(A \cap B = \varnothing\): \(A\) nằm bên trái \(B\) khi \(m + 3 \le -1\) (lấy dấu bằng vì \(A\) không chứa \(m + 3\)), tức \(m \le -4\); \(A\) nằm bên phải \(B\) khi \(m \ge 5\) (lấy dấu bằng vì \(A\) không chứa \(m\)).`,
+            S`Vậy \(A \cap B = \varnothing \iff m \le -4\) hoặc \(m \ge 5\).`,
+            S`Suy ra \(A \cap B \ne \varnothing \iff -4 \lt m \lt 5\).`,
+            S`Các số nguyên: \(-3, -2, \ldots, 4\), có \(4 - (-3) + 1 = 8\) số.`],
+          ds: S`\(-4 \lt m \lt 5\); có 8 số nguyên \(m\).` }],
+        bt: [
+          { muc: 'VD', dong: 8,
+            de: S`Cho \(A = (m;\, m + 2]\) và \(B = [-3;\, 4]\). Có bao nhiêu số nguyên \(m \in [-2026;\, 2026]\) để \(A \cap B = \varnothing\)?`,
+            goiY: S`\(A\) chứa đầu mút \(m + 2\) và \(B\) chứa \(-3\), nên bên trái phải có \(m + 2 \lt -3\) (không lấy dấu bằng).`,
+            lg: [S`\(A\) nằm bên trái \(B\): \(m + 2 \lt -3 \iff m \lt -5\). \(A\) nằm bên phải \(B\): \(m \ge 4\) (\(A\) không chứa \(m\)).`,
+              S`Vậy \(A \cap B = \varnothing \iff m \lt -5\) hoặc \(m \ge 4\).`,
+              S`Số nguyên \(m \in [-2026;\, -6]\): \(-6 - (-2026) + 1 = 2021\) số. Số nguyên \(m \in [4;\, 2026]\): \(2026 - 4 + 1 = 2023\) số.`,
+              S`Tổng cộng \(2021 + 2023 = 4044\) số.`],
+            ds: '4044 số nguyên.' },
+          { muc: 'VD', dong: 9,
+            de: S`Cho \(A = \left[m - 1;\, \dfrac{m + 5}{2}\right]\) với \(m \lt 7\) và \(B = (-\infty;\, -2) \cup [4;\, +\infty)\). Có bao nhiêu số nguyên \(m\) để \(A \cap B = \varnothing\)?`,
+            goiY: S`\(A \cap B = \varnothing\) nghĩa là \(A\) nằm trong phần bù của \(B\), tức \(A \subset [-2;\, 4)\).`,
+            lg: [S`\(C_{\mathbb R}B = [-2;\, 4)\). \(A \cap B = \varnothing \iff A \subset [-2;\, 4)\).`,
+              S`\(\iff m - 1 \ge -2\) và \(\dfrac{m + 5}{2} \lt 4 \iff m \ge -1\) và \(m \lt 3\).`,
+              S`Kết hợp \(m \lt 7\): \(-1 \le m \lt 3\). Các số nguyên: \(-1, 0, 1, 2\).`],
+            ds: S`4 số nguyên (\(m \in \{-1;\, 0;\, 1;\, 2\}\)).` },
+          { muc: 'VDC', dong: 11,
+            de: S`Cho \(A = [m;\, +\infty)\), \(B = \{x \in \mathbb R \mid x^2 - 4x + 3 = 0\}\) và \(C = (0;\, 6)\). Tìm các số nguyên \(m\) để tập \((A \cup B) \cap C\) chứa đúng 4 số nguyên.`,
+            goiY: S`\(B = \{1;\, 3\}\); các số nguyên thuộc \(C\) là \(1, 2, 3, 4, 5\). Xét lần lượt các giá trị của \(m\) và liệt kê số nguyên thuộc \((A \cup B) \cap C\).`,
+            lg: [S`\(x^2 - 4x + 3 = 0 \iff x = 1\) hoặc \(x = 3\), nên \(B = \{1;\, 3\}\). Số nguyên thuộc \(C\): \(1, 2, 3, 4, 5\).`,
+              S`Số nguyên thuộc \((A \cup B) \cap C\) là các số \(k \in \{1, \ldots, 5\}\) mà \(k \ge m\), cùng với 1 và 3.`,
+              S`\(m \le 2\): đủ cả \(1, 2, 3, 4, 5\) (5 số). \(m = 3\): \(\{1, 3, 4, 5\}\) (4 số). \(m = 4\): \(\{1, 3, 4, 5\}\) (4 số). \(m = 5\): \(\{1, 3, 5\}\) (3 số). \(m \ge 6\): \(\{1, 3\}\).`,
+              S`Vậy \(m = 3\) hoặc \(m = 4\).`],
+            ds: S`\(m \in \{3;\, 4\}\).` },
+        ] },
+      { ten: S`Tìm \(m\) để \(A \subset B\) (có xét tập rỗng)`, muc: 'VD – VDC',
+        pp: [S`Nếu \(A\) cho bởi bất đẳng thức chứa \(m\): xét trường hợp \(A = \varnothing\) trước (luôn thỏa mãn \(A \subset B\)).`,
+          S`Khi \(A \ne \varnothing\): so sánh đầu mút trái với đầu mút trái, đầu mút phải với đầu mút phải, chú ý ngoặc.`,
+          S`Nếu \(B\) là hợp hai khoảng rời nhau: một đoạn liền \(A\) phải nằm trọn trong một trong hai khoảng.`,
+          'Hợp các trường hợp, rồi trả lời đúng câu hỏi (tập giá trị hay số giá trị nguyên).'],
+        vd: [{
+          de: S`Cho \(A = \{x \in \mathbb R \mid m + 1 \le x \le 2m - 1\}\) và \(B = (-2;\, 9)\). Tìm tất cả số thực \(m\) để \(A \subset B\).`,
+          lg: [S`Trường hợp \(A = \varnothing\): \(m + 1 \gt 2m - 1 \iff m \lt 2\). Khi đó \(A \subset B\) luôn đúng.`,
+            S`Trường hợp \(m \ge 2\): \(A = [m + 1;\, 2m - 1]\). \(A \subset B \iff m + 1 \gt -2\) và \(2m - 1 \lt 9 \iff m \gt -3\) và \(m \lt 5\). Kết hợp \(m \ge 2\): \(2 \le m \lt 5\).`,
+            S`Hợp hai trường hợp: \(m \lt 5\).`],
+          ds: S`\(m \lt 5\).` }],
+        bt: [
+          { muc: 'VD', dong: 8,
+            de: S`Cho \(A = (2;\, 2027]\) và \(B = [m;\, 3m + 1]\) với \(m \gt -\tfrac12\). Có bao nhiêu số nguyên \(m\) để \(B \subset A\)?`,
+            goiY: S`Cần \(m \gt 2\) (vì \(A\) không chứa 2) và \(3m + 1 \le 2027\).`,
+            lg: [S`\(B \subset A \iff m \gt 2\) và \(3m + 1 \le 2027 \iff 2 \lt m \le \tfrac{2026}{3} \approx 675{,}3\).`,
+              S`Số nguyên \(m \in \{3;\, 4;\, \ldots;\, 675\}\): \(675 - 3 + 1 = 673\) số.`],
+            ds: '673 số nguyên.' },
+          { muc: 'VD', dong: 7,
+            de: S`Cho \(A = [m - 2;\, m + 3]\) và \(B = (-1;\, 7]\). Tìm \(m\) để \(A \cap B = A\).`,
+            goiY: S`\(A \cap B = A \iff A \subset B\).`,
+            lg: [S`\(A \cap B = A \iff A \subset B \iff m - 2 \gt -1\) và \(m + 3 \le 7\).`, S`\(\iff m \gt 1\) và \(m \le 4\), tức \(1 \lt m \le 4\).`],
+            ds: S`\(1 \lt m \le 4\).` },
+          { muc: 'VDC', dong: 11,
+            de: S`Cho \(A = \{x \in \mathbb R \mid 2m - 1 \le x \le m + 3\}\) và \(B = (-\infty;\, -1) \cup [6;\, +\infty)\). Tìm tất cả số thực \(m\) để \(A \subset B\).`,
+            goiY: S`Xét \(A = \varnothing\) trước. Khi \(A\) là một đoạn, nó không thể "vắt qua" khoảng trống \([-1;\, 6)\): phải nằm hẳn trong \((-\infty;\, -1)\) hoặc hẳn trong \([6;\, +\infty)\).`,
+            lg: [S`\(A = \varnothing \iff 2m - 1 \gt m + 3 \iff m \gt 4\): thỏa mãn.`,
+              S`Khi \(m \le 4\), \(A = [2m - 1;\, m + 3]\) là một đoạn. \(A \subset (-\infty;\, -1) \iff m + 3 \lt -1 \iff m \lt -4\).`,
+              S`\(A \subset [6;\, +\infty) \iff 2m - 1 \ge 6 \iff m \ge \tfrac72\); kết hợp \(m \le 4\): \(\tfrac72 \le m \le 4\).`,
+              S`Hợp các trường hợp: \(m \lt -4\) hoặc \(m \ge \tfrac72\).`],
+            ds: S`\(m \lt -4\) hoặc \(m \ge \tfrac72\).` },
+        ] },
+    ],
+  });
+})();
+
+</script>
 <script>/* data/lop10/c2-toi-uu-mien-nghiem.js */
-/* Toán 10 – Chương II. Vận dụng: giá trị lớn nhất, nhỏ nhất trên miền nghiệm và bài toán tối ưu thực tế.
-   MẪU MINH HỌA (mau:true) – soạn trước khi có tài liệu; sẽ đối chiếu, sửa theo tai-lieu/lop10/ của thầy.
-   Đáp số đã kiểm bằng tools/kiem-dap-so.py (đỉnh miền nghiệm, vét cạn nghiệm nguyên). */
+/* Toán 10 – Chương II. Vận dụng, vận dụng cao: giá trị lớn nhất, nhỏ nhất trên miền nghiệm và bài toán tối ưu thực tế.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-3 (Vận dụng cao), Đúng–Sai ĐS-2 – hệ bất phương trình bậc nhất hai ẩn.
+   Dạng bài lấy theo các đề trong tai-lieu/lop10/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Tôn Thất Tùng – Đà Nẵng.pdf (thực đơn trà sữa, bánh)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Xuân Trường – Ninh Bình.pdf (m nhỏ nhất để BPT đúng trên miền)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường chuyên Vĩnh Phúc – Phú Thọ.pdf (đầu tư ba loại trái phiếu)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Phan Bội Châu – Đà Nẵng.pdf (khẩu phần thịt, chi phí nhỏ nhất)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Lạng Giang 1 – Bắc Ninh.pdf (nghiệm nguyên)
+   - Đề giữa HK1/Đề ôn tập GK1 Toán 10 năm 2026 – 2027 trường THPT Lê Thị Hồng Gấm – TP HCM.pdf (xưởng may hai máy) */
 (() => {
   const P = Fig.plane;
   Vdc.add({
-    grade: 'lop10', id: 'c2-toi-uu-mien-nghiem', ky: ['Giữa kì I'], mau: true,
+    grade: 'lop10', id: 'c2-toi-uu-mien-nghiem', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Tôn Thất Tùng – Đà Nẵng; THPT Xuân Trường – Ninh Bình; THPT chuyên Vĩnh Phúc; THPT Phan Bội Châu – Đà Nẵng; THPT Lạng Giang 1 – Bắc Ninh (2025 – 2026); THPT Lê Thị Hồng Gấm – TP HCM (2026 – 2027)',
     chuong: 'Chương II. Bất phương trình và hệ bất phương trình bậc nhất hai ẩn',
     bai: 'Bài 4. Hệ bất phương trình bậc nhất hai ẩn',
     title: S`Giá trị lớn nhất, nhỏ nhất của \(F = ax + by\) và bài toán tối ưu`,
@@ -4180,6 +4468,15 @@ Topics.add({
               S`\(F(O) = 0\), \(F(A) = 4\), \(F(B) = 4m\). Do đó GTLN của \(F\) trên \(D\) là \(\max\{4;\ 4m\}\) (vì \(4 \gt 0\)).`,
               S`GTLN bằng 8 mà \(4 \ne 8\), nên phải có \(4m = 8\) và \(4m \ge 4\), tức \(m = 2\).`, S`Thử lại: \(m = 2\) thì \(F(B) = 8 \gt 4\). Vậy \(m = 2\).`],
             ds: S`\(m = 2\).` },
+          { muc: 'VDC', dong: 10,
+            de: S`Cho hệ bất phương trình \(\begin{cases} x + y \ge 4 \\ x - 2y \le 1 \\ y \le 3 \end{cases}\) (I). Tìm giá trị nhỏ nhất của tham số \(m\) để bất phương trình \(3x - 4y + m \ge 0\) đúng với mọi \((x;\, y)\) thỏa mãn (I).`,
+            goiY: S`Bất phương trình đúng với mọi điểm của miền \(\iff m \ge -(3x - 4y)\) với mọi điểm \(\iff m \ge -\min(3x - 4y)\). Tìm GTNN của \(3x - 4y\) tại các đỉnh.`,
+            fig: P({ xr: [-0.6, 8], yr: [-0.6, 4.5], w: 250, lines: [{ a: 1, b: 1, c: 4 }, { a: 1, b: -2, c: 1 }, { a: 0, b: 1, c: 3 }], poly: [[1, 3], [7, 3], [3, 1]], pts: [[1, 3, '(1; 3)', -12, -8], [7, 3, '(7; 3)', -8, -8], [3, 1, '(3; 1)', 6, 12]] }),
+            lg: [S`Miền nghiệm của (I) là tam giác có các đỉnh: giao của \(x + y = 4\) và \(y = 3\) là \((1;\, 3)\); giao của \(x - 2y = 1\) và \(y = 3\) là \((7;\, 3)\); giao của \(x + y = 4\) và \(x - 2y = 1\) là \((3;\, 1)\).`,
+              S`Đặt \(G = 3x - 4y\): \(G(1;\,3) = -9\), \(G(7;\,3) = 9\), \(G(3;\,1) = 5\). GTNN của \(G\) trên miền là \(-9\).`,
+              S`\(3x - 4y + m \ge 0\) với mọi \((x;\, y)\) thuộc miền \(\iff m \ge -G\) với mọi điểm \(\iff m \ge -(-9) = 9\).`,
+              S`Giá trị nhỏ nhất của \(m\) là 9.`],
+            ds: S`\(m_{\min} = 9\).` },
         ] },
       { ten: 'Bài toán thực tế tối ưu (lợi nhuận, chi phí, nghiệm nguyên)', muc: 'VD – VDC',
         pp: [S`Gọi ẩn \(x, y\): ghi rõ đại lượng, đơn vị, điều kiện (không âm, không vượt quá giới hạn, nguyên nếu đếm số lượng).`, 'Lập hệ bất phương trình từ từng ràng buộc (giờ máy, nguyên liệu, nhu cầu tối thiểu…).', S`Lập biểu thức \(F\) cần tìm giá trị lớn nhất (lãi) hoặc nhỏ nhất (chi phí).`, S`Vẽ miền nghiệm, tìm các đỉnh, tính \(F\) tại các đỉnh. Ẩn nguyên mà đỉnh tối ưu không nguyên thì xét các điểm nguyên lân cận trong miền.`, 'Trả lời đúng câu hỏi, có đơn vị.'],
@@ -4213,6 +4510,831 @@ Topics.add({
               S`Xét nghiệm nguyên. \(y = 6\): cần \(3x \ge 2\) nên \(x \ge 1\), \(F \ge 4 + 18 = 22\). \(y = 5\): cần \(x \ge 2\), \(F \ge 8 + 15 = 23\). \(y \le 4\): cần \(x \ge 12 - 2y\), \(F \ge 4(12 - 2y) + 3y = 48 - 5y \ge 28\).`,
               S`Chi phí nhỏ nhất là 22 triệu đồng khi thuê 1 xe A và 6 xe B (kiểm tra: 150 người, 13 tấn hàng).`],
             ds: '1 xe loại A và 6 xe loại B; chi phí thấp nhất 22 triệu đồng.' },
+          { muc: 'VD', dong: 12,
+            de: S`Để gây quỹ, câu lạc bộ thiện nguyện bán hai thực đơn. Thực đơn 1 gồm 2 ly trà sữa và 1 chiếc bánh, giá 45 nghìn đồng; thực đơn 2 gồm 1 ly trà sữa và 2 chiếc bánh, giá 50 nghìn đồng. Câu lạc bộ làm được không quá 160 ly trà sữa và 110 chiếc bánh. Hỏi bán bao nhiêu suất mỗi thực đơn để thu được nhiều tiền nhất (giả sử bán hết)?`,
+            goiY: S`Gọi \(x, y\) là số suất thực đơn 1, 2. Trà sữa: \(2x + y \le 160\); bánh: \(x + 2y \le 110\); tiền thu \(F = 45x + 50y\).`,
+            fig: P({ xr: [-5, 100], yr: [-5, 170], w: 220, step: 20, lines: [{ a: 2, b: 1, c: 160 }, { a: 1, b: 2, c: 110 }], poly: [[0, 0], [80, 0], [70, 20], [0, 55]], pts: [[70, 20, '(70; 20)', 6, -6]] }),
+            lg: [S`Gọi \(x, y\) (\(x, y \in \mathbb N\)) là số suất thực đơn 1, 2. Ràng buộc: \(2x + y \le 160\), \(x + 2y \le 110\), \(x \ge 0\), \(y \ge 0\).`,
+              S`Tiền thu được \(F = 45x + 50y\) (nghìn đồng).`,
+              S`Miền nghiệm là tứ giác có các đỉnh \(O(0;\,0)\), \((80;\, 0)\), \((0;\, 55)\) và giao của \(2x + y = 160\), \(x + 2y = 110\) là \((70;\, 20)\).`,
+              S`\(F(80;\,0) = 3600\); \(F(70;\,20) = 3150 + 1000 = 4150\); \(F(0;\,55) = 2750\); \(F(0;\,0) = 0\).`,
+              'Bán 70 suất thực đơn 1 và 20 suất thực đơn 2, thu nhiều nhất 4150 nghìn đồng (4,15 triệu đồng).'],
+            ds: '70 suất thực đơn 1, 20 suất thực đơn 2; thu nhiều nhất 4 150 nghìn đồng.' },
+          { muc: 'VDC', dong: 14,
+            de: S`Cô Lan đầu tư toàn bộ 1,5 tỉ đồng vào ba loại trái phiếu: trái phiếu chính phủ lãi 6%/năm, trái phiếu ngân hàng lãi 8%/năm và trái phiếu doanh nghiệp lãi 11%/năm. Cô muốn số tiền mua trái phiếu chính phủ ít nhất gấp 3 lần số tiền mua trái phiếu ngân hàng, và mua trái phiếu doanh nghiệp không quá 300 triệu đồng. Hỏi cô nên đầu tư mỗi loại bao nhiêu để tiền lãi sau một năm lớn nhất?`,
+            goiY: S`Ba ẩn nhưng tổng cố định: gọi \(x, y\) (triệu đồng) là tiền mua trái phiếu chính phủ, ngân hàng thì trái phiếu doanh nghiệp là \(1500 - x - y\). Đưa về bài toán hai ẩn.`,
+            lg: [S`Gọi \(x, y\) (triệu đồng) là tiền mua trái phiếu chính phủ, ngân hàng; tiền mua trái phiếu doanh nghiệp là \(1500 - x - y\).`,
+              S`Ràng buộc: \(x \ge 3y\), \(y \ge 0\), \(0 \le 1500 - x - y \le 300 \iff 1200 \le x + y \le 1500\).`,
+              S`Tiền lãi: \(L = 0{,}06x + 0{,}08y + 0{,}11(1500 - x - y) = 165 - 0{,}05x - 0{,}03y\).`,
+              S`Miền nghiệm là tứ giác có các đỉnh \((1200;\, 0)\), \((1500;\, 0)\), \((1125;\, 375)\) và \((900;\, 300)\) (giao của \(x = 3y\) với \(x + y = 1500\) và \(x + y = 1200\)).`,
+              S`\(L(1200;\,0) = 105\); \(L(1500;\,0) = 90\); \(L(1125;\,375) = 97{,}5\); \(L(900;\,300) = 165 - 45 - 9 = 111\).`,
+              'Đầu tư 900 triệu trái phiếu chính phủ, 300 triệu trái phiếu ngân hàng, 300 triệu trái phiếu doanh nghiệp; lãi lớn nhất 111 triệu đồng.'],
+            ds: 'Chính phủ 900 triệu, ngân hàng 300 triệu, doanh nghiệp 300 triệu; lãi lớn nhất 111 triệu đồng/năm.' },
+        ] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/lop10/c3-he-thuc-luong-thuc-te.js */
+/* Toán 10 – Chương III. Vận dụng, vận dụng cao: hệ thức lượng trong tam giác – đo đạc và bài toán thực tế.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-4, Đúng–Sai ĐS-3 – mức Vận dụng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop10/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Tôn Thất Tùng – Đà Nẵng.pdf (khoảng cách qua sông)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Hồ Thị Kỷ – Cà Mau.pdf (đo qua đầm cá)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Huỳnh Thúc Kháng – Nghệ An.pdf (hai xe theo góc 120°)
+   - Đề giữa HK1/Đề ôn tập giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Việt Đức – Hà Nội.pdf (hai tàu đến đảo)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Phan Bội Châu – Đà Nẵng.pdf (chiều cao tháp)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Chu Văn An – Thái Nguyên.pdf (cột cờ trên tòa nhà)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Lục Nam – Bắc Ninh.pdf (xe thang cứu hỏa)
+   - Đề giữa HK1/Đề ôn tập GK1 Toán 10 năm 2026 – 2027 trường THPT Lê Thị Hồng Gấm – TP HCM.pdf (mảnh vườn tứ giác)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 10 năm 2025 – 2026 trường THPT Lạng Giang 1 – Bắc Ninh.pdf (lát gạch tứ giác)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Lý Tự Trọng – Đà Nẵng.pdf (giếng trời) */
+(() => {
+  const G = Fig.geo;
+  Vdc.add({
+    grade: 'lop10', id: 'c3-he-thuc-luong-thuc-te', ky: ['Giữa kì I', 'Cuối kì I'],
+    nguon: 'Đề giữa HK1: THPT Tôn Thất Tùng, Phan Bội Châu, Lý Tự Trọng – Đà Nẵng; THPT Hồ Thị Kỷ – Cà Mau; THPT Huỳnh Thúc Kháng – Nghệ An; THPT Việt Đức – Hà Nội; THPT Chu Văn An – Thái Nguyên; THPT Lục Nam, Lạng Giang 1 – Bắc Ninh (2025 – 2026); THPT Lê Thị Hồng Gấm – TP HCM (2026 – 2027)',
+    chuong: 'Chương III. Hệ thức lượng trong tam giác',
+    bai: 'Bài 6. Hệ thức lượng trong tam giác',
+    title: 'Hệ thức lượng trong tam giác: đo đạc và bài toán thực tế',
+    desc: 'Đo khoảng cách không đến được, đo chiều cao, hai vật chuyển động theo hai hướng; diện tích mảnh đất, bán kính đường tròn.',
+    kt: [
+      { t: 'Định lí côsin',
+        b: S`\[a^2 = b^2 + c^2 - 2bc\cos A, \qquad \cos A = \frac{b^2 + c^2 - a^2}{2bc}.\] Dùng khi biết <b>hai cạnh và góc xen giữa</b> (tìm cạnh thứ ba) hoặc biết <b>ba cạnh</b> (tìm góc).` },
+      { t: 'Định lí sin',
+        b: S`\[\frac{a}{\sin A} = \frac{b}{\sin B} = \frac{c}{\sin C} = 2R.\] Dùng khi biết <b>một cạnh và hai góc</b> (nhớ tính góc còn lại bằng \(180^\circ\) trừ tổng hai góc), hoặc để tìm bán kính \(R\) đường tròn ngoại tiếp.` },
+      { t: 'Công thức diện tích',
+        b: S`\(S = \tfrac12 ab\sin C = \dfrac{abc}{4R} = pr = \sqrt{p(p - a)(p - b)(p - c)}\) với \(p = \tfrac{a + b + c}{2}\) (Heron). Mảnh đất tứ giác: kẻ một đường chéo, chia thành hai tam giác rồi cộng diện tích.` },
+      { t: 'Đo chiều cao từ hai điểm',
+        b: S`Hai điểm \(A, B\) thẳng hàng với chân \(C\) của tháp \(CD\), \(B\) nằm giữa \(A\) và \(C\), góc nhìn đỉnh \(D\) từ \(A, B\) là \(\alpha \lt \beta\). Trong tam giác \(ABD\): \(\widehat{ADB} = \beta - \alpha\) (góc ngoài), \(BD = \dfrac{AB\sin\alpha}{\sin(\beta - \alpha)}\), rồi \(CD = BD\sin\beta\). Kết quả làm tròn ở <b>bước cuối</b>, giữ nhiều chữ số ở các bước giữa.`,
+        fig: G({ pts: { A: [-58.19, 0], B: [-34.19, 0], C: [0, 0], D: [0, 48.83] }, segs: 'AC CD AD BD', rights: [['B', 'C', 'D']], rsUnit: 18, texts: [[-50, 3, 'α'], [-27.5, 3, 'β']], w: 260 }) },
+    ],
+    dang: [
+      { ten: 'Đo khoảng cách không đến được; hai vật chuyển động theo hai hướng', muc: 'VD – VDC',
+        pp: ['Vẽ hình, đặt tên các điểm, ghi số liệu (cạnh, góc) lên hình.', 'Chọn tam giác chứa đoạn cần tìm và đủ dữ kiện.', S`Biết hai cạnh và góc xen giữa → định lí côsin; biết một cạnh và hai góc → định lí sin.`, 'Bài chuyển động: quãng đường = vận tốc × thời gian, góc giữa hai hướng là góc xen giữa.', 'Đổi đơn vị (phút ↔ giờ, m ↔ km) trước khi kết luận; làm tròn theo yêu cầu.'],
+        vd: [{
+          de: S`Để đo khoảng cách từ điểm \(A\) trên bờ sông đến cây \(C\) trên cù lao, người ta chọn điểm \(B\) cùng bờ với \(A\) sao cho \(AB = 50\) m và đo được \(\widehat{CAB} = 62^\circ\), \(\widehat{CBA} = 48^\circ\). Tính \(AC\) (làm tròn đến hàng phần mười).`,
+          fig: G({ pts: { A: [0, 0], B: [50, 0], C: [18.56, 34.91] }, segs: 'AB BC CA', texts: [[7, 3, '62°'], [43, 3, '48°']], w: 230 }),
+          lg: [S`Trong tam giác \(ABC\): \(\widehat{C} = 180^\circ - 62^\circ - 48^\circ = 70^\circ\).`,
+            S`Theo định lí sin: \(\dfrac{AC}{\sin B} = \dfrac{AB}{\sin C} \Rightarrow AC = \dfrac{50\sin 48^\circ}{\sin 70^\circ}\).`,
+            S`\(AC \approx \dfrac{50 \cdot 0{,}7431}{0{,}9397} \approx 39{,}5\) (m).`],
+          ds: S`\(AC \approx 39{,}5\) m.` }],
+        bt: [
+          { muc: 'VD', dong: 7,
+            de: S`Không đo trực tiếp được khoảng cách \(AB\) vì phải qua một đầm cá. Người ta chọn điểm \(C\) nhìn \(A\) và \(B\) dưới góc \(65^\circ\), đo được \(CA = 180\) m, \(CB = 150\) m. Tính \(AB\) (làm tròn đến hàng đơn vị).`,
+            goiY: 'Biết hai cạnh và góc xen giữa: dùng định lí côsin.',
+            lg: [S`\(AB^2 = CA^2 + CB^2 - 2 \cdot CA \cdot CB\cos 65^\circ = 180^2 + 150^2 - 2 \cdot 180 \cdot 150\cos 65^\circ\).`,
+              S`\(AB^2 \approx 32400 + 22500 - 54000 \cdot 0{,}4226 \approx 32078\), nên \(AB \approx 179\) m.`],
+            ds: S`\(AB \approx 179\) m.` },
+          { muc: 'VD', dong: 7,
+            de: 'Hai xe cùng xuất phát từ vị trí O, đi thẳng theo hai hướng tạo với nhau góc 120°. Xe thứ nhất chạy 40 km/h, xe thứ hai chạy 50 km/h. Sau 1 giờ 30 phút hai xe cách nhau bao nhiêu ki-lô-mét (làm tròn đến hàng phần mười)?',
+            goiY: S`Sau 1,5 giờ: \(OA = 60\) km, \(OB = 75\) km, \(\widehat{AOB} = 120^\circ\). Nhớ \(\cos 120^\circ = -\tfrac12\).`,
+            lg: [S`Sau 1,5 giờ: \(OA = 40 \cdot 1{,}5 = 60\) km, \(OB = 50 \cdot 1{,}5 = 75\) km.`,
+              S`\(AB^2 = 60^2 + 75^2 - 2 \cdot 60 \cdot 75 \cdot \cos 120^\circ = 3600 + 5625 + 4500 = 13725\).`,
+              S`\(AB = \sqrt{13725} \approx 117{,}2\) km.`],
+            ds: S`\(\approx 117{,}2\) km.` },
+          { muc: 'VDC', dong: 12,
+            de: S`Hai cảng \(A\) và \(B\) cách nhau 180 km; từ hai cảng có hai tàu cùng đi thẳng đến đảo \(C\). Biết \(\widehat{CAB} = 35^\circ\), \(\widehat{CBA} = 50^\circ\). Tàu 1 rời \(A\) lúc 7 giờ, tàu 2 rời \(B\); cả hai tàu đều chạy 60 km/h. Hỏi tàu 2 phải khởi hành sau tàu 1 bao nhiêu phút để hai tàu đến \(C\) cùng lúc (làm tròn đến hàng đơn vị)?`,
+            goiY: S`Tính \(\widehat C\), dùng định lí sin để tìm \(AC\), \(BC\). Hai tàu cùng vận tốc nên thời gian chênh lệch bằng \(\dfrac{AC - BC}{60}\) giờ.`,
+            lg: [S`\(\widehat{C} = 180^\circ - 35^\circ - 50^\circ = 95^\circ\).`,
+              S`Định lí sin: \(AC = \dfrac{180\sin 50^\circ}{\sin 95^\circ} \approx 138{,}41\) km; \(BC = \dfrac{180\sin 35^\circ}{\sin 95^\circ} \approx 103{,}64\) km.`,
+              S`Tàu 1 đi hết \(\dfrac{138{,}41}{60}\) giờ, tàu 2 đi hết \(\dfrac{103{,}64}{60}\) giờ. Chênh lệch: \(\dfrac{138{,}41 - 103{,}64}{60} \approx 0{,}5796\) giờ \(\approx 34{,}8\) phút.`,
+              'Tàu 2 phải khởi hành sau tàu 1 khoảng 35 phút.'],
+            ds: 'Khoảng 35 phút.' },
+        ] },
+      { ten: 'Đo chiều cao (tháp, ngọn hải đăng, cột cờ)', muc: 'VD – VDC',
+        pp: ['Vẽ hình: chân tháp, đỉnh tháp, hai vị trí quan sát; đánh dấu góc vuông ở chân tháp.', S`Tìm góc tại đỉnh của tam giác "xiên" bằng tính chất góc ngoài: \(\beta - \alpha\).`, 'Dùng định lí sin trong tam giác xiên để tìm một cạnh nối tới đỉnh, rồi dùng tỉ số lượng giác trong tam giác vuông.', 'Nếu mắt người quan sát cao h so với mặt đất thì cộng thêm h vào kết quả.'],
+        vd: [{
+          de: S`Để đo chiều cao tháp \(CD\) (\(C\) là chân tháp), người ta chọn hai điểm \(A, B\) trên mặt đất thẳng hàng với \(C\), \(B\) nằm giữa \(A\) và \(C\), \(AB = 24\) m và đo được \(\widehat{CAD} = 40^\circ\), \(\widehat{CBD} = 55^\circ\). Tính chiều cao tháp (làm tròn đến hàng phần mười).`,
+          fig: G({ pts: { A: [-58.19, 0], B: [-34.19, 0], C: [0, 0], D: [0, 48.83] }, segs: 'AC CD AD BD', rights: [['B', 'C', 'D']], rsUnit: 18, texts: [[-50, 3, '40°'], [-27, 3, '55°']], w: 260 }),
+          lg: [S`Góc \(\widehat{CBD}\) là góc ngoài của tam giác \(ABD\) nên \(\widehat{ADB} = 55^\circ - 40^\circ = 15^\circ\).`,
+            S`Định lí sin trong tam giác \(ABD\): \(BD = \dfrac{AB\sin 40^\circ}{\sin 15^\circ} = \dfrac{24\sin 40^\circ}{\sin 15^\circ} \approx 59{,}605\) m.`,
+            S`Tam giác \(BCD\) vuông tại \(C\): \(CD = BD\sin 55^\circ \approx 59{,}605 \cdot 0{,}8192 \approx 48{,}8\) m.`],
+          ds: S`\(CD \approx 48{,}8\) m.` }],
+        bt: [
+          { muc: 'VD', dong: 8,
+            de: S`Một người đi dọc bờ biển từ \(A\) đến \(B\) với \(AB = 50\) m và quan sát ngọn hải đăng \(C\). Góc giữa hướng nhìn tới hải đăng và đường đi tại \(A\) là \(40^\circ\), tại \(B\) là \(70^\circ\) (\(B\) gần hải đăng hơn). Ngọn hải đăng cách bờ biển bao nhiêu mét (làm tròn đến hàng đơn vị)?`,
+            goiY: S`Gọi \(H\) là chân đường vuông góc từ \(C\) xuống bờ. Trong tam giác \(ABC\): \(\widehat{ACB} = 70^\circ - 40^\circ\). Tìm \(BC\) rồi \(CH = BC\sin 70^\circ\).`,
+            fig: G({ pts: { A: [0, 0], B: [50, 0], H: [71.98, 0], C: [71.98, 60.4] }, segs: 'AH AC BC', dash: 'CH', rights: [['B', 'H', 'C']], rsUnit: 16, texts: [[10, 3, '40°'], [58, 3, '70°']], w: 230 }),
+            lg: [S`\(\widehat{ACB} = 70^\circ - 40^\circ = 30^\circ\) (góc ngoài tại \(B\)).`,
+              S`Định lí sin: \(BC = \dfrac{AB\sin 40^\circ}{\sin 30^\circ} = 100\sin 40^\circ \approx 64{,}28\) m.`,
+              S`Khoảng cách tới bờ: \(CH = BC\sin 70^\circ \approx 64{,}28 \cdot 0{,}9397 \approx 60\) m.`],
+            ds: S`\(\approx 60\) m.` },
+          { muc: 'VD', dong: 7,
+            de: S`Trên nóc một tòa nhà có cột cờ. Từ điểm \(M\) trên mặt đất cách chân tòa nhà 20 m, người ta nhìn chân cột cờ dưới góc \(38^\circ\) và đỉnh cột cờ dưới góc \(46^\circ\) so với phương nằm ngang. Tính chiều cao cột cờ (làm tròn đến hàng phần mười).`,
+            goiY: S`Chiều cao từ mặt đất tới chân cột là \(20\tan 38^\circ\), tới đỉnh cột là \(20\tan 46^\circ\).`,
+            lg: [S`Gọi \(H\) là chân tòa nhà, \(P\) là chân cột cờ, \(Q\) là đỉnh cột: \(HP = 20\tan 38^\circ\), \(HQ = 20\tan 46^\circ\).`,
+              S`Chiều cao cột cờ: \(PQ = 20(\tan 46^\circ - \tan 38^\circ) \approx 20(1{,}0355 - 0{,}7813) \approx 5{,}1\) m.`],
+            ds: S`\(\approx 5{,}1\) m.` },
+          { muc: 'VDC', dong: 12,
+            de: S`Hai người đứng tại \(A\) và \(B\) cách nhau 25 m, thẳng hàng với chân \(C\) của một tòa nhà (\(B\) gần tòa nhà hơn), nhìn điểm cháy \(D\) trên tường tòa nhà dưới các góc \(32^\circ\) và \(52^\circ\) so với phương ngang. Xe cứu hỏa có thang dài tối đa 40 m, chân thang đặt trên xe ở độ cao 1,8 m. Hỏi xe phải đỗ cách chân tòa nhà xa nhất bao nhiêu mét để thang chạm tới điểm cháy (làm tròn đến hàng phần mười)?`,
+            goiY: S`Tìm chiều cao \(CD\) như bài đo tháp. Thang là cạnh huyền của tam giác vuông có cạnh đứng \(CD - 1{,}8\); khoảng cách xa nhất ứng với thang dài 40 m.`,
+            lg: [S`\(\widehat{ADB} = 52^\circ - 32^\circ = 20^\circ\); \(BD = \dfrac{25\sin 32^\circ}{\sin 20^\circ} \approx 38{,}735\) m.`,
+              S`\(CD = BD\sin 52^\circ \approx 30{,}523\) m.`,
+              S`Thang dài 40 m, độ cao cần vươn tới: \(30{,}523 - 1{,}8 = 28{,}723\) m. Khoảng cách ngang lớn nhất: \(d = \sqrt{40^2 - 28{,}723^2} \approx \sqrt{774{,}99} \approx 27{,}8\) m.`],
+            ds: S`Xa nhất khoảng 27,8 m.` },
+        ] },
+      { ten: 'Diện tích mảnh đất, bán kính đường tròn từ số đo thực tế', muc: 'VD – VDC',
+        pp: ['Tam giác biết ba cạnh: dùng công thức Heron.', S`Biết hai cạnh và góc xen giữa: \(S = \tfrac12 ab\sin C\).`, S`Đường tròn đi qua ba điểm đo được: tính cạnh thứ ba bằng định lí côsin rồi \(R = \dfrac{a}{2\sin A}\).`, 'Tứ giác: kẻ đường chéo chia thành hai tam giác; tính đường chéo bằng định lí côsin, tính góc cần thiết bằng định lí sin hoặc côsin.', 'Nhân diện tích với đơn giá khi bài hỏi chi phí.'],
+        vd: [{
+          de: S`Mảnh vườn hình tứ giác lồi \(ABCD\) có \(AB = 12\) m, \(BC = 16\) m, \(CD = 10\) m, \(DA = 14\) m và \(\widehat{ABC} = 60^\circ\). Tính diện tích mảnh vườn (làm tròn đến hàng phần mười).`,
+          lg: [S`Kẻ đường chéo \(AC\). Định lí côsin trong tam giác \(ABC\): \(AC^2 = 12^2 + 16^2 - 2 \cdot 12 \cdot 16\cos 60^\circ = 208\), \(AC = \sqrt{208} \approx 14{,}422\) m.`,
+            S`\(S_{ABC} = \tfrac12 \cdot 12 \cdot 16 \cdot \sin 60^\circ = 48\sqrt3 \approx 83{,}138\) m².`,
+            S`Tam giác \(ACD\) có ba cạnh \(14{,}422;\ 10;\ 14\): \(p \approx 19{,}211\), \(S_{ACD} = \sqrt{p(p - 14{,}422)(p - 10)(p - 14)} \approx 66{,}453\) m².`,
+            S`Diện tích mảnh vườn: \(S \approx 83{,}138 + 66{,}453 \approx 149{,}6\) m².`],
+          ds: S`\(\approx 149{,}6\) m².` }],
+        bt: [
+          { muc: 'VD', dong: 7,
+            de: 'Một mảnh đất hình tam giác có ba cạnh 25 m, 29 m, 36 m. Người ta trồng cỏ phủ kín mảnh đất với giá 70 000 đồng/m². Tính số tiền mua cỏ.',
+            goiY: S`Heron: \(p = 45\).`,
+            lg: [S`\(p = \tfrac{25 + 29 + 36}{2} = 45\).`, S`\(S = \sqrt{45 \cdot 20 \cdot 16 \cdot 9} = \sqrt{129600} = 360\) m².`, S`Tiền cỏ: \(360 \cdot 70\,000 = 25\,200\,000\) đồng.`],
+            ds: '25 200 000 đồng (25,2 triệu đồng).' },
+          { muc: 'VD', dong: 8,
+            de: S`Để tính diện tích miệng một giếng trời hình tròn, người ta đánh dấu ba điểm \(A, B, C\) trên mép giếng và đo được \(AB = 4\) m, \(AC = 3\) m, \(\widehat{BAC} = 120^\circ\). Tính diện tích miệng giếng (lấy \(\pi \approx 3{,}14\), làm tròn đến hàng phần mười).`,
+            goiY: S`Đường tròn mép giếng là đường tròn ngoại tiếp tam giác \(ABC\). Tính \(BC\) rồi \(R = \dfrac{BC}{2\sin A}\).`,
+            lg: [S`\(BC^2 = 4^2 + 3^2 - 2 \cdot 4 \cdot 3\cos 120^\circ = 16 + 9 + 12 = 37\).`,
+              S`\(R = \dfrac{BC}{2\sin 120^\circ} = \dfrac{\sqrt{37}}{\sqrt3}\), nên \(R^2 = \dfrac{37}{3}\).`,
+              S`Diện tích: \(S = \pi R^2 \approx 3{,}14 \cdot \dfrac{37}{3} \approx 38{,}7\) m².`],
+            ds: S`\(\approx 38{,}7\) m².` },
+          { muc: 'VDC', dong: 12,
+            de: S`Người ta lát gạch trên mảnh đất hình tứ giác lồi \(ABCD\) có \(AB = 8\) m, \(BC = 5\) m, \(CD = 6\) m, \(\widehat{ABC} = 105^\circ\), \(\widehat{BCD} = 110^\circ\). Giá lát gạch (cả công thợ) là 350 nghìn đồng/m². Tính số tiền lát gạch (làm tròn đến hàng nghìn đồng).`,
+            goiY: S`Kẻ \(AC\). Tính \(AC\) (định lí côsin), góc \(\widehat{BCA}\) (định lí sin), suy ra \(\widehat{ACD} = 110^\circ - \widehat{BCA}\). Cộng diện tích hai tam giác.`,
+            lg: [S`\(AC^2 = 8^2 + 5^2 - 2 \cdot 8 \cdot 5\cos 105^\circ \approx 109{,}706\), \(AC \approx 10{,}474\) m.`,
+              S`Định lí sin: \(\sin\widehat{BCA} = \dfrac{AB\sin 105^\circ}{AC} \approx 0{,}7378\). Vì \(\widehat{B}\) tù nên \(\widehat{BCA}\) nhọn, \(\widehat{BCA} \approx 47{,}54^\circ\); suy ra \(\widehat{ACD} \approx 62{,}46^\circ\).`,
+              S`\(S_{ABC} = \tfrac12 \cdot 8 \cdot 5\sin 105^\circ \approx 19{,}319\) m²; \(S_{ACD} = \tfrac12 \cdot AC \cdot CD\sin\widehat{ACD} \approx 27{,}861\) m².`,
+              S`\(S \approx 47{,}180\) m². Số tiền: \(47{,}180 \cdot 350 \approx 16\,513\) nghìn đồng.`],
+            ds: 'Khoảng 16 513 000 đồng.' },
+        ] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/lop11/c1-cong-thuc-luong-giac.js */
+/* Toán 11 – Chương I. Vận dụng, vận dụng cao: giá trị lượng giác, công thức lượng giác.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Đúng–Sai ĐS-1 (công thức lượng giác) – mức Vận dụng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop11/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Lê Hồng Phong 1 – Đắk Lắk.pdf (sin(α − β))
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Trà Ôn – Vĩnh Long.pdf (biểu thức theo tan)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Ea H’Leo – Đắk Lắk.pdf (tan x, tan y là nghiệm phương trình bậc hai)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT chuyên Lê Quý Đôn – Gia Lai.pdf (cos x·cos(60° − x)·cos(60° + x))
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 11 năm 2025 – 2026 trường THPT Việt Đức – Hà Nội.pdf (rút gọn tổng sin / tổng cos)
+   - Đề cương/Đề cương giữa kỳ 1 Toán 11 năm 2025 – 2026 trường THPT Hoàng Văn Thụ – Hà Nội.pdf (sin α + cos α cho trước)
+   - Đề cương/Ôn tập giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Trần Phú – Hà Nội.pdf (bánh xe, camera, tổng hợp âm)
+   - Đề cương/Đề cương học kì 1 Toán 11 năm 2026 – 2027 trường THPT Vân Nội – Hà Nội.pdf (camera giữa hai chung cư) */
+(() => {
+  Vdc.add({
+    grade: 'lop11', id: 'c1-cong-thuc-luong-giac', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Lê Hồng Phong 1, Ea H’Leo – Đắk Lắk; THPT Trà Ôn – Vĩnh Long; THPT chuyên Lê Quý Đôn – Gia Lai; THPT Việt Đức – Hà Nội. Đề cương: THPT Hoàng Văn Thụ, Trần Phú, Vân Nội – Hà Nội',
+    chuong: 'Chương I. Hàm số lượng giác và phương trình lượng giác',
+    bai: 'Bài 1. Giá trị lượng giác của góc lượng giác · Bài 2. Công thức lượng giác',
+    title: 'Công thức lượng giác: tính giá trị, biến đổi, bài toán thực tế',
+    desc: 'Tính giá trị khi biết một giá trị lượng giác và góc phần tư; rút gọn, chứng minh; góc nhìn, tổng hợp dao động.',
+    kt: [
+      { t: 'Dấu theo góc phần tư',
+        b: S`\(\sin^2\alpha + \cos^2\alpha = 1\), \(1 + \tan^2\alpha = \dfrac{1}{\cos^2\alpha}\). Biết \(\sin\alpha\) thì \(\cos\alpha = \pm\sqrt{1 - \sin^2\alpha}\); <b>dấu chọn theo góc phần tư</b>: phần tư II (\(\tfrac\pi2 \lt \alpha \lt \pi\)) có \(\sin \gt 0\), \(\cos \lt 0\); phần tư III có \(\tan \gt 0\); phần tư IV có \(\cos \gt 0\).` },
+      { t: 'Công thức cộng và nhân đôi',
+        b: S`\(\cos(a \pm b) = \cos a\cos b \mp \sin a\sin b\); \(\sin(a \pm b) = \sin a\cos b \pm \cos a\sin b\); \(\tan(a \pm b) = \dfrac{\tan a \pm \tan b}{1 \mp \tan a\tan b}\).<br>\(\sin 2a = 2\sin a\cos a\); \(\cos 2a = \cos^2 a - \sin^2 a = 2\cos^2 a - 1 = 1 - 2\sin^2 a\); \(\tan 2a = \dfrac{2\tan a}{1 - \tan^2 a}\).` },
+      { t: 'Biến đổi tích ↔ tổng',
+        b: S`\(\cos a\cos b = \tfrac12[\cos(a - b) + \cos(a + b)]\); \(\sin a\sin b = \tfrac12[\cos(a - b) - \cos(a + b)]\); \(\sin a\cos b = \tfrac12[\sin(a - b) + \sin(a + b)]\).<br>\(\cos u + \cos v = 2\cos\tfrac{u + v}{2}\cos\tfrac{u - v}{2}\); \(\sin u + \sin v = 2\sin\tfrac{u + v}{2}\cos\tfrac{u - v}{2}\).` },
+      { t: 'Biểu thức theo tan và dạng a sin x + b cos x',
+        b: S`Biểu thức <b>đẳng cấp</b> (cùng bậc với \(\sin, \cos\)) khi biết \(\tan\alpha\): chia cả tử và mẫu cho \(\cos\alpha\) (hoặc \(\cos^2\alpha\)). Ngoài ra \(\sin 2\alpha = \dfrac{2\tan\alpha}{1 + \tan^2\alpha}\).<br>\(a\sin x + b\cos x = \sqrt{a^2 + b^2}\,\sin(x + \varphi)\) với \(\cos\varphi = \dfrac{a}{\sqrt{a^2 + b^2}}\), \(\sin\varphi = \dfrac{b}{\sqrt{a^2 + b^2}}\).` },
+    ],
+    dang: [
+      { ten: 'Tính giá trị biểu thức khi biết một giá trị lượng giác', muc: 'VD – VDC',
+        pp: ['Tính các giá trị lượng giác còn lại, chọn dấu theo góc phần tư.', 'Thay vào công thức cộng, nhân đôi để tính biểu thức.', S`Biểu thức đẳng cấp theo \(\sin, \cos\) và đã biết \(\tan\): chia cho \(\cos\) (hoặc \(\cos^2\)).`, S`Cho \(\sin a + \cos a = k\): bình phương được \(\sin 2a = k^2 - 1\).`],
+        vd: [{
+          de: S`Cho \(\sin\alpha = \tfrac45\) với \(\tfrac\pi2 \lt \alpha \lt \pi\) và \(\cos\beta = \tfrac{5}{13}\) với \(0 \lt \beta \lt \tfrac\pi2\). Tính \(\cos(\alpha + \beta)\) và \(\tan 2\alpha\).`,
+          lg: [S`\(\tfrac\pi2 \lt \alpha \lt \pi\) nên \(\cos\alpha \lt 0\): \(\cos\alpha = -\sqrt{1 - \tfrac{16}{25}} = -\tfrac35\). \(0 \lt \beta \lt \tfrac\pi2\) nên \(\sin\beta = \sqrt{1 - \tfrac{25}{169}} = \tfrac{12}{13}\).`,
+            S`\(\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta = -\tfrac35 \cdot \tfrac{5}{13} - \tfrac45 \cdot \tfrac{12}{13} = -\tfrac{15}{65} - \tfrac{48}{65} = -\tfrac{63}{65}\).`,
+            S`\(\tan\alpha = \dfrac{\sin\alpha}{\cos\alpha} = -\tfrac43\); \(\tan 2\alpha = \dfrac{2 \cdot \left(-\tfrac43\right)}{1 - \tfrac{16}{9}} = \dfrac{-\tfrac83}{-\tfrac79} = \tfrac{24}{7}\).`],
+          ds: S`\(\cos(\alpha + \beta) = -\tfrac{63}{65}\); \(\tan 2\alpha = \tfrac{24}{7}\).` }],
+        bt: [
+          { muc: 'VD', dong: 7,
+            de: S`Cho \(\tan\alpha = 3\). Tính \(P = \dfrac{2\sin\alpha - \cos\alpha}{\sin\alpha + 3\cos\alpha}\) và \(Q = \sin 2\alpha\).`,
+            goiY: S`Chia tử và mẫu của \(P\) cho \(\cos\alpha\) (\(\cos\alpha \ne 0\) vì \(\tan\alpha\) xác định). \(\sin 2\alpha = \dfrac{2\tan\alpha}{1 + \tan^2\alpha}\).`,
+            lg: [S`\(\cos\alpha \ne 0\); chia tử và mẫu cho \(\cos\alpha\): \(P = \dfrac{2\tan\alpha - 1}{\tan\alpha + 3} = \dfrac{6 - 1}{3 + 3} = \tfrac56\).`,
+              S`\(Q = \sin 2\alpha = 2\sin\alpha\cos\alpha = \dfrac{2\tan\alpha}{1 + \tan^2\alpha} = \dfrac{6}{10} = \tfrac35\).`],
+            ds: S`\(P = \tfrac56\); \(Q = \tfrac35\).` },
+          { muc: 'VD', dong: 9,
+            de: S`Cho \(\sin a + \cos a = \tfrac23\) với \(\tfrac\pi2 \lt a \lt \pi\). Tính \(\sin 2a\), \(\sin^4 a + \cos^4 a\) và \(\sin a - \cos a\).`,
+            goiY: S`Bình phương hai vế. \(\sin^4 a + \cos^4 a = 1 - \tfrac12\sin^2 2a\). Dấu của \(\sin a - \cos a\) xác định nhờ góc phần tư.`,
+            lg: [S`\((\sin a + \cos a)^2 = \tfrac49 \Rightarrow 1 + \sin 2a = \tfrac49 \Rightarrow \sin 2a = -\tfrac59\).`,
+              S`\(\sin^4 a + \cos^4 a = (\sin^2 a + \cos^2 a)^2 - 2\sin^2 a\cos^2 a = 1 - \tfrac12\sin^2 2a = 1 - \tfrac{25}{162} = \tfrac{137}{162}\).`,
+              S`\((\sin a - \cos a)^2 = 1 - \sin 2a = \tfrac{14}{9}\). Với \(\tfrac\pi2 \lt a \lt \pi\): \(\sin a \gt 0\), \(\cos a \lt 0\) nên \(\sin a - \cos a \gt 0\), do đó \(\sin a - \cos a = \tfrac{\sqrt{14}}{3}\).`],
+            ds: S`\(\sin 2a = -\tfrac59\); \(\sin^4 a + \cos^4 a = \tfrac{137}{162}\); \(\sin a - \cos a = \tfrac{\sqrt{14}}{3}\).` },
+          { muc: 'VDC', dong: 12,
+            de: S`Biết \(\tan x\), \(\tan y\) là hai nghiệm của phương trình \(4t^2 + 3t - 5 = 0\). Tính chính xác \(T = 4\sin^2(x + y) + 3\sin(x + y)\cos(x + y) - 5\cos^2(x + y)\).`,
+            goiY: S`Dùng định lí Viète tính \(u = \tan(x + y)\). Viết \(T = \cos^2(x + y)\,(4u^2 + 3u - 5)\) và \(\cos^2(x + y) = \dfrac{1}{1 + u^2}\).`,
+            lg: [S`Phương trình có \(ac \lt 0\) nên có hai nghiệm phân biệt. Viète: \(\tan x + \tan y = -\tfrac34\), \(\tan x\tan y = -\tfrac54\).`,
+              S`\(\tan(x + y) = \dfrac{-\tfrac34}{1 + \tfrac54} = -\tfrac13\). Suy ra \(\cos(x + y) \ne 0\) và \(\cos^2(x + y) = \dfrac{1}{1 + \tfrac19} = \tfrac{9}{10}\).`,
+              S`\(T = \cos^2(x + y)\left[4 \cdot \tfrac19 + 3 \cdot \left(-\tfrac13\right) - 5\right] = \tfrac{9}{10} \cdot \left(\tfrac49 - 6\right) = \tfrac{9}{10} \cdot \left(-\tfrac{50}{9}\right) = -5\).`],
+            ds: S`\(T = -5\).` },
+        ] },
+      { ten: 'Rút gọn, chứng minh đẳng thức lượng giác', muc: 'VD – VDC',
+        pp: ['Nhóm các số hạng có "góc đối xứng" (x và 5x, x và 3x…) rồi dùng công thức tổng thành tích.', 'Tích của các cos, sin: dùng công thức tích thành tổng từng cặp, hoặc nhân thêm sin để dùng sin 2a.', S`Lũy thừa bậc 4: \(\sin^4 + \cos^4 = (\sin^2 + \cos^2)^2 - 2\sin^2\cos^2\), rồi hạ bậc.`, 'Biến đổi một vế thành vế kia; ghi điều kiện để biểu thức có nghĩa khi có phân thức.'],
+        vd: [{
+          de: S`Rút gọn \(A = \dfrac{\sin x + \sin 3x + \sin 5x}{\cos x + \cos 3x + \cos 5x}\) (với điều kiện biểu thức có nghĩa).`,
+          lg: [S`\(\sin x + \sin 5x = 2\sin 3x\cos 2x\); \(\cos x + \cos 5x = 2\cos 3x\cos 2x\).`,
+            S`Tử: \(2\sin 3x\cos 2x + \sin 3x = \sin 3x(2\cos 2x + 1)\). Mẫu: \(\cos 3x(2\cos 2x + 1)\).`,
+            S`Với điều kiện mẫu khác 0 (nên \(2\cos 2x + 1 \ne 0\) và \(\cos 3x \ne 0\)): \(A = \dfrac{\sin 3x}{\cos 3x} = \tan 3x\).`],
+          ds: S`\(A = \tan 3x\).` }],
+        bt: [
+          { muc: 'VD', dong: 7,
+            de: S`Chứng minh \(\sin^4 x + \cos^4 x = \dfrac{3 + \cos 4x}{4}\) với mọi \(x\).`,
+            goiY: S`\(\sin^4 x + \cos^4 x\) \(= 1 - 2\sin^2 x\cos^2 x\) \(= 1 - \tfrac12\sin^2 2x\), rồi hạ bậc \(\sin^2 2x = \tfrac{1 - \cos 4x}{2}\).`,
+            lg: [S`\(\sin^4 x + \cos^4 x = (\sin^2 x + \cos^2 x)^2 - 2\sin^2 x\cos^2 x = 1 - \tfrac12\sin^2 2x\).`,
+              S`\(= 1 - \tfrac12 \cdot \dfrac{1 - \cos 4x}{2} = 1 - \dfrac{1 - \cos 4x}{4} = \dfrac{3 + \cos 4x}{4}\) (điều phải chứng minh).`],
+            ds: 'Đã chứng minh.' },
+          { muc: 'VD', dong: 8,
+            de: S`Cho \(P = \cos\left(x + \tfrac\pi3\right)\cos\left(x - \tfrac\pi3\right)\). Biến đổi \(P\) thành tổng, rồi tìm giá trị lớn nhất và nhỏ nhất của \(P\).`,
+            goiY: S`\(\cos a\cos b = \tfrac12[\cos(a + b) + \cos(a - b)]\); \(\cos\tfrac{2\pi}{3} = -\tfrac12\).`,
+            lg: [S`\(P = \tfrac12\left[\cos 2x + \cos\tfrac{2\pi}{3}\right] = \tfrac12\cos 2x - \tfrac14\).`,
+              S`Vì \(-1 \le \cos 2x \le 1\) nên \(-\tfrac34 \le P \le \tfrac14\).`,
+              S`\(P = \tfrac14\) khi \(\cos 2x = 1\) (ví dụ \(x = 0\)); \(P = -\tfrac34\) khi \(\cos 2x = -1\) (ví dụ \(x = \tfrac\pi2\)).`],
+            ds: S`\(P = \tfrac12\cos 2x - \tfrac14\); GTLN \(\tfrac14\), GTNN \(-\tfrac34\).` },
+          { muc: 'VDC', dong: 11,
+            de: S`Chứng minh \(\sin x\sin(60^\circ - x)\sin(60^\circ + x) = \tfrac14\sin 3x\). Áp dụng tính \(\sin 20^\circ\sin 40^\circ\sin 80^\circ\).`,
+            goiY: S`Biến đổi \(\sin(60^\circ - x)\sin(60^\circ + x)\) thành tổng trước, rồi nhân với \(\sin x\) và dùng \(\sin 3x = 3\sin x - 4\sin^3 x\) (suy từ công thức cộng).`,
+            lg: [S`\(\sin(60^\circ - x)\sin(60^\circ + x) = \tfrac12[\cos 2x - \cos 120^\circ] = \tfrac12\cos 2x + \tfrac14 = \tfrac12(1 - 2\sin^2 x) + \tfrac14 = \tfrac34 - \sin^2 x\).`,
+              S`Vế trái \(= \sin x\left(\tfrac34 - \sin^2 x\right) = \tfrac14(3\sin x - 4\sin^3 x)\).`,
+              S`Mà \(\sin 3x = \sin(2x + x) = \sin 2x\cos x + \cos 2x\sin x = 2\sin x(1 - \sin^2 x) + (1 - 2\sin^2 x)\sin x = 3\sin x - 4\sin^3 x\). Vậy vế trái \(= \tfrac14\sin 3x\).`,
+              S`Áp dụng với \(x = 20^\circ\): \(\sin 20^\circ\sin 40^\circ\sin 80^\circ = \tfrac14\sin 60^\circ = \dfrac{\sqrt3}{8}\).`],
+            ds: S`\(\sin 20^\circ\sin 40^\circ\sin 80^\circ = \dfrac{\sqrt3}{8}\).` },
+        ] },
+      { ten: 'Bài toán thực tế dùng góc lượng giác và công thức lượng giác', muc: 'VD – VDC',
+        pp: ['Đổi đơn vị: km/h → m/s; số vòng quay → góc (1 vòng = 2π rad); độ dài cung l = R·α (α tính bằng rad).', S`Góc nhìn một đoạn thẳng thường là <b>hiệu</b> hai góc: dùng công thức \(\tan(a - b)\).`, S`Tổng hai dao động \(a\sin t + b\cos t\): đưa về \(k\sin(t + \varphi)\).`, 'Làm tròn theo yêu cầu ở bước cuối.'],
+        vd: [{
+          de: S`Một thiết bị nhận hai âm \(f_1(t) = 2\sin t\) và \(f_2(t) = 2\sqrt3\cos t\); âm kết hợp là \(f(t) = f_1(t) + f_2(t)\). Viết \(f(t)\) dưới dạng \(k\sin(t + \varphi)\) với \(k \gt 0\), \(-\pi \le \varphi \le \pi\). Tìm biên độ \(k\) và pha ban đầu \(\varphi\).`,
+          lg: [S`\(k = \sqrt{2^2 + (2\sqrt3)^2} = 4\). \(f(t) = 4\left(\tfrac12\sin t + \tfrac{\sqrt3}{2}\cos t\right)\).`,
+            S`Vì \(\cos\tfrac\pi3 = \tfrac12\), \(\sin\tfrac\pi3 = \tfrac{\sqrt3}{2}\) nên \(f(t) = 4\left(\sin t\cos\tfrac\pi3 + \cos t\sin\tfrac\pi3\right) = 4\sin\left(t + \tfrac\pi3\right)\).`],
+          ds: S`\(k = 4\), \(\varphi = \tfrac\pi3\).` }],
+        bt: [
+          { muc: 'VD', dong: 7,
+            de: 'Bánh xe máy có đường kính (kể cả lốp) 60 cm. Xe chạy với vận tốc 36 km/h. Hỏi trong một giây bánh xe quay được bao nhiêu vòng và quay được một góc bao nhiêu radian (làm tròn đến hàng phần chục)?',
+            goiY: S`36 km/h = 10 m/s. Mỗi vòng xe đi được chu vi bánh xe \(0{,}6\pi\) m.`,
+            lg: [S`Vận tốc \(36\) km/h \(= 10\) m/s. Chu vi bánh xe: \(0{,}6\pi \approx 1{,}885\) m.`,
+              S`Số vòng trong 1 giây: \(\dfrac{10}{0{,}6\pi} \approx 5{,}3\) vòng.`,
+              S`Góc quay: \(\dfrac{10}{0{,}6\pi} \cdot 2\pi = \dfrac{10}{0{,}3} \approx 33{,}3\) rad.`],
+            ds: S`Khoảng 5,3 vòng; góc khoảng 33,3 rad.` },
+          { muc: 'VD', dong: 9,
+            de: S`Hai chung cư cách nhau \(HK = 25\) m. Camera đặt tại \(C\) trên nóc chung cư thứ hai, cao \(CK = 30\) m. Trên tường chung cư thứ nhất, \(A\) và \(B\) là vị trí thấp nhất, cao nhất mà camera quan sát được, với \(AH = 5\) m, \(BH = 20\) m (\(H\) là chân chung cư thứ nhất). Tính góc \(\widehat{ACB}\) (làm tròn đến hàng phần mười của độ).`,
+            goiY: S`Kẻ đường nằm ngang từ \(C\). Góc hạ từ \(C\) xuống \(A\) có \(\tan = \tfrac{30 - 5}{25}\), xuống \(B\) có \(\tan = \tfrac{30 - 20}{25}\). Góc cần tìm là hiệu hai góc.`,
+            lg: [S`Gọi \(\alpha\), \(\beta\) là góc giữa phương ngang tại \(C\) với \(CA\), \(CB\): \(\tan\alpha = \tfrac{25}{25} = 1\), \(\tan\beta = \tfrac{10}{25} = 0{,}4\).`,
+              S`\(\widehat{ACB} = \alpha - \beta\); \(\tan(\alpha - \beta) = \dfrac{1 - 0{,}4}{1 + 1 \cdot 0{,}4} = \dfrac{0{,}6}{1{,}4} = \tfrac37\).`,
+              S`\(\widehat{ACB} \approx 23{,}2^\circ\).`],
+            ds: S`\(\widehat{ACB} \approx 23{,}2^\circ\).` },
+          { muc: 'VDC', dong: 12,
+            de: S`Một bức tượng cao 4 m đặt trên bệ cao 2 m. Một người (coi mắt ở sát mặt đất) đứng cách chân bệ \(x\) mét nhìn bức tượng dưới góc \(\theta\) (góc giữa hai tia nhìn tới chân và đỉnh tượng). Chứng minh \(\tan\theta = \dfrac{4x}{x^2 + 12}\) và tìm \(x\) để \(\theta = 30^\circ\).`,
+            goiY: S`Tia nhìn tới đỉnh tượng có \(\tan = \tfrac6x\), tới chân tượng có \(\tan = \tfrac2x\); \(\theta\) là hiệu hai góc.`,
+            lg: [S`Gọi \(a, b\) là góc nâng tới đỉnh tượng, chân tượng: \(\tan a = \tfrac6x\), \(\tan b = \tfrac2x\), \(\theta = a - b\).`,
+              S`\(\tan\theta = \dfrac{\tfrac6x - \tfrac2x}{1 + \tfrac{12}{x^2}} = \dfrac{4x}{x^2 + 12}\).`,
+              S`\(\theta = 30^\circ \iff \dfrac{4x}{x^2 + 12} = \dfrac{1}{\sqrt3} \iff x^2 - 4\sqrt3\,x + 12 = 0 \iff (x - 2\sqrt3)^2 = 0 \iff x = 2\sqrt3\).`,
+              S`Vậy người đứng cách chân bệ \(2\sqrt3 \approx 3{,}46\) m (khi đó góc nhìn đạt đúng \(30^\circ\)).`],
+            ds: S`\(x = 2\sqrt3 \approx 3{,}46\) m.` },
+        ] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/lop11/c1-ham-so-luong-giac-thuc-te.js */
+/* Toán 11 – Chương I. Vận dụng, vận dụng cao: hàm số lượng giác – giá trị lớn nhất, nhỏ nhất và mô hình thực tế.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-1 (hàm số lượng giác trong thực tế), Đúng–Sai ĐS-1 – mức Vận dụng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop11/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Tử Đà – Phú Thọ.pdf (mực nước kênh)
+   - Đề giữa HK1/Đề giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Nhữ Văn Lan – Hải Phòng.pdf (vòng quay)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Lê Hồng Phong 1 – Đắk Lắk.pdf (số giờ có ánh sáng)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 11 năm 2025 – 2026 trường THPT Nguyễn Công Trứ – Đắk Lắk.pdf (huyết áp)
+   - Đề cương/Đề cương giữa kỳ 1 Toán 11 năm 2026 – 2027 trường THPT Hoàng Văn Thụ – Hà Nội.pdf (GTLN, GTNN)
+   - Đề cương/Ôn tập giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Trần Phú – Hà Nội.pdf (GTLN trên đoạn bằng cách đặt ẩn phụ) */
+(() => {
+  const FN = Fig.func, PI = Math.PI;
+  Vdc.add({
+    grade: 'lop11', id: 'c1-ham-so-luong-giac-thuc-te', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Tử Đà – Phú Thọ; THPT Nhữ Văn Lan – Hải Phòng; THPT Lê Hồng Phong 1, Nguyễn Công Trứ – Đắk Lắk. Đề cương: THPT Hoàng Văn Thụ, Trần Phú – Hà Nội',
+    chuong: 'Chương I. Hàm số lượng giác và phương trình lượng giác',
+    bai: 'Bài 3. Hàm số lượng giác',
+    title: 'Hàm số lượng giác: giá trị lớn nhất, nhỏ nhất và mô hình thực tế',
+    desc: 'GTLN, GTNN (đưa về một hàm, đặt ẩn phụ trên đoạn); thủy triều, vòng quay, số giờ có ánh sáng, huyết áp.',
+    kt: [
+      { t: 'Tập giá trị',
+        b: S`\(-1 \le \sin u \le 1\), \(-1 \le \cos u \le 1\) với mọi \(u\). Hàm \(y = a\sin(\omega x + \varphi) + d\) (hoặc \(\cos\)) có <b>GTLN</b> \(d + |a|\), <b>GTNN</b> \(d - |a|\) và chu kì \(T = \dfrac{2\pi}{|\omega|}\).` },
+      { t: 'Đưa về một hàm lượng giác',
+        b: S`\(\sin x\cos x = \tfrac12\sin 2x\); \(\cos^2 x = \tfrac{1 + \cos 2x}{2}\); \(a\sin u + b\cos u = \sqrt{a^2 + b^2}\sin(u + \varphi)\) nên \(-\sqrt{a^2 + b^2} \le a\sin u + b\cos u \le \sqrt{a^2 + b^2}\).` },
+      { t: 'Đặt ẩn phụ',
+        b: S`Hàm chứa \(\cos 2x\) và \(\sin x\): thay \(\cos 2x = 1 - 2\sin^2 x\), đặt \(s = \sin x\) được hàm bậc hai theo \(s\). <b>Tìm đúng tập giá trị của \(s\)</b> (với \(x\) trong đoạn đề cho) rồi so sánh giá trị tại đỉnh parabol (nếu thuộc) và hai đầu mút.` },
+      { t: 'Mô hình thực tế',
+        b: S`\(h(t) = a\cos(bt + c) + d\): giá trị lớn nhất \(d + |a|\) đạt khi \(\cos(bt + c) = 1\) (nếu \(a \gt 0\)); muốn tìm thời điểm thì giải phương trình lượng giác cơ bản rồi chọn \(t\) trong khoảng đề cho.`,
+        fig: FN({ f: t => 2.5 * Math.cos(PI * t / 6 + PI / 3) + 10, xr: [0, 24], yr: [0, 13.5], w: 300, h: 150, xt: [[4, '4'], [10, '10'], [16, '16'], [22, '22']], yt: [[7.5, '7,5'], [12.5, '12,5']], hl: [12.5, 7.5], xl: 't', yl: 'h' }) },
+    ],
+    dang: [
+      { ten: 'Giá trị lớn nhất, nhỏ nhất của hàm số lượng giác', muc: 'VD – VDC',
+        pp: ['Biến đổi về một hàm lượng giác (hạ bậc, nhân đôi, a sin + b cos) hoặc về hàm bậc hai của s = sin x (s = cos x).', 'Dùng −1 ≤ sin, cos ≤ 1 (hoặc tập giá trị đúng của s trên đoạn đề cho).', 'Hàm bậc hai theo s trên đoạn: so sánh giá trị tại đỉnh (nếu đỉnh thuộc đoạn) và tại hai đầu mút.', 'Chỉ ra giá trị x để dấu bằng xảy ra.'],
+        vd: [{
+          de: S`Tìm giá trị lớn nhất và nhỏ nhất của \(y = \cos 2x - 2\sin x + 3\).`,
+          lg: [S`\(\cos 2x = 1 - 2\sin^2 x\) nên \(y = -2\sin^2 x - 2\sin x + 4\). Đặt \(s = \sin x\), \(s \in [-1;\, 1]\): \(y = g(s) = -2s^2 - 2s + 4\).`,
+            S`Parabol \(g\) có hệ số \(a = -2 \lt 0\), đỉnh tại \(s = -\tfrac12 \in [-1;\, 1]\): \(g\left(-\tfrac12\right) = -\tfrac12 + 1 + 4 = \tfrac92\).`,
+            S`\(g(-1) = -2 + 2 + 4 = 4\); \(g(1) = -2 - 2 + 4 = 0\).`,
+            S`GTLN \(\tfrac92\) khi \(\sin x = -\tfrac12\); GTNN \(0\) khi \(\sin x = 1\).`],
+          ds: S`\(\max y = \tfrac92\) (khi \(\sin x = -\tfrac12\)); \(\min y = 0\) (khi \(\sin x = 1\)).` }],
+        bt: [
+          { muc: 'VD', dong: 6,
+            de: S`Tìm giá trị lớn nhất và nhỏ nhất của \(y = 7 - 6\sin x\cos x\).`,
+            goiY: S`\(6\sin x\cos x = 3\sin 2x\).`,
+            lg: [S`\(y = 7 - 3\sin 2x\). Vì \(-1 \le \sin 2x \le 1\) nên \(4 \le y \le 10\).`,
+              S`\(y = 10\) khi \(\sin 2x = -1\) (ví dụ \(x = -\tfrac\pi4\)); \(y = 4\) khi \(\sin 2x = 1\) (ví dụ \(x = \tfrac\pi4\)).`],
+            ds: S`\(\max y = 10\), \(\min y = 4\).` },
+          { muc: 'VD', dong: 7,
+            de: S`Tìm giá trị lớn nhất và nhỏ nhất của \(y = 2\cos^2 x + \sqrt3\sin 2x\).`,
+            goiY: S`Hạ bậc \(2\cos^2 x = 1 + \cos 2x\), rồi đưa \(\sqrt3\sin 2x + \cos 2x\) về dạng \(2\sin(2x + \varphi)\).`,
+            lg: [S`\(y = 1 + \cos 2x + \sqrt3\sin 2x = 1 + 2\left(\tfrac{\sqrt3}{2}\sin 2x + \tfrac12\cos 2x\right) = 1 + 2\sin\left(2x + \tfrac\pi6\right)\).`,
+              S`Do \(-1 \le \sin\left(2x + \tfrac\pi6\right) \le 1\) nên \(-1 \le y \le 3\).`,
+              S`\(y = 3\) khi \(x = \tfrac\pi6 + k\pi\); \(y = -1\) khi \(x = -\tfrac\pi3 + k\pi\).`],
+            ds: S`\(\max y = 3\), \(\min y = -1\).` },
+          { muc: 'VDC', dong: 10,
+            de: S`Tìm giá trị lớn nhất và nhỏ nhất của \(y = \cos 2x + 2\sin x\) trên đoạn \(\left[-\tfrac\pi6;\, \tfrac{5\pi}{6}\right]\).`,
+            goiY: S`Đặt \(s = \sin x\). Khi \(x\) chạy trên \(\left[-\tfrac\pi6;\, \tfrac{5\pi}{6}\right]\) thì \(s\) chạy trên \(\left[-\tfrac12;\, 1\right]\) (xem đường tròn lượng giác).`,
+            lg: [S`\(y = 1 - 2\sin^2 x + 2\sin x\). Đặt \(s = \sin x\). Với \(x \in \left[-\tfrac\pi6;\, \tfrac{5\pi}{6}\right]\), \(\sin x\) nhỏ nhất bằng \(-\tfrac12\) (tại \(x = -\tfrac\pi6\)) và lớn nhất bằng 1 (tại \(x = \tfrac\pi2\)), nên \(s \in \left[-\tfrac12;\, 1\right]\).`,
+              S`\(g(s) = -2s^2 + 2s + 1\), đỉnh \(s = \tfrac12\) thuộc đoạn: \(g\left(\tfrac12\right) = \tfrac32\). \(g\left(-\tfrac12\right) = -\tfrac12\); \(g(1) = 1\).`,
+              S`GTLN \(\tfrac32\) khi \(\sin x = \tfrac12\) (\(x = \tfrac\pi6\) hoặc \(x = \tfrac{5\pi}{6}\)); GTNN \(-\tfrac12\) khi \(x = -\tfrac\pi6\).`],
+            ds: S`\(\max y = \tfrac32\); \(\min y = -\tfrac12\).` },
+        ] },
+      { ten: S`Mô hình thực tế \(h(t) = a\sin(bt + c) + d\)`, muc: 'VD – VDC',
+        pp: ['Giá trị lớn nhất, nhỏ nhất của đại lượng: d ± |a|.', 'Thời điểm đạt giá trị lớn nhất (nhỏ nhất): giải sin(bt + c) = ±1 (hoặc cos = ±1).', 'Thời điểm đạt một giá trị cho trước: giải phương trình lượng giác cơ bản, rồi chọn các nghiệm t thuộc khoảng thời gian đề cho (lập bất phương trình theo k).', 'Chu kì T = 2π/|b| cho biết sau bao lâu hiện tượng lặp lại (ví dụ số nhịp tim, thời gian một vòng quay).'],
+        vd: [{
+          de: S`Độ sâu \(h\) (m) của mực nước ở một cảng tại thời điểm \(t\) (giờ) trong một ngày được cho bởi \(h(t) = 2{,}5\cos\left(\tfrac{\pi t}{6} + \tfrac\pi3\right) + 10\), \(0 \le t \le 24\). Tìm độ sâu lớn nhất, nhỏ nhất và các thời điểm mực nước sâu nhất trong ngày.`,
+          fig: FN({ f: t => 2.5 * Math.cos(PI * t / 6 + PI / 3) + 10, xr: [0, 24], yr: [0, 13.5], w: 300, h: 150, xt: [[4, '4'], [10, '10'], [16, '16'], [22, '22']], yt: [[7.5, '7,5'], [12.5, '12,5']], hl: [12.5, 7.5], pts: [[10, 12.5, '', 0, 0], [22, 12.5, '', 0, 0]], xl: 't', yl: 'h' }),
+          lg: [S`Vì \(-1 \le \cos\left(\tfrac{\pi t}{6} + \tfrac\pi3\right) \le 1\) nên \(7{,}5 \le h \le 12{,}5\).`,
+            S`\(h = 12{,}5 \iff \cos\left(\tfrac{\pi t}{6} + \tfrac\pi3\right) = 1 \iff \tfrac{\pi t}{6} + \tfrac\pi3 = k2\pi \iff t = -2 + 12k\ (k \in \mathbb Z)\).`,
+            S`\(0 \le -2 + 12k \le 24 \iff \tfrac16 \le k \le \tfrac{13}{6}\), nên \(k \in \{1;\, 2\}\): \(t = 10\) và \(t = 22\).`,
+            S`(Tương tự, \(h = 7{,}5\) khi \(t = 4 + 12k\), tức lúc 4 giờ và 16 giờ.)`],
+          ds: 'Sâu nhất 12,5 m lúc 10 giờ và 22 giờ; nông nhất 7,5 m (lúc 4 giờ và 16 giờ).' }],
+        bt: [
+          { muc: 'VD', dong: 9,
+            de: S`Một vòng quay có bán kính 50 m, trục quay cách mặt đất 52 m, quay đều mỗi vòng hết 20 phút. Độ cao của một cabin so với mặt đất sau \(t\) phút là \(h(t) = 52 - 50\cos\tfrac{\pi t}{10}\) (m). a) Lúc bắt đầu cabin cao bao nhiêu? Sau bao lâu cabin lên cao nhất? b) Trong vòng quay đầu tiên, sau bao nhiêu phút cabin lần đầu đạt độ cao 77 m (làm tròn đến hàng phần trăm)?`,
+            goiY: S`Cao nhất khi \(\cos\tfrac{\pi t}{10} = -1\). Độ cao 77 m: \(\cos\tfrac{\pi t}{10} = -\tfrac12\), lấy nghiệm dương nhỏ nhất.`,
+            lg: [S`a) \(h(0) = 52 - 50 = 2\) m. Cao nhất \(102\) m khi \(\cos\tfrac{\pi t}{10} = -1 \iff \tfrac{\pi t}{10} = \pi\) (vòng đầu) \(\iff t = 10\) phút.`,
+              S`b) \(h = 77 \iff \cos\tfrac{\pi t}{10} = -\tfrac12 \iff \tfrac{\pi t}{10} = \pm\tfrac{2\pi}{3} + k2\pi\).`,
+              S`Trong vòng đầu (\(0 \le t \le 20\)): \(t = \tfrac{20}{3}\) hoặc \(t = \tfrac{40}{3}\). Lần đầu là \(t = \tfrac{20}{3} \approx 6{,}67\) phút.`],
+            ds: S`a) 2 m; sau 10 phút. b) \(t = \tfrac{20}{3} \approx 6{,}67\) phút.` },
+          { muc: 'VD', dong: 8,
+            de: S`Số giờ có ánh sáng mặt trời của một thành phố vào ngày thứ \(t\) của năm (không nhuận) được cho bởi \(d(t) = 4\sin\left[\tfrac{\pi}{182}(t - 79)\right] + 12\), \(t \in \mathbb Z\), \(1 \le t \le 365\). Ngày nào trong năm có nhiều giờ ánh sáng nhất, ngày nào ít nhất? Tính số giờ tương ứng.`,
+            goiY: S`Nhiều nhất khi \(\sin[\ldots] = 1\), ít nhất khi \(\sin[\ldots] = -1\); chọn \(k\) để \(t\) nguyên và thuộc \([1;\, 365]\).`,
+            lg: [S`\(d(t) = 16 \iff \tfrac{\pi}{182}(t - 79) = \tfrac\pi2 + k2\pi \iff t = 170 + 364k\). Với \(1 \le t \le 365\): \(t = 170\).`,
+              S`\(d(t) = 8 \iff \tfrac{\pi}{182}(t - 79) = -\tfrac\pi2 + k2\pi \iff t = -12 + 364k\). Với \(1 \le t \le 365\): \(t = 352\).`],
+            ds: 'Ngày thứ 170 có nhiều nhất (16 giờ); ngày thứ 352 có ít nhất (8 giờ).' },
+          { muc: 'VDC', dong: 12,
+            de: S`Huyết áp của một người được mô hình hóa bởi \(P(t) = 115 + 25\sin\tfrac{7\pi t}{3}\) (mmHg), \(t\) tính bằng giây. a) Tìm huyết áp tâm thu (lớn nhất), tâm trương (nhỏ nhất) và số nhịp tim mỗi phút. b) Trong 2 giây đầu (\(0 \le t \le 2\)), huyết áp bằng 140 mmHg mấy lần? Bằng 127,5 mmHg mấy lần?`,
+            goiY: S`Một nhịp tim là một chu kì \(T = \dfrac{2\pi}{7\pi/3}\). \(P = 127{,}5 \iff \sin\tfrac{7\pi t}{3} = \tfrac12\): có hai họ nghiệm, đếm từng họ trong \([0;\, 2]\).`,
+            lg: [S`a) Tâm thu \(115 + 25 = 140\) mmHg, tâm trương \(115 - 25 = 90\) mmHg. Chu kì \(T = \tfrac67\) giây nên mỗi phút có \(60 : \tfrac67 = 70\) nhịp.`,
+              S`b) \(P = 140 \iff \tfrac{7\pi t}{3} = \tfrac\pi2 + k2\pi \iff t = \tfrac{3}{14} + \tfrac{6k}{7}\). \(0 \le t \le 2 \iff k \in \{0;\, 1;\, 2\}\): 3 lần.`,
+              S`\(P = 127{,}5 \iff \sin\tfrac{7\pi t}{3} = \tfrac12 \iff t = \tfrac{1}{14} + \tfrac{6k}{7}\) hoặc \(t = \tfrac{5}{14} + \tfrac{6k}{7}\).`,
+              S`Họ thứ nhất trong \([0;\, 2]\): \(k = 0, 1, 2\) (3 giá trị); họ thứ hai: \(t = \tfrac5{14}, \tfrac{17}{14}, \tfrac{29}{14}\) – giá trị cuối \(\gt 2\), còn 2 giá trị. Tổng: 5 lần.`],
+            ds: 'a) 140 mmHg, 90 mmHg, 70 nhịp/phút. b) 3 lần; 5 lần.' },
+        ] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/lop11/c1-phuong-trinh-luong-giac.js */
+/* Toán 11 – Chương I. Vận dụng, vận dụng cao: phương trình lượng giác cơ bản – nghiệm trên khoảng, tham số, thực tế.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-2 (Vận dụng cao) – phương trình lượng giác cơ bản.
+   Dạng bài lấy theo các đề trong tai-lieu/lop11/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Lê Chân – Hải Phòng.pdf (cos 3x = sin(…))
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Trà Ôn – Vĩnh Long.pdf (đếm nghiệm trên (−50π; 50π))
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 11 năm 2025 – 2026 trường THPT Lê Quý Đôn – Ninh Bình.pdf (tan(2x − 15°), tổng nghiệm)
+   - Đề giữa HK1/Bộ đề ôn tập kiểm tra giữa học kì 1 môn Toán 11 năm học 2025 – 2026.pdf (tham số m có nghiệm)
+   - Đề cương/Ôn tập giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Trần Phú – Hà Nội.pdf (đúng k nghiệm có tham số)
+   - Đề cương/Đề cương học kì 1 Toán 11 năm 2025 – 2026 trường THPT Phan Đình Phùng – Hà Nội.pdf (dao động qua vị trí cân bằng)
+   - Đề giữa HK1/Đề giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Nhữ Văn Lan – Hải Phòng.pdf (vệ tinh)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Lạng Giang 1 – Bắc Ninh.pdf (số ngày chạy bộ) */
+(() => {
+  Vdc.add({
+    grade: 'lop11', id: 'c1-phuong-trinh-luong-giac', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Lê Chân, Nhữ Văn Lan – Hải Phòng; THPT Trà Ôn – Vĩnh Long; THPT Lê Quý Đôn – Ninh Bình; THPT Lạng Giang 1 – Bắc Ninh; Bộ đề ôn tập kiểm tra giữa HK1 Toán 11. Đề cương: THPT Trần Phú, Phan Đình Phùng – Hà Nội',
+    chuong: 'Chương I. Hàm số lượng giác và phương trình lượng giác',
+    bai: 'Bài 4. Phương trình lượng giác cơ bản',
+    title: 'Phương trình lượng giác cơ bản: nghiệm trên khoảng, tham số, bài toán thực tế',
+    desc: 'Đưa về phương trình cơ bản; đếm nghiệm, tổng nghiệm trên khoảng; tìm m để có nghiệm, có đúng k nghiệm; dao động, vệ tinh.',
+    kt: [
+      { t: 'Công thức nghiệm',
+        b: S`\(\sin u = \sin v \iff u = v + k2\pi\) hoặc \(u = \pi - v + k2\pi\).<br>\(\cos u = \cos v \iff u = \pm v + k2\pi\).<br>\(\tan u = \tan v \iff u = v + k\pi\); \(\cot u = \cot v \iff u = v + k\pi\) (\(k \in \mathbb Z\), kèm điều kiện xác định).<br>\(\sin x = m\), \(\cos x = m\) có nghiệm \(\iff -1 \le m \le 1\).` },
+      { t: 'Đưa về cùng một hàm',
+        b: S`\(\sin v = \cos\left(\tfrac\pi2 - v\right)\), \(-\cos v = \cos(\pi - v)\), \(-\sin v = \sin(-v)\). Tổng hai sin hoặc hai cos: dùng công thức tổng thành tích để đưa về tích bằng 0.` },
+      { t: 'Chọn nghiệm trên khoảng',
+        b: S`Với họ nghiệm \(x = \alpha + k\beta\) và khoảng \((a;\, b)\): giải \(a \lt \alpha + k\beta \lt b\) tìm các số nguyên \(k\). Có nhiều họ nghiệm thì đếm từng họ, rồi <b>trừ các nghiệm trùng nhau</b> giữa các họ.` },
+      { t: 'Số nghiệm của phương trình tích có tham số',
+        b: S`\((f(x) - a)(g(x) - m) = 0\): nghiệm của phương trình là hợp nghiệm của \(f(x) = a\) (không phụ thuộc \(m\)) và \(g(x) = m\). Đếm số nghiệm của \(g(x) = m\) theo \(m\) trên đoạn đề cho (dùng đường tròn lượng giác), rồi loại các giá trị \(m\) làm nghiệm bị trùng.` },
+    ],
+    dang: [
+      { ten: 'Đưa về phương trình cơ bản; số nghiệm, tổng nghiệm trên khoảng', muc: 'VD – VDC',
+        pp: ['Đưa hai vế về cùng một hàm lượng giác (sin = sin, cos = cos…) hoặc về tích bằng 0.', 'Viết đầy đủ các họ nghiệm.', 'Với khoảng cho trước: giải bất phương trình theo k cho từng họ, liệt kê nghiệm.', 'Đếm nghiệm trên khoảng lớn: đếm số k của từng họ, trừ phần trùng (nghiệm chung của hai họ).'],
+        vd: [{
+          de: S`Giải phương trình \(\cos 3x = \sin\left(x + \tfrac\pi6\right)\). Tìm các nghiệm thuộc đoạn \([0;\, \pi]\) và tính tổng của chúng.`,
+          lg: [S`\(\sin\left(x + \tfrac\pi6\right) = \cos\left(\tfrac\pi2 - x - \tfrac\pi6\right) = \cos\left(\tfrac\pi3 - x\right)\). Phương trình trở thành \(\cos 3x = \cos\left(\tfrac\pi3 - x\right)\).`,
+            S`\(3x = \tfrac\pi3 - x + k2\pi \iff x = \tfrac{\pi}{12} + \tfrac{k\pi}{2}\); hoặc \(3x = -\tfrac\pi3 + x + k2\pi \iff x = -\tfrac\pi6 + k\pi\) (\(k \in \mathbb Z\)).`,
+            S`Trên \([0;\, \pi]\): họ thứ nhất cho \(x = \tfrac{\pi}{12}\), \(x = \tfrac{7\pi}{12}\); họ thứ hai cho \(x = \tfrac{5\pi}{6}\).`,
+            S`Tổng các nghiệm: \(\tfrac{\pi}{12} + \tfrac{7\pi}{12} + \tfrac{10\pi}{12} = \tfrac{3\pi}{2}\).`],
+          ds: S`\(x = \tfrac{\pi}{12} + \tfrac{k\pi}{2}\) hoặc \(x = -\tfrac\pi6 + k\pi\); trên \([0;\, \pi]\) có 3 nghiệm, tổng \(\tfrac{3\pi}{2}\).` }],
+        bt: [
+          { muc: 'VD', dong: 8,
+            de: S`Cho phương trình \(\cos 2x = -\tfrac{\sqrt3}{2}\). Phương trình có bao nhiêu nghiệm thuộc khoảng \((0;\, 2\pi)\)? Tính tổng các nghiệm đó và tìm nghiệm lớn nhất.`,
+            goiY: S`\(\cos 2x = \cos\tfrac{5\pi}{6}\), suy ra \(x = \pm\tfrac{5\pi}{12} + k\pi\).`,
+            lg: [S`\(\cos 2x = \cos\tfrac{5\pi}{6} \iff 2x = \pm\tfrac{5\pi}{6} + k2\pi \iff x = \pm\tfrac{5\pi}{12} + k\pi\).`,
+              S`Trên \((0;\, 2\pi)\): \(x = \tfrac{5\pi}{12}, \tfrac{17\pi}{12}\) (họ dấu cộng) và \(x = \tfrac{7\pi}{12}, \tfrac{19\pi}{12}\) (họ dấu trừ, \(k = 1, 2\)).`,
+              S`Có 4 nghiệm; tổng \(\tfrac{(5 + 17 + 7 + 19)\pi}{12} = 4\pi\); nghiệm lớn nhất \(\tfrac{19\pi}{12}\).`],
+            ds: S`4 nghiệm; tổng \(4\pi\); nghiệm lớn nhất \(\tfrac{19\pi}{12}\).` },
+          { muc: 'VD', dong: 7,
+            de: S`Cho phương trình \(\tan(2x + 20^\circ) = \sqrt3\). Tìm số nghiệm thuộc khoảng \((-180^\circ;\, 180^\circ)\), tổng các nghiệm đó và nghiệm âm lớn nhất.`,
+            goiY: S`\(\tan(2x + 20^\circ) = \tan 60^\circ \iff x = 20^\circ + k\,90^\circ\).`,
+            lg: [S`\(2x + 20^\circ = 60^\circ + k\,180^\circ \iff x = 20^\circ + k\,90^\circ\) (điều kiện xác định tự thỏa vì \(\tan\) có giá trị).`,
+              S`\(-180^\circ \lt 20^\circ + k\,90^\circ \lt 180^\circ \iff -\tfrac{20}{9} \lt k \lt \tfrac{16}{9}\), nên \(k \in \{-2;\, -1;\, 0;\, 1\}\): \(x = -160^\circ, -70^\circ, 20^\circ, 110^\circ\).`,
+              S`Có 4 nghiệm, tổng \(-100^\circ\); nghiệm âm lớn nhất \(-70^\circ\).`],
+            ds: S`4 nghiệm; tổng \(-100^\circ\); nghiệm âm lớn nhất \(-70^\circ\).` },
+          { muc: 'VDC', dong: 12,
+            de: S`Tìm số nghiệm thuộc khoảng \((-10\pi;\, 10\pi)\) của phương trình \(\cos 4x + \cos x = 0\).`,
+            goiY: S`\(\cos 4x = \cos(\pi - x)\) cho hai họ: \(x = \tfrac{(2k + 1)\pi}{5}\) và \(x = \tfrac{(2k - 1)\pi}{3}\). Đếm từng họ, rồi trừ các nghiệm chung (là các bội lẻ của \(\pi\)).`,
+            lg: [S`\(\cos 4x = -\cos x = \cos(\pi - x) \iff 4x = \pi - x + k2\pi\) hoặc \(4x = -\pi + x + k2\pi\).`,
+              S`Họ 1: \(x = \tfrac{(2k + 1)\pi}{5}\). Điều kiện \(|2k + 1| \lt 50\): các số lẻ từ \(-49\) đến \(49\), có 50 nghiệm.`,
+              S`Họ 2: \(x = \tfrac{(2k - 1)\pi}{3}\). Điều kiện \(|2k - 1| \lt 30\): các số lẻ từ \(-29\) đến \(29\), có 30 nghiệm.`,
+              S`Nghiệm chung: \(\tfrac{p\pi}{5} = \tfrac{q\pi}{3}\) với \(p, q\) lẻ \(\Rightarrow 3p = 5q\), nên \(p = 5r\), \(q = 3r\) với \(r\) lẻ, tức \(x = r\pi\) (\(r\) lẻ, \(|r| \lt 10\)): có 10 nghiệm chung.`,
+              S`Số nghiệm: \(50 + 30 - 10 = 70\).`],
+            ds: '70 nghiệm.' },
+        ] },
+      { ten: 'Phương trình chứa tham số: có nghiệm, có đúng k nghiệm', muc: 'VDC',
+        pp: [S`Phương trình \(\sin u = f(m)\) (hoặc \(\cos u = f(m)\)) có nghiệm \(\iff -1 \le f(m) \le 1\); giải hệ bất phương trình theo \(m\).`, 'Phương trình phức tạp: thử phân tích thành tích (nhóm số hạng, đặt nhân tử chung).', 'Đếm số nghiệm của sin x = m (cos x = m) trên đoạn bằng đường tròn lượng giác: chú ý các giá trị đặc biệt m = ±1, m = 0 và các m làm nghiệm trùng với họ kia.', 'Kết luận tập giá trị của m (hoặc số giá trị nguyên).'],
+        vd: [{
+          de: S`Có bao nhiêu số nguyên \(m\) để phương trình \(\sin\left(2x - \tfrac\pi5\right) = m^2 - 3m + 1\) có nghiệm?`,
+          lg: [S`Phương trình có nghiệm \(\iff -1 \le m^2 - 3m + 1 \le 1\).`,
+            S`\(m^2 - 3m + 1 \ge -1 \iff m^2 - 3m + 2 \ge 0 \iff m \le 1\) hoặc \(m \ge 2\).`,
+            S`\(m^2 - 3m + 1 \le 1 \iff m^2 - 3m \le 0 \iff 0 \le m \le 3\).`,
+            S`Kết hợp: \(m \in [0;\, 1] \cup [2;\, 3]\). Các số nguyên: \(0, 1, 2, 3\).`],
+          ds: '4 số nguyên.' }],
+        bt: [
+          { muc: 'VD', dong: 6,
+            de: S`Tính tổng các giá trị nguyên của \(m\) để phương trình \(3\sin\left(x - \tfrac\pi6\right) = 2m - 1\) có nghiệm.`,
+            goiY: S`Cần \(-3 \le 2m - 1 \le 3\).`,
+            lg: [S`Phương trình \(\iff \sin\left(x - \tfrac\pi6\right) = \tfrac{2m - 1}{3}\), có nghiệm \(\iff -3 \le 2m - 1 \le 3 \iff -1 \le m \le 2\).`,
+              S`Các số nguyên \(m \in \{-1;\, 0;\, 1;\, 2\}\), tổng bằng 2.`],
+            ds: 'Tổng bằng 2.' },
+          { muc: 'VDC', dong: 10,
+            de: S`Tìm \(m\) để phương trình \((2\sin x - 1)(\cos x - m) = 0\) có đúng 3 nghiệm phân biệt thuộc đoạn \([0;\, \pi]\).`,
+            goiY: S`\(2\sin x - 1 = 0\) cho 2 nghiệm cố định trên \([0;\, \pi]\). Trên đoạn này, \(\cos x = m\) có đúng một nghiệm khi \(-1 \le m \le 1\); loại các \(m\) làm nghiệm này trùng với hai nghiệm kia.`,
+            lg: [S`\(\sin x = \tfrac12\) trên \([0;\, \pi]\): \(x = \tfrac\pi6\), \(x = \tfrac{5\pi}{6}\).`,
+              S`Trên \([0;\, \pi]\) hàm \(\cos\) giảm từ 1 xuống \(-1\), nên \(\cos x = m\) có đúng một nghiệm khi \(-1 \le m \le 1\) và vô nghiệm khi \(|m| \gt 1\).`,
+              S`Nghiệm đó trùng \(\tfrac\pi6\) khi \(m = \cos\tfrac\pi6 = \tfrac{\sqrt3}{2}\), trùng \(\tfrac{5\pi}{6}\) khi \(m = -\tfrac{\sqrt3}{2}\).`,
+              S`Có đúng 3 nghiệm \(\iff -1 \le m \le 1\) và \(m \ne \pm\tfrac{\sqrt3}{2}\).`],
+            ds: S`\(m \in [-1;\, 1]\), \(m \ne \pm\tfrac{\sqrt3}{2}\).` },
+          { muc: 'VDC', dong: 13,
+            de: S`Tìm \(m\) để phương trình \(\sin 2x - 2m\cos x - \sin x + m = 0\) có đúng 4 nghiệm phân biệt thuộc đoạn \([0;\, 2\pi]\).`,
+            goiY: S`Phân tích vế trái: \(\sin 2x - \sin x - 2m\cos x + m\) \(= \sin x(2\cos x - 1) - m(2\cos x - 1)\). Chú ý \(m = 0\) cho 3 nghiệm \(0, \pi, 2\pi\) trên \([0;\, 2\pi]\).`,
+            lg: [S`Phương trình \(\iff (2\cos x - 1)(\sin x - m) = 0\).`,
+              S`\(\cos x = \tfrac12\) trên \([0;\, 2\pi]\): \(x = \tfrac\pi3\), \(x = \tfrac{5\pi}{3}\) (2 nghiệm).`,
+              S`Số nghiệm của \(\sin x = m\) trên \([0;\, 2\pi]\): \(m = \pm 1\): 1 nghiệm; \(m = 0\): 3 nghiệm (\(0, \pi, 2\pi\)); \(0 \lt |m| \lt 1\): 2 nghiệm; \(|m| \gt 1\): vô nghiệm.`,
+              S`Cần thêm đúng 2 nghiệm mới: \(0 \lt |m| \lt 1\) và hai nghiệm của \(\sin x = m\) không trùng \(\tfrac\pi3, \tfrac{5\pi}{3}\), tức \(m \ne \sin\tfrac\pi3 = \tfrac{\sqrt3}{2}\) và \(m \ne \sin\tfrac{5\pi}{3} = -\tfrac{\sqrt3}{2}\).`,
+              S`Vậy \(m \in (-1;\, 1)\), \(m \ne 0\), \(m \ne \pm\tfrac{\sqrt3}{2}\).`],
+            ds: S`\(-1 \lt m \lt 1\), \(m \ne 0\), \(m \ne \pm\tfrac{\sqrt3}{2}\).` },
+        ] },
+      { ten: 'Phương trình lượng giác trong bài toán thực tế', muc: 'VD – VDC',
+        pp: ['Đặt đại lượng bằng giá trị đề cho, đưa về phương trình lượng giác cơ bản theo t.', 'Viết các họ nghiệm t, rồi giải bất phương trình theo k để t thuộc khoảng thời gian đề cho (t ≥ 0).', 'Đếm "số lần" là đếm số nghiệm t; t nguyên (ngày, tháng) thì chỉ nhận nghiệm nguyên.', 'Trả lời kèm đơn vị.'],
+        vd: [{
+          de: S`Một vật dao động điều hòa quanh vị trí cân bằng theo phương trình \(x = 3\cos\left(4t - \tfrac\pi3\right)\) (\(x\) tính bằng cm, \(t\) tính bằng giây). Trong khoảng thời gian từ 0 đến 5 giây, vật đi qua vị trí cân bằng bao nhiêu lần?`,
+          lg: [S`Vật qua vị trí cân bằng khi \(x = 0 \iff \cos\left(4t - \tfrac\pi3\right) = 0 \iff 4t - \tfrac\pi3 = \tfrac\pi2 + k\pi \iff t = \tfrac{5\pi}{24} + \tfrac{k\pi}{4}\).`,
+            S`\(0 \le t \le 5 \iff -\tfrac56 \le k \le \tfrac{20}{\pi} - \tfrac56 \approx 5{,}53\), nên \(k \in \{0;\, 1;\, \ldots;\, 5\}\).`,
+            'Vật đi qua vị trí cân bằng 6 lần.'],
+          ds: '6 lần.' }],
+        bt: [
+          { muc: 'VD', dong: 8,
+            de: S`Độ cao của một vệ tinh so với mặt đất sau \(t\) phút là \(h(t) = 600 + 400\cos\tfrac{\pi t}{45}\) (km). Người ta cần làm thí nghiệm khi vệ tinh ở độ cao 400 km. Trong 90 phút đầu tiên, tìm các thời điểm làm được thí nghiệm.`,
+            goiY: S`\(h = 400 \iff \cos\tfrac{\pi t}{45} = -\tfrac12\).`,
+            lg: [S`\(h = 400 \iff \cos\tfrac{\pi t}{45} = -\tfrac12 \iff \tfrac{\pi t}{45} = \pm\tfrac{2\pi}{3} + k2\pi \iff t = \pm 30 + 90k\).`,
+              S`Với \(0 \le t \le 90\): \(t = 30\) và \(t = 60\).`],
+            ds: 'Phút thứ 30 và phút thứ 60.' },
+          { muc: 'VD', dong: 8,
+            de: S`Số phút chạy bộ của bạn An vào ngày thứ \(t\) của một tháng là \(f(t) = 40 + 20\cos\tfrac{\pi t}{3}\), \(t \in \mathbb Z\), \(1 \le t \le 30\). Bằng cách giải phương trình lượng giác, tìm số ngày An chạy đúng 50 phút.`,
+            goiY: S`\(\cos\tfrac{\pi t}{3} = \tfrac12 \iff t = \pm 1 + 6k\). Liệt kê các \(t\) nguyên trong \([1;\, 30]\).`,
+            lg: [S`\(f(t) = 50 \iff \cos\tfrac{\pi t}{3} = \tfrac12 \iff \tfrac{\pi t}{3} = \pm\tfrac\pi3 + k2\pi \iff t = \pm 1 + 6k\).`,
+              S`\(t = 1 + 6k \in [1;\, 30]\): \(1, 7, 13, 19, 25\). \(t = -1 + 6k \in [1;\, 30]\): \(5, 11, 17, 23, 29\).`,
+              'Có 10 ngày.'],
+            ds: '10 ngày.' },
+          { muc: 'VDC', dong: 11,
+            de: S`Hai vật dao động trên hai đường song song với li độ \(x_1 = 4\cos 2\pi t\) và \(x_2 = 4\sin\left(2\pi t + \tfrac\pi6\right)\) (cm, \(t\) tính bằng giây). Trong 2 giây đầu (\(0 \le t \le 2\)), có bao nhiêu thời điểm hai vật có cùng li độ? Tìm thời điểm sớm nhất.`,
+            goiY: S`Đổi \(\sin\left(2\pi t + \tfrac\pi6\right) = \cos\left(\tfrac\pi3 - 2\pi t\right)\), giải \(\cos 2\pi t = \cos\left(\tfrac\pi3 - 2\pi t\right)\).`,
+            lg: [S`\(x_1 = x_2 \iff \cos 2\pi t = \cos\left(\tfrac\pi3 - 2\pi t\right)\).`,
+              S`Trường hợp \(2\pi t = \tfrac\pi3 - 2\pi t + k2\pi \iff t = \tfrac{1}{12} + \tfrac k2\). Trường hợp \(2\pi t = -\tfrac\pi3 + 2\pi t + k2\pi \iff \tfrac\pi3 = k2\pi\): vô nghiệm.`,
+              S`\(0 \le \tfrac{1}{12} + \tfrac k2 \le 2 \iff k \in \{0;\, 1;\, 2;\, 3\}\): \(t = \tfrac{1}{12}, \tfrac{7}{12}, \tfrac{13}{12}, \tfrac{19}{12}\).`],
+            ds: S`4 thời điểm; sớm nhất \(t = \tfrac{1}{12}\) giây.` },
+        ] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/lop11/c2-cap-so-cong.js */
+/* Toán 11 – Chương II. Vận dụng, vận dụng cao: cấp số cộng – hệ điều kiện và bài toán thực tế.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-3, Đúng–Sai ĐS-2 – cấp số cộng, mức Vận dụng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop11/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT An Lạc – TP HCM.pdf (hệ u2 + u5 − u3, u4 + u6)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Trà Ôn – Vĩnh Long.pdf (hệ điều kiện, tính S_n)
+   - Đề cương/Ôn tập giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Trần Phú – Hà Nội.pdf (cấp số cộng có chẵn số hạng)
+   - Đề cương/Đề cương học kỳ 1 Toán 11 năm 2026 – 2027 trường THPT Yên Hòa – Hà Nội.pdf (ba cạnh tam giác vuông)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 11 năm 2025 – 2026 trường Nguyễn Bỉnh Khiêm – Hà Nội.pdf (cho S_n, tìm u_n)
+   - Đề cương/Đề cương học kì 1 Toán 11 năm 2025 – 2026 trường THPT Phan Đình Phùng – Hà Nội.pdf (số hàng ghế tối thiểu)
+   - Đề cương/Đề cương cuối học kỳ 1 Toán 11 năm 2025 – 2026 trường THPT Sơn Động 3 – Bắc Ninh.pdf (khoan giếng hai cơ sở)
+   - Đề cương/Đề cương giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Hướng Hóa – Quảng Trị.pdf (hai phương án lương) */
+(() => {
+  Vdc.add({
+    grade: 'lop11', id: 'c2-cap-so-cong', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT An Lạc – TP HCM; THPT Trà Ôn – Vĩnh Long; Nguyễn Bỉnh Khiêm – Hà Nội. Đề cương: THPT Trần Phú, Yên Hòa, Phan Đình Phùng – Hà Nội; THPT Sơn Động 3 – Bắc Ninh; THPT Hướng Hóa – Quảng Trị',
+    chuong: 'Chương II. Dãy số. Cấp số cộng và cấp số nhân',
+    bai: 'Bài 6. Cấp số cộng',
+    title: 'Cấp số cộng: hệ điều kiện và bài toán thực tế',
+    desc: 'Tìm số hạng đầu, công sai từ hệ; cho S_n tìm u_n; cấp số cộng có chẵn số hạng; ghế hội trường, khoan giếng, so sánh phương án lương.',
+    kt: [
+      { t: 'Số hạng tổng quát và tổng',
+        b: S`\(u_n = u_1 + (n - 1)d\). \(S_n = \dfrac{n(u_1 + u_n)}{2} = \dfrac{n\big[2u_1 + (n - 1)d\big]}{2}\).` },
+      { t: 'Tính chất ba số liên tiếp',
+        b: S`\(a, b, c\) là ba số hạng liên tiếp của cấp số cộng \(\iff a + c = 2b\). Ba số lập cấp số cộng có tổng cho trước: đặt \(x - d,\ x,\ x + d\) (tổng là \(3x\)).` },
+      { t: 'Biết tổng S_n',
+        b: S`\(u_1 = S_1\) và \(u_n = S_n - S_{n - 1}\) với \(n \ge 2\). Dãy là cấp số cộng khi \(u_n - u_{n-1}\) không đổi.` },
+      { t: 'Bài toán thực tế',
+        b: S`Đại lượng tăng (giảm) thêm một lượng <b>không đổi</b> sau mỗi bước (mỗi hàng, mỗi mét, mỗi năm) là cấp số cộng. Xác định rõ \(u_1\), \(d\), \(n\) (số hàng, số mét, số năm hay số quý) và câu hỏi là \(u_n\) hay \(S_n\). Tìm \(n\) nhỏ nhất để \(S_n \ge M\): giải bất phương trình bậc hai theo \(n\), nhận \(n\) nguyên dương.` },
+    ],
+    dang: [
+      { ten: 'Tìm số hạng đầu, công sai từ hệ điều kiện', muc: 'VD – VDC',
+        pp: [S`Viết mọi số hạng theo \(u_1\) và \(d\): \(u_k = u_1 + (k - 1)d\).`, S`Lập hệ hai phương trình ẩn \(u_1, d\) rồi giải (có thể ra phương trình bậc hai khi đề có tích).`, 'Tính đại lượng đề hỏi: số hạng thứ n, tổng S_n, số hạng nào bằng một số cho trước.', 'Bài có ba số (cạnh tam giác…): đặt x − d, x, x + d.'],
+        vd: [{
+          de: S`Cho cấp số cộng \((u_n)\) có \(u_2 + u_5 - u_3 = 13\) và \(u_4 + u_6 = 34\). Tìm \(u_1\), \(d\); tính \(S_{20}\) và cho biết 401 là số hạng thứ bao nhiêu.`,
+          lg: [S`\(u_2 + u_5 - u_3 = (u_1 + d) + (u_1 + 4d) - (u_1 + 2d) = u_1 + 3d = 13\).`,
+            S`\(u_4 + u_6 = 2u_1 + 8d = 34 \iff u_1 + 4d = 17\). Trừ vế: \(d = 4\), \(u_1 = 1\).`,
+            S`\(S_{20} = \dfrac{20(2 \cdot 1 + 19 \cdot 4)}{2} = 10 \cdot 78 = 780\).`,
+            S`\(u_n = 1 + 4(n - 1) = 401 \iff n = 101\).`],
+          ds: S`\(u_1 = 1\), \(d = 4\), \(S_{20} = 780\); 401 là số hạng thứ 101.` }],
+        bt: [
+          { muc: 'VD', dong: 8,
+            de: S`Cho cấp số cộng \((u_n)\) thỏa mãn \(u_3 + u_7 = 22\) và \(u_2 \cdot u_8 = 40\). Tìm \(u_1\) và công sai \(d\).`,
+            goiY: S`\(u_3 + u_7 = 2u_5\) nên \(u_5 = 11\). Viết \(u_2 = u_5 - 3d\), \(u_8 = u_5 + 3d\).`,
+            lg: [S`\(u_3 + u_7 = 2u_1 + 8d = 2u_5 = 22 \Rightarrow u_5 = 11\).`,
+              S`\(u_2 u_8 = (11 - 3d)(11 + 3d) = 121 - 9d^2 = 40 \Rightarrow d^2 = 9 \Rightarrow d = \pm 3\).`,
+              S`\(d = 3\): \(u_1 = u_5 - 4d = -1\). \(d = -3\): \(u_1 = 23\).`],
+            ds: S`\(u_1 = -1, d = 3\) hoặc \(u_1 = 23, d = -3\).` },
+          { muc: 'VD', dong: 7,
+            de: S`Cho dãy số \((u_n)\) có tổng \(n\) số hạng đầu là \(S_n = 2n^2 - n\). Chứng minh \((u_n)\) là cấp số cộng, tìm công sai và cho biết 197 là số hạng thứ bao nhiêu.`,
+            goiY: S`\(u_n = S_n - S_{n-1}\) với \(n \ge 2\), \(u_1 = S_1\).`,
+            lg: [S`\(u_1 = S_1 = 1\). Với \(n \ge 2\): \(u_n = (2n^2 - n) - \big[2(n - 1)^2 - (n - 1)\big] = 4n - 3\); công thức cũng đúng với \(n = 1\).`,
+              S`\(u_{n+1} - u_n = 4\) không đổi, nên \((u_n)\) là cấp số cộng với \(d = 4\).`,
+              S`\(4n - 3 = 197 \iff n = 50\).`],
+            ds: S`\(u_n = 4n - 3\), \(d = 4\); 197 là số hạng thứ 50.` },
+          { muc: 'VD', dong: 7,
+            de: 'Ba cạnh của một tam giác vuông lập thành một cấp số cộng và chu vi tam giác bằng 36 cm. Tính diện tích tam giác.',
+            goiY: S`Đặt ba cạnh \(x - d,\ x,\ x + d\) (\(d \gt 0\)); cạnh huyền là \(x + d\).`,
+            lg: [S`Ba cạnh \(x - d, x, x + d\) với \(0 \lt d \lt x\). Chu vi \(3x = 36 \Rightarrow x = 12\).`,
+              S`Định lí Pythagore: \((12 + d)^2 = 12^2 + (12 - d)^2 \iff 48d = 144 \iff d = 3\).`,
+              S`Ba cạnh 9, 12, 15 cm; diện tích \(\tfrac12 \cdot 9 \cdot 12 = 54\) cm².`],
+            ds: '54 cm² (ba cạnh 9, 12, 15 cm).' },
+          { muc: 'VDC', dong: 11,
+            de: S`Một cấp số cộng có số số hạng là số chẵn. Tổng các số hạng ở vị trí lẻ là 36, tổng các số hạng ở vị trí chẵn là 45, và số hạng cuối lớn hơn số hạng đầu \(\tfrac{33}{2}\). Cấp số cộng đó có bao nhiêu số hạng?`,
+            goiY: S`Gọi số số hạng là \(2k\). Mỗi số hạng chẵn \(u_{2i}\) lớn hơn số hạng lẻ \(u_{2i-1}\) đúng \(d\), nên hiệu hai tổng là \(kd\). Số hạng cuối trừ số hạng đầu là \((2k - 1)d\).`,
+            lg: [S`Gọi số số hạng là \(2k\). \((u_2 - u_1) + (u_4 - u_3) + \ldots + (u_{2k} - u_{2k-1}) = kd = 45 - 36 = 9\).`,
+              S`\(u_{2k} - u_1 = (2k - 1)d = \tfrac{33}{2}\).`,
+              S`Thay \(d = \tfrac9k\): \((2k - 1) \cdot \tfrac9k = \tfrac{33}{2} \iff 36k - 18 = 33k \iff k = 6\).`,
+              S`Cấp số cộng có \(2k = 12\) số hạng (\(d = \tfrac32\), \(u_1 = -\tfrac32\); thử lại: tổng lẻ 36, tổng chẵn 45).`],
+            ds: '12 số hạng.' },
+        ] },
+      { ten: 'Bài toán thực tế dùng cấp số cộng', muc: 'VD – VDC',
+        pp: ['Nhận ra đại lượng tăng (giảm) đều một lượng d sau mỗi bước.', 'Xác định u_1, d và số bước n; câu hỏi là một số hạng (u_n) hay tổng (S_n).', 'Tìm n nhỏ nhất để S_n đạt ít nhất một mức: lập bất phương trình bậc hai theo n, thử lại với n vừa tìm và n − 1.', 'So sánh phương án: tính tổng của từng phương án trong cùng khoảng thời gian (chú ý năm ↔ quý: 1 năm = 4 quý).'],
+        vd: [{
+          de: 'Một hội trường có 25 dãy ghế. Dãy đầu tiên có 20 ghế, mỗi dãy sau nhiều hơn dãy ngay trước 3 ghế. Hỏi dãy cuối cùng có bao nhiêu ghế và hội trường có tất cả bao nhiêu ghế?',
+          lg: [S`Số ghế các dãy lập cấp số cộng với \(u_1 = 20\), \(d = 3\), \(n = 25\).`,
+            S`Dãy cuối: \(u_{25} = 20 + 24 \cdot 3 = 92\) ghế.`,
+            S`Tổng số ghế: \(S_{25} = \dfrac{25(20 + 92)}{2} = 1400\) ghế.`],
+          ds: 'Dãy cuối 92 ghế; tổng 1400 ghế.' }],
+        bt: [
+          { muc: 'VD', dong: 8,
+            de: 'Một hội trường được thiết kế có hàng thứ nhất 18 ghế, mỗi hàng sau nhiều hơn hàng trước 2 ghế. Muốn hội trường có sức chứa ít nhất 1000 ghế thì phải thiết kế tối thiểu bao nhiêu hàng ghế?',
+            goiY: S`\(S_n = \dfrac{n[36 + 2(n - 1)]}{2} = n(n + 17)\). Giải \(n(n + 17) \ge 1000\).`,
+            lg: [S`\(u_1 = 18\), \(d = 2\): \(S_n = \dfrac{n[2 \cdot 18 + 2(n - 1)]}{2} = n(n + 17)\).`,
+              S`\(n^2 + 17n - 1000 \ge 0 \iff n \ge \dfrac{-17 + \sqrt{4289}}{2} \approx 24{,}25\) (vì \(n \gt 0\)).`,
+              S`Thử lại: \(n = 24\): \(24 \cdot 41 = 984 \lt 1000\); \(n = 25\): \(25 \cdot 42 = 1050 \ge 1000\). Cần tối thiểu 25 hàng.`],
+            ds: '25 hàng.' },
+          { muc: 'VD', dong: 9,
+            de: 'Anh Hải muốn khoan một giếng sâu 40 m. Cơ sở A: giá mét đầu tiên 100 nghìn đồng, từ mét thứ hai mỗi mét đắt hơn mét trước 8 nghìn đồng. Cơ sở B: giá mét đầu tiên 70 nghìn đồng, từ mét thứ hai mỗi mét đắt hơn mét trước 10 nghìn đồng. Anh nên chọn cơ sở nào để tiết kiệm hơn, và tiết kiệm được bao nhiêu?',
+            goiY: S`Mỗi cơ sở là một cấp số cộng, \(n = 40\). Tính \(S_{40}\) của từng cơ sở.`,
+            lg: [S`Cơ sở A: \(S_{40} = \dfrac{40(2 \cdot 100 + 39 \cdot 8)}{2} = 20 \cdot 512 = 10\,240\) nghìn đồng.`,
+              S`Cơ sở B: \(S_{40} = \dfrac{40(2 \cdot 70 + 39 \cdot 10)}{2} = 20 \cdot 530 = 10\,600\) nghìn đồng.`,
+              S`Chọn cơ sở A, tiết kiệm \(10\,600 - 10\,240 = 360\) nghìn đồng.`],
+            ds: 'Chọn cơ sở A (10 240 nghìn đồng), rẻ hơn 360 nghìn đồng.' },
+          { muc: 'VDC', dong: 13,
+            de: 'Một doanh nghiệp đưa ra hai phương án trả lương. Phương án 1: năm thứ nhất 120 triệu đồng, từ năm thứ hai mỗi năm tăng 30 triệu đồng. Phương án 2: quý thứ nhất 32 triệu đồng, từ quý thứ hai mỗi quý tăng 1,2 triệu đồng. Em nên chọn phương án nào nếu kí hợp đồng a) 3 năm; b) 10 năm?',
+            goiY: S`Phương án 1 tính theo năm (\(n = 3\) hoặc 10); phương án 2 tính theo quý (\(n = 12\) hoặc 40). So sánh hai tổng.`,
+            lg: [S`a) PA1: \(S_3 = \dfrac{3(240 + 2 \cdot 30)}{2} = 450\) triệu. PA2 (12 quý): \(S_{12} = \dfrac{12(64 + 11 \cdot 1{,}2)}{2} = 6 \cdot 77{,}2 = 463{,}2\) triệu. Chọn phương án 2.`,
+              S`b) PA1: \(S_{10} = \dfrac{10(240 + 9 \cdot 30)}{2} = 2550\) triệu. PA2 (40 quý): \(S_{40} = \dfrac{40(64 + 39 \cdot 1{,}2)}{2} = 20 \cdot 110{,}8 = 2216\) triệu. Chọn phương án 1.`,
+              'Nhận xét: phương án 2 khởi đầu cao hơn nhưng tăng chậm hơn, nên chỉ có lợi khi hợp đồng ngắn.'],
+            ds: 'a) Phương án 2 (463,2 triệu so với 450 triệu). b) Phương án 1 (2550 triệu so với 2216 triệu).' },
+        ] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/lop11/c2-cap-so-nhan.js */
+/* Toán 11 – Chương II. Vận dụng, vận dụng cao: cấp số nhân – hệ điều kiện, ba số, bài toán thực tế.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-4 – cấp số nhân, mức Vận dụng.
+   (Tổng cấp số nhân lùi vô hạn thuộc chương Giới hạn, không có trong ma trận giữa kì I nên không đưa vào.)
+   Dạng bài lấy theo các đề trong tai-lieu/lop11/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT chuyên Vị Thanh – Cần Thơ.pdf (u1 + u5, u2 + u6)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 11 năm 2025 – 2026 trường THPT Ngô Gia Tự 1 – Đắk Lắk.pdf (tìm n từ S_n)
+   - Đề cương/Ôn tập giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Trần Phú – Hà Nội.pdf (ba số CSN rồi CSC; lãi kép; vi khuẩn)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Ea H’Leo – Đắk Lắk.pdf (ba số CSC rồi CSN; khấu hao máy)
+   - Đề cương/Đề cương học kì 1 Toán 11 năm 2025 – 2026 trường THPT Xuân Phương – Hà Nội.pdf (vi khuẩn và thuốc)
+   - Đề giữa HK1/Đề giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Lê Lợi – Quảng Ngãi.pdf (vi khuẩn tăng gấp đôi)
+   - Đề cương/Đề cương giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Quế Sơn – Đà Nẵng.pdf (gửi thêm tiền hằng tháng) */
+(() => {
+  Vdc.add({
+    grade: 'lop11', id: 'c2-cap-so-nhan', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT chuyên Vị Thanh – Cần Thơ; THPT Ngô Gia Tự 1, Ea H’Leo – Đắk Lắk; THPT Lê Lợi – Quảng Ngãi. Đề cương: THPT Trần Phú, Xuân Phương – Hà Nội; THPT Quế Sơn – Đà Nẵng',
+    chuong: 'Chương II. Dãy số. Cấp số cộng và cấp số nhân',
+    bai: 'Bài 7. Cấp số nhân',
+    title: 'Cấp số nhân: hệ điều kiện, ba số và bài toán thực tế',
+    desc: 'Tìm u1, q từ hệ; ba số vừa lập cấp số nhân vừa lập cấp số cộng; lãi kép, khấu hao, vi khuẩn, gửi tiết kiệm hằng tháng.',
+    kt: [
+      { t: 'Số hạng tổng quát và tổng',
+        b: S`\(u_n = u_1 q^{n-1}\). Với \(q \ne 1\): \(S_n = u_1 \dfrac{1 - q^n}{1 - q}\). Ba số khác 0 \(a, b, c\) liên tiếp của cấp số nhân \(\iff b^2 = ac\).` },
+      { t: 'Chia vế để tìm công bội',
+        b: S`Hệ dạng \(u_1 q^a(\ldots) = A\), \(u_1 q^b(\ldots) = B\) với cùng biểu thức trong ngoặc: chia vế được \(q^{b - a} = \tfrac BA\).` },
+      { t: 'Tăng, giảm theo tỉ lệ',
+        b: S`Mỗi kì tăng \(r\%\): sau \(n\) kì giá trị là \(A(1 + r)^n\) (lãi kép, dân số). Mỗi kì giảm \(r\%\): \(A(1 - r)^n\) (khấu hao). Tăng gấp đôi sau mỗi chu kì: \(A \cdot 2^n\) với \(n\) là số chu kì.` },
+      { t: 'Gửi đều hằng tháng',
+        b: S`Đầu mỗi tháng gửi \(a\), lãi kép \(r\)/tháng. Cuối tháng thứ \(n\): khoản gửi đầu tiên thành \(a(1 + r)^n\), khoản cuối thành \(a(1 + r)\). Tổng là tổng cấp số nhân: \[T_n = a(1 + r)\dfrac{(1 + r)^n - 1}{r}.\]` },
+    ],
+    dang: [
+      { ten: 'Hệ điều kiện; ba số lập cấp số nhân, cấp số cộng', muc: 'VD – VDC',
+        pp: [S`Viết các số hạng theo \(u_1\) và \(q\); chia vế hai phương trình để tìm \(q\).`, S`Ba số lập cấp số nhân: đặt \(a, aq, aq^2\); ba số lập cấp số cộng có tổng cho trước: đặt \(x - d, x, x + d\).`, S`Dùng điều kiện còn lại (\(b^2 = ac\) hoặc \(a + c = 2b\)) để lập phương trình.`, 'Chọn nghiệm theo đề (dãy tăng, số dương…) và thử lại.'],
+        vd: [{
+          de: S`Cho cấp số nhân \((u_n)\) có \(u_2 + u_4 = 30\) và \(u_3 + u_5 = 90\). Tìm \(u_1\), \(q\). Tổng bao nhiêu số hạng đầu bằng 3280? Số 729 là số hạng thứ mấy?`,
+          lg: [S`\(u_1 q(1 + q^2) = 30\) và \(u_1 q^2(1 + q^2) = 90\). Chia vế: \(q = 3\); suy ra \(u_1 \cdot 3 \cdot 10 = 30 \Rightarrow u_1 = 1\).`,
+            S`\(S_n = \dfrac{3^n - 1}{3 - 1} = 3280 \iff 3^n = 6561 = 3^8 \iff n = 8\).`,
+            S`\(u_n = 3^{n-1} = 729 = 3^6 \iff n = 7\).`],
+          ds: S`\(u_1 = 1\), \(q = 3\); \(n = 8\); 729 là số hạng thứ 7.` }],
+        bt: [
+          { muc: 'VD', dong: 6,
+            de: S`Cấp số nhân \((u_n)\) có các số hạng dương, \(u_3 = 12\) và \(u_5 = 48\). Tìm \(u_1\), \(q\) và \(S_{10}\).`,
+            goiY: S`\(\tfrac{u_5}{u_3} = q^2\); các số hạng dương nên \(q \gt 0\).`,
+            lg: [S`\(q^2 = \tfrac{48}{12} = 4\), các số hạng dương nên \(q = 2\); \(u_1 = \tfrac{12}{4} = 3\).`,
+              S`\(S_{10} = 3 \cdot \dfrac{2^{10} - 1}{2 - 1} = 3 \cdot 1023 = 3069\).`],
+            ds: S`\(u_1 = 3\), \(q = 2\), \(S_{10} = 3069\).` },
+          { muc: 'VDC', dong: 11,
+            de: 'Ba số dương có tổng 39 lập thành một cấp số nhân tăng. Nếu thêm 1 vào số thứ nhất, giữ nguyên số thứ hai và bớt 13 ở số thứ ba thì được một cấp số cộng. Tìm ba số đó.',
+            goiY: S`Đặt \(a, aq, aq^2\). Điều kiện cấp số cộng: \((a + 1) + (aq^2 - 13) = 2aq\), tức \(a(q - 1)^2 = 12\). Chia cho \(a(1 + q + q^2) = 39\).`,
+            lg: [S`Đặt ba số \(a, aq, aq^2\) (\(a \gt 0\), \(q \gt 1\)): \(a(1 + q + q^2) = 39\).`,
+              S`Cấp số cộng: \((a + 1) + (aq^2 - 13) = 2aq \iff a(q^2 - 2q + 1) = 12 \iff a(q - 1)^2 = 12\).`,
+              S`Chia vế: \(\dfrac{1 + q + q^2}{(q - 1)^2} = \dfrac{39}{12} \iff 12 + 12q + 12q^2 = 39q^2 - 78q + 39 \iff 3q^2 - 10q + 3 = 0\).`,
+              S`\(q = 3\) hoặc \(q = \tfrac13\); dãy tăng nên \(q = 3\), \(a = \tfrac{12}{4} = 3\). Ba số: 3, 9, 27 (thử lại: 4, 9, 14 là cấp số cộng).`],
+            ds: '3; 9; 27.' },
+          { muc: 'VDC', dong: 11,
+            de: 'Ba số lập thành một cấp số cộng có tổng bằng 24. Nếu thêm lần lượt 3, 4, 6 vào ba số đó thì được một cấp số nhân. Tìm ba số.',
+            goiY: S`Đặt \(8 - d,\ 8,\ 8 + d\). Điều kiện cấp số nhân: \((11 - d)(14 + d) = 12^2\).`,
+            lg: [S`Ba số \(8 - d, 8, 8 + d\) (tổng 24). Sau khi thêm: \(11 - d,\ 12,\ 14 + d\).`,
+              S`Cấp số nhân: \((11 - d)(14 + d) = 144 \iff 154 - 3d - d^2 = 144 \iff d^2 + 3d - 10 = 0 \iff d = 2\) hoặc \(d = -5\).`,
+              S`\(d = 2\): 6, 8, 10 (thành 9, 12, 16, công bội \(\tfrac43\)). \(d = -5\): 13, 8, 3 (thành 16, 12, 9, công bội \(\tfrac34\)).`],
+            ds: '6; 8; 10 hoặc 13; 8; 3.' },
+        ] },
+      { ten: 'Bài toán thực tế: lãi kép, khấu hao, tăng trưởng, gửi tiết kiệm', muc: 'VD – VDC',
+        pp: ['Xác định giá trị ban đầu, tỉ lệ thay đổi mỗi kì (nhân với 1 + r hoặc 1 − r, hoặc 2) và số kì n (đổi giờ ra số chu kì).', S`Giá trị sau \(n\) kì là số hạng của cấp số nhân; tổng tích lũy nhiều khoản là tổng cấp số nhân.`, S`Hỏi "sau bao lâu đạt mức M": tính lần lượt theo \(n\) (hoặc đưa về lũy thừa của 2) đến khi vượt M.`, S`Dãy truy hồi \(a_{n+1} = q\,a_n + b\): đặt \(b_n = a_n - c\) với \(c\) thỏa \(c = qc + b\) để \((b_n)\) là cấp số nhân.`],
+        vd: [{
+          de: 'Bác Bình gửi 100 triệu đồng vào ngân hàng, kì hạn 1 năm, lãi suất 6,5%/năm theo hình thức lãi kép (không rút lãi). Tính số tiền bác nhận được sau 5 năm (làm tròn đến hàng phần mười). Sau ít nhất bao nhiêu năm thì số tiền vượt 150 triệu đồng?',
+          lg: [S`Số tiền sau mỗi năm lập cấp số nhân với công bội \(1{,}065\): sau \(n\) năm là \(A_n = 100 \cdot 1{,}065^n\) (triệu đồng).`,
+            S`\(A_5 = 100 \cdot 1{,}065^5 \approx 137{,}0\) triệu đồng.`,
+            S`\(A_6 \approx 145{,}9 \lt 150\); \(A_7 \approx 155{,}4 \gt 150\). Vậy sau ít nhất 7 năm.`],
+          ds: 'Khoảng 137,0 triệu đồng; sau ít nhất 7 năm.' }],
+        bt: [
+          { muc: 'VD', dong: 6,
+            de: 'Một máy photocopy mua với giá 60 triệu đồng. Sau mỗi năm, giá trị còn lại của máy bằng 85% giá trị năm trước. Tính giá trị còn lại của máy sau 5 năm (làm tròn đến hàng phần trăm).',
+            goiY: S`Giá trị sau \(n\) năm: \(60 \cdot 0{,}85^n\).`,
+            lg: [S`Giá trị sau mỗi năm lập cấp số nhân, công bội \(0{,}85\).`, S`Sau 5 năm: \(60 \cdot 0{,}85^5 \approx 26{,}62\) triệu đồng.`],
+            ds: 'Khoảng 26,62 triệu đồng.' },
+          { muc: 'VD', dong: 7,
+            de: 'Một loại vi khuẩn cứ sau 15 phút thì số lượng tăng gấp đôi. Ban đầu có 50 con. Hỏi sau 2 giờ có bao nhiêu con? Sau bao lâu thì có 409 600 con?',
+            goiY: S`2 giờ = 8 chu kì 15 phút. \(409\,600 : 50 = 8192 = 2^{13}\).`,
+            lg: [S`Sau \(k\) chu kì 15 phút có \(50 \cdot 2^k\) con. 2 giờ = 120 phút = 8 chu kì: \(50 \cdot 2^8 = 12\,800\) con.`,
+              S`\(50 \cdot 2^k = 409\,600 \iff 2^k = 8192 = 2^{13} \iff k = 13\), tức sau \(13 \cdot 15 = 195\) phút (3 giờ 15 phút).`],
+            ds: '12 800 con; sau 195 phút (3 giờ 15 phút).' },
+          { muc: 'VD', dong: 8,
+            de: 'Đầu mỗi tháng, chị Mai gửi vào ngân hàng 5 triệu đồng với lãi suất 0,5%/tháng theo hình thức lãi kép (lãi nhập vào gốc). Hỏi ngay sau khi hết tháng thứ 12, chị Mai có bao nhiêu tiền (làm tròn đến hàng phần trăm)?',
+            goiY: S`Khoản gửi tháng thứ \(i\) được tính lãi \(13 - i\) tháng. Tổng \(5(1{,}005 + 1{,}005^2 + \ldots + 1{,}005^{12})\).`,
+            lg: [S`Khoản gửi đầu tháng 1 sau 12 tháng thành \(5 \cdot 1{,}005^{12}\); khoản gửi đầu tháng 12 thành \(5 \cdot 1{,}005\).`,
+              S`Tổng: \(T = 5(1{,}005 + 1{,}005^2 + \ldots + 1{,}005^{12}) = 5 \cdot 1{,}005 \cdot \dfrac{1{,}005^{12} - 1}{0{,}005}\).`,
+              S`\(T \approx 61{,}99\) triệu đồng.`],
+            ds: 'Khoảng 61,99 triệu đồng.' },
+          { muc: 'VDC', dong: 13,
+            de: S`Một thí nghiệm bắt đầu với 1000 triệu vi khuẩn và dùng ngay liều thuốc thứ nhất. Mỗi liều thuốc diệt ngay 150 triệu vi khuẩn; sau đó trong 4 giờ trước liều kế tiếp, số vi khuẩn tăng thêm 10%. Gọi \(a_n\) (triệu con) là số vi khuẩn ngay trước liều thứ \(n\) (\(a_1 = 1000\)). a) Chứng minh \(b_n = a_n - 1650\) là cấp số nhân, tìm \(a_5\). b) Liều thứ mấy thì diệt hết vi khuẩn?`,
+            goiY: S`\(a_{n+1} = 1{,}1(a_n - 150)\). Thay \(a_n = b_n + 1650\) để thấy \(b_{n+1} = 1{,}1\,b_n\). Diệt hết khi \(a_n \le 150\).`,
+            lg: [S`\(a_{n+1} = 1{,}1(a_n - 150) = 1{,}1a_n - 165\). Khi đó \(b_{n+1} = a_{n+1} - 1650 = 1{,}1a_n - 1815 = 1{,}1(a_n - 1650) = 1{,}1\,b_n\).`,
+              S`\((b_n)\) là cấp số nhân với \(b_1 = 1000 - 1650 = -650\), \(q = 1{,}1\): \(a_n = 1650 - 650 \cdot 1{,}1^{n-1}\).`,
+              S`a) \(a_5 = 1650 - 650 \cdot 1{,}1^4 = 1650 - 951{,}665 = 698{,}335\) triệu con.`,
+              S`b) Diệt hết ở liều thứ \(n\) khi \(a_n \le 150 \iff 650 \cdot 1{,}1^{n-1} \ge 1500\). Tính: \(a_9 \approx 256{,}7 \gt 150\), \(a_{10} \approx 117{,}3 \le 150\). Liều thứ 10 diệt hết vi khuẩn.`],
+            ds: S`a) \(a_n = 1650 - 650 \cdot 1{,}1^{n-1}\), \(a_5 \approx 698{,}3\) triệu con. b) Liều thứ 10.` },
+        ] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/lop11/c3-mau-so-lieu-ghep-nhom.js */
+/* Toán 11 – Chương III. Vận dụng, vận dụng cao: số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm.
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Đúng–Sai ĐS-3 – mẫu số liệu ghép nhóm, mức Vận dụng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop11/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề cương/Đề cương giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Quế Sơn – Đà Nẵng.pdf (tuổi thọ muỗi)
+   - Đề giữa HK1/Đề giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Lê Chân – Hải Phòng.pdf (thời gian, trung vị)
+   - Đề cương/Đề cương ôn tập HK1 Toán 11 năm 2025 – 2026 trường THPT Linh Trung – TP HCM.pdf (doanh số, khen thưởng 25%)
+   - Đề giữa HK1/Đề giữa học kì 1 Toán 11 năm 2025 – 2026 trường THPT Pleiku – Gia Lai.pdf (chọn 25% chạy nhanh nhất)
+   - Đề cương/Đề cương học kì 1 Toán 11 năm 2025 – 2026 trường THPT Phan Đình Phùng – Hà Nội.pdf (cholesterol, mốc 50%)
+   - Đề giữa HK1/Đề giữa kì 1 Toán 11 năm 2025 – 2026 trường THPT Duy Tân – Quảng Ngãi.pdf (tiền nước, tứ phân vị thứ ba)
+   - Đề cương/Đề cương học kì 1 Toán 11 năm 2025 – 2026 trường THPT Xuân Phương – Hà Nội.pdf (cân nặng cam hai lô) */
+(() => {
+  const tb = (head, rows) => `<table class="tbl"><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+  Vdc.add({
+    grade: 'lop11', id: 'c3-mau-so-lieu-ghep-nhom', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Lê Chân – Hải Phòng; THPT Pleiku – Gia Lai; THPT Duy Tân – Quảng Ngãi. Đề cương: THPT Quế Sơn – Đà Nẵng; THPT Linh Trung – TP HCM; THPT Phan Đình Phùng, Xuân Phương – Hà Nội',
+    chuong: 'Chương III. Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm',
+    bai: 'Bài 8. Mẫu số liệu ghép nhóm · Bài 9. Các số đặc trưng đo xu thế trung tâm',
+    title: 'Số trung bình, trung vị, tứ phân vị, mốt của mẫu số liệu ghép nhóm',
+    desc: 'Tính các số đặc trưng; tìm tần số chưa biết; dùng tứ phân vị, trung vị để chọn ngưỡng (25%, 50% cao nhất / thấp nhất).',
+    kt: [
+      { t: 'Số trung bình',
+        b: S`Giá trị đại diện của nhóm \([a_i;\, a_{i+1})\) là \(c_i = \dfrac{a_i + a_{i+1}}{2}\). \[\bar x = \frac{m_1c_1 + m_2c_2 + \ldots + m_kc_k}{n}.\]` },
+      { t: 'Trung vị và tứ phân vị',
+        b: S`Trung vị: tìm nhóm \([u_m;\, u_{m+1})\) chứa đại lượng thứ \(\tfrac n2\) (dùng tần số tích lũy); với \(C\) là tổng tần số các nhóm đứng trước, \(m_m\) là tần số nhóm đó, \(h\) là độ dài nhóm: \[M_e = u_m + \frac{\tfrac n2 - C}{m_m}\cdot h.\] Tứ phân vị \(Q_1\), \(Q_3\): làm tương tự với \(\tfrac n4\) và \(\tfrac{3n}{4}\); \(Q_2 = M_e\).` },
+      { t: 'Mốt',
+        b: S`Nhóm chứa mốt là nhóm có tần số lớn nhất \([u_m;\, u_{m+1})\); với \(m_{m-1}\), \(m_{m+1}\) là tần số hai nhóm kề (không có thì lấy 0): \[M_0 = u_m + \frac{m_m - m_{m-1}}{(m_m - m_{m-1}) + (m_m - m_{m+1})}\cdot h.\]` },
+      { t: 'Chọn ngưỡng',
+        b: S`"25% có giá trị <b>thấp nhất</b>" ↔ dưới \(Q_1\); "25% <b>cao nhất</b>" ↔ từ \(Q_3\) trở lên; "50%" ↔ trung vị. Kết quả là giá trị ước lượng, làm tròn theo yêu cầu và trả lời bằng lời trong ngữ cảnh.` },
+    ],
+    dang: [
+      { ten: 'Tính các số đặc trưng; tìm tần số chưa biết', muc: 'VD – VDC',
+        pp: ['Lập bảng: giá trị đại diện c_i và tần số tích lũy.', 'Tính số trung bình bằng tổng m_i·c_i chia cho n.', 'Xác định nhóm chứa trung vị (tứ phân vị) nhờ tần số tích lũy, rồi thay vào công thức.', 'Mốt: chọn nhóm tần số lớn nhất, lấy đúng tần số hai nhóm kề.', 'Có tần số chưa biết: lập phương trình từ điều kiện đề (cỡ mẫu, số trung bình hoặc trung vị), giải rồi kiểm tra nhóm chứa trung vị đúng như đã giả sử.'],
+        vd: [{
+          de: S`Thời gian (phút) đi từ nhà đến trường của 40 học sinh: ${tb(['Thời gian', '[0; 10)', '[10; 20)', '[20; 30)', '[30; 40)', '[40; 50)'], [['Số học sinh', 5, 12, 14, 6, 3]])} Tính số trung bình, trung vị, mốt, \(Q_1\), \(Q_3\) (làm tròn đến hàng phần trăm).`,
+          lg: [S`Giá trị đại diện: 5; 15; 25; 35; 45. \(\bar x = \dfrac{5 \cdot 5 + 15 \cdot 12 + 25 \cdot 14 + 35 \cdot 6 + 45 \cdot 3}{40} = \dfrac{900}{40} = 22{,}5\) phút.`,
+            S`Tần số tích lũy: 5; 17; 31; 37; 40. \(\tfrac n2 = 20\) thuộc nhóm \([20;\, 30)\): \(M_e = 20 + \dfrac{20 - 17}{14}\cdot 10 \approx 22{,}14\).`,
+            S`Mốt: nhóm \([20;\, 30)\) có tần số lớn nhất 14: \(M_0 = 20 + \dfrac{14 - 12}{(14 - 12) + (14 - 6)}\cdot 10 = 22\).`,
+            S`\(\tfrac n4 = 10\) thuộc nhóm \([10;\, 20)\): \(Q_1 = 10 + \dfrac{10 - 5}{12}\cdot 10 \approx 14{,}17\). \(\tfrac{3n}{4} = 30\) thuộc nhóm \([20;\, 30)\): \(Q_3 = 20 + \dfrac{30 - 17}{14}\cdot 10 \approx 29{,}29\).`],
+          ds: S`\(\bar x = 22{,}5\); \(M_e \approx 22{,}14\); \(M_0 = 22\); \(Q_1 \approx 14{,}17\); \(Q_3 \approx 29{,}29\).` }],
+        bt: [
+          { muc: 'VD', dong: 9,
+            de: S`Tuổi thọ (ngày) của 100 con muỗi trong một phòng thí nghiệm: ${tb(['Tuổi thọ', '[0; 20)', '[20; 40)', '[40; 60)', '[60; 80)', '[80; 100)'], [['Số con', 6, 14, 25, 30, 25]])} Tính số trung bình, trung vị (làm tròn đến hàng phần trăm) và mốt.`,
+            goiY: 'Tần số tích lũy: 6; 20; 45; 75; 100. Nhóm chứa trung vị và nhóm chứa mốt đều là [60; 80).',
+            lg: [S`\(\bar x = \dfrac{10 \cdot 6 + 30 \cdot 14 + 50 \cdot 25 + 70 \cdot 30 + 90 \cdot 25}{100} = \dfrac{6080}{100} = 60{,}8\) ngày.`,
+              S`\(\tfrac n2 = 50\) thuộc \([60;\, 80)\): \(M_e = 60 + \dfrac{50 - 45}{30}\cdot 20 \approx 63{,}33\) ngày.`,
+              S`Mốt: \(M_0 = 60 + \dfrac{30 - 25}{(30 - 25) + (30 - 25)}\cdot 20 = 70\) ngày.`],
+            ds: S`\(\bar x = 60{,}8\); \(M_e \approx 63{,}33\); \(M_0 = 70\).` },
+          { muc: 'VD', dong: 9,
+            de: S`Thời gian tự học (giờ/tuần) của một nhóm học sinh: ${tb(['Thời gian', '[0; 2)', '[2; 4)', '[4; 6)', '[6; 8)', '[8; 10)'], [['Số học sinh', 3, 8, S`\(x\)`, 12, 4]])} Biết số trung bình là 5,2 giờ. Tìm \(x\) và trung vị của mẫu số liệu (làm tròn đến hàng phần trăm).`,
+            goiY: S`\(\bar x = \dfrac{1 \cdot 3 + 3 \cdot 8 + 5x + 7 \cdot 12 + 9 \cdot 4}{27 + x} = 5{,}2\).`,
+            lg: [S`\(\dfrac{147 + 5x}{27 + x} = 5{,}2 \iff 147 + 5x = 140{,}4 + 5{,}2x \iff 0{,}2x = 6{,}6 \iff x = 33\).`,
+              S`Cỡ mẫu \(n = 60\); tần số tích lũy: 3; 11; 44; 56; 60. \(\tfrac n2 = 30\) thuộc nhóm \([4;\, 6)\).`,
+              S`\(M_e = 4 + \dfrac{30 - 11}{33}\cdot 2 \approx 5{,}15\) giờ.`],
+            ds: S`\(x = 33\); \(M_e \approx 5{,}15\) giờ.` },
+          { muc: 'VDC', dong: 11,
+            de: S`Một mẫu số liệu ghép nhóm có cỡ mẫu \(n = 50\): ${tb(['Nhóm', '[0; 5)', '[5; 10)', '[10; 15)', '[15; 20)', '[20; 25)'], [['Tần số', 4, S`\(a\)`, 15, S`\(b\)`, 5]])} Biết trung vị bằng 14. Tìm \(a\), \(b\) và số trung bình.`,
+            goiY: S`\(a + b = 26\). Trung vị 14 thuộc nhóm \([10;\, 15)\), nên \(M_e = 10 + \dfrac{25 - (4 + a)}{15}\cdot 5 = 14\).`,
+            lg: [S`Cỡ mẫu: \(4 + a + 15 + b + 5 = 50 \Rightarrow a + b = 26\).`,
+              S`Trung vị \(14 \in [10;\, 15)\), nên nhóm chứa trung vị là \([10;\, 15)\), các nhóm trước có tổng tần số \(4 + a\): \(10 + \dfrac{25 - 4 - a}{15}\cdot 5 = 14 \iff \dfrac{21 - a}{3} = 4 \iff a = 9\); suy ra \(b = 17\).`,
+              S`Kiểm tra: tần số tích lũy \(4;\ 13;\ 28\) nên đại lượng thứ 25 đúng là thuộc nhóm \([10;\, 15)\).`,
+              S`\(\bar x = \dfrac{2{,}5 \cdot 4 + 7{,}5 \cdot 9 + 12{,}5 \cdot 15 + 17{,}5 \cdot 17 + 22{,}5 \cdot 5}{50} = \dfrac{675}{50} = 13{,}5\).`],
+            ds: S`\(a = 9\), \(b = 17\), \(\bar x = 13{,}5\).` },
+        ] },
+      { ten: 'Dùng trung vị, tứ phân vị, mốt để chọn ngưỡng và so sánh', muc: 'VD – VDC',
+        pp: ['Đọc câu hỏi để biết cần số đặc trưng nào: 25% thấp nhất → Q1; 25% cao nhất → Q3; 50% → trung vị; giá trị "thường gặp nhất" → mốt.', 'Chú ý chiều: thời gian chạy càng nhỏ càng nhanh, nên "25% nhanh nhất" là dưới Q1.', 'Tính bằng công thức, làm tròn theo yêu cầu.', 'Kết luận bằng lời trong ngữ cảnh (ai được chọn, mức nào).'],
+        vd: [{
+          de: S`Doanh số bán hàng (triệu đồng) trong tháng của 60 nhân viên: ${tb(['Doanh số', '[20; 40)', '[40; 60)', '[60; 80)', '[80; 100)', '[100; 120)'], [['Số nhân viên', 6, 14, 20, 15, 5]])} Công ty thưởng cho 25% nhân viên có doanh số cao nhất. Nhân viên cần doanh số ít nhất bao nhiêu để được thưởng (làm tròn đến hàng phần mười)?`,
+          lg: [S`Ngưỡng cần tìm là tứ phân vị thứ ba \(Q_3\). \(\tfrac{3n}{4} = 45\); tần số tích lũy: 6; 20; 40; 55; 60 nên \(Q_3\) thuộc nhóm \([80;\, 100)\).`,
+            S`\(Q_3 = 80 + \dfrac{45 - 40}{15}\cdot 20 \approx 86{,}7\).`,
+            'Nhân viên cần doanh số khoảng 86,7 triệu đồng trở lên.'],
+          ds: 'Khoảng 86,7 triệu đồng.' }],
+        bt: [
+          { muc: 'VD', dong: 7,
+            de: S`Thời gian chạy 100 m (giây) của 48 học sinh: ${tb(['Thời gian', '[12; 13)', '[13; 14)', '[14; 15)', '[15; 16)', '[16; 17)'], [['Số học sinh', 4, 10, 18, 11, 5]])} Thầy chọn 25% học sinh chạy nhanh nhất vào đội tuyển. Học sinh phải chạy trong thời gian tối đa bao nhiêu giây (làm tròn đến hàng phần mười)?`,
+            goiY: S`Chạy nhanh là thời gian nhỏ: ngưỡng là \(Q_1\). \(\tfrac n4 = 12\).`,
+            lg: [S`\(\tfrac n4 = 12\); tần số tích lũy 4; 14; … nên \(Q_1\) thuộc nhóm \([13;\, 14)\).`,
+              S`\(Q_1 = 13 + \dfrac{12 - 4}{10}\cdot 1 = 13{,}8\) giây.`],
+            ds: 'Tối đa khoảng 13,8 giây.' },
+          { muc: 'VD', dong: 9,
+            de: S`Nồng độ cholesterol (mg/dL) của 100 người: ${tb(['Nồng độ', '[150; 160)', '[160; 170)', '[170; 180)', '[180; 190)', '[190; 200)', '[200; 210)'], [['Số người', 8, 17, 32, 23, 12, 8]])} a) Tìm mốt và nêu ý nghĩa. b) Xác định mốc để chọn ra 50% số người có nồng độ cao nhất (làm tròn đến hàng phần trăm).`,
+            goiY: 'Mốt ở nhóm [170; 180). Mốc 50% là trung vị; tần số tích lũy 8; 25; 57; …',
+            lg: [S`a) \(M_0 = 170 + \dfrac{32 - 17}{(32 - 17) + (32 - 23)}\cdot 10 = 170 + \dfrac{150}{24} = 176{,}25\): nồng độ thường gặp nhất khoảng 176,25 mg/dL.`,
+              S`b) \(\tfrac n2 = 50\) thuộc nhóm \([170;\, 180)\): \(M_e = 170 + \dfrac{50 - 25}{32}\cdot 10 \approx 177{,}81\). Những người có nồng độ từ khoảng 177,81 mg/dL trở lên là 50% có nồng độ cao nhất.`],
+            ds: S`a) \(M_0 = 176{,}25\). b) Mốc \(\approx 177{,}81\) mg/dL.` },
+          { muc: 'VDC', dong: 11,
+            de: S`Lượng nước tiêu thụ (m³) trong tháng của 160 hộ gia đình: ${tb(['Lượng nước', '[3; 6)', '[6; 9)', '[9; 12)', '[12; 15)', '[15; 18)'], [['Số hộ', 20, 55, 45, 30, 10]])} a) Tính lượng nước trung bình mỗi hộ (làm tròn đến hàng phần trăm) và mốt. b) Công ty gửi thông báo nhắc tiết kiệm nước tới 25% số hộ dùng nhiều nước nhất. Hộ dùng từ bao nhiêu m³ trở lên thì nhận thông báo? c) Mốt và số trung bình, số nào lớn hơn? Giải thích ngắn gọn.`,
+            goiY: S`\(\tfrac{3n}{4} = 120\) – đúng bằng tần số tích lũy hết nhóm \([9;\, 12)\). Lấy nhóm \([9;\, 12)\) để tính \(Q_3\).`,
+            lg: [S`a) \(\bar x = \dfrac{4{,}5 \cdot 20 + 7{,}5 \cdot 55 + 10{,}5 \cdot 45 + 13{,}5 \cdot 30 + 16{,}5 \cdot 10}{160} = \dfrac{1545}{160} \approx 9{,}66\) m³. Mốt: nhóm \([6;\, 9)\): \(M_0 = 6 + \dfrac{55 - 20}{(55 - 20) + (55 - 45)}\cdot 3 \approx 8{,}33\) m³.`,
+              S`b) Tần số tích lũy: 20; 75; 120; 150; 160. \(\tfrac{3n}{4} = 120\) thuộc nhóm \([9;\, 12)\): \(Q_3 = 9 + \dfrac{120 - 75}{45}\cdot 3 = 12\). Hộ dùng từ 12 m³ trở lên nhận thông báo.`,
+              S`c) \(M_0 \approx 8{,}33 \lt \bar x \approx 9{,}66\): phần lớn hộ dùng mức vừa phải, một số hộ dùng nhiều (nhóm 12–18 m³) kéo số trung bình lên cao hơn mốt.`],
+            ds: S`a) \(\bar x \approx 9{,}66\) m³, \(M_0 \approx 8{,}33\) m³. b) Từ 12 m³ trở lên. c) Số trung bình lớn hơn mốt.` },
         ] },
     ],
   });

@@ -1,0 +1,103 @@
+/* Toán 10 – Chương I. Vận dụng: bài toán thực tế đếm số phần tử bằng biểu đồ Ven (2 tập, 3 tập, có tham số).
+   Ma trận giữa kì I (MA_TR_N_GKI.docx): Trả lời ngắn TLN-1, TLN-2 và Đúng–Sai ĐS-1 – mức Vận dụng.
+   Dạng bài lấy theo các đề trong tai-lieu/lop10/ (số liệu đã đổi, đáp số kiểm lại bằng tools/kiem-dap-so.py):
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Hướng Hóa – Quảng Trị.pdf (thích đúng hai môn)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Nguyễn Trãi – Đà Nẵng.pdf (chỉ thích một môn)
+   - Đề giữa HK1/Đề giữa kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Hồ Thị Kỷ – Cà Mau.pdf (cà phê đường, sữa)
+   - Đề giữa HK1/Đề giữa học kỳ 1 Toán 10 năm 2025 – 2026 trường THPT Thái Phiên – Hải Phòng.pdf (Ven có tham số m)
+   - Đề giữa HK1/Đề GK1 Toán 10 năm 2025 – 2026 trường THPT Ninh Bình – Bạc Liêu – Ninh Bình.pdf (ba môn thể thao) */
+(() => {
+  const V = Fig.venn;
+  Vdc.add({
+    grade: 'lop10', id: 'c1-tap-hop-ven', ky: ['Giữa kì I'],
+    nguon: 'Đề giữa HK1: THPT Hướng Hóa – Quảng Trị; THPT Nguyễn Trãi – Đà Nẵng; THPT Hồ Thị Kỷ – Cà Mau; THPT Thái Phiên – Hải Phòng; THPT Ninh Bình – Bạc Liêu (2025 – 2026)',
+    chuong: 'Chương I. Mệnh đề và tập hợp',
+    bai: 'Bài 2. Tập hợp và các phép toán trên tập hợp',
+    title: 'Bài toán thực tế dùng biểu đồ Ven',
+    desc: 'Đếm số phần tử của hợp, giao; "chỉ thuộc đúng một / đúng hai tập"; ba tập hợp; số liệu chứa tham số.',
+    kt: [
+      { t: 'Số phần tử của hợp hai tập',
+        b: S`Với hai tập hữu hạn \(A, B\): \[n(A \cup B) = n(A) + n(B) - n(A \cap B).\] Số phần tử <b>chỉ thuộc</b> \(A\) là \(n(A) - n(A \cap B)\). Nếu tập "toàn thể" (cả lớp) có \(N\) phần tử thì số phần tử không thuộc tập nào là \(N - n(A \cup B)\).`,
+        fig: V({ sets: ['A', 'B'], vals: { a: 'chỉ A', ab: 'A∩B', b: 'chỉ B' }, w: 260 }) },
+      { t: 'Số phần tử của hợp ba tập',
+        b: S`\[n(A \cup B \cup C) = n(A) + n(B) + n(C) - n(A \cap B) - n(B \cap C) - n(C \cap A) + n(A \cap B \cap C).\] Đặt \(x\) là số thuộc cả ba tập. Số thuộc <b>đúng hai</b> tập: \(\big[n(A\cap B) + n(B \cap C) + n(C \cap A)\big] - 3x\). Số thuộc <b>đúng một</b> tập: \(n(A \cup B \cup C)\) trừ số thuộc đúng hai tập và trừ \(x\).` },
+      { t: 'Điền biểu đồ Ven từ trong ra ngoài',
+        b: S`Vẽ biểu đồ Ven, điền số vào miền giữa (thuộc cả ba tập) trước, rồi các miền "đúng hai tập", sau cùng các miền "chỉ một tập". Mỗi miền phải là số tự nhiên – đây cũng là cách thử lại đáp số. Cẩn thận với từ ngữ: "thích Toán và Lí" thường gồm cả người thích ba môn; "<b>chỉ</b> thích Toán và Lí" thì không.`,
+        fig: V({ sets: ['A', 'B', 'C'], vals: { abc: 'x' }, shade: ['abc'], w: 250 }) },
+    ],
+    dang: [
+      { ten: 'Bài toán thực tế với hai tập hợp', muc: 'VD',
+        pp: ['Gọi tên các tập (A: học sinh thích bóng đá, …), ghi rõ số phần tử đã biết.', S`Dùng \(n(A \cup B) = n(A) + n(B) - n(A \cap B)\) để tìm đại lượng chưa biết.`, 'Đọc kĩ câu hỏi: hỏi "ít nhất một", "cả hai", "chỉ một" hay "không thuộc tập nào".', 'Thử lại bằng biểu đồ Ven: các miền đều là số tự nhiên và cộng lại đúng tổng.'],
+        vd: [{
+          de: 'Lớp 10A có 45 học sinh, trong đó có 25 em thích bóng đá, 20 em thích cầu lông và 8 em thích cả hai môn. Hỏi lớp 10A có bao nhiêu em không thích môn nào trong hai môn trên? Có bao nhiêu em chỉ thích đúng một môn?',
+          fig: V({ sets: ['Bóng đá', 'Cầu lông'], vals: { a: '17', ab: '8', b: '12', out: '8' }, shade: ['ab'], w: 260 }),
+          lg: [S`Gọi \(A\), \(B\) lần lượt là tập học sinh thích bóng đá, thích cầu lông: \(n(A) = 25\), \(n(B) = 20\), \(n(A \cap B) = 8\).`,
+            S`Số em thích ít nhất một môn: \(n(A \cup B) = 25 + 20 - 8 = 37\).`,
+            S`Số em không thích môn nào: \(45 - 37 = 8\).`,
+            S`Chỉ thích bóng đá: \(25 - 8 = 17\); chỉ thích cầu lông: \(20 - 8 = 12\). Chỉ thích đúng một môn: \(17 + 12 = 29\) em.`],
+          ds: '8 em không thích môn nào; 29 em chỉ thích đúng một môn.' }],
+        bt: [
+          { muc: 'VD', dong: 7,
+            de: 'Lớp 10B có 40 học sinh, mỗi em đăng kí ít nhất một trong hai câu lạc bộ Tiếng Anh và Tin học. Có 26 em đăng kí Tiếng Anh, 21 em đăng kí Tin học. Hỏi có bao nhiêu em đăng kí cả hai câu lạc bộ? Bao nhiêu em chỉ đăng kí Tin học?',
+            goiY: S`"Mỗi em đăng kí ít nhất một câu lạc bộ" nghĩa là \(n(A \cup B) = 40\). Từ công thức tìm \(n(A \cap B)\).`,
+            lg: [S`Gọi \(A\), \(B\) là tập học sinh đăng kí Tiếng Anh, Tin học; \(n(A \cup B) = 40\).`,
+              S`\(n(A \cap B) = n(A) + n(B) - n(A \cup B) = 26 + 21 - 40 = 7\).`,
+              S`Chỉ đăng kí Tin học: \(21 - 7 = 14\) em.`],
+            ds: '7 em đăng kí cả hai; 14 em chỉ đăng kí Tin học.' },
+          { muc: 'VD', dong: 7,
+            de: 'Khảo sát 120 khách uống cà phê: 70 người thêm đường, 65 người thêm sữa và 15 người không thêm gì. Hỏi có bao nhiêu người thêm cả đường và sữa? Bao nhiêu người chỉ thêm đường?',
+            goiY: S`Số người thêm ít nhất một thứ là \(120 - 15\).`,
+            lg: [S`Gọi \(A\), \(B\) là tập khách thêm đường, thêm sữa. \(n(A \cup B) = 120 - 15 = 105\).`,
+              S`\(n(A \cap B) = 70 + 65 - 105 = 30\).`, S`Chỉ thêm đường: \(70 - 30 = 40\) người.`],
+            ds: '30 người thêm cả đường và sữa; 40 người chỉ thêm đường.' },
+          { muc: 'VDC', dong: 9,
+            de: S`Lớp 10C có 42 học sinh. Số học sinh giỏi Toán là \(2a\), giỏi Văn là \(a + 6\), giỏi cả hai môn là \(a - 3\) và có 9 em không giỏi môn nào trong hai môn đó. Tìm \(a\) và số học sinh chỉ giỏi đúng một môn.`,
+            goiY: S`Lập phương trình: \(n(A) + n(B) - n(A \cap B) + 9 = 42\). Sau khi tìm \(a\) nhớ kiểm tra các miền của biểu đồ Ven không âm.`,
+            lg: [S`Số học sinh giỏi ít nhất một môn: \(2a + (a + 6) - (a - 3) = 2a + 9\).`,
+              S`Cả lớp: \(2a + 9 + 9 = 42 \Rightarrow a = 12\).`,
+              S`Giỏi Toán 24 em, giỏi Văn 18 em, giỏi cả hai 9 em (đều hợp lí vì \(9 \le 18 \le 24\)).`,
+              S`Chỉ giỏi Toán: \(24 - 9 = 15\); chỉ giỏi Văn: \(18 - 9 = 9\). Chỉ giỏi đúng một môn: \(15 + 9 = 24\) em.`],
+            ds: S`\(a = 12\); 24 học sinh chỉ giỏi đúng một môn.` },
+        ] },
+      { ten: 'Bài toán thực tế với ba tập hợp (có tham số)', muc: 'VD – VDC',
+        pp: [S`Gọi ba tập \(A, B, C\) và ghi các số đã biết: \(n(A), n(B), n(C)\), các giao từng đôi, giao cả ba, số không thuộc tập nào.`,
+          'Dùng công thức số phần tử của hợp ba tập để tìm đại lượng chưa biết (thường là giao cả ba hoặc tổng các giao từng đôi).',
+          'Muốn biết "đúng hai", "đúng một": điền biểu đồ Ven từ miền giữa ra ngoài.',
+          'Bài có tham số: lập phương trình theo tham số từ tổng số phần tử, giải rồi kiểm tra mọi miền không âm.'],
+        vd: [{
+          de: 'Lớp 10D có 40 học sinh. Có 20 em chơi bóng đá, 18 em chơi cầu lông, 15 em chơi bóng chuyền; 7 em chơi bóng đá và cầu lông, 6 em chơi bóng đá và bóng chuyền, 5 em chơi cầu lông và bóng chuyền, 3 em chơi cả ba môn. Hỏi có bao nhiêu em không chơi môn nào? Bao nhiêu em chơi đúng một môn?',
+          fig: V({ sets: ['BĐ', 'CL', 'BC'], vals: { a: '10', b: '9', c: '7', ab: '4', ac: '3', bc: '2', abc: '3', out: '2' }, shade: ['abc'], w: 260 }),
+          lg: [S`Gọi \(A, B, C\) là tập học sinh chơi bóng đá, cầu lông, bóng chuyền.`,
+            S`\(n(A \cup B \cup C) = 20 + 18 + 15 - 7 - 6 - 5 + 3 = 38\). Số em không chơi môn nào: \(40 - 38 = 2\).`,
+            S`Điền Ven: miền giữa 3; chỉ BĐ và CL: \(7 - 3 = 4\); chỉ BĐ và BC: \(6 - 3 = 3\); chỉ CL và BC: \(5 - 3 = 2\).`,
+            S`Chỉ BĐ: \(20 - 4 - 3 - 3 = 10\); chỉ CL: \(18 - 4 - 2 - 3 = 9\); chỉ BC: \(15 - 3 - 2 - 3 = 7\).`,
+            S`Chơi đúng một môn: \(10 + 9 + 7 = 26\) em. Thử lại: \(26 + (4 + 3 + 2) + 3 = 38\).`],
+          ds: '2 em không chơi môn nào; 26 em chơi đúng một môn.' }],
+        bt: [
+          { muc: 'VD', dong: 9,
+            de: 'Lớp 10E có 45 học sinh: 22 em thích Toán, 20 em thích Văn, 18 em thích Tiếng Anh, 4 em không thích môn nào và 5 em thích cả ba môn. Hỏi có bao nhiêu em thích đúng hai trong ba môn?',
+            goiY: S`Tìm \(n(A \cup B \cup C)\), suy ra tổng ba giao từng đôi \(s\). Số thích đúng hai môn là \(s - 3 \cdot 5\).`,
+            lg: [S`\(n(A \cup B \cup C) = 45 - 4 = 41\).`,
+              S`Đặt \(s = n(A \cap B) + n(B \cap C) + n(C \cap A)\). Theo công thức: \(41 = 22 + 20 + 18 - s + 5 \Rightarrow s = 24\).`,
+              S`Mỗi em thích cả ba môn được đếm 3 lần trong \(s\), nên số em thích đúng hai môn là \(24 - 3 \cdot 5 = 9\).`],
+            ds: '9 em thích đúng hai môn.' },
+          { muc: 'VD', dong: 9,
+            de: S`Câu lạc bộ thể thao của trường có 32 em thích bóng đá, 26 em thích bóng bàn, 22 em thích cầu lông; 14 em thích bóng đá và bóng bàn, 10 em thích bóng bàn và cầu lông, 12 em thích bóng đá và cầu lông, 6 em thích cả ba môn. Mỗi thành viên thích ít nhất một môn. Gọi \(m, n, p\) lần lượt là số em chỉ thích bóng đá, chỉ thích bóng bàn, chỉ thích cầu lông. Tính \(S = m + n + p\) và số thành viên của câu lạc bộ.`,
+            goiY: S`Chỉ thích bóng đá \(= n(A) - n(A \cap B) - n(A \cap C) + n(A \cap B \cap C)\) (vì phần giữa bị trừ hai lần).`,
+            lg: [S`\(m = 32 - 14 - 12 + 6 = 12\); \(n = 26 - 14 - 10 + 6 = 8\); \(p = 22 - 10 - 12 + 6 = 6\).`,
+              S`\(S = 12 + 8 + 6 = 26\).`,
+              S`Số thành viên: \(32 + 26 + 22 - 14 - 10 - 12 + 6 = 50\).`],
+            ds: S`\(S = 26\); câu lạc bộ có 50 thành viên.` },
+          { muc: 'VDC', dong: 11,
+            de: S`Đội tuyển học sinh giỏi của trường có 100 em. Số em thích Toán là \(40 + m\), thích Lí là \(35 + m\), thích Hóa là 30; thích Toán và Lí là \(12 + 2m\), thích Toán và Hóa là 10, thích Lí và Hóa là \(8 + m\); 4 em thích cả ba môn và 25 em không thích môn nào trong ba môn đó (\(m\) là số nguyên). Hỏi có bao nhiêu em chỉ thích đúng một môn?`,
+            goiY: S`Số em thích ít nhất một môn là 75. Thay vào công thức hợp ba tập để được phương trình bậc nhất theo \(m\).`,
+            lg: [S`\(n(A \cup B \cup C) = 100 - 25 = 75\).`,
+              S`\((40 + m) + (35 + m) + 30 - (12 + 2m) - 10 - (8 + m) + 4 = 79 - m\). Vậy \(79 - m = 75 \Rightarrow m = 4\).`,
+              S`Khi đó: Toán 44, Lí 39, Hóa 30; Toán–Lí 20, Toán–Hóa 10, Lí–Hóa 12, cả ba 4.`,
+              S`Chỉ Toán: \(44 - 20 - 10 + 4 = 18\); chỉ Lí: \(39 - 20 - 12 + 4 = 11\); chỉ Hóa: \(30 - 10 - 12 + 4 = 12\).`,
+              S`Thử lại các miền đúng hai môn: \(16,\ 6,\ 8\) (không âm) và \(18 + 11 + 12 + 16 + 6 + 8 + 4 = 75\). Chỉ thích đúng một môn: \(18 + 11 + 12 = 41\) em.`],
+            ds: S`\(m = 4\); 41 em chỉ thích đúng một môn.` },
+        ] },
+    ],
+  });
+})();

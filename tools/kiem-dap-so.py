@@ -159,5 +159,217 @@ chk('L10 Bài 5: min liên tục 20,5 tại (1; 5,5)', (mn[0], mn[1], mn[2]), (F
 nguyen = min((4 * a + 3 * b, a, b) for a in range(7) for b in range(7) if 3 * a + 2 * b >= 14 and a + 2 * b >= 12)
 chk('L10 Bài 5: nghiệm nguyên', nguyen, (22, 1, 6))
 
+
+# L10 Chương II – bài bổ sung
+mx, mn = toi_uu([(-1, -1, -4), (1, -2, 1), (0, 1, 3)], lambda a, b: 3 * a - 4 * b)
+chk('L10 C2 m nhỏ nhất (= −min(3x − 4y))', -mn[0], 9)
+mx, _ = toi_uu([X0, Y0, (2, 1, 160), (1, 2, 110)], lambda a, b: 45 * a + 50 * b)
+chk('L10 C2 trà sữa: max', mx[0], 4150); chk('L10 C2 trà sữa: tại (70;20)', (mx[1], mx[2]), (70, 20))
+mx, _ = toi_uu([(-1, 3, 0), Y0, (-1, -1, -1200), (1, 1, 1500)], lambda a, b: Fr(165) - Fr(5, 100) * a - Fr(3, 100) * b)
+chk('L10 C2 trái phiếu: lãi max', mx[0], 111); chk('L10 C2 trái phiếu: (900;300)', (mx[1], mx[2]), (900, 300))
+
+# ---------- Lớp 10 · Chương I · Biểu đồ Ven (data/lop10/c1-tap-hop-ven.js): vét cạn trên các miền Ven ----------
+chk('Ven VD hai tập: không thích môn nào', 45 - (25 + 20 - 8), 8); chk('Ven VD: đúng một môn', (25 - 8) + (20 - 8), 29)
+chk('Ven bài 1: cả hai', 26 + 21 - 40, 7); chk('Ven bài 2: cả hai', 70 + 65 - 105, 30)
+aa = [a for a in range(0, 50) if 2 * a + (a + 6) - (a - 3) + 9 == 42 and 0 <= a - 3 <= min(2 * a, a + 6)]
+chk('Ven bài 3: a', aa, [12]); chk('Ven bài 3: đúng một môn', (24 - 9) + (18 - 9), 24)
+def ven3(A, B, C, AB, AC, BC, ABC):
+    ab, ac, bc = AB - ABC, AC - ABC, BC - ABC
+    a, b, c = A - ab - ac - ABC, B - ab - bc - ABC, C - ac - bc - ABC
+    assert min(a, b, c, ab, ac, bc) >= 0
+    return a + b + c, ab + ac + bc, a + b + c + ab + ac + bc + ABC
+mot, hai, hop = ven3(20, 18, 15, 7, 6, 5, 3); chk('Ven VD ba tập: không chơi', 40 - hop, 2); chk('Ven VD ba tập: đúng một', mot, 26)
+# bài 4: vét cạn mọi cách chia giao từng đôi để chắc chắn số "đúng hai" không phụ thuộc cách chia
+dh = {ven3(22, 20, 18, x, y, 24 - x - y, 5)[1] for x in range(5, 20) for y in range(5, 20) if 24 - x - y >= 5 and ven3(22, 20, 18, x, y, 24 - x - y, 5)[2] == 41 if min(22 - x - y + 5, 20 - x - (24 - x - y) + 5, 18 - y - (24 - x - y) + 5) >= 0}
+chk('Ven bài 4: đúng hai môn', dh, {9})
+mot, _, hop = ven3(32, 26, 22, 14, 12, 10, 6); chk('Ven bài 5: S = m + n + p', mot, 26); chk('Ven bài 5: số thành viên', hop, 50)
+mm = [k for k in range(-20, 20) if (40 + k) + (35 + k) + 30 - (12 + 2 * k) - 10 - (8 + k) + 4 == 75]
+chk('Ven bài 6: m', mm, [4]); mot, _, hop = ven3(44, 39, 30, 20, 10, 12, 4); chk('Ven bài 6: đúng một môn', mot, 41); chk('Ven bài 6: hợp', hop, 75)
+
+# ---------- Lớp 10 · Chương I · Khoảng, đoạn có tham số (data/lop10/c1-tap-hop-tham-so.js): quét m trên lưới ----------
+def giao_rong(a, ai, b, bi, c, ci, d, di):  # [a,b] với cờ có lấy đầu mút; kiểm tra A ∩ B = ∅ bằng quét điểm hữu tỉ
+    pts = {a, b, c, d} | {Fr(a + b, 2), Fr(c + d, 2)} | {max(a, c), min(b, d), Fr(max(a, c) + min(b, d), 2)}
+    inA = lambda t: (a < t or (ai and t == a)) and (t < b or (bi and t == b))
+    inB = lambda t: (c < t or (ci and t == c)) and (t < d or (di and t == d))
+    return not any(inA(t) and inB(t) for t in pts)
+ms = [Fr(k, 4) for k in range(-40, 41)]
+chk('Tham số VD: A ∩ B ≠ ∅ ⇔ −4 < m < 5', all((not giao_rong(m_, 0, m_ + 3, 0, -1, 1, 5, 1)) == (-4 < m_ < 5) for m_ in ms), 1)
+chk('Tham số VD: số nguyên', sum(1 for k in range(-20, 20) if not giao_rong(k, 0, k + 3, 0, -1, 1, 5, 1)), 8)
+chk('Tham số bài 1: số nguyên m', sum(1 for k in range(-2026, 2027) if giao_rong(k, 0, k + 2, 1, -3, 1, 4, 1)), 4044)
+cnt = sum(1 for k in range(-100, 7) if all(not (Fr(-10**6) < t < -2 or t >= 4) for t in [Fr(k - 1), Fr(k + 5, 2)]))
+chk('Tham số bài 2: số nguyên m', cnt, 4)
+def so_nguyen(mv): return len({k for k in range(1, 6) if k >= mv} | {1, 3})
+chk('Tham số bài 3: m nguyên có đúng 4 số nguyên', [k for k in range(-5, 10) if so_nguyen(k) == 4], [3, 4])
+chk('Tham số VD2: A ⊂ B ⇔ m < 5', all(((m_ + 1 > 2 * m_ - 1) or (m_ + 1 > -2 and 2 * m_ - 1 < 9)) == (m_ < 5) for m_ in ms), 1)
+chk('Tham số bài 4: số nguyên m', sum(1 for k in range(0, 3000) if k > 2 and 3 * k + 1 <= 2027), 673)
+chk('Tham số bài 5: 1 < m ≤ 4', all((m_ - 2 > -1 and m_ + 3 <= 7) == (1 < m_ <= 4) for m_ in ms), 1)
+def con6(m_):
+    if 2 * m_ - 1 > m_ + 3: return True
+    return m_ + 3 < -1 or 2 * m_ - 1 >= 6
+chk('Tham số bài 6: m < −4 hoặc m ≥ 7/2', all(con6(m_) == (m_ < -4 or m_ >= Fr(7, 2)) for m_ in ms), 1)
+
+# ---------- Lớp 10 · Chương III · Hệ thức lượng thực tế (data/lop10/c3-he-thuc-luong-thuc-te.js): toạ độ hoá ----------
+R_ = math.radians
+def tam_giac(AB, A, B):  # A(0,0), B(AB,0), góc tại A, B → toạ độ C
+    t = AB / (1 / math.tan(R_(A)) + 1 / math.tan(R_(B))); return (t / math.tan(R_(A)), t)
+C_ = tam_giac(50, 62, 48); chk('HTL VD: AC', round(math.hypot(*C_), 1), 39.5)
+chk('HTL bài 1: AB', round(math.dist((180, 0), (150 * math.cos(R_(65)), 150 * math.sin(R_(65))))), 179)
+chk('HTL bài 2: hai xe', round(math.dist((60, 0), (75 * math.cos(R_(120)), 75 * math.sin(R_(120)))), 1), 117.2)
+C_ = tam_giac(180, 35, 50); chk('HTL bài 3: phút', round((math.hypot(*C_) - math.dist((180, 0), C_)) / 60 * 60), 35)
+def cao(AB, a, b):  # A, B thẳng hàng với chân tháp, góc nâng a < b
+    return AB / (1 / math.tan(R_(a)) - 1 / math.tan(R_(b)))
+chk('HTL VD tháp', round(cao(24, 40, 55), 1), 48.8); chk('HTL bài 4: hải đăng', round(cao(50, 40, 70)), 60)
+chk('HTL bài 5: cột cờ', round(20 * (math.tan(R_(46)) - math.tan(R_(38))), 1), 5.1)
+h_ = cao(25, 32, 52); chk('HTL bài 6: xe thang', round(math.sqrt(40 ** 2 - (h_ - 1.8) ** 2), 1), 27.8)
+def heron(a, b, c): p_ = (a + b + c) / 2; return math.sqrt(p_ * (p_ - a) * (p_ - b) * (p_ - c))
+B_, A_, C_ = (0, 0), (12, 0), (16 * math.cos(R_(60)), 16 * math.sin(R_(60)))
+ac = math.dist(A_, C_); chk('HTL VD tứ giác: diện tích', round(heron(12, 16, ac) + heron(ac, 10, 14), 1), 149.6)
+chk('HTL bài 7: Heron', heron(25, 29, 36), 360, 1e-6)
+chk('HTL bài 8: giếng trời', round(3.14 * (16 + 9 + 12) / (4 * math.sin(R_(120)) ** 2), 1), 38.7)
+# bài 9: toạ độ hoá tứ giác B(0,0), A trên tia Ox, C theo góc 105°, D theo góc BCD = 110°, rồi công thức shoelace
+B_, A_ = (0, 0), (8, 0); C_ = (5 * math.cos(R_(105)), 5 * math.sin(R_(105)))
+hCB = math.atan2(B_[1] - C_[1], B_[0] - C_[0])
+def loi(P):  # tứ giác lồi: mọi tích có hướng cùng dấu
+    cr = [(P[(i + 1) % 4][0] - P[i][0]) * (P[(i + 2) % 4][1] - P[(i + 1) % 4][1]) - (P[(i + 1) % 4][1] - P[i][1]) * (P[(i + 2) % 4][0] - P[(i + 1) % 4][0]) for i in range(4)]
+    return all(c > 0 for c in cr) or all(c < 0 for c in cr)
+P_ = [P for sg in (1, -1) for P in [[A_, B_, C_, (C_[0] + 6 * math.cos(hCB + sg * R_(110)), C_[1] + 6 * math.sin(hCB + sg * R_(110)))]] if loi(P)][0]
+S_ = abs(sum(P_[i][0] * P_[(i + 1) % 4][1] - P_[(i + 1) % 4][0] * P_[i][1] for i in range(4))) / 2
+chk('HTL bài 9: tiền (nghìn đồng)', round(S_ * 350), 16513)
+
+# ---------- Lớp 11 · Công thức lượng giác (data/lop11/c1-cong-thuc-luong-giac.js) ----------
+a_ = sp.pi - sp.asin(sp.Rational(4, 5)); b_ = sp.acos(sp.Rational(5, 13))
+chk('CTLG VD: cos(α+β)', sp.nsimplify(sp.cos(a_ + b_)), sp.Rational(-63, 65)); chk('CTLG VD: tan 2α', sp.nsimplify(sp.tan(2 * a_)), sp.Rational(24, 7))
+t_ = sp.atan(3); chk('CTLG bài 1: P', sp.nsimplify((2 * sp.sin(t_) - sp.cos(t_)) / (sp.sin(t_) + 3 * sp.cos(t_))), sp.Rational(5, 6)); chk('CTLG bài 1: sin 2α', sp.nsimplify(sp.sin(2 * t_)), sp.Rational(3, 5))
+xs_ = [float(v) for v in sp.solve(sp.sin(x) + sp.cos(x) - sp.Rational(2, 3), x)]
+xv = [v % (2 * math.pi) for v in xs_ if math.pi / 2 < v % (2 * math.pi) < math.pi][0]
+chk('CTLG bài 2: sin 2a', math.sin(2 * xv), -5 / 9); chk('CTLG bài 2: sin⁴+cos⁴', math.sin(xv) ** 4 + math.cos(xv) ** 4, 137 / 162); chk('CTLG bài 2: sin − cos', math.sin(xv) - math.cos(xv), math.sqrt(14) / 3)
+r1, r2 = [complex(z).real for z in sp.Poly(4 * x ** 2 + 3 * x - 5).nroots()]; u_ = math.atan(r1) + math.atan(r2)
+chk('CTLG bài 3: T', 4 * math.sin(u_) ** 2 + 3 * math.sin(u_) * math.cos(u_) - 5 * math.cos(u_) ** 2, -5)
+chk('CTLG VD2: rút gọn = tan 3x', all(abs((math.sin(v) + math.sin(3 * v) + math.sin(5 * v)) / (math.cos(v) + math.cos(3 * v) + math.cos(5 * v)) - math.tan(3 * v)) < 1e-9 for v in (0.1, 0.37, 1.2)), 1)
+chk('CTLG bài 4: sin⁴ + cos⁴', sp.simplify(sp.sin(x) ** 4 + sp.cos(x) ** 4 - (3 + sp.cos(4 * x)) / 4), 0)
+Pf = lambda v: math.cos(v + math.pi / 3) * math.cos(v - math.pi / 3); grid = [k * 0.001 for k in range(6284)]
+chk('CTLG bài 5: max P', max(map(Pf, grid)), 0.25, 1e-6); chk('CTLG bài 5: min P', min(map(Pf, grid)), -0.75, 1e-6)
+chk('CTLG bài 6: sin20 sin40 sin80', math.sin(R_(20)) * math.sin(R_(40)) * math.sin(R_(80)), math.sqrt(3) / 8)
+chk('CTLG VD3: k', math.hypot(2, 2 * math.sqrt(3)), 4); chk('CTLG VD3: φ', math.atan2(2 * math.sqrt(3), 2), math.pi / 3)
+chk('CTLG bài 7: vòng/giây', round(10 / (0.6 * math.pi), 1), 5.3); chk('CTLG bài 7: rad/giây', round(10 / 0.3, 1), 33.3)
+chk('CTLG bài 8: góc ACB', round(math.degrees(math.atan(25 / 25) - math.atan(10 / 25)), 1), 23.2)
+chk('CTLG bài 9: x', max((math.atan(6 / v) - math.atan(2 / v), v) for v in [k / 1000 for k in range(1, 20000)])[1], round(2 * math.sqrt(3), 3), 1e-3)
+
+# ---------- Lớp 11 · Hàm số lượng giác thực tế (data/lop11/c1-ham-so-luong-giac-thuc-te.js) ----------
+gx = [k * 2 * math.pi / 200000 for k in range(200001)]
+y_ = [math.cos(2 * v) - 2 * math.sin(v) + 3 for v in gx]; chk('HSLG VD: max', max(y_), 4.5, 1e-6); chk('HSLG VD: min', min(y_), 0, 1e-6)
+y_ = [7 - 6 * math.sin(v) * math.cos(v) for v in gx]; chk('HSLG bài 1: max', max(y_), 10, 1e-6); chk('HSLG bài 1: min', min(y_), 4, 1e-6)
+y_ = [2 * math.cos(v) ** 2 + math.sqrt(3) * math.sin(2 * v) for v in gx]; chk('HSLG bài 2: max', max(y_), 3, 1e-6); chk('HSLG bài 2: min', min(y_), -1, 1e-6)
+g2 = [-math.pi / 6 + k * math.pi / 200000 for k in range(200001)]
+y_ = [math.cos(2 * v) + 2 * math.sin(v) for v in g2]; chk('HSLG bài 3: max', max(y_), 1.5, 1e-6); chk('HSLG bài 3: min', min(y_), -0.5, 1e-6)
+h_ = lambda t: 2.5 * math.cos(math.pi * t / 6 + math.pi / 3) + 10
+chk('HSLG VD2: thời điểm cao nhất', [t for t in range(25) if abs(h_(t) - 12.5) < 1e-9], [10, 22]); chk('HSLG VD2: thấp nhất', [t for t in range(25) if abs(h_(t) - 7.5) < 1e-9], [4, 16])
+w_ = lambda t: 52 - 50 * math.cos(math.pi * t / 10)
+chk('HSLG bài 4: h(0)', w_(0), 2); chk('HSLG bài 4: lần đầu 77 m', min(t / 1000 for t in range(20001) if w_(t / 1000) >= 77), 20 / 3, 1e-3)
+dl = {t: 4 * math.sin(math.pi / 182 * (t - 79)) + 12 for t in range(1, 366)}
+chk('HSLG bài 5: ngày nhiều nắng nhất', max(dl, key=dl.get), 170); chk('HSLG bài 5: ngày ít nắng nhất', min(dl, key=dl.get), 352)
+P_ = lambda t: 115 + 25 * math.sin(7 * math.pi * t / 3)
+def so_lan(f, a, b, val, n=400000):  # đếm số lần f(t) = val trên [a,b]: số lần cắt + số lần chạm (cực trị)
+    ts = [a + (b - a) * i / n for i in range(n + 1)]; v = [f(t) - val for t in ts]
+    cat = sum(1 for i in range(n) if v[i] == 0 or v[i] * v[i + 1] < 0)
+    cham = sum(1 for i in range(1, n) if abs(v[i]) < 1e-6 and v[i - 1] < 0 and v[i + 1] < 0 or abs(v[i]) < 1e-6 and v[i - 1] > 0 and v[i + 1] > 0)
+    return cat + cham
+chk('HSLG bài 6: số nhịp/phút', 60 / (2 / (7 / 3)), 70); chk('HSLG bài 6: lần đạt 140', len([k for k in range(10) if 3 / 14 + 6 * k / 7 <= 2]), 3)
+chk('HSLG bài 6: lần đạt 127,5', so_lan(P_, 0, 2, 127.5), 5)
+
+# ---------- Lớp 11 · Phương trình lượng giác (data/lop11/c1-phuong-trinh-luong-giac.js) ----------
+def nghiem(f, a, b, n=2000000, mo=(False, False)):  # đếm nghiệm đơn bằng đổi dấu (các nghiệm ở đây đều đơn)
+    h = (b - a) / n; c = 0; prev = f(a + h * 1e-3)
+    for i in range(1, n + 1):
+        cur = f(a + i * h - (h * 1e-3 if i == n else 0))
+        if prev == 0 or prev * cur < 0: c += 1
+        prev = cur
+    return c
+chk('PTLG VD: tổng nghiệm trên [0; π]', sum(v for k in range(-3, 4) for v in {math.pi / 12 + k * math.pi / 2, -math.pi / 6 + k * math.pi} if -1e-12 <= v <= math.pi + 1e-12) / math.pi, 1.5)
+chk('PTLG VD: số nghiệm (đổi dấu)', nghiem(lambda v: math.cos(3 * v) - math.sin(v + math.pi / 6), 0, math.pi, 200000), 3)
+sl = sorted(v for k in range(-3, 4) for v in (5 * math.pi / 12 + k * math.pi, -5 * math.pi / 12 + k * math.pi) if 0 < v < 2 * math.pi)
+chk('PTLG bài 1: số nghiệm', len(sl), 4); chk('PTLG bài 1: tổng / π', sum(sl) / math.pi, 4); chk('PTLG bài 1: lớn nhất ·12/π', sl[-1] * 12 / math.pi, 19)
+chk('PTLG bài 1: đổi dấu', nghiem(lambda v: math.cos(2 * v) + math.sqrt(3) / 2, 0, 2 * math.pi, 200000), 4)
+sl = [v for v in range(-179, 180) if abs(math.tan(R_(2 * v + 20)) - math.sqrt(3)) < 1e-9]
+chk('PTLG bài 2: nghiệm (độ)', sl, [-160, -70, 20, 110]); chk('PTLG bài 2: tổng', sum(sl), -100)
+chk('PTLG bài 3: cos4x + cos x = 0 trên (−10π; 10π)', nghiem(lambda v: math.cos(4 * v) + math.cos(v), -10 * math.pi, 10 * math.pi), 70)
+chk('PTLG VD2: số m nguyên', len([k for k in range(-10, 10) if -1 <= k * k - 3 * k + 1 <= 1]), 4)
+chk('PTLG bài 4: tổng m nguyên', sum(k for k in range(-10, 10) if -3 <= 2 * k - 1 <= 3), 2)
+def nghiem_tich(mv, f1, g, a, b):  # tập nghiệm (làm tròn) của f1(x)=0 hoặc g(x)=mv trên [a,b]
+    out = set(); n = 200000; h = (b - a) / n
+    for F_ in (f1, lambda v: g(v) - mv):
+        vals = [F_(a + i * h) for i in range(n + 1)]
+        for i in range(n + 1):
+            if abs(vals[i]) < 1e-12: out.add(round(a + i * h, 3))
+            elif i < n and vals[i] * vals[i + 1] < 0: out.add(round(a + (i + 0.5) * h, 3))
+            elif 0 < i < n and abs(vals[i]) < 1e-7 and vals[i - 1] * vals[i + 1] > 0 and abs(vals[i]) <= min(abs(vals[i - 1]), abs(vals[i + 1])): out.add(round(a + i * h, 3))
+    return len({round(v, 2) for v in out})
+mtest = [-1.0, -0.9, -math.sqrt(3) / 2, -0.5, 0.0, 0.5, math.sqrt(3) / 2, 0.95, 1.0]
+dung5 = [mv for mv in mtest if nghiem_tich(mv, lambda v: 2 * math.sin(v) - 1, math.cos, 0, math.pi) == 3]
+chk('PTLG bài 5: các m thử có đúng 3 nghiệm', [round(v, 3) for v in dung5], [-1.0, -0.9, -0.5, 0.0, 0.5, 0.95, 1.0])
+dung6 = [mv for mv in mtest if nghiem_tich(mv, lambda v: 2 * math.cos(v) - 1, math.sin, 0, 2 * math.pi) == 4]
+chk('PTLG bài 6: các m thử có đúng 4 nghiệm', [round(v, 3) for v in dung6], [-0.9, -0.5, 0.5, 0.95])
+chk('PTLG bài 6: phân tích nhân tử', sp.simplify(sp.sin(2 * x) - 2 * m * sp.cos(x) - sp.sin(x) + m - (2 * sp.cos(x) - 1) * (sp.sin(x) - m)), 0)
+chk('PTLG VD3: qua VTCB trong [0;5]', nghiem(lambda t: math.cos(4 * t - math.pi / 3), 0, 5, 200000), 6)
+chk('PTLG bài 7: vệ tinh', [t for t in range(91) if abs(600 + 400 * math.cos(math.pi * t / 45) - 400) < 1e-9], [30, 60])
+chk('PTLG bài 8: số ngày', len([t for t in range(1, 31) if abs(40 + 20 * math.cos(math.pi * t / 3) - 50) < 1e-9]), 10)
+chk('PTLG bài 9: số lần cùng li độ', nghiem(lambda t: 4 * math.cos(2 * math.pi * t) - 4 * math.sin(2 * math.pi * t + math.pi / 6), 0, 2, 200000), 4)
+
+# ---------- Lớp 11 · Cấp số cộng (data/lop11/c2-cap-so-cong.js) ----------
+sol = [(u, d) for u in range(-50, 51) for d in range(-20, 21) if (u + d) + (u + 4 * d) - (u + 2 * d) == 13 and (u + 3 * d) + (u + 5 * d) == 34]
+chk('CSC VD: (u1, d)', sol, [(1, 4)]); chk('CSC VD: S20', sum(1 + 4 * k for k in range(20)), 780); chk('CSC VD: 401 là số hạng thứ', 1 + (401 - 1) // 4, 101)
+sol = [(u, d) for u in range(-50, 51) for d in range(-20, 21) if (u + 2 * d) + (u + 6 * d) == 22 and (u + d) * (u + 7 * d) == 40]
+chk('CSC bài 1', sorted(sol), [(-1, 3), (23, -3)])
+Sn = lambda n: 2 * n * n - n; chk('CSC bài 2: u_n = 4n − 3', all(Sn(n) - Sn(n - 1) == 4 * n - 3 for n in range(1, 60)), 1); chk('CSC bài 2: 197', (197 + 3) // 4, 50)
+sol = [(xx, dd) for xx in range(1, 40) for dd in range(1, 40) if 3 * xx == 36 and (xx + dd) ** 2 == xx ** 2 + (xx - dd) ** 2 and xx - dd > 0]
+chk('CSC bài 3: diện tích', [(xx - dd) * xx / 2 for xx, dd in sol], [54])
+sol = [k for k in range(1, 50) for d in [Fr(9, k)] if (2 * k - 1) * d == Fr(33, 2)]
+chk('CSC bài 4: số số hạng', [2 * k for k in sol], [12]); u_ = [Fr(-3, 2) + i * Fr(3, 2) for i in range(12)]; chk('CSC bài 4: thử lại', (sum(u_[0::2]), sum(u_[1::2])), (36, 45))
+chk('CSC VD2: dãy cuối', 20 + 24 * 3, 92); chk('CSC VD2: tổng', sum(20 + 3 * k for k in range(25)), 1400)
+chk('CSC bài 5: số hàng', next(n for n in range(1, 100) if sum(18 + 2 * k for k in range(n)) >= 1000), 25)
+chk('CSC bài 6: A', sum(100 + 8 * k for k in range(40)), 10240); chk('CSC bài 6: B', sum(70 + 10 * k for k in range(40)), 10600)
+pa1 = lambda n: sum(120 + 30 * k for k in range(n)); pa2 = lambda q: sum(Fr(32) + Fr(6, 5) * k for k in range(q))
+chk('CSC bài 7: 3 năm', (pa1(3), pa2(12)), (450, Fr(2316, 5))); chk('CSC bài 7: 10 năm', (pa1(10), pa2(40)), (2550, 2216))
+
+# ---------- Lớp 11 · Cấp số nhân (data/lop11/c2-cap-so-nhan.js) ----------
+sol = [(u, q) for u in range(1, 30) for q in range(-6, 7) if q and u * q + u * q ** 3 == 30 and u * q ** 2 + u * q ** 4 == 90]
+chk('CSN VD: (u1, q)', sol, [(1, 3)]); chk('CSN VD: n', next(n for n in range(1, 20) if (3 ** n - 1) // 2 == 3280), 8); chk('CSN VD: 729', next(n for n in range(1, 20) if 3 ** (n - 1) == 729), 7)
+chk('CSN bài 1: S10', sum(3 * 2 ** k for k in range(10)), 3069)
+sol = [(a, a * q, a * q * q) for q in [Fr(k, 6) for k in range(7, 60)] for a in [Fr(39) / (1 + q + q * q)] if (a + 1) + (a * q * q - 13) == 2 * a * q]
+chk('CSN bài 2: ba số', sol, [(3, 9, 27)])
+sol = [(8 - d, 8, 8 + d) for d in range(-20, 21) if (11 - d) * (14 + d) == 144]
+chk('CSN bài 3: ba số', sorted(sol), [(6, 8, 10), (13, 8, 3)])
+chk('CSN VD2: sau 5 năm', round(100 * 1.065 ** 5, 1), 137.0); chk('CSN VD2: số năm vượt 150', next(n for n in range(1, 30) if 100 * 1.065 ** n > 150), 7)
+chk('CSN bài 4: máy photocopy', round(60 * 0.85 ** 5, 2), 26.62)
+chk('CSN bài 5: sau 2 giờ', 50 * 2 ** (120 // 15), 12800); chk('CSN bài 5: phút', 15 * next(k for k in range(40) if 50 * 2 ** k == 409600), 195)
+T_ = 0
+for _ in range(12): T_ = (T_ + 5) * 1.005
+chk('CSN bài 6: gửi đều (mô phỏng từng tháng)', round(T_, 2), 61.99)
+a_ = [1000.0]
+for _ in range(12): a_.append(1.1 * (a_[-1] - 150))
+chk('CSN bài 7: a5', round(a_[4], 3), 698.335); chk('CSN bài 7: liều diệt hết', next(i + 1 for i, v in enumerate(a_) if v <= 150), 10)
+
+# ---------- Lớp 11 · Mẫu số liệu ghép nhóm (data/lop11/c3-mau-so-lieu-ghep-nhom.js): bung mẫu thành từng giá trị đều trong nhóm ----------
+def dac_trung(b, h, f):
+    n = sum(f); c = [v + Fr(h, 2) for v in b]; mean = sum(ci * fi for ci, fi in zip(c, f)) / n
+    def q(p):
+        t, cum = p * n, 0
+        for i, fi in enumerate(f):
+            if cum + fi >= t: return b[i] + (t - cum) / fi * h
+            cum += fi
+    i = max(range(len(f)), key=lambda j: f[j]); fp = f[i - 1] if i else 0; fn = f[i + 1] if i + 1 < len(f) else 0
+    return mean, q(Fr(1, 4)), q(Fr(1, 2)), q(Fr(3, 4)), b[i] + Fr(f[i] - fp, (f[i] - fp) + (f[i] - fn)) * h
+D = dac_trung([0, 10, 20, 30, 40], 10, [5, 12, 14, 6, 3])
+chk('GN VD: tb, Q1, Me, Q3, Mo', tuple(round(float(v), 2) for v in D), (22.5, 14.17, 22.14, 29.29, 22.0))
+D = dac_trung([0, 20, 40, 60, 80], 20, [6, 14, 25, 30, 25]); chk('GN bài 1: tb, Me, Mo', (float(D[0]), round(float(D[2]), 2), float(D[4])), (60.8, 63.33, 70.0))
+xx_ = [v for v in range(0, 200) if dac_trung([0, 2, 4, 6, 8], 2, [3, 8, v, 12, 4])[0] == Fr(26, 5)]
+chk('GN bài 2: x', xx_, [33]); chk('GN bài 2: Me', round(float(dac_trung([0, 2, 4, 6, 8], 2, [3, 8, 33, 12, 4])[2]), 2), 5.15)
+ab_ = [(a, 26 - a) for a in range(0, 27) if dac_trung([0, 5, 10, 15, 20], 5, [4, a, 15, 26 - a, 5])[2] == 14]
+chk('GN bài 3: (a, b)', ab_, [(9, 17)]); chk('GN bài 3: tb', dac_trung([0, 5, 10, 15, 20], 5, [4, 9, 15, 17, 5])[0], Fr(27, 2))
+chk('GN VD2: Q3 doanh số', round(float(dac_trung([20, 40, 60, 80, 100], 20, [6, 14, 20, 15, 5])[3]), 1), 86.7)
+chk('GN bài 4: Q1 chạy', float(dac_trung([12, 13, 14, 15, 16], 1, [4, 10, 18, 11, 5])[1]), 13.8)
+D = dac_trung([150, 160, 170, 180, 190, 200], 10, [8, 17, 32, 23, 12, 8]); chk('GN bài 5: Mo, Me', (float(D[4]), round(float(D[2]), 2)), (176.25, 177.81))
+D = dac_trung([3, 6, 9, 12, 15], 3, [20, 55, 45, 30, 10]); chk('GN bài 6: tb, Q3, Mo', (round(float(D[0]), 2), float(D[3]), round(float(D[4]), 2)), (9.66, 12.0, 8.33))
+
 print('\nKẾT QUẢ:', 'ĐẠT ✓ – mọi đáp số khớp phép tính độc lập' if ok_all else 'CHƯA ĐẠT ✗')
 raise SystemExit(0 if ok_all else 1)

@@ -139,12 +139,12 @@ const Vdc = (() => {
     let s = `<section class="sh-page">${head}<h1 class="sh-title">PHIẾU LUYỆN TẬP</h1><p class="sh-sub">${t.title}</p>
       <p class="sh-info">Họ và tên: .......................................................... Lớp: .............. Ngày: ......../......../........</p>
       <div class="sh-kt"><p class="sh-h">KIẾN THỨC TRỌNG TÂM</p>${t.kt.map(k => `<div class="sh-kt-i"><b>${k.t}.</b> ${k.b}</div>`).join('')}</div>`;
-    if (o.vd) s += `<p class="sh-h">VÍ DỤ MẪU</p>${t.dang.map((d, i) => d.vd.map(v => `<div class="sh-vd"><p><b>Dạng ${i + 1} – Ví dụ.</b> ${v.de}</p>${v.fig ? `<div class="sh-fig">${v.fig}</div>` : ''}<ol class="sh-lg">${v.lg.map(x => `<li>${x}</li>`).join('')}</ol><p><b>Đáp số:</b> ${v.ds}</p></div>`).join('')).join('')}`;
+    if (o.vd) s += `<p class="sh-h">VÍ DỤ MẪU</p>${t.dang.map((d, i) => d.vd.map(v => `<div class="sh-vd"><div class="sh-de"><b>Dạng ${i + 1} – Ví dụ.</b> ${v.de}</div>${v.fig ? `<div class="sh-fig">${v.fig}</div>` : ''}<ol class="sh-lg">${v.lg.map(x => `<li>${x}</li>`).join('')}</ol><p><b>Đáp số:</b> ${v.ds}</p></div>`).join('')).join('')}`;
     s += `<p class="sh-h">ĐỀ LUYỆN TẬP</p>`;
     t.dang.forEach((d, i) => {
       s += `<p class="sh-dang">Dạng ${i + 1}. ${d.ten}</p>`;
       d.bt.forEach(b => {
-        s += `<div class="sh-q"><p><b>Bài ${b.n}</b> <i>(${esc(b.muc)})</i>. ${b.de}</p>${b.figQ ? `<div class="sh-fig">${b.figQ}</div>` : ''}<div class="sh-lines">${'<i></i>'.repeat(b.dong || 8)}</div></div>`;
+        s += `<div class="sh-q"><div class="sh-de"><b>Bài ${b.n}</b> <i>(${esc(b.muc)})</i>. ${b.de}</div>${b.figQ ? `<div class="sh-fig">${b.figQ}</div>` : ''}<div class="sh-lines">${'<i></i>'.repeat(b.dong || 8)}</div></div>`;
       });
     });
     const qrNote = base ? `Quét mã QR để xem lời giải từng bài.` : `Chưa có địa chỉ web nên chưa in được mã QR – thầy điền <code>siteUrl</code> trong config.js sau khi đưa web lên mạng.`;

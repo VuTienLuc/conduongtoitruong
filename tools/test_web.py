@@ -119,6 +119,12 @@ async def main():
                     if (!r) { r = document.createElement('div'); r.id = 'print-root'; document.body.appendChild(r); }
                     r.innerHTML = Vdc.sheetHTML(Vdc.get(g, id), o); document.body.classList.add('printing'); }''', [g, i, opt])
                 await pg.evaluate("MathTS.done(document.getElementById('print-root'))")
+                await pg.emulate_media(media='print')
+                tran = await pg.evaluate('''() => [...document.querySelectorAll('#print-root mjx-container')].filter(c => {
+                    const box = c.parentElement.closest('.sh-hint > div, .sh-de, li, p, td'); const m = c.firstElementChild;
+                    return box && m && m.getBoundingClientRect().right > box.getBoundingClientRect().right + 2; }).map(c => c.closest('.sh-hint, .sh-q, .sh-vd, .sh-kt, li, p').textContent.slice(0, 50))''')
+                await pg.emulate_media(media='screen')
+                for t_ in tran: fails.append(f'{g}/{i}: công thức tràn khung trên phiếu – "{t_}"')
                 qn = await pg.locator('#print-root .qr').count()
                 if qn != nb: fails.append(f'{g}/{i}: phiếu có {qn} mã QR, cần {nb}')
                 pdf = os.path.join(OUT, f'vdc-{g}-{i}-{"vd" if opt["vd"] else "lam"}.pdf')

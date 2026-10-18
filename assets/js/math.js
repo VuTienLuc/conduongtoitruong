@@ -26,11 +26,22 @@ const MathTS = (() => {
     busy = busy.then(async () => {
       for (const n of nodes) {
         if (!n.isConnected || !HAS.test(n.textContent)) continue;
-        try { await MathJax.typesetPromise([n]); }
+        try { await MathJax.typesetPromise([n]); fit(n); }
         catch (e) { if (n.isConnected) setTimeout(() => add(n), 30); }
       }
     });
   }
+  // Công thức dài hơn khung (điện thoại): cho cuộn ngang riêng công thức đó, trang không bị tràn.
+  function fit(root) {
+    (root || document.body).querySelectorAll('mjx-container').forEach(c => {
+      c.classList.remove('mjx-wide');
+      const box = c.parentElement && c.parentElement.closest('li, p, div, td, th, section, article');
+      const inner = c.firstElementChild, w = Math.max(c.getBoundingClientRect().width, inner ? inner.getBoundingClientRect().width : 0);
+      if (box && w > box.clientWidth + 1) c.classList.add('mjx-wide');
+    });
+  }
+  let rz = null;
+  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => fit(document.body), 150); });
   function add(n) {
     if (!n || n.nodeType !== 1) n = n && n.parentElement;
     if (!n || n.closest('mjx-container')) return;
@@ -47,7 +58,7 @@ const MathTS = (() => {
     for (let i = 0; i < 100 && !started; i++) await new Promise(r => setTimeout(r, 100));
     if (!window.MathJax || !MathJax.typesetPromise) return;
     await busy;
-    try { await MathJax.typesetPromise([node || document.body]); } catch (e) { /* bỏ qua */ }
+    try { await MathJax.typesetPromise([node || document.body]); fit(node); } catch (e) { /* bỏ qua */ }
   }
-  return { start, typeset: add, done };
+  return { start, typeset: add, done, fit };
 })();

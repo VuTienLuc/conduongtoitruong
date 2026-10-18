@@ -19,6 +19,8 @@ const load = f => {
   const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
   try { new vm.Script(code, { filename: f }); } catch (e) { err(f, 'lỗi cú pháp – ' + e.message); return; }
   if (/\bTODO\b|\bFIXME\b|phần còn lại giữ nguyên/.test(code)) err(f, 'còn chỗ làm tắt (TODO/FIXME/phần còn lại)');
+  // Công thức trong chuỗi nháy đơn bị mất dấu \ khi chạy: phải viết bằng S`…`.
+  if (f.startsWith('data/')) code.split('\n').forEach((l, i) => { if (/(^|[\s,(:\[])'[^'`]*\\[(\[][^'`]*'/.test(l)) err(`${f}:${i + 1}`, 'công thức \\( \\) trong chuỗi thường – dùng S`…`'); });
   try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc;`, ctx, { filename: f }); }
   catch (e) { err(f, 'lỗi khi chạy – ' + e.message); }
 };
