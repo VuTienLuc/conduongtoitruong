@@ -122,5 +122,42 @@ sa, ca = 3 / 5, 4 / 5
 chk('CĐ10 B2: P', (2 * sa + ca) / (sa - 2 * ca), -2)
 chk('CĐ10 B3: BH', 81 / 15, 5.4); chk('CĐ10 B3: AH', 9 * 12 / 15, 7.2); chk('CĐ10 B3: HC', 144 / 15, 9.6)
 
+# ---------- Lớp 10 · Chương II · GTLN, GTNN trên miền nghiệm (data/lop10/c2-toi-uu-mien-nghiem.js) ----------
+from itertools import combinations as _cb
+
+
+def dinh(cons):  # cons: (a, b, c) nghĩa là a·x + b·y ≤ c
+    V = []
+    for (a1, b1, c1), (a2, b2, c2) in _cb(cons, 2):
+        d = a1 * b2 - a2 * b1
+        if d == 0: continue
+        px, py = Fr(c1 * b2 - c2 * b1, d), Fr(a1 * c2 - a2 * c1, d)
+        if all(a * px + b * py <= c for a, b, c in cons) and (px, py) not in V: V.append((px, py))
+    return V
+
+
+def toi_uu(cons, f):
+    vals = [(f(px, py), px, py) for px, py in dinh(cons)]
+    return max(vals), min(vals)
+
+
+X0, Y0 = (-1, 0, 0), (0, -1, 0)
+mx, mn = toi_uu([X0, Y0, (1, 1, 6), (1, 2, 8)], lambda a, b: 3 * a + 4 * b)
+chk('L10 VD1: max F', mx[0], 20); chk('L10 VD1: tại (4;2)', (mx[1], mx[2]), (4, 2)); chk('L10 VD1: min F', mn[0], 0)
+mx, _ = toi_uu([X0, Y0, (2, 1, 8), (1, 3, 9)], lambda a, b: 2 * a + 3 * b)
+chk('L10 Bài 1: max', mx[0], 12); chk('L10 Bài 1: tại (3;2)', (mx[1], mx[2]), (3, 2))
+mx, mn = toi_uu([(-1, 0, -1), (0, -1, -1), (1, 1, 5)], lambda a, b: a - 2 * b)
+chk('L10 Bài 2: max', mx[0], 2); chk('L10 Bài 2: min', mn[0], -7); chk('L10 Bài 2: min tại (1;4)', (mn[1], mn[2]), (1, 4))
+mm = [mv for mv in [Fr(k, 4) for k in range(-40, 41)] if toi_uu([X0, Y0, (1, 1, 4)], lambda a, b: a + mv * b)[0][0] == 8]
+chk('L10 Bài 3: m (quét m = k/4)', mm, [2])
+mx, _ = toi_uu([X0, Y0, (2, 1, 10), (1, 2, 8)], lambda a, b: 40 * a + 30 * b)
+chk('L10 VD2: lãi max', mx[0], 220); chk('L10 VD2: tại (4;2)', (mx[1], mx[2]), (4, 2))
+_, mn = toi_uu([(-3, -1, -9), (-1, -2, -8), (1, 0, 5), (0, 1, 5), X0, Y0], lambda a, b: 20 * a + 25 * b)
+chk('L10 Bài 4: chi phí min', mn[0], 115); chk('L10 Bài 4: tại (2;3)', (mn[1], mn[2]), (2, 3))
+_, mn = toi_uu([(-3, -2, -14), (-1, -2, -12), (1, 0, 6), (0, 1, 6), X0, Y0], lambda a, b: 4 * a + 3 * b)
+chk('L10 Bài 5: min liên tục 20,5 tại (1; 5,5)', (mn[0], mn[1], mn[2]), (Fr(41, 2), 1, Fr(11, 2)))
+nguyen = min((4 * a + 3 * b, a, b) for a in range(7) for b in range(7) if 3 * a + 2 * b >= 14 and a + 2 * b >= 12)
+chk('L10 Bài 5: nghiệm nguyên', nguyen, (22, 1, 6))
+
 print('\nKẾT QUẢ:', 'ĐẠT ✓ – mọi đáp số khớp phép tính độc lập' if ok_all else 'CHƯA ĐẠT ✗')
 raise SystemExit(0 if ok_all else 1)

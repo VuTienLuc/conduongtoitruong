@@ -95,6 +95,7 @@ table.struct th[scope=row]{white-space:nowrap}
 .tno.big{width:64px;height:64px;font-size:30px;border-radius:18px}
 .tbody{display:flex;flex-direction:column;gap:3px;min-width:0}
 .tbai{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--primary);margin:0}
+.tbai mjx-container,.tbai mjx-container *{text-transform:none}
 .ttitle{font:700 20px/1.3 var(--f-head)}
 .tdesc{font-size:15px;color:var(--muted);margin:2px 0 0}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
@@ -230,6 +231,52 @@ table.struct th[scope=row]{white-space:nowrap}
 .fig .f-acc{fill:var(--accent)}
 .fig .f-num{fill:var(--ink);font:600 13px var(--f-body)}
 
+/* ---------- Trang chọn lớp ---------- */
+.grade-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr));gap:18px;margin-top:6px}
+.grade-card{display:flex;gap:16px;align-items:center;text-decoration:none;color:var(--ink);margin:0}
+.grade-card.soon{opacity:.72}
+.g-big{flex:none;display:grid;place-items:center;width:64px;height:64px;border-radius:18px;background:var(--primary);color:var(--primary-ink);font:800 30px/1 var(--f-head)}
+.g-body{display:flex;flex-direction:column;gap:3px;min-width:0}
+.g-body b{font:700 21px/1.3 var(--f-head)}
+.g-body > span:not(.chips){color:var(--muted);font-size:15px}
+.chip.warnc{background:var(--warn-soft);color:var(--warn)}
+.empty{color:var(--muted);font-style:italic;margin:6px 0 0}
+
+/* ---------- Lớp 10–12: vận dụng, vận dụng cao ---------- */
+.muc{display:inline-block;vertical-align:middle;font:800 13px/1 var(--f-body);letter-spacing:.5px;padding:5px 9px;border-radius:8px;margin-left:6px}
+.muc.vd{background:var(--primary-soft);color:var(--primary)}
+.muc.vdc{background:var(--bad-soft);color:var(--bad)}
+.kt-item + .kt-item{margin-top:14px;padding-top:12px;border-top:1.5px dashed var(--grid)}
+.kt-item h4{margin-bottom:4px}
+.lg-steps{padding-left:24px;margin:8px 0}
+.lg-steps li{margin:6px 0}
+.lg-steps li.hid,.ds.hid{display:none}
+h3.sub{margin:22px 0 0}
+.bt-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 6px}
+.tog.small{margin-left:auto;font-size:14px;min-height:36px}
+.ds-box{background:var(--ok-soft);border-radius:12px;padding:10px 14px;margin:12px 0 0}
+.ds-final{background:var(--ok-soft);border-radius:12px;padding:10px 14px;font-size:18px}
+.dang{scroll-margin-top:16px}
+.tabs a.tab{flex:none}
+
+/* Phiếu VD–VDC (xem trước + in) */
+.sh-h{font:700 11.5pt/1.3 "Times New Roman",serif;letter-spacing:.5px;margin:10px 0 4px;border-bottom:1px solid #000;padding-bottom:2px}
+.sh-kt{font-size:11pt}
+.sh-kt-i{margin:2px 0 4px}
+.sh-dang{font-weight:700;font-style:italic;margin:8px 0 2px}
+.sh-vd{font-size:11pt;margin:4px 0 8px;break-inside:avoid}
+.sh-vd p{margin:0 0 3px}
+.sh-lg{margin:2px 0;padding-left:20px}
+.sh-lines{margin-top:2px}
+.sh-lines i{display:block;height:8mm;border-bottom:1px solid #8d939d}
+.sh-dang,.sh-q > p,.sh-h{break-after:avoid;page-break-after:avoid}
+.sh-hints{margin-top:10px;break-inside:avoid-page}
+.sh-note{font:italic 400 9.5pt/1.3 "Times New Roman",serif;letter-spacing:0}
+.sh-hgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.sh-hint{display:flex;gap:8px;align-items:flex-start;font-size:10.5pt;border:1px dashed #777;border-radius:6px;padding:5px 7px;break-inside:avoid}
+.sh-qr{flex:none;width:21mm;height:21mm}
+.sh-qr .qr{width:100%;height:100%;display:block}
+
 /* ---------- Điện thoại ---------- */
 @media (max-width:560px){
   body{font-size:17px}
@@ -243,6 +290,8 @@ table.struct th[scope=row]{white-space:nowrap}
   .sheet{font-size:11pt}
   table.struct{font-size:15px}
   table.struct th,table.struct td{padding:8px}
+  .sh-hgrid{grid-template-columns:1fr}
+  .tog.small{margin-left:0}
   .card table:not(.struct){display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 

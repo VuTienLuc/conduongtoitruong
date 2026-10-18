@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gộp cả thư mục thành MỘT tệp dist/toan-vao-10.html (gửi Zalo, đăng web, mở trực tiếp).
+"""Gộp cả thư mục thành MỘT tệp dist/con-duong-toi-truong.html (gửi Zalo, đăng web, mở trực tiếp).
 Bản gộp lấy MathJax từ CDN jsDelivr (cần mạng); bản thư mục dùng MathJax đặt sẵn, chạy không cần mạng.
 Chạy: python3 tools/build.py"""
 import os, re
@@ -27,7 +27,7 @@ def inline(m):
 
 html = re.sub(r'<script src="([^"]+)"(?: async)?></script>', inline, html)
 os.makedirs(os.path.join(ROOT, 'dist'), exist_ok=True)
-out = os.path.join(ROOT, 'dist', 'toan-vao-10.html')
+out = os.path.join(ROOT, 'dist', 'con-duong-toi-truong.html')
 with open(out, 'w', encoding='utf-8') as f:
     f.write(html)
 print(f'Đã tạo {os.path.relpath(out, ROOT)} ({len(html.encode()) // 1024} KB)')

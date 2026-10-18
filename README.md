@@ -19,7 +19,10 @@ Web tự học cho học sinh lớp 9, bám cấu trúc đề thống nhất nă
 Mỗi chủ đề: Lý thuyết · Mẹo nhớ · Trắc nghiệm hiểu bài (8 câu) · Tự luận mẫu có barem từng bước · Phiếu làm bài in A4 (3 bài, khung ô li, 2 trang; tuỳ chọn kèm bài mẫu và đáp án) · Prompt nhờ ChatGPT / Gemini / Claude chấm và gợi ý phần chưa làm.
 
 ## Dùng
-- Mở `index.html` trực tiếp (chạy cả khi không có mạng), hoặc gửi một tệp `dist/toan-vao-10.html`.
+- Mở `index.html` trực tiếp (chạy cả khi không có mạng), hoặc gửi một tệp `dist/con-duong-toi-truong.html`.
 - Đăng web: đưa cả thư mục lên GitHub rồi Vercel (như Học mà chơi).
 - Kế hoạch 6 tháng luyện thi: `docs/`.
 - Sửa nội dung: `data/vao-10/cdNN-*.js`; hướng dẫn chi tiết cho AI trong `CLAUDE.md`.
+
+## Lớp 10 – 11 – 12: vận dụng, vận dụng cao
+Dành cho học sinh khá, giỏi lấy điểm cao giữa kì, cuối kì. Mỗi chủ đề: kiến thức trọng tâm, các dạng (phương pháp, ví dụ mẫu, bài tương tự có gợi ý và lời giải). Phiếu PDF có dòng kẻ để làm, gợi ý phương pháp ở cuối phiếu và mã QR quét ra lời giải từng bài. Nội dung soạn theo tài liệu thầy để trong `tai-lieu/`.

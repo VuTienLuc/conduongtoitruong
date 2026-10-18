@@ -39,9 +39,12 @@ async def main():
             await pg.goto(base + '#/')
             await pg.wait_for_function('window.MathJax && MathJax.typesetPromise')
             ids = await pg.evaluate('Topics.list.map(t => t.id)')
+            await pg.goto(base + '#/vao-10'); await pg.wait_for_timeout(200)
             n = await pg.locator('.tcard').count()
             if n != len(ids): fails.append(f'{name}: trang chủ có {n} thẻ, cần {len(ids)}')
-            routes = ['#/', '#/lo-trinh'] + [f'#/cd/{i}/{t}' for i in ids for t in TABS]
+            vdc = await pg.evaluate("Vdc.list.map(t => [t.grade, t.id, Vdc.allBt(t).length])")
+            routes = ['#/', '#/vao-10', '#/lo-trinh', '#/lop10', '#/lop11', '#/lop12'] + [f'#/cd/{i}/{t}' for i in ids for t in TABS]
+            routes += [r for g, i, nb in vdc for r in [f'#/{g}/{i}', f'#/{g}/{i}/phieu'] + [f'#/{g}/{i}/lg/{k}' for k in range(1, nb + 1)]]
             for r in routes:
                 await pg.goto(base + r)
                 await pg.wait_for_timeout(350)
@@ -99,6 +102,44 @@ async def main():
                 tag = 'kèm mẫu + đáp án' if opt['model'] else 'phiếu làm bài'
                 print(f'  {i}: {tag} = {n} trang')
                 if n > lim: fails.append(f'{i}: {tag} {n} trang (tối đa {lim})')
+        # Lớp 10–12: trang chủ đề (gợi ý, đáp số, ví dụ mẫu), phiếu PDF có QR giải mã được.
+        import cv2, numpy as np
+        vdc = await pg.evaluate("Vdc.list.map(t => [t.grade, t.id, Vdc.allBt(t).length])")
+        await pg.evaluate("CONFIG.siteUrl = 'https://vi-du.vercel.app/'")
+        for g, i, nb in vdc:
+            await pg.goto(base + f'#/{g}/{i}'); await pg.wait_for_timeout(250)
+            card = pg.locator('.bt-card').first
+            await card.locator('[data-show="hint"]').click()
+            if not await card.locator('.hint').is_visible(): fails.append(f'{g}/{i}: nút Gợi ý không mở')
+            for vd in await pg.locator('.vd-card').all():
+                await vd.locator('[data-all]').click()
+                if await vd.locator('.rv > li.hid').count(): fails.append(f'{g}/{i}: ví dụ mẫu còn bước ẩn')
+            for opt in [{'vd': False, 'qr': True}, {'vd': True, 'qr': True}]:
+                await pg.evaluate('''([g, id, o]) => { let r = document.getElementById('print-root');
+                    if (!r) { r = document.createElement('div'); r.id = 'print-root'; document.body.appendChild(r); }
+                    r.innerHTML = Vdc.sheetHTML(Vdc.get(g, id), o); document.body.classList.add('printing'); }''', [g, i, opt])
+                await pg.evaluate("MathTS.done(document.getElementById('print-root'))")
+                qn = await pg.locator('#print-root .qr').count()
+                if qn != nb: fails.append(f'{g}/{i}: phiếu có {qn} mã QR, cần {nb}')
+                pdf = os.path.join(OUT, f'vdc-{g}-{i}-{"vd" if opt["vd"] else "lam"}.pdf')
+                await pg.pdf(path=pdf, format='A4', prefer_css_page_size=True, print_background=True)
+                print(f'  {g}/{i}: phiếu {"kèm ví dụ" if opt["vd"] else "luyện tập"} = {pdf_pages(pdf)} trang, {qn} QR')
+                if not opt['vd']:
+                    # Giải mã từng QR (chụp riêng từng mã) và so với đường link lời giải.
+                    # Lấy đúng mã SVG in trên phiếu, vẽ to trên trang riêng rồi giải mã.
+                    qrs = await pg.evaluate("[...document.querySelectorAll('#print-root .sh-qr svg')].map(e => e.outerHTML)")
+                    det = cv2.QRCodeDetector()
+                    qp = await b.new_page(viewport={'width': 400, 'height': 400})
+                    for k, svg in enumerate(qrs, 1):
+                        await qp.set_content('<body style="margin:0;background:#fff"><div id="q" style="width:320px;height:320px">' + svg.replace('<svg ', '<svg width="320" height="320" ', 1) + '</div></body>')
+                        img = cv2.imdecode(np.frombuffer(await qp.locator('#q').screenshot(), np.uint8), cv2.IMREAD_COLOR)
+                        img = cv2.copyMakeBorder(img, 40, 40, 40, 40, cv2.BORDER_CONSTANT, value=(255, 255, 255))
+                        txt = det.detectAndDecode(img)[0]
+                        want = f'https://vi-du.vercel.app/#/{g}/{i}/lg/{k}'
+                        if txt != want: fails.append(f'{g}/{i}: QR bài {k} đọc được "{txt}", cần "{want}"')
+                    await qp.close()
+                    print(f'  {g}/{i}: đã giải mã {len(qrs)} mã QR')
+                await pg.evaluate("document.body.classList.remove('printing'); document.getElementById('print-root').innerHTML=''")
         if errs: fails.append(f'lỗi JS: {errs[:3]}')
         await b.close()
     srv.shutdown()

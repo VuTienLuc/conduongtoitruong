@@ -97,7 +97,19 @@ const App = (() => {
       <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi nền sáng/tối">🌓</button></header>`;
   }
 
-  /* ---------- Trang chủ ---------- */
+  /* ---------- Trang chọn lớp (#/) ---------- */
+  function picker() {
+    const n = g => (typeof Vdc !== 'undefined' ? Vdc.ofGrade(g).length : 0);
+    const card = (href, big, title, sub, chip, soon) => `<a class="card grade-card${soon ? ' soon' : ''}" href="${href}"><span class="g-big">${big}</span>
+      <span class="g-body"><b>${title}</b><span>${sub}</span><span class="chips">${chip}</span></span></a>`;
+    const vdc = ['lop10', 'lop11', 'lop12'].map((g, i) => card(`#/${g}`, 10 + i, `Toán ${10 + i}`, 'Vận dụng – vận dụng cao · lấy điểm cao giữa kì, cuối kì',
+      n(g) ? `<span class="chip ok">${n(g)} chủ đề</span>` : '<span class="chip">Đang soạn</span>', !n(g))).join('');
+    view().innerHTML = `${topBar()}<main class="wrap">
+      <section class="card hero"><h2>Em đang học lớp mấy?</h2><p>Chọn đúng phần dành cho em. Mỗi chủ đề có kiến thức trọng tâm, ví dụ mẫu, bài luyện tập, phiếu in để làm trên giấy và lời giải.</p></section>
+      <div class="grade-grid">${card('#/vao-10', 9, 'Ôn thi vào lớp 10', 'Lớp 9 · TP.HCM 2026 – 2027 · 10 chủ đề theo cấu trúc 7 bài', `<span class="chip ok">${Topics.list.length} chủ đề</span>`)}${vdc}</div></main>`;
+  }
+
+  /* ---------- Trang chủ Ôn thi vào 10 (#/vao-10) ---------- */
   function home() {
     const topics = Topics.list;
     const cards = topics.map(t => {
@@ -114,7 +126,7 @@ const App = (() => {
     }).join('');
     const rows = STRUCT.map(([b, d, nd, ids]) => `<tr><th scope="row">${b}</th><td class="num">${d}</td><td>${esc(nd)}</td>
       <td>${ids.map(id => { const t = Topics.get(id); return t ? `<a href="#/cd/${id}/lt">Chủ đề ${t.no}</a>` : ''; }).join(' · ')}</td></tr>`).join('');
-    view().innerHTML = `${topBar()}<main class="wrap">
+    view().innerHTML = `${topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/">← Chọn lớp</a></div>
       <section class="hero card"><p class="pill">🎯 ${esc(CONFIG.examLine)}</p>
         <h2>Mỗi chủ đề học theo 6 bước</h2>
         <ol class="steps6"><li>📘 Đọc <b>lý thuyết</b></li><li>💡 Thuộc <b>mẹo nhớ</b></li><li>✅ Làm <b>trắc nghiệm hiểu bài</b></li>
@@ -138,7 +150,7 @@ const App = (() => {
         const t = id && Topics.get(id);
         return `<tr><th scope="row">${n}</th><td class="nowrap">${d}</td><td>${esc(w)}</td><td>${t ? `<a href="#/cd/${id}/lt">Chủ đề ${t.no}</a>` : '—'}</td></tr>`;
       }).join('')}</tbody></table></div>`).join('');
-    view().innerHTML = `${topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/">← Trang chủ</a></div>
+    view().innerHTML = `${topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/vao-10">← Ôn thi vào 10</a></div>
       <section class="card hero"><h2>Lộ trình 26 tuần</h2><p>Mỗi tuần: 5 buổi × 90 phút (10 phút ôn mẹo nhớ · 15 phút giữ điểm dễ · 45 phút chủ đề tuần · 15 phút ghi sổ lỗi · 5 phút tự đánh giá), thứ Bảy kiểm tra nhanh 45 phút. Tuần 9 và tuần 18 là hai cửa kiểm tra: chưa đạt thì ôn lại 1 tuần rồi mới đi tiếp.</p></section>
       ${body}</main>`;
   }
@@ -152,9 +164,9 @@ const App = (() => {
     const tabs = TABS.map(([k, ic, name]) => `<a class="tab${k === tab ? ' on' : ''}" href="#/cd/${id}/${k}" ${k === tab ? 'aria-current="page"' : ''}><span aria-hidden="true">${ic}</span> ${name}</a>`).join('');
     const ti = TABS.findIndex(x => x[0] === tab), nt = TABS[ti + 1];
     const nextBtn = nt ? `<a class="btn primary" href="#/cd/${id}/${nt[0]}">Tiếp: ${nt[1]} ${nt[2]} →</a>`
-      : (next ? `<a class="btn primary" href="#/cd/${next.id}/lt">Sang chủ đề ${next.no} →</a>` : '<a class="btn primary" href="#/">Về trang chủ</a>');
+      : (next ? `<a class="btn primary" href="#/cd/${next.id}/lt">Sang chủ đề ${next.no} →</a>` : '<a class="btn primary" href="#/vao-10">Về danh sách chủ đề</a>');
     view().innerHTML = `${topBar()}<main class="wrap">
-      <div class="toolbar"><a class="back" href="#/">← Các chủ đề</a>
+      <div class="toolbar"><a class="back" href="#/vao-10">← Các chủ đề</a>
         <span class="nav-mini">${prev ? `<a href="#/cd/${prev.id}/${tab}">‹ Chủ đề ${prev.no}</a>` : ''}${next ? `<a href="#/cd/${next.id}/${tab}">Chủ đề ${next.no} ›</a>` : ''}</span></div>
       <section class="thead card"><span class="tno big">${t.no}</span><div><p class="tbai">${esc(t.bai)}</p><h2>${t.title}</h2><p class="tdesc">${t.desc}</p></div></section>
       <nav class="tabs" aria-label="Các bước học">${tabs}</nav>
@@ -355,7 +367,9 @@ THẦY HÃY
     const parts = (location.hash || '#/').replace(/^#\/?/, '').split('/');
     if (parts[0] === 'cd') topic(parts[1], parts[2] || 'lt');
     else if (parts[0] === 'lo-trinh') roadmap();
-    else home();
+    else if (parts[0] === 'vao-10') home();
+    else if (typeof Vdc !== 'undefined' && Vdc.route(parts)) { /* lớp 10, 11, 12 */ }
+    else picker();
     window.scrollTo(0, 0);
     bindTheme();
   }
@@ -373,7 +387,7 @@ THẦY HÃY
     window.addEventListener('hashchange', route);
     route();
   }
-  return { start, promptGrade, promptHint, sheetHTML, RULES, STRUCT };
+  return { start, topBar, promptGrade, promptHint, sheetHTML, RULES, STRUCT };
 })();
 
 document.addEventListener('DOMContentLoaded', App.start);

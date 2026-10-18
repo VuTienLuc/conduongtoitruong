@@ -130,5 +130,36 @@ const Fig = (() => {
     return s + '</svg>';
   }
 
-  return { parab, geo, solid };
+  /* ---------- Mặt phẳng toạ độ: đường thẳng ax + by = c, miền tô, các đỉnh ----------
+     o = { xr:[x0,x1], yr:[y0,y1], w, step (vạch số cách nhau), lines:[{a,b,c,lab:[x,y,'d1']}],
+           poly:[[x,y]…] (miền nghiệm, tô nhạt), pts:[[x,y,'A',dx,dy]…] } */
+  function plane(o) {
+    const [x0, x1] = o.xr, [y0, y1] = o.yr, W = o.w || 300, u = W / (x1 - x0), H = f2((y1 - y0) * u);
+    const X = x => f2((x - x0) * u), Y = y => f2((y1 - y) * u), st = o.step || 1;
+    let s = `<svg class="fig" viewBox="-16 -16 ${W + 32} ${H + 32}" role="img" aria-label="${o.label || 'Miền nghiệm'}">`;
+    s += '<g class="f-grid">';
+    for (let x = Math.ceil(x0 / st) * st; x <= x1; x += st) s += `<line x1="${X(x)}" y1="0" x2="${X(x)}" y2="${H}"/>`;
+    for (let y = Math.ceil(y0 / st) * st; y <= y1; y += st) s += `<line x1="0" y1="${Y(y)}" x2="${W}" y2="${Y(y)}"/>`;
+    s += '</g>';
+    if (o.poly) s += `<path class="f-shade" d="M${o.poly.map(([x, y]) => `${X(x)} ${Y(y)}`).join('L')}Z"/>`;
+    s += `<g class="f-axis"><line x1="0" y1="${Y(0)}" x2="${W + 8}" y2="${Y(0)}"/><line x1="${X(0)}" y1="${H}" x2="${X(0)}" y2="-8"/>`;
+    s += `<path d="M${W + 8} ${Y(0)}l-7 -4v8z" class="f-fill"/><path d="M${X(0)} -8l-4 7h8z" class="f-fill"/></g>`;
+    s += `<text class="f-lab" x="${W + 4}" y="${Y(0) + 16}">x</text><text class="f-lab" x="${X(0) + 8}" y="-2">y</text><text class="f-lab" x="${X(0) - 14}" y="${Y(0) + 15}">O</text>`;
+    for (let x = Math.ceil(x0 / st) * st; x <= x1 - st / 2; x += st) if (x) s += `<text class="f-num" x="${X(x)}" y="${Y(0) + 15}" text-anchor="middle">${num(x)}</text>`;
+    for (let y = Math.ceil(y0 / st) * st; y <= y1 - st / 2; y += st) if (y) s += `<text class="f-num" x="${X(0) - 6}" y="${Y(y) + 4}" text-anchor="end">${num(y)}</text>`;
+    (o.lines || []).forEach(({ a, b, c, lab }) => {
+      let p;
+      if (Math.abs(b) < 1e-12) p = [[c / a, y0], [c / a, y1]];
+      else p = [[x0, (c - a * x0) / b], [x1, (c - a * x1) / b]];
+      s += `<line class="f-line2" x1="${X(p[0][0])}" y1="${Y(p[0][1])}" x2="${X(p[1][0])}" y2="${Y(p[1][1])}"/>`;
+      if (lab) s += `<text class="f-lab f-acc" x="${X(lab[0])}" y="${Y(lab[1])}">${lab[2]}</text>`;
+    });
+    (o.pts || []).forEach(([x, y, lab, dx = 6, dy = -6]) => {
+      s += `<circle class="f-dot" cx="${X(x)}" cy="${Y(y)}" r="3.4"/>`;
+      if (lab) s += `<text class="f-lab" x="${X(x) + dx}" y="${Y(y) + dy}">${lab}</text>`;
+    });
+    return s + '</svg>';
+  }
+
+  return { parab, geo, solid, plane };
 })();
