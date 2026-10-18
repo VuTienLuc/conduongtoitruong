@@ -6,7 +6,7 @@ Thư mục gốc: `~/Documents/con-duong-toi-truong`. Phần đã có: **Toán v
 
 ## 1. Dự án là gì
 Web tĩnh (HTML + JS thường, không framework, không npm) cho học sinh lớp 9 tự ôn thi vào 10 theo **cấu trúc đề thống nhất 2026–2027 của Sở GD&ĐT TP.HCM** (7 bài, 10 điểm, 120 phút). Khuôn giao diện "vở ô chấm" giống web Học mà chơi.
-Mỗi chủ đề có 6 tab: 📘 Lý thuyết · 💡 Mẹo nhớ · ✅ Hiểu bài (trắc nghiệm) · ✍️ Tự luận mẫu (barem từng bước + lỗi bị trừ điểm + cách trình bày) · 🖨️ Phiếu làm bài (A4, khung ô li, tuỳ chọn kèm bài mẫu / đáp án) · 🤖 Nhờ AI nhận xét (prompt A chấm bài kèm ảnh, prompt B gợi ý khi bí).
+Mỗi chủ đề có 7 tab: 📘 Lý thuyết · 💡 Mẹo nhớ · ✅ Hiểu bài (trắc nghiệm) · ✍️ Tự luận mẫu (barem từng bước + lỗi bị trừ điểm + cách trình bày) · 🖨️ Phiếu làm bài (A4, khung ô li, tuỳ chọn kèm bài mẫu / đáp án) · 📝 Luyện đề (10 đề đúng dạng tuyển sinh, mỗi đề một PDF – mục 8) · 🤖 Nhờ AI nhận xét (prompt A chấm bài kèm ảnh, prompt B gợi ý khi bí).
 
 ## 2. Tệp
 | Tệp | Vai trò |
@@ -26,6 +26,7 @@ Mỗi chủ đề có 6 tab: 📘 Lý thuyết · 💡 Mẹo nhớ · ✅ Hiểu
 | `tools/kiem-dap-so.py` | Tính lại độc lập mọi đáp số (sympy) |
 | `tools/test_web.py` | Playwright: mọi chủ đề × 6 tab trên điện thoại + iPad, trắc nghiệm, bài mẫu, prompt, PDF phiếu |
 | `tools/build.py` | Gộp thành `dist/con-duong-toi-truong.html` |
+| `assets/js/luyende.js`, `data/vao-10/luyen-de/`, `tools/xuat-de-pdf.py`, `de-luyen/` | Luyện đề vào 10: 10 đề/chủ đề, mỗi đề một PDF (mục 8) |
 
 ## 3. Hợp đồng dữ liệu một chủ đề
 ```js
@@ -86,3 +87,12 @@ Vdc.add({ grade:'lop10', id:'ma-khong-dau', ky:['Giữa kì I'|'Cuối kì I'|'G
 - Công thức dài: `math.js` tự gắn lớp `mjx-wide` (cuộn ngang riêng công thức) trên điện thoại. Trên phiếu in, gợi ý nằm trong ô hẹp (nửa trang) – tách công thức dài thành nhiều đoạn \( \) ngắn; `test_web.py` báo lỗi nếu công thức tràn khung trên phiếu. Mọi chuỗi có công thức phải viết bằng S`…` (`kiem-tra.js` báo lỗi nếu nằm trong nháy đơn).
 - Hình: `Fig.plane` (miền nghiệm, đường thẳng, đỉnh), `Fig.venn` (Ven 2–3 tập, tô miền), `Fig.func` (đồ thị hàm số, mô hình lượng giác), `Fig.geo`, `Fig.parab`, `Fig.solid`. Bảng số liệu: `<table class="tbl">`.
 - Mỗi chủ đề mới: thêm phép tính kiểm đáp số vào `tools/kiem-dap-so.py`; `tools/test_web.py` tự mở mọi trang, xuất PDF và **giải mã từng QR** so với đường link lời giải.
+
+## 8. Luyện đề vào 10 – mỗi chủ đề 10 đề, mỗi đề một PDF (thầy yêu cầu 18/10/2026)
+Mục đích: rèn thành thạo từng chủ đề theo đúng dạng, đúng số điểm của bài tương ứng trong đề tuyển sinh TP.HCM. **Làm lần lượt từng chủ đề, ưu tiên nội dung lớp 9 học kì I**:
+Bài 6 hệ PT thực tế ✅ → Bài 4 thực tế đại số – hình học ✅ → Bài 7a, 7b, 7c hình học phẳng → (học kì II) Bài 1 parabol, Bài 2 Viète, Bài 3 xác suất, Bài 5 hình không gian.
+- Dữ liệu: `data/vao-10/luyen-de/ldNN-<mã chủ đề>.js`, nạp SAU tệp chủ đề trong `index.html`; hợp đồng ở đầu `assets/js/luyende.js`:
+  `LuyenDe.add('<mã>', { phut, soat?, de:[{ ten, nguon, pts, h, de, figQ?, fig?, ans, barem:[[bước, điểm]…], loi:[…] }×10] })`.
+- Đề lấy dạng từ `tai-lieu/lop9/Lớp 9 - Tài liệu/Đề thi/` (đề Sở, bộ đề tham khảo, tuyển tập 2026–2027, 53 đề, bộ 15 đề), **đổi số liệu**, ghi `nguon` (tên tệp + đề/cụm). Barem bội 0,25, tổng = `pts`. Mọi đáp số thêm phép kiểm vào `tools/kiem-dap-so.py`.
+- Web: tab 📝 Luyện đề (`#/cd/<mã>/de/<k>`), in một đề hoặc cả bộ, tuỳ chọn kèm đáp án.
+- Tệp PDF: `python3 tools/xuat-de-pdf.py [mã…]` → `de-luyen/<mã>/De-01.pdf … De-10.pdf` (trang 1 đề + ô li, trang 2 đáp án – barem); công cụ báo lỗi nếu tệp không đúng 2 trang. Chạy lại sau mỗi lần sửa đề và commit các PDF.

@@ -7,11 +7,13 @@
    Hợp đồng dữ liệu (data/vao-10/luyen-de/ldNN-*.js, nạp SAU tệp chủ đề):
    LuyenDe.add('<mã chủ đề>', {
      phut: 12,                         // thời gian gợi ý cho một đề
+     soat: ['…'],                      // (tuỳ chọn) 4 ý tự soát in cuối trang đề
      de: [{ ten:'Dạng …', nguon:'tệp đề gốc (dạng tham khảo)', pts:1, h:70 (mm ô li),
             de, figQ?, fig?, ans, barem:[[bước, điểm]…], loi:['lỗi hay bị trừ điểm'…] } ×10] })
    ===================================================================== */
 const LuyenDe = (() => {
   const store = {};
+  const SOAT = ['Gọi ẩn có đơn vị, điều kiện', 'Lập đúng phương trình / hệ', 'Giải đúng, đối chiếu điều kiện', 'Trả lời đủ câu hỏi, có đơn vị'];
   const add = (id, o) => { store[id] = o; };
   const get = id => store[id];
   const ids = () => Object.keys(store);
@@ -27,7 +29,7 @@ const LuyenDe = (() => {
       <p class="sh-info">Họ và tên: ........................................................ Lớp: .............. Ngày: ......../......../........ Điểm: ......../${pt(d.pts)}</p>
       <div class="sh-q"><div class="sh-de"><b>${t.bai.split('·')[0].trim()}.</b> <i>(${pt(d.pts.toFixed(1))} điểm)</i> ${d.de}</div>${d.figQ ? `<div class="sh-fig">${d.figQ}</div>` : ''}
         <div class="sh-write" style="height:${d.h || 70}mm"></div></div>
-      <div class="sh-check"><b>Tự soát:</b> <span>☐ Gọi ẩn có đơn vị, điều kiện</span><span>☐ Lập đúng phương trình / hệ</span><span>☐ Giải đúng, đối chiếu điều kiện</span><span>☐ Trả lời đủ câu hỏi, có đơn vị</span></div>
+      <div class="sh-check"><b>Tự soát:</b> ${(L.soat || SOAT).map(x => `<span>☐ ${x}</span>`).join('')}</div>
     </section>`;
   }
   function pageKey(t, L, k) {
