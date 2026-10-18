@@ -90,9 +90,9 @@ Vdc.add({ grade:'lop10', id:'ma-khong-dau', ky:['Giữa kì I'|'Cuối kì I'|'G
 
 ## 8. Luyện đề vào 10 – mỗi chủ đề 10 đề, mỗi đề một PDF (thầy yêu cầu 18/10/2026)
 Mục đích: rèn thành thạo từng chủ đề theo đúng dạng, đúng số điểm của bài tương ứng trong đề tuyển sinh TP.HCM. **Làm lần lượt từng chủ đề, ưu tiên nội dung lớp 9 học kì I**:
-Bài 6 hệ PT thực tế ✅ → Bài 4 thực tế đại số – hình học ✅ → Bài 7a, 7b, 7c hình học phẳng ✅ → (học kì II) Bài 1 parabol, Bài 2 Viète, Bài 3 xác suất, Bài 5 hình không gian.
+Bài 6 hệ PT thực tế ✅ (10 đề) → Bài 4 thực tế đại số – hình học ✅ (20 đề: thêm cung, quạt, viên phân, vành khăn) → Bài 7a, 7b, 7c hình học phẳng ✅ → (học kì II) Bài 1 parabol, Bài 2 Viète, Bài 3 xác suất, Bài 5 hình không gian.
 - Dữ liệu: `data/vao-10/luyen-de/ldNN-<mã chủ đề>.js`, nạp SAU tệp chủ đề trong `index.html`; hợp đồng ở đầu `assets/js/luyende.js`:
-  `LuyenDe.add('<mã>', { phut, soat?, de:[{ ten, nguon, pts, h, de, figQ?, fig?, ans, barem:[[bước, điểm]…], loi:[…] }×10] })`.
+  `LuyenDe.add('<mã>', { phut, soat?, de:[{ ten, nguon, pts, h, de, figQ?, fig?, ans, barem:[[bước, điểm]…], loi:[…] }×10k] })` (10, 20… đề).
 - Đề lấy dạng từ `tai-lieu/lop9/Lớp 9 - Tài liệu/Đề thi/` (đề Sở, bộ đề tham khảo, tuyển tập 2026–2027, 53 đề, bộ 15 đề), **đổi số liệu**, ghi `nguon` (tên tệp + đề/cụm). Barem bội 0,25, tổng = `pts`. Mọi đáp số thêm phép kiểm vào `tools/kiem-dap-so.py`.
 - Bài 7: `ld07-hinh-7.js` có 10 cấu hình dùng chung cho ba bộ `hinh-7a/7b/7c` (7a hỏi câu a, học sinh tự vẽ hình; 7b cho hình + kết quả câu a, hỏi b; 7c cho hình + kết quả a, b, hỏi c). Mỗi cấu hình kiểm bằng toạ độ trong `kiem-dap-so.py`.
 - Web: tab 📝 Luyện đề (`#/cd/<mã>/de/<k>`), in một đề hoặc cả bộ, tuỳ chọn kèm đáp án.

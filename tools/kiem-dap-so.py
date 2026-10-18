@@ -410,6 +410,21 @@ chk('LĐ4 đề 9: giá', sp.solve(sp.Eq(sp.Rational(235, 100) * xx, 1410000), x
 chk('LĐ4 đề 10: biểu thức', sp.expand((24 - xx) * (16 - xx) - (xx ** 2 - 40 * xx + 384)), 0)
 chk('LĐ4 đề 10: x', [r_ for r_ in sp.solve(sp.Eq(xx ** 2 - 40 * xx + 384, 273), xx) if r_ < 16], [3])
 
+# Bài 4 – đề 11–20
+R11 = 30 / math.sin(math.radians(60)); chk('LĐ4 đề 11: R = 20√3', R11, 20 * math.sqrt(3), 1e-9)
+l11 = 2 * 3.14 * round(R11, 2) / 3; chk('LĐ4 đề 11: chu vi', round(200 + 2 * round(l11, 2), 1), 345.0)
+chk('LĐ4 đề 12: S(120)', 3.14 * (900 - 144) * 120 / 360, 791.28, 1e-6); chk('LĐ4 đề 12: n', 989.1 / (3.14 * (900 - 144) / 360), 150, 1e-9)
+chk('LĐ4 đề 13: R', math.sqrt(28.5 * 4 / (3.14 - 2)), 10, 1e-9); chk('LĐ4 đề 13: AB', round(10 * math.sqrt(2), 2), 14.14)
+chk('LĐ4 đề 14: x', (1.1304 / 3.14 - 0.09) / 0.6, 0.45, 1e-9)
+chk('LĐ4 đề 15: a', [r_ for r_ in sp.solve(sp.Eq((xx + 2) ** 2 - xx ** 2, 3 * xx ** 2), xx)], [2])
+chk('LĐ4 đề 16: x', round(math.sqrt(800 / 3.14), 2), 15.96)
+chk('LĐ4 đề 17: R', math.sqrt(256.5 / (3.14 - 2)), 15, 1e-9); chk('LĐ4 đề 17: cạnh', round(15 * math.sqrt(2), 2), 21.21)
+chk('LĐ4 đề 18: x', sp.solve(sp.Eq((2 * xx + 2) * (xx + 2) - 2 * xx ** 2, 64), xx), [10])
+chk('LĐ4 đề 19: x', sp.solve(sp.Eq(2 * ((xx + 30) / 2 + 3 * xx), 2 * (2 * xx + 30)), xx), [10]); chk('LĐ4 đề 19: diện tích', 10 * 40, 400)
+T19 = lambda k: 12 + 15 * min(k - 1, 29) + 11 * max(k - 30, 0)
+chk('LĐ4 đề 20: công thức (x ≤ 30, x > 30)', all(T19(k) == (15 * k - 3 if k <= 30 else 11 * k + 117) for k in range(2, 80)), True)
+chk('LĐ4 đề 20: số km', next(k for k in range(1, 200) if T19(k) == 535), 38)
+
 # ---------- Luyện đề Bài 7a, 7b, 7c (data/vao-10/luyen-de/ld07-hinh-7.js): dựng toạ độ thật, kiểm mọi kết luận số ----------
 from math import sqrt as _sq, hypot as _hy, acos as _ac, degrees as _dg
 def _cut(P, Q, c, rad):  # giao điểm thứ hai (khác P) của đường thẳng PQ với đường tròn tâm c

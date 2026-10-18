@@ -134,12 +134,12 @@ V.forEach(t => {
   });
 });
 
-// 2b) Luyện đề vào 10: mỗi bộ đúng 10 đề, barem cộng đúng điểm, bội 0,25.
+// 2b) Luyện đề vào 10: mỗi bộ 10, 20… đề, barem cộng đúng điểm, bội 0,25.
 let nLD = 0;
 if (ctx.LuyenDe) ctx.LuyenDe.ids().forEach(id => {
   const L = ctx.LuyenDe.get(id), W = `Luyện đề ${id}`;
   if (!ids.has(id)) err(W, 'không có chủ đề vào 10 mã này');
-  if (!L.de || L.de.length !== 10) err(W, `cần đúng 10 đề (đang có ${(L.de || []).length})`);
+  if (!L.de || !L.de.length || L.de.length % 10) err(W, `số đề phải là bội của 10 (đang có ${(L.de || []).length})`);
   (L.de || []).forEach((d, i) => {
     const w = `${W} › đề ${i + 1}`; nLD++;
     ['ten', 'nguon', 'de', 'ans'].forEach(k => { if (!d[k]) err(w, `thiếu ${k}`); });
