@@ -161,5 +161,62 @@ const Fig = (() => {
     return s + '</svg>';
   }
 
-  return { parab, geo, solid, plane };
+  /* ---------- Biểu đồ Ven: 2 hoặc 3 tập ----------
+     o = { sets:['A','B'(,'C')], vals:{ a:'..', b:'..', ab:'..', … , out:'..' } (số ghi trong từng miền, tuỳ chọn),
+           shade:['ab', …] (các miền tô), w }. Miền: a, b, c, ab, ac, bc, abc (chỉ thuộc đúng các tập đó), out. */
+  function venn(o) {
+    const three = o.sets.length === 3, W = o.w || 280, H = three ? 230 : 170, r = three ? 62 : 64;
+    const C = three ? { a: [W / 2 - 42, 88], b: [W / 2 + 42, 88], c: [W / 2, 158] } : { a: [W / 2 - 40, 85], b: [W / 2 + 40, 85] };
+    const P = three
+      ? { a: [W / 2 - 78, 70], b: [W / 2 + 78, 70], c: [W / 2, 196], ab: [W / 2, 62], ac: [W / 2 - 46, 140], bc: [W / 2 + 46, 140], abc: [W / 2, 112], out: [W - 22, 20] }
+      : { a: [W / 2 - 74, 90], b: [W / 2 + 74, 90], ab: [W / 2, 90], out: [W - 22, 20] };
+    const keys = Object.keys(C);
+    let s = `<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="Biểu đồ Ven">`;
+    s += `<rect class="f-stroke" x="2" y="2" width="${W - 4}" height="${H - 4}" rx="8" fill="none"/>`;
+    const sh = new Set(o.shade || []);
+    // tô từng miền bằng mặt nạ: miền = giao các hình tròn trong khoá, trừ các hình tròn còn lại
+    sh.forEach(reg => {
+      const inn = reg.split(''), outs = keys.filter(k => !inn.includes(k));
+      const id = 'v' + Math.random().toString(36).slice(2, 8);
+      s += `<defs><mask id="${id}"><rect x="0" y="0" width="${W}" height="${H}" fill="${reg === 'out' ? '#fff' : '#000'}"/>`;
+      if (reg !== 'out') s += `<circle cx="${C[inn[0]][0]}" cy="${C[inn[0]][1]}" r="${r}" fill="#fff"/>`;
+      (reg === 'out' ? keys : outs).forEach(k => { s += `<circle cx="${C[k][0]}" cy="${C[k][1]}" r="${r}" fill="#000"/>`; });
+      s += '</mask>';
+      inn.slice(1).forEach((k, j) => { s += `<clipPath id="${id}c${j}"><circle cx="${C[k][0]}" cy="${C[k][1]}" r="${r}"/></clipPath>`; });
+      s += '</defs>';
+      let rect = `<rect class="f-shade" x="0" y="0" width="${W}" height="${H}" mask="url(#${id})"/>`;
+      if (reg !== 'out') inn.slice(1).forEach((k, j) => { rect = `<g clip-path="url(#${id}c${j})">${rect}</g>`; });
+      s += rect;
+    });
+    keys.forEach((k, i) => {
+      s += `<circle class="f-stroke" cx="${C[k][0]}" cy="${C[k][1]}" r="${r}" fill="none"/>`;
+      const lx = C[k][0] + (k === 'a' ? -r + 6 : k === 'b' ? r - 14 : r - 6), ly = C[k][1] + (k === 'c' ? r - 4 : -r + 14);
+      s += `<text class="f-lab" x="${lx}" y="${ly}">${o.sets[i]}</text>`;
+    });
+    Object.entries(o.vals || {}).forEach(([k, v]) => { if (P[k]) s += `<text class="f-num" x="${P[k][0]}" y="${P[k][1] + 4}" text-anchor="middle">${v}</text>`; });
+    return s + '</svg>';
+  }
+
+  /* ---------- Đồ thị hàm số y = f(x) (dùng cho hàm số lượng giác, mô hình thực tế) ----------
+     o = { f, xr:[x0,x1], yr:[y0,y1], w, h, xt:[[giá trị, 'nhãn'], …], yt:[[giá trị,'nhãn'],…], pts:[[x,y,'nhãn',dx,dy]],
+           hl:[y…] (đường ngang nét đứt), xl:'x', yl:'y' } */
+  function func(o) {
+    const [x0, x1] = o.xr, [y0, y1] = o.yr, W = o.w || 320, H = o.h || 180;
+    const X = x => f2((x - x0) / (x1 - x0) * W), Y = y => f2((y1 - y) / (y1 - y0) * H);
+    let s = `<svg class="fig" viewBox="-36 -16 ${W + 58} ${H + 34}" role="img" aria-label="${o.label || 'Đồ thị'}">`;
+    const ox = x0 <= 0 && x1 >= 0 ? X(0) : 0, oy = y0 <= 0 && y1 >= 0 ? Y(0) : H;
+    (o.hl || []).forEach(y => { s += `<line class="f-dash" x1="0" y1="${Y(y)}" x2="${W}" y2="${Y(y)}"/>`; });
+    s += `<g class="f-axis"><line x1="0" y1="${oy}" x2="${W + 10}" y2="${oy}"/><line x1="${ox}" y1="${H}" x2="${ox}" y2="-10"/>`;
+    s += `<path d="M${W + 10} ${oy}l-7 -4v8z" class="f-fill"/><path d="M${ox} -10l-4 7h8z" class="f-fill"/></g>`;
+    s += `<text class="f-lab" x="${W + 6}" y="${oy + 16}">${o.xl || 'x'}</text><text class="f-lab" x="${ox + 8}" y="-4">${o.yl || 'y'}</text>`;
+    (o.xt || []).forEach(([x, t]) => { s += `<line class="f-axis" x1="${X(x)}" y1="${oy - 3}" x2="${X(x)}" y2="${oy + 3}"/><text class="f-num" x="${X(x)}" y="${oy + 15}" text-anchor="middle">${t}</text>`; });
+    (o.yt || []).forEach(([y, t]) => { s += `<line class="f-axis" x1="${ox - 3}" y1="${Y(y)}" x2="${ox + 3}" y2="${Y(y)}"/><text class="f-num" x="${ox - 6}" y="${Y(y) + 4}" text-anchor="end">${t}</text>`; });
+    let d = '';
+    for (let i = 0; i <= 300; i++) { const x = x0 + (x1 - x0) * i / 300, y = o.f(x); d += (i ? 'L' : 'M') + X(x) + ' ' + Y(y); }
+    s += `<path class="f-curve" d="${d}"/>`;
+    (o.pts || []).forEach(([x, y, lab, dx = 6, dy = -6]) => { s += `<circle class="f-dot" cx="${X(x)}" cy="${Y(y)}" r="3.4"/>${lab ? `<text class="f-lab" x="${X(x) + dx}" y="${Y(y) + dy}">${lab}</text>` : ''}`; });
+    return s + '</svg>';
+  }
+
+  return { parab, geo, solid, plane, venn, func };
 })();
