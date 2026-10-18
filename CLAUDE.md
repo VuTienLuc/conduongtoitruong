@@ -6,7 +6,7 @@ Thư mục gốc: `~/Documents/con-duong-toi-truong`. Phần đã có: **Toán v
 
 ## 1. Dự án là gì
 Web tĩnh (HTML + JS thường, không framework, không npm) cho học sinh lớp 9 tự ôn thi vào 10 theo **cấu trúc đề thống nhất 2026–2027 của Sở GD&ĐT TP.HCM** (7 bài, 10 điểm, 120 phút). Khuôn giao diện "vở ô chấm" giống web Học mà chơi.
-Mỗi chủ đề có 6 tab: 📘 Lý thuyết · 💡 Mẹo nhớ · ✅ Hiểu bài (trắc nghiệm) · ✍️ Tự luận mẫu (barem từng bước + lỗi bị trừ điểm + cách trình bày) · 🖨️ Phiếu làm bài (A4, khung ô li, tuỳ chọn kèm bài mẫu / đáp án) · 🤖 Nhờ AI nhận xét (prompt A chấm bài kèm ảnh, prompt B gợi ý khi bí).
+Mỗi chủ đề có 7 tab: 📘 Lý thuyết · 💡 Mẹo nhớ · ✅ Hiểu bài (trắc nghiệm) · ✍️ Tự luận mẫu (barem từng bước + lỗi bị trừ điểm + cách trình bày) · 🖨️ Phiếu làm bài (A4, khung ô li, tuỳ chọn kèm bài mẫu / đáp án) · 📝 Luyện đề (10 đề đúng dạng tuyển sinh, mỗi đề một PDF – mục 8) · 🤖 Nhờ AI nhận xét (prompt A chấm bài kèm ảnh, prompt B gợi ý khi bí).
 
 ## 2. Tệp
 | Tệp | Vai trò |

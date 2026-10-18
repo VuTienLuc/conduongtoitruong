@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Kiểm thử giao diện thật bằng trình duyệt (Playwright):  python3 tools/test_web.py
-- Điện thoại 390×844 và iPad 820×1180: mọi chủ đề × 6 tab không lỗi JS, không lỗi công thức (mjx-merror),
+- Điện thoại 390×844 và iPad 820×1180: mọi chủ đề × 7 tab (kể cả từng đề luyện) không lỗi JS, không lỗi công thức (mjx-merror),
   không còn mã LaTeX thô, không cuộn ngang.
 - Trắc nghiệm chấm đúng và lưu điểm; bài mẫu hiện từng bước đến hết; prompt đủ đề + đáp án, đổi \\( \\) thành $.
 - Phiếu in: xuất PDF A4 thật, đếm trang (phiếu làm bài 2 trang; kèm mẫu và đáp án thì thêm trang)."""
@@ -8,7 +8,7 @@ import asyncio, functools, http.server, os, re, socketserver, sys, threading
 from playwright.async_api import async_playwright
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TABS = ['lt', 'meo', 'hieu', 'mau', 'phieu', 'ai']
+TABS = ['lt', 'meo', 'hieu', 'mau', 'phieu', 'de', 'ai']
 OUT = os.environ.get('TEST_OUT', '/tmp')
 fails = []
 
@@ -44,6 +44,8 @@ async def main():
             if n != len(ids): fails.append(f'{name}: trang chủ có {n} thẻ, cần {len(ids)}')
             vdc = await pg.evaluate("Vdc.list.map(t => [t.grade, t.id, Vdc.allBt(t).length])")
             routes = ['#/', '#/vao-10', '#/lo-trinh', '#/lop10', '#/lop11', '#/lop12'] + [f'#/cd/{i}/{t}' for i in ids for t in TABS]
+            ld = await pg.evaluate("LuyenDe.ids().map(i => [i, LuyenDe.get(i).de.length])")
+            routes += [f'#/cd/{i}/de/{k}' for i, n in ld for k in range(2, n + 1)]
             routes += [r for g, i, nb in vdc for r in [f'#/{g}/{i}', f'#/{g}/{i}/phieu'] + [f'#/{g}/{i}/lg/{k}' for k in range(1, nb + 1)]]
             for r in routes:
                 await pg.goto(base + r)

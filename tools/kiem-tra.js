@@ -21,7 +21,7 @@ const load = f => {
   if (/\bTODO\b|\bFIXME\b|phần còn lại giữ nguyên/.test(code)) err(f, 'còn chỗ làm tắt (TODO/FIXME/phần còn lại)');
   // Công thức trong chuỗi nháy đơn bị mất dấu \ khi chạy: phải viết bằng S`…`.
   if (f.startsWith('data/')) code.split('\n').forEach((l, i) => { if (/(^|[\s,(:\[])'[^'`]*\\[(\[][^'`]*'/.test(l)) err(`${f}:${i + 1}`, 'công thức \\( \\) trong chuỗi thường – dùng S`…`'); });
-  try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc;`, ctx, { filename: f }); }
+  try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.LuyenDe = typeof LuyenDe !== 'undefined' ? LuyenDe : globalThis.LuyenDe; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc;`, ctx, { filename: f }); }
   catch (e) { err(f, 'lỗi khi chạy – ' + e.message); }
 };
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -134,13 +134,30 @@ V.forEach(t => {
   });
 });
 
+// 2b) Luyện đề vào 10: mỗi bộ đúng 10 đề, barem cộng đúng điểm, bội 0,25.
+let nLD = 0;
+if (ctx.LuyenDe) ctx.LuyenDe.ids().forEach(id => {
+  const L = ctx.LuyenDe.get(id), W = `Luyện đề ${id}`;
+  if (!ids.has(id)) err(W, 'không có chủ đề vào 10 mã này');
+  if (!L.de || L.de.length !== 10) err(W, `cần đúng 10 đề (đang có ${(L.de || []).length})`);
+  (L.de || []).forEach((d, i) => {
+    const w = `${W} › đề ${i + 1}`; nLD++;
+    ['ten', 'nguon', 'de', 'ans'].forEach(k => { if (!d[k]) err(w, `thiếu ${k}`); });
+    if (!d.pts || !(d.h >= 30 && d.h <= 200)) err(w, 'thiếu pts hoặc h (mm ô li, 30–200)');
+    const bs = sum((d.barem || []).map(b => b[1]));
+    if (!near(bs, d.pts)) err(w, `tổng barem ${bs} ≠ ${d.pts}`);
+    (d.barem || []).forEach(b => { if (!near(b[1] * 4, Math.round(b[1] * 4))) err(w, `điểm ${b[1]} không là bội 0,25`); checkStr(w, b[0]); });
+    [d.de, d.ans, d.ten, ...(d.loi || [])].forEach(x => checkStr(w, x));
+  });
+});
+
 // 3) Liên kết trong app.js trỏ tới chủ đề có thật.
 const app = fs.readFileSync(path.join(ROOT, 'assets/js/app.js'), 'utf8');
 const used = new Set([...app.matchAll(/\[('[a-z0-9-]+'(?:,\s*'[a-z0-9-]+')*)\]\]/g)].flatMap(m => m[1].split(',').map(s => s.trim().replace(/'/g, ''))));
 [...app.matchAll(/, '([a-z0-9-]+)'\]/g)].forEach(m => { if (m[1]) used.add(m[1]); });
 used.forEach(id => { if (id && !/^lop\d+$/.test(id) && !ids.has(id)) err('app.js', `liên kết tới chủ đề không có: ${id}`); });
 
-console.log(`Ôn thi vào 10: ${T.length} chủ đề, ${sum(T.map(t => t.quiz.length))} câu trắc nghiệm, ${sum(T.map(t => t.models.length))} bài mẫu, ${sum(T.map(t => t.practice.length))} bài tự luyện.`);
+console.log(`Ôn thi vào 10: ${T.length} chủ đề, ${sum(T.map(t => t.quiz.length))} câu trắc nghiệm, ${sum(T.map(t => t.models.length))} bài mẫu, ${sum(T.map(t => t.practice.length))} bài tự luyện, ${nLD} đề luyện (${ctx.LuyenDe ? ctx.LuyenDe.ids().length : 0} chủ đề).`);
 console.log(`Lớp 10–12 (VD–VDC): ${V.length} chủ đề, ${sum(V.map(t => t.dang.length))} dạng, ${sum(V.map(t => sum(t.dang.map(d => d.bt.length))))} bài tương tự.`);
 warns.forEach(w => console.log('! ' + w));
 if (errs.length) { errs.forEach(e => console.log(e)); console.log(`KẾT QUẢ: CHƯA ĐẠT ✗ (${errs.length} lỗi)`); process.exit(1); }

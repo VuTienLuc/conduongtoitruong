@@ -371,5 +371,30 @@ chk('GN bài 4: Q1 chạy', float(dac_trung([12, 13, 14, 15, 16], 1, [4, 10, 18,
 D = dac_trung([150, 160, 170, 180, 190, 200], 10, [8, 17, 32, 23, 12, 8]); chk('GN bài 5: Mo, Me', (float(D[4]), round(float(D[2]), 2)), (176.25, 177.81))
 D = dac_trung([3, 6, 9, 12, 15], 3, [20, 55, 45, 30, 10]); chk('GN bài 6: tb, Q3, Mo', (round(float(D[0]), 2), float(D[3]), round(float(D[4]), 2)), (9.66, 12.0, 8.33))
 
+
+# ---------- Luyện đề Bài 6 (data/vao-10/luyen-de/ld06-he-phuong-trinh-thuc-te.js): giải lại bằng sympy ----------
+a_, b_, T_ = sp.symbols('a b T', positive=True)
+sol = sp.solve([sp.Eq(a_ / 3 + 2 * b_ / 3, T_ + 9), sp.Eq(b_ / 3 + 2 * a_ / 3, T_ + 6), sp.Eq(T_ * (a_ + b_), a_ * b_)], [a_, b_, T_], dict=True)
+chk('LĐ6 đề 1: (a, b, T)', [(s_[a_], s_[b_], s_[T_]) for s_ in sol], [(9, 18, 6)])
+u_, v_ = sp.symbols('u v')
+def hpt(e1, e2, X=u_, Y=v_): r = sp.solve([e1, e2], [X, Y], dict=True); return [(r_[X], r_[Y]) for r_ in r]
+chk('LĐ6 đề 2: vòi (x, y)', [(1 / p_, 1 / q_) for p_, q_ in hpt(sp.Eq(u_ + v_, sp.Rational(5, 24)), sp.Eq(3 * u_ + 4 * v_, sp.Rational(3, 4)))], [(12, 8)])
+X_, Y_ = sp.symbols('X Y')
+r = sp.solve([sp.Eq((X_ + 10) * (Y_ - 1), X_ * Y_), sp.Eq((X_ - 10) * (Y_ + sp.Rational(5, 3)), X_ * Y_)], [X_, Y_], dict=True)
+chk('LĐ6 đề 3: v, t, s', [(r_[X_], r_[Y_], r_[X_] * r_[Y_]) for r_ in r], [(40, 5, 200)])
+r = hpt(sp.Eq(60 * u_ + 48 * v_, 6), sp.Eq(40 * u_ + 80 * v_, 7)); xv, yv = 1 / r[0][0], 1 / r[0][1]
+chk('LĐ6 đề 4: riêng, dòng', ((xv + yv) / 2, (xv - yv) / 2), (18, 2))
+chk('LĐ6 đề 5: áo, quần', hpt(sp.Eq(2 * X_ + 3 * Y_, 1550), sp.Eq(sp.Rational(16, 10) * X_ + sp.Rational(27, 10) * Y_, 1330), X_, Y_), [(325, 300)])
+A6 = sp.symbols('A6', positive=True); a6 = [r_ for r_ in sp.solve(sp.Eq(A6 ** 2 + (A6 - sp.Rational(3, 10)) ** 2, sp.Rational(9, 4)), A6)]
+chk('LĐ6 đề 6: cạnh a', a6, [sp.Rational(6, 5)]); a6 = a6[0]; DE6 = a6 - sp.Rational(3, 10)
+chk('LĐ6 đề 6: x/y', (2 * a6 + (a6 - DE6)) / (a6 + DE6), sp.Rational(9, 7))
+# mô phỏng: lần gặp thứ hai của hai bạn đúng tại F (AF = 0,6) – toạ độ theo chu vi tính từ A, Hòa đi chiều dương
+t2 = 8 * a6 / (9 + 7); chk('LĐ6 đề 6: vị trí gặp lần 2 (AF)', (9 * t2) % (4 * a6), sp.Rational(3, 5))
+chk('LĐ6 đề 7: vượt mức', hpt(sp.Eq(X_ + Y_, 720), sp.Eq(sp.Rational(115, 100) * X_ + sp.Rational(112, 100) * Y_, 819), X_, Y_), [(420, 300)])
+chk('LĐ6 đề 8: pha trộn', hpt(sp.Eq(X_ + Y_, 500), sp.Eq(sp.Rational(1, 10) * X_ + sp.Rational(3, 10) * Y_, 90), X_, Y_), [(300, 200)])
+r = sp.solve([sp.Eq(X_ + Y_, 34), sp.Eq((X_ - 4) * (Y_ + 3), X_ * Y_ - 8)], [X_, Y_], dict=True)
+chk('LĐ6 đề 9: dài, rộng', [(r_[X_], r_[Y_]) for r_ in r], [(20, 14)])
+chk('LĐ6 đề 10: vận tốc', hpt(sp.Eq(2 * X_ + 2 * Y_, 180), sp.Eq(sp.Rational(24, 10) * X_ + sp.Rational(15, 10) * Y_, 180), X_, Y_), [(50, 40)])
+
 print('\nKẾT QUẢ:', 'ĐẠT ✓ – mọi đáp số khớp phép tính độc lập' if ok_all else 'CHƯA ĐẠT ✗')
 raise SystemExit(0 if ok_all else 1)

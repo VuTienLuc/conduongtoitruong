@@ -1,7 +1,7 @@
 /* =====================================================================
    APP – điều hướng theo hash và hiển thị:
    #/                 trang chủ (cấu trúc đề, các chủ đề, tiến độ)
-   #/cd/<mã>/<tab>    một chủ đề; tab: lt · meo · hieu · mau · phieu · ai
+   #/cd/<mã>/<tab>    một chủ đề; tab: lt · meo · hieu · mau · phieu · de (luyện đề, #/cd/<mã>/de/<k>) · ai
    #/lo-trinh         lộ trình 26 tuần
    Nội dung lấy từ Topics (data/cdNN-*.js). Không sửa tệp này khi chỉ thêm nội dung.
    ===================================================================== */
@@ -14,6 +14,7 @@ const App = (() => {
     ['hieu', '✅', 'Hiểu bài'],
     ['mau', '✍️', 'Tự luận mẫu'],
     ['phieu', '🖨️', 'Phiếu làm bài'],
+    ['de', '📝', 'Luyện đề'],
     ['ai', '🤖', 'Nhờ AI nhận xét'],
   ];
 
@@ -156,7 +157,7 @@ const App = (() => {
   }
 
   /* ---------- Trang chủ đề ---------- */
-  function topic(id, tab) {
+  function topic(id, tab, sub) {
     const t = Topics.get(id);
     if (!t) return home();
     if (!TABS.some(x => x[0] === tab)) tab = 'lt';
@@ -173,7 +174,7 @@ const App = (() => {
       <section id="pane" class="pane"></section>
       <div class="pane-foot">${nextBtn}</div></main>`;
     const pane = $('#pane');
-    ({ lt: paneTheory, meo: paneTips, hieu: paneQuiz, mau: paneModel, phieu: paneSheet, ai: paneAI })[tab](t, pane);
+    ({ lt: paneTheory, meo: paneTips, hieu: paneQuiz, mau: paneModel, phieu: paneSheet, de: (x, el) => LuyenDe.pane(x, el, sub), ai: paneAI })[tab](t, pane);
     const on = $('.tab.on'); if (on && on.scrollIntoView) on.scrollIntoView({ block: 'nearest', inline: 'center' });
   }
 
@@ -365,7 +366,7 @@ THẦY HÃY
   /* ---------- Điều hướng ---------- */
   function route() {
     const parts = (location.hash || '#/').replace(/^#\/?/, '').split('/');
-    if (parts[0] === 'cd') topic(parts[1], parts[2] || 'lt');
+    if (parts[0] === 'cd') topic(parts[1], parts[2] || 'lt', parts[3]);
     else if (parts[0] === 'lo-trinh') roadmap();
     else if (parts[0] === 'vao-10') home();
     else if (typeof Vdc !== 'undefined' && Vdc.route(parts)) { /* lớp 10, 11, 12 */ }
