@@ -1,0 +1,1932 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Toán vào 10 · Luyện thi tuyển sinh lớp 10 TP.HCM</title>
+<meta name="description" content="Luyện thi Toán vào lớp 10 TP.HCM theo 10 chủ đề: lý thuyết, mẹo nhớ, trắc nghiệm hiểu bài, tự luận mẫu có barem, phiếu in làm bài và prompt nhờ AI nhận xét.">
+<meta name="theme-color" content="#2f6fe4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f6fe4'/%3E%3Ctext x='32' y='44' font-size='30' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3E10%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   GIAO DIỆN "vở ô chấm" – cùng phong cách Học mà chơi.
+   Chỉ dùng biến màu trên :root (có bộ màu tối). Không viết màu cứng trong component.
+   ===================================================================== */
+:root{
+  --bg:#f3f6fb; --dot:#cfd9e8; --surface:#ffffff; --ink:#14213d; --muted:#556079; --line:#14213d;
+  --primary:#2f6fe4; --primary-ink:#ffffff; --primary-soft:#e2ebfd;
+  --ok:#17804a; --ok-soft:#e1f5e9; --warn:#8a5a00; --warn-soft:#fff3cf; --bad:#c23636; --bad-soft:#fde7e7;
+  --s-blue:#a9c4ec; --s-pink:#efb2c9; --s-yellow:#f4d57a; --accent:#d9480f;
+  --grid:#dfe5ee; --shade:#2f6fe433;
+  --r-lg:22px; --r-md:14px; --r-pill:999px;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,sans-serif; --f-head:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
+  --shadow:6px 6px 0 var(--line); --shadow-sm:3px 3px 0 var(--line);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --dot:#1f2b44; --surface:#16213a; --ink:#e8eefa; --muted:#a7b3cc; --line:#7f96c4;
+  --primary:#6b9bff; --primary-ink:#0e1524; --primary-soft:#1f3160;
+  --ok:#5fd394; --ok-soft:#153526; --warn:#f3c95a; --warn-soft:#3a2f10; --bad:#ff8a8a; --bad-soft:#3d1a1d;
+  --s-blue:#2c4a7a; --s-pink:#6b3550; --s-yellow:#6b5a22; --accent:#ff9a62; --grid:#24324f; --shade:#6b9bff44;
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --dot:#1f2b44; --surface:#16213a; --ink:#e8eefa; --muted:#a7b3cc; --line:#7f96c4;
+  --primary:#6b9bff; --primary-ink:#0e1524; --primary-soft:#1f3160;
+  --ok:#5fd394; --ok-soft:#153526; --warn:#f3c95a; --warn-soft:#3a2f10; --bad:#ff8a8a; --bad-soft:#3d1a1d;
+  --s-blue:#2c4a7a; --s-pink:#6b3550; --s-yellow:#6b5a22; --accent:#ff9a62; --grid:#24324f; --shade:#6b9bff44;
+  color-scheme:dark;}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(var(--dot) 1.3px,transparent 1.4px);background-size:22px 22px;
+  color:var(--ink);font:500 18px/1.6 var(--f-body);-webkit-tap-highlight-color:transparent;min-height:100vh}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:3px;border-radius:8px}
+.wrap{max-width:940px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left)) 64px max(16px,env(safe-area-inset-right))}
+h2,h3,h4{font-family:var(--f-head);line-height:1.25;margin:0 0 8px}
+h2{font-size:clamp(24px,3.6vw,30px)} h3{font-size:22px} h4{font-size:18px}
+
+/* ---------- Đầu trang ---------- */
+.top{background:color-mix(in srgb,var(--s-blue) 45%,var(--surface));text-align:center;padding:calc(18px + env(safe-area-inset-top)) 56px 18px;position:relative}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:linear-gradient(90deg,var(--s-blue) 0 25%,var(--s-pink) 25% 75%,var(--s-yellow) 75%)}
+.brand-link{text-decoration:none}
+.brand{font:800 clamp(32px,6vw,46px)/1.1 var(--f-head);margin:0;color:var(--ink)}
+.brand span{color:var(--primary)}
+.sub{margin:6px 0 4px;font:700 13px/1.35 var(--f-body);letter-spacing:2px;text-transform:uppercase;color:var(--primary)}
+.author{margin:0;font-size:14px;color:var(--muted)}
+.theme-btn{position:absolute;right:max(12px,env(safe-area-inset-right));top:calc(14px + env(safe-area-inset-top));width:44px;height:44px;border-radius:50%;
+  border:2.5px solid var(--line);background:var(--surface);font-size:20px;box-shadow:var(--shadow-sm)}
+
+/* ---------- Thành phần chung ---------- */
+.card{background:var(--surface);border:2.5px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:20px 22px;margin:18px 0}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--bg);border-radius:var(--r-pill);padding:7px 16px;font:700 13px/1.35 var(--f-body);margin:0 0 12px}
+.pill.soft{background:var(--primary-soft);color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px 22px;border-radius:var(--r-pill);border:2.5px solid var(--line);
+  background:var(--surface);color:var(--ink);font-weight:700;font-size:17px;text-decoration:none;box-shadow:var(--shadow-sm);transition:transform .08s}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+.btn.primary{background:var(--primary);color:var(--primary-ink)}
+.btn.ghost{box-shadow:none}
+.btn:disabled{opacity:.55;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+.lead{color:var(--muted);margin:6px 0 12px}
+.lead.small{font-size:15px}
+.warn{background:var(--warn-soft);color:var(--ink);border-left:5px solid var(--warn);border-radius:10px;padding:10px 14px;margin:12px 0 0;font-size:16px}
+.chip{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;border-radius:var(--r-pill);background:var(--primary-soft);color:var(--ink)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.sec{margin:34px 0 4px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:20px 0 4px;flex-wrap:wrap}
+.back{display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none;font-size:18px}
+.nav-mini{display:flex;gap:16px;font-weight:700;font-size:16px}
+.nav-mini a{text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,40px);opacity:0;background:var(--ink);color:var(--bg);
+  padding:12px 20px;border-radius:var(--r-pill);font-weight:700;font-size:15px;transition:.25s;z-index:20;max-width:calc(100% - 32px);text-align:center;pointer-events:none}
+#toast.show{transform:translate(-50%,0);opacity:1}
+
+/* ---------- Trang chủ ---------- */
+.hero h2{margin-top:2px}
+.steps6{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 18px;padding-left:22px;margin:10px 0}
+.hint-line{background:var(--ok-soft);border-radius:12px;padding:10px 14px;margin:12px 0 0;font-weight:600}
+.table-wrap{padding:6px;overflow-x:auto}
+table.struct{width:100%;border-collapse:collapse;font-size:16px}
+table.struct th,table.struct td{text-align:left;padding:10px 12px;border-bottom:1.5px solid var(--grid);vertical-align:top}
+table.struct thead th{font-family:var(--f-head);font-size:16px;color:var(--muted)}
+table.struct tbody tr:last-child th,table.struct tbody tr:last-child td{border-bottom:0}
+table.struct a{font-weight:700;white-space:nowrap}
+table.struct th[scope=row]{white-space:nowrap}
+.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.nowrap{white-space:nowrap}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:18px;margin-top:14px}
+.tcard{display:flex;gap:14px;align-items:flex-start;text-decoration:none;color:var(--ink);background:var(--surface);border:2.5px solid var(--line);
+  border-radius:var(--r-lg);box-shadow:var(--shadow);padding:16px 18px;transition:transform .08s}
+.tcard:active{transform:translate(3px,3px);box-shadow:var(--shadow-sm)}
+.tno{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:var(--primary);color:var(--primary-ink);font:800 22px/1 var(--f-head)}
+.tno.big{width:64px;height:64px;font-size:30px;border-radius:18px}
+.tbody{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tbai{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--primary);margin:0}
+.ttitle{font:700 20px/1.3 var(--f-head)}
+.tdesc{font-size:15px;color:var(--muted);margin:2px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:18px;margin-top:10px}
+.link-card{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--ink)}
+.link-card .big{font-size:30px}
+.link-card b{font:700 21px/1.3 var(--f-head)}
+.link-card span:last-child{color:var(--muted);font-size:15px}
+
+/* ---------- Trang chủ đề ---------- */
+.thead{display:flex;gap:18px;align-items:center}
+.thead h2{margin:2px 0 4px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 10px;margin:8px -4px 0;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.tab{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:8px 16px;border-radius:var(--r-pill);border:2.5px solid var(--line);
+  background:var(--surface);color:var(--ink);text-decoration:none;font-weight:700;font-size:16px}
+.tab.on{background:var(--ink);color:var(--bg)}
+.pane-foot{display:flex;justify-content:flex-end;margin-top:22px}
+.remind{background:color-mix(in srgb,var(--s-yellow) 30%,var(--surface))}
+.remind ul,.kb ul,.tip-b ul,.loi ul,.checks{padding-left:22px;margin:6px 0}
+.remind li,.kb li{margin:4px 0}
+.kt h3{display:flex;gap:10px;align-items:center}
+.kno{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--primary-soft);font-size:17px}
+.kb p{margin:8px 0}
+.figbox{display:flex;justify-content:center;margin:12px 0 2px}
+.fig{width:100%;max-width:340px;height:auto;display:block}
+.fig.fig-sm{max-width:220px}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:0 18px}
+.tip-key{font:700 21px/1.35 var(--f-head);margin:0 0 6px;color:var(--accent)}
+.tip-b{font-size:17px}
+.card table:not(.struct){border-collapse:collapse;margin:8px 0;font-size:16px;max-width:100%}
+.card table:not(.struct) td,.card table:not(.struct) th{border:1.5px solid var(--grid);padding:5px 10px;text-align:center}
+.sheet table:not(.sh-barem){border-collapse:collapse;margin:4px 0}
+.sheet table:not(.sh-barem) td,.sheet table:not(.sh-barem) th{border:1px solid #888;padding:2px 8px;text-align:center}
+.tbl-wrap{overflow-x:auto}
+
+/* ---------- Trắc nghiệm ---------- */
+.qtext{margin:0 0 12px}
+.opts{display:grid;gap:10px}
+@media (min-width:760px){.opts{grid-template-columns:1fr 1fr}}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;min-height:54px;padding:10px 14px;border-radius:16px;border:2.5px solid var(--line);background:var(--surface);font-size:17px}
+.opt .ol{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--primary-soft);font-weight:800}
+.opt.good{background:var(--ok-soft);border-color:var(--ok)}
+.opt.bad{background:var(--bad-soft);border-color:var(--bad)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.why{margin-top:12px;background:var(--primary-soft);border-radius:12px;padding:10px 14px;font-size:16px}
+.okc{color:var(--ok)} .badc{color:var(--bad)}
+.score{text-align:center}
+.big-score{font:800 52px/1 var(--f-head);margin:6px 0;color:var(--primary)}
+
+/* ---------- Tự luận mẫu ---------- */
+.de{background:var(--primary-soft);border-radius:14px;padding:12px 16px;margin:10px 0}
+.reveal-bar{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px}
+.steps{list-style:none;padding:0;margin:8px 0;counter-reset:st}
+.steps .part{font:700 18px/1.4 var(--f-head);color:var(--primary);margin:14px 0 4px;padding-top:6px;border-top:2px dashed var(--grid)}
+.steps .st{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1.5px solid var(--grid)}
+.steps .st-t{flex:1;min-width:0}
+.steps .pts{flex:none;min-width:58px;text-align:center;font-weight:800;font-size:15px;background:var(--ok-soft);color:var(--ok);border-radius:var(--r-pill);padding:3px 8px}
+.steps .pts.empty{background:none}
+.steps .hid{display:none}
+.loi{margin-top:16px;background:var(--bad-soft);border-radius:14px;padding:12px 16px}
+.loi h4{color:var(--bad)}
+.checks{list-style:none;padding:0}
+.checks li{padding:6px 0 6px 32px;position:relative}
+.checks li::before{content:"✔";position:absolute;left:4px;top:5px;color:var(--ok);font-weight:800}
+
+/* ---------- Phiếu (xem trước) ---------- */
+.opts-row{display:flex;flex-direction:column;gap:8px}
+.tog{display:flex;gap:10px;align-items:center;min-height:44px;font-size:16px}
+.tog input{width:22px;height:22px;accent-color:var(--primary)}
+.paper-wrap{margin-top:18px}
+.paper-wrap .sh-page{background:#fff;color:#000;border:1.5px solid var(--line);border-radius:6px;box-shadow:var(--shadow-sm);padding:14mm 13mm;margin:0 auto 18px;max-width:210mm}
+#print-root{display:none}
+
+/* Nội dung phiếu (dùng chung xem trước + in) */
+.sheet{font:12pt/1.45 "Times New Roman",Times,serif;color:#000}
+.sh-head{display:flex;justify-content:space-between;gap:8px;font:600 9pt/1.3 var(--f-body);color:#444;border-bottom:1px solid #999;padding-bottom:3px;margin-bottom:6px}
+.sh-title{font:700 15pt/1.2 "Times New Roman",serif;text-align:center;margin:4px 0 0}
+.sh-sub{text-align:center;font-style:italic;margin:2px 0 6px}
+.sh-info{margin:4px 0 6px;font-size:11.5pt}
+.sh-remind{border:1px solid #777;border-radius:6px;padding:4px 10px;margin:0 0 8px;font-size:11pt}
+.sh-remind ul{margin:2px 0;padding-left:18px;columns:2;column-gap:18px}
+.sh-remind li{break-inside:avoid}
+.sh-q{margin:8px 0 0;break-inside:avoid}
+.sh-q p{margin:0 0 4px}
+.sh-write{border:1px solid #9aa0aa;background-color:#fff;background-image:linear-gradient(#d3d8e0 1px,transparent 1px),linear-gradient(90deg,#d3d8e0 1px,transparent 1px);
+  background-size:5mm 5mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sh-check{margin:8px 0 4px;font-size:10.5pt;display:flex;flex-wrap:wrap;gap:2px 14px;break-inside:avoid}
+.sh-check b{width:100%}
+.sh-ai{border:1.5px dashed #555;border-radius:6px;padding:5px 10px;font-size:10.5pt;margin-top:6px;break-inside:avoid}
+.sh-fig{display:flex;justify-content:center;margin:4px 0}
+.sh-fig .fig{max-width:62mm}
+.sh-fig .fig.fig-sm{max-width:40mm}
+.sh-model{margin:6px 0 10px;break-inside:avoid-page}
+.sh-model p{margin:0 0 4px}
+.sh-steps{margin:2px 0;padding-left:0;list-style:none;font-size:11pt}
+.sh-steps li{margin:1px 0;padding-left:12px;position:relative}
+.sh-steps li::before{content:"–";position:absolute;left:0}
+.sh-steps li.part{padding-left:0;font-weight:700;margin-top:4px}
+.sh-steps li.part::before{content:none}
+.sh-pt{float:right;font-weight:700;margin-left:10px}
+.sh-loi{font-size:10.5pt;border-left:3px solid #999;padding-left:8px}
+.sh-key{margin:6px 0 10px;break-inside:avoid}
+.sh-key p{margin:0 0 4px}
+.sh-barem{width:100%;border-collapse:collapse;font-size:11pt}
+.sh-barem td{border:1px solid #888;padding:3px 6px;vertical-align:top}
+.sheet .fig .f-grid line{stroke:#ccc}
+.sheet .fig .f-stroke,.sheet .fig .f-axis line,.sheet .fig .f-curve{stroke:#000}
+.sheet .fig .f-lab,.sheet .fig .f-num,.sheet .fig .f-fill,.sheet .fig .f-dot{fill:#000}
+.sheet .fig .f-dash{stroke:#555}
+.sheet .fig .f-shade{fill:#cfcfcf;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet .fig .f-line2{stroke:#000;stroke-dasharray:6 3}
+.sheet .fig .f-acc{fill:#000}
+
+/* ---------- Prompt AI ---------- */
+.how{padding-left:22px;margin:8px 0}
+.how li{margin:6px 0}
+.prompt details{margin:10px 0}
+.prompt summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;align-items:center}
+.prompt pre{white-space:pre-wrap;word-break:break-word;font:13.5px/1.55 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1.5px solid var(--grid);border-radius:12px;padding:12px 14px;max-height:420px;overflow:auto}
+
+/* ---------- Hình SVG ---------- */
+.fig .f-grid line{stroke:var(--grid);stroke-width:1}
+.fig .f-axis line,.fig .f-axis{stroke:var(--ink);stroke-width:1.4}
+.fig .f-fill{fill:var(--ink);stroke:none}
+.fig .f-curve{stroke:var(--primary);stroke-width:2.4;fill:none}
+.fig .f-line2{stroke:var(--accent);stroke-width:2;fill:none}
+.fig .f-stroke{stroke:var(--ink);stroke-width:1.8}
+.fig .f-thin{stroke:var(--ink);stroke-width:1.2}
+.fig .f-dash{stroke:var(--muted);stroke-width:1.3;stroke-dasharray:5 4;fill:none}
+.fig .f-dot{fill:var(--ink)}
+.fig .f-shade{fill:var(--shade);stroke:none;fill-rule:evenodd}
+.fig .f-lab{fill:var(--ink);font:700 15px var(--f-body)}
+.fig .f-acc{fill:var(--accent)}
+.fig .f-num{fill:var(--ink);font:600 13px var(--f-body)}
+
+/* ---------- Điện thoại ---------- */
+@media (max-width:560px){
+  body{font-size:17px}
+  .card{padding:16px;border-radius:18px;box-shadow:4px 4px 0 var(--line)}
+  .thead{align-items:flex-start}
+  .tno.big{width:52px;height:52px;font-size:24px}
+  .btn{width:100%}
+  .row .btn{width:auto;flex:1 1 140px}
+  .top{padding-left:52px;padding-right:52px}
+  .paper-wrap .sh-page{padding:6mm 4mm}
+  .sheet{font-size:11pt}
+  table.struct{font-size:15px}
+  table.struct th,table.struct td{padding:8px}
+  .card table:not(.struct){display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+
+/* ---------- In ---------- */
+@page{size:A4;margin:11mm 12mm}
+@media print{
+  body.printing{background:#fff !important}
+  body.printing > *:not(#print-root){display:none !important}
+  body.printing #print-root{display:block}
+  #print-root .sh-page{break-after:page;page-break-after:always}
+  #print-root .sh-page:last-child{break-after:auto;page-break-after:auto}
+  #print-root .sheet{font-size:12pt}
+}
+
+</style>
+</head>
+<body class="math">
+<div id="view"></div>
+<noscript>Trang này cần bật JavaScript.</noscript>
+
+<script>/* config.js */
+/* =====================================================================
+   CẤU HÌNH CHUNG – sửa tên web, người soạn, năm thi, đường link AI tại đây.
+   ===================================================================== */
+window.CONFIG = {
+  brand: ['Toán', 'vào 10'],                 // tên web: chữ thường + chữ màu
+  sub: 'Luyện thi tuyển sinh lớp 10 · TP.HCM',
+  author: 'Người soạn: thầy Vũ Tiến Lực',
+  year: '2026 – 2027',
+  examLine: 'Kỳ thi tuyển sinh vào lớp 10 TP.HCM, tháng 6/2027 · 120 phút · 7 bài · 10 điểm',
+  // Các trợ lý AI học sinh dùng để nhận xét bài (mở tab mới).
+  ai: [
+    { name: 'ChatGPT', url: 'https://chatgpt.com/' },
+    { name: 'Gemini', url: 'https://gemini.google.com/app' },
+    { name: 'Claude', url: 'https://claude.ai/new' },
+  ],
+  storeKey: 'vao10',                         // tiền tố khoá localStorage
+};
+
+</script>
+<script>/* assets/js/core.js */
+/* =====================================================================
+   CORE – sổ đăng ký chủ đề và các tiện ích dùng chung.
+   Nội dung chủ đề nằm trong data/cdNN-*.js, mỗi tệp gọi Topics.add({...}).
+   Công thức viết LaTeX trong \( … \) (trong dòng) hoặc \[ … \] (riêng dòng).
+   Trong tệp dữ liệu nên viết chuỗi bằng S`…` (= String.raw) để KHÔNG phải gấp đôi dấu \.
+   ===================================================================== */
+const S = String.raw;
+
+const Topics = (() => {
+  const list = [];
+  const REQUIRED = ['id', 'no', 'bai', 'title', 'desc', 'remind', 'theory', 'tips', 'quiz', 'models', 'present', 'practice'];
+  function add(t) {
+    REQUIRED.forEach(k => { if (t[k] === undefined) console.warn('Chủ đề thiếu trường', k, t.id); });
+    list.push(t);
+    list.sort((a, b) => a.no - b.no);
+  }
+  const get = id => list.find(t => t.id === id);
+  return { add, get, list };
+})();
+
+/* ---------- Tiện ích ---------- */
+const U = (() => {
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+  function h(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+
+  // Lưu trữ an toàn (trình duyệt chặn localStorage thì vẫn chạy).
+  const KEY = k => `${(window.CONFIG && CONFIG.storeKey) || 'vao10'}:${k}`;
+  function get(k, d) { try { const v = localStorage.getItem(KEY(k)); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
+  function set(k, v) { try { localStorage.setItem(KEY(k), JSON.stringify(v)); } catch (e) { /* bỏ qua */ } }
+
+  function shuffle(a) { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
+
+  // Số điểm kiểu Việt Nam: 0.25 → "0,25".
+  const pt = x => (Math.round(x * 100) / 100).toString().replace('.', ',');
+  const sum = arr => arr.reduce((s, x) => s + x, 0);
+
+  // HTML có công thức → văn bản thuần cho prompt AI: \( \) → $ $, bỏ thẻ, giữ xuống dòng.
+  function plain(html) {
+    let s = String(html)
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/(p|div|li|tr|h\d)>/gi, '\n')
+      .replace(/<li[^>]*>/gi, '- ')
+      .replace(/<td[^>]*>/gi, ' | ')
+      .replace(/<sup>(.*?)<\/sup>/gi, '^$1')
+      .replace(/<[^>]+>/g, '')
+      .replace(/\\\(\s*/g, '$').replace(/\s*\\\)/g, '$')
+      .replace(/\\\[\s*/g, '$$$$').replace(/\s*\\\]/g, '$$$$');
+    const t = document.createElement('textarea'); t.innerHTML = s; s = t.value;
+    return s.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  async function copy(text) {
+    try { await navigator.clipboard.writeText(text); return true; }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', '');
+      t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select();
+      let ok = false; try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+      t.remove(); return ok;
+    }
+  }
+
+  function toast(msg) {
+    let el = $('#toast'); if (!el) { el = h('<div id="toast" role="status" aria-live="polite"></div>'); document.body.appendChild(el); }
+    el.textContent = msg; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 2200);
+  }
+
+  return { esc, $, $$, h, get, set, shuffle, pt, sum, plain, copy, toast };
+})();
+
+</script>
+<script>/* assets/js/figures.js */
+/* =====================================================================
+   FIGURES – hình vẽ SVG (trả về chuỗi). Màu lấy từ class f-* trong style.css
+   nên tự đổi theo chế độ tối và in ra đen trắng.
+   - Fig.parab({...})  hệ trục + parabol y = ax² (+ đường thẳng, các điểm)
+   - Fig.geo({...})    hình phẳng: điểm, đoạn, đường tròn, góc vuông (toạ độ thực, y hướng lên)
+   - Fig.solid(kind)   hình khối: 'tru', 'non', 'cau', 'kem', 'coc-bi'
+   ===================================================================== */
+const Fig = (() => {
+  const f2 = x => Math.round(x * 100) / 100;
+  const num = x => String(x).replace('.', ',').replace('-', '−');
+
+  /* ---------- Parabol ---------- */
+  function parab(o) {
+    const a = o.a, [x0, x1] = o.xr || [-5, 5], [y0, y1] = o.yr || [-1, 9];
+    const W = o.w || 300, u = W / (x1 - x0), H = f2((y1 - y0) * u);
+    const X = x => f2((x - x0) * u), Y = y => f2((y1 - y) * u);
+    let s = `<svg class="fig" viewBox="-14 -14 ${W + 28} ${H + 28}" role="img" aria-label="${o.label || 'Đồ thị'}">`;
+    // lưới
+    s += '<g class="f-grid">';
+    for (let x = Math.ceil(x0); x <= x1; x++) s += `<line x1="${X(x)}" y1="0" x2="${X(x)}" y2="${H}"/>`;
+    for (let y = Math.ceil(y0); y <= y1; y++) s += `<line x1="0" y1="${Y(y)}" x2="${W}" y2="${Y(y)}"/>`;
+    s += '</g>';
+    // trục
+    s += `<g class="f-axis"><line x1="0" y1="${Y(0)}" x2="${W + 8}" y2="${Y(0)}"/><line x1="${X(0)}" y1="${H}" x2="${X(0)}" y2="-8"/>`;
+    s += `<path d="M${W + 8} ${Y(0)}l-7 -4v8z" class="f-fill"/><path d="M${X(0)} -8l-4 7h8z" class="f-fill"/></g>`;
+    s += `<text class="f-lab" x="${W + 4}" y="${Y(0) + 16}">x</text><text class="f-lab" x="${X(0) + 8}" y="0">y</text>`;
+    s += `<text class="f-lab" x="${X(0) - 14}" y="${Y(0) + 15}">O</text>`;
+    // vạch số
+    (o.ticksX || []).forEach(x => { s += `<line class="f-axis" x1="${X(x)}" y1="${Y(0) - 3}" x2="${X(x)}" y2="${Y(0) + 3}"/><text class="f-num" x="${X(x)}" y="${Y(0) + 15}" text-anchor="middle">${num(x)}</text>`; });
+    (o.ticksY || []).forEach(y => { s += `<line class="f-axis" x1="${X(0) - 3}" y1="${Y(y)}" x2="${X(0) + 3}" y2="${Y(y)}"/><text class="f-num" x="${X(0) - 6}" y="${Y(y) + 4}" text-anchor="end">${num(y)}</text>`; });
+    // parabol
+    let d = '';
+    for (let i = 0; i <= 200; i++) {
+      const x = x0 + (x1 - x0) * i / 200, y = a * x * x;
+      if (y < y0 - 0.5 || y > y1 + 0.5) continue;
+      d += (d ? 'L' : 'M') + X(x) + ' ' + Y(y);
+    }
+    s += `<path class="f-curve" d="${d}"/>`;
+    if (o.line) {
+      const { m, n } = o.line;
+      s += `<line class="f-line2" x1="${X(x0)}" y1="${Y(m * x0 + n)}" x2="${X(x1)}" y2="${Y(m * x1 + n)}"/>`;
+      if (o.lineLabel) s += `<text class="f-lab f-acc" x="${X(o.lineLabel[0])}" y="${Y(o.lineLabel[1])}">${o.lineLabel[2]}</text>`;
+    }
+    (o.pts || []).forEach(([x, y, lab, dx = 6, dy = -6]) => {
+      s += `<line class="f-dash" x1="${X(x)}" y1="${Y(y)}" x2="${X(x)}" y2="${Y(0)}"/><line class="f-dash" x1="${X(x)}" y1="${Y(y)}" x2="${X(0)}" y2="${Y(y)}"/>`;
+      s += `<circle class="f-dot" cx="${X(x)}" cy="${Y(y)}" r="3.6"/>`;
+      if (lab) s += `<text class="f-lab" x="${X(x) + dx}" y="${Y(y) + dy}">${lab}</text>`;
+    });
+    if (o.name) s += `<text class="f-lab f-acc" x="${X(o.name[0])}" y="${Y(o.name[1])}">${o.name[2]}</text>`;
+    return s + '</svg>';
+  }
+
+  /* ---------- Hình phẳng ---------- */
+  function geo(o) {
+    const P = o.pts, names = Object.keys(P);
+    const xs = [], ys = [];
+    names.forEach(k => { xs.push(P[k][0]); ys.push(P[k][1]); });
+    (o.circles || []).forEach(c => { const [cx, cy] = typeof c.c === 'string' ? P[c.c] : c.c; xs.push(cx - c.r, cx + c.r); ys.push(cy - c.r, cy + c.r); });
+    const mx = Math.min(...xs), Mx = Math.max(...xs), my = Math.min(...ys), My = Math.max(...ys);
+    const W = o.w || 300, pad = 26, u = (W - 2 * pad) / (Mx - mx || 1), H = f2((My - my) * u + 2 * pad);
+    const X = x => f2(pad + (x - mx) * u), Y = y => f2(pad + (My - y) * u);
+    const at = k => (Array.isArray(k) ? k : P[k]);
+    let s = `<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.label || 'Hình vẽ'}">`;
+    (o.fill || []).forEach(f => { s += `<path class="f-shade" d="${f(X, Y, P, u)}"/>`; });
+    (o.circles || []).forEach(c => { const [cx, cy] = typeof c.c === 'string' ? P[c.c] : c.c; s += `<circle class="${c.dash ? 'f-dash' : 'f-stroke'}" cx="${X(cx)}" cy="${Y(cy)}" r="${f2(c.r * u)}" fill="none"/>`; });
+    const seg = (cls, list) => (list || '').split(/\s+/).filter(Boolean).forEach(pq => {
+      const [p, q] = pq.length === 2 ? [pq[0], pq[1]] : pq.split('-');
+      const A = at(p), B = at(q);
+      s += `<line class="${cls}" x1="${X(A[0])}" y1="${Y(A[1])}" x2="${X(B[0])}" y2="${Y(B[1])}"/>`;
+    });
+    seg('f-stroke', o.segs); seg('f-dash', o.dash); seg('f-line2', o.acc);
+    // góc vuông: [P, đỉnh, Q]
+    (o.rights || []).forEach(([p, v, q]) => {
+      const V = at(v), A = at(p), B = at(q), k = (o.rs || 0.22) * (o.rsUnit || 1);
+      const ua = [A[0] - V[0], A[1] - V[1]], ub = [B[0] - V[0], B[1] - V[1]];
+      const la = Math.hypot(...ua), lb = Math.hypot(...ub);
+      const a1 = [V[0] + ua[0] / la * k, V[1] + ua[1] / la * k], b1 = [V[0] + ub[0] / lb * k, V[1] + ub[1] / lb * k];
+      const c1 = [a1[0] + ub[0] / lb * k, a1[1] + ub[1] / lb * k];
+      s += `<path class="f-thin" d="M${X(a1[0])} ${Y(a1[1])}L${X(c1[0])} ${Y(c1[1])}L${X(b1[0])} ${Y(b1[1])}" fill="none"/>`;
+    });
+    // điểm và nhãn
+    const cx = names.reduce((t, k) => t + P[k][0], 0) / names.length, cy = names.reduce((t, k) => t + P[k][1], 0) / names.length;
+    const dots = (o.dots || '').split(/\s+/).filter(Boolean);
+    names.forEach(k => {
+      if ((o.hide || '').split(/\s+/).includes(k)) return;
+      const [x, y] = P[k];
+      let dx, dy;
+      if (o.lab && o.lab[k]) [dx, dy] = o.lab[k];
+      else { const vx = x - cx, vy = y - cy, l = Math.hypot(vx, vy) || 1; dx = vx / l * 14; dy = -vy / l * 14; }
+      if (dots.includes(k)) s += `<circle class="f-dot" cx="${X(x)}" cy="${Y(y)}" r="2.8"/>`;
+      s += `<text class="f-lab" x="${f2(X(x) + dx)}" y="${f2(Y(y) + dy + 5)}" text-anchor="middle">${k}</text>`;
+    });
+    (o.texts || []).forEach(([x, y, t]) => { s += `<text class="f-num" x="${X(x)}" y="${Y(y)}" text-anchor="middle">${t}</text>`; });
+    return s + '</svg>';
+  }
+
+  /* ---------- Hình khối ---------- */
+  function solid(kind, t = {}) {
+    const lab = (x, y, s, a = 'middle') => `<text class="f-num" x="${x}" y="${y}" text-anchor="${a}">${s}</text>`;
+    let s = '<svg class="fig fig-sm" viewBox="0 0 240 230" role="img" aria-label="Hình khối">';
+    if (kind === 'tru') {
+      s += '<ellipse class="f-stroke" cx="120" cy="40" rx="70" ry="18" fill="none"/>';
+      s += '<path class="f-stroke" d="M50 40V190M190 40V190" fill="none"/>';
+      s += '<path class="f-stroke" d="M50 190A70 18 0 0 0 190 190" fill="none"/><path class="f-dash" d="M50 190A70 18 0 0 1 190 190" fill="none"/>';
+      s += '<line class="f-dash" x1="120" y1="40" x2="120" y2="190"/><line class="f-dash" x1="120" y1="190" x2="190" y2="190"/>';
+      s += lab(155, 184, t.r || 'r') + lab(128, 120, t.h || 'h', 'start');
+    } else if (kind === 'non') {
+      s += '<path class="f-stroke" d="M120 20L50 190M120 20L190 190" fill="none"/>';
+      s += '<path class="f-stroke" d="M50 190A70 18 0 0 0 190 190" fill="none"/><path class="f-dash" d="M50 190A70 18 0 0 1 190 190" fill="none"/>';
+      s += '<line class="f-dash" x1="120" y1="20" x2="120" y2="190"/><line class="f-dash" x1="120" y1="190" x2="190" y2="190"/>';
+      s += lab(155, 184, t.r || 'r') + lab(126, 120, t.h || 'h', 'start') + lab(170, 100, t.l || 'l', 'start');
+    } else if (kind === 'cau') {
+      s += '<circle class="f-stroke" cx="120" cy="115" r="85" fill="none"/>';
+      s += '<path class="f-stroke" d="M35 115A85 22 0 0 0 205 115" fill="none"/><path class="f-dash" d="M35 115A85 22 0 0 1 205 115" fill="none"/>';
+      s += '<circle class="f-dot" cx="120" cy="115" r="3"/><line class="f-dash" x1="120" y1="115" x2="205" y2="115"/>';
+      s += lab(162, 108, t.r || 'R');
+    } else if (kind === 'kem') {
+      s += '<path class="f-stroke" d="M60 95A60 60 0 0 1 180 95" fill="none"/>';
+      s += '<path class="f-stroke" d="M60 95A60 14 0 0 0 180 95" fill="none"/><path class="f-dash" d="M60 95A60 14 0 0 1 180 95" fill="none"/>';
+      s += '<path class="f-stroke" d="M60 95L120 220L180 95" fill="none"/>';
+      s += '<line class="f-dash" x1="120" y1="95" x2="120" y2="220"/><line class="f-dash" x1="120" y1="95" x2="180" y2="95"/>';
+      s += lab(150, 89, t.r || 'r') + lab(126, 165, t.h || 'h', 'start');
+    } else if (kind === 'coc-bi') {
+      s += '<ellipse class="f-stroke" cx="120" cy="30" rx="70" ry="14" fill="none"/>';
+      s += '<path class="f-stroke" d="M50 30V200M190 30V200M50 200A70 14 0 0 0 190 200" fill="none"/>';
+      s += '<path class="f-shade" d="M50 90A70 14 0 0 0 190 90V200A70 14 0 0 1 50 200Z"/>';
+      s += '<ellipse class="f-thin" cx="120" cy="90" rx="70" ry="14" fill="none"/>';
+      [[90, 170], [140, 178], [116, 140]].forEach(([x, y]) => { s += `<circle class="f-stroke" cx="${x}" cy="${y}" r="18" fill="none"/>`; });
+    }
+    return s + '</svg>';
+  }
+
+  return { parab, geo, solid };
+})();
+
+</script>
+<script>/* assets/js/math.js */
+/* =====================================================================
+   MATH – cấu hình MathJax 3 (bản đặt sẵn trong assets/vendor/mathjax, chạy không cần mạng)
+   và tự vẽ công thức mỗi khi nội dung trang đổi. Nạp TRƯỚC tex-chtml.js.
+   ===================================================================== */
+window.MathJax = {
+  loader: { load: [] },
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], processEscapes: false },
+  chtml: { scale: 1.02, matchFontHeight: false, displayAlign: 'left', displayIndent: '0' },
+  options: { enableMenu: false, ignoreHtmlClass: 'no-math', processHtmlClass: 'math' },
+  startup: {
+    typeset: false,
+    ready() {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => MathTS.start());
+    },
+  },
+};
+
+const MathTS = (() => {
+  const queued = new Set(); let timer = null, busy = Promise.resolve(), started = false;
+  const HAS = /\\\(|\\\[/;
+  function flush() {
+    timer = null;
+    const nodes = [...queued]; queued.clear();
+    if (!window.MathJax || !MathJax.typesetPromise) return;
+    busy = busy.then(async () => {
+      for (const n of nodes) {
+        if (!n.isConnected || !HAS.test(n.textContent)) continue;
+        try { await MathJax.typesetPromise([n]); }
+        catch (e) { if (n.isConnected) setTimeout(() => add(n), 30); }
+      }
+    });
+  }
+  function add(n) {
+    if (!n || n.nodeType !== 1) n = n && n.parentElement;
+    if (!n || n.closest('mjx-container')) return;
+    queued.add(n); if (!timer) timer = setTimeout(flush, 0);
+  }
+  function start() {
+    started = true;
+    add(document.body);
+    new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(add)))
+      .observe(document.body, { childList: true, subtree: true });
+  }
+  // Chờ vẽ xong công thức trong một vùng (dùng trước khi in). Không có MathJax thì trả về ngay.
+  async function done(node) {
+    for (let i = 0; i < 100 && !started; i++) await new Promise(r => setTimeout(r, 100));
+    if (!window.MathJax || !MathJax.typesetPromise) return;
+    await busy;
+    try { await MathJax.typesetPromise([node || document.body]); } catch (e) { /* bỏ qua */ }
+  }
+  return { start, typeset: add, done };
+})();
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" async></script>
+<!-- NỘI DUNG: mỗi chủ đề một tệp. Thêm chủ đề = thêm một dòng ở đây. -->
+<script>/* data/vao-10/cd01-ham-so-parabol.js */
+/* Chủ đề 1 – Bài 1 (1,5 điểm): Hàm số y = ax² (a ≠ 0) và đồ thị. */
+Topics.add({
+  id: 'ham-so-parabol', no: 1, bai: 'Bài 1 · 1,5 điểm',
+  title: S`Hàm số \(y = ax^2\ (a \ne 0)\) và đồ thị`,
+  desc: 'Vẽ parabol bằng bảng 5 giá trị; tìm điểm thuộc đồ thị thỏa điều kiện; giao điểm với đường thẳng.',
+  remind: [
+    S`Đồ thị \(y = ax^2\) là parabol đỉnh \(O\), nhận \(Oy\) làm trục đối xứng.`,
+    S`\(a \gt 0\): nằm phía trên \(Ox\); \(a \lt 0\): nằm phía dưới \(Ox\).`,
+    S`\(M(x_0;\, y_0)\) thuộc đồ thị \(\iff y_0 = a x_0^2\).`,
+    S`Giao điểm với \(y = mx + n\): giải \(ax^2 = mx + n\).`,
+  ],
+  theory: [
+    { t: 'Đồ thị là một parabol',
+      b: S`<p>Đồ thị hàm số \(y = ax^2\ (a \ne 0)\) là một đường cong gọi là <b>parabol</b>, có đỉnh là gốc tọa độ \(O\) và nhận trục \(Oy\) làm trục đối xứng.</p>
+        <ul><li>\(a \gt 0\): parabol nằm phía trên trục hoành, \(O\) là điểm thấp nhất.</li>
+        <li>\(a \lt 0\): parabol nằm phía dưới trục hoành, \(O\) là điểm cao nhất.</li></ul>`,
+      fig: Fig.parab({ a: 1, xr: [-3.2, 3.2], yr: [-0.6, 9.4], w: 260, ticksX: [-2, -1, 1, 2], ticksY: [1, 4], pts: [[-2, 4], [-1, 1], [1, 1], [2, 4]], name: [2.25, 7.3, 'y = x²'], label: 'Parabol y = x²' }) },
+    { t: 'Lập bảng giá trị để vẽ',
+      b: S`<p>Chọn <b>5 giá trị của \(x\) đối xứng nhau qua 0</b>, tính \(y\) rồi đánh dấu 5 điểm và nối thành đường cong trơn.</p>
+        <ul><li>\(a = \pm 1,\ \pm 2\): chọn \(x = -2;\ -1;\ 0;\ 1;\ 2\).</li>
+        <li>\(a = \pm\dfrac12\): chọn \(x = -4;\ -2;\ 0;\ 2;\ 4\) (hoặc \(-2;\,-1;\,0;\,1;\,2\)).</li>
+        <li>\(a = \pm\dfrac14\): chọn \(x = -4;\ -2;\ 0;\ 2;\ 4\) để \(y\) là số nguyên.</li></ul>`,
+      warn: 'Hai điểm đối xứng nhau qua Oy luôn có cùng tung độ – nếu bảng của em không đối xứng là đã tính sai.' },
+    { t: 'Điểm thuộc đồ thị',
+      b: S`<p>\(M(x_0;\, y_0)\) thuộc đồ thị \((P): y = ax^2 \iff y_0 = a x_0^2\).</p>
+        <p>Muốn <b>tìm điểm thuộc (P) thỏa một điều kiện</b>: gọi \(M(x_0;\, a x_0^2)\), viết điều kiện thành phương trình ẩn \(x_0\), giải rồi tính \(y_0\).</p>
+        <table><tr><th>Điều kiện</th><th>Phương trình</th></tr>
+        <tr><td>Tung độ bằng \(k\)</td><td>\(a x_0^2 = k\)</td></tr>
+        <tr><td>Tung độ gấp \(k\) lần hoành độ</td><td>\(a x_0^2 = k x_0\)</td></tr>
+        <tr><td>Cách đều hai trục tọa độ</td><td>\(|a x_0^2| = |x_0|\)</td></tr>
+        <tr><td>Hoành độ và tung độ đối nhau</td><td>\(a x_0^2 = -x_0\)</td></tr></table>`,
+      warn: S`Phương trình dạng \(a x_0^2 = k x_0\): chuyển vế rồi đặt nhân tử chung \(x_0(a x_0 - k) = 0\). Chia hai vế cho \(x_0\) sẽ mất nghiệm \(x_0 = 0\).` },
+    { t: 'Giao điểm của parabol và đường thẳng',
+      b: S`<p>Hoành độ giao điểm của \((P): y = ax^2\) và \((d): y = mx + n\) là nghiệm của phương trình
+        \[ax^2 = mx + n \iff ax^2 - mx - n = 0.\]
+        Giải ra \(x\), thay vào \((d)\) (hoặc \((P)\)) để tìm \(y\). Số nghiệm của phương trình = số giao điểm.</p>` },
+  ],
+  tips: [
+    { t: 'a dương mặt cười, a âm mặt buồn', b: S`Parabol của \(a \gt 0\) cong lên như miệng cười; \(a \lt 0\) úp xuống như miệng buồn.` },
+    { t: 'Năm điểm đối xứng, đỉnh luôn ở O', b: 'Bảng giá trị phải đối xứng: cặp x đối nhau cho cùng y. Không đối xứng là sai.' },
+    { t: 'Thuộc đồ thị = thay vào thấy đúng', b: S`Muốn biết điểm có thuộc không: thay \(x_0\) vào, tính \(a x_0^2\) rồi so với \(y_0\).` },
+    { t: 'Hoành nằm ngang, tung đứng thẳng', b: S`Hoành độ là \(x\) (trục nằm ngang), tung độ là \(y\) (trục đứng). Điểm viết \((x;\, y)\): hoành trước, tung sau.` },
+    { t: 'Đừng chia cho x – hãy đặt nhân tử', b: S`Gặp \(a x^2 = k x\): đưa hết về một vế rồi đặt \(x\) ra ngoài để giữ nghiệm \(x = 0\).` },
+  ],
+  quiz: [
+    { q: S`Đồ thị hàm số \(y = -2x^2\) nằm ở đâu?`, a: ['Phía dưới trục hoành, đỉnh là O', 'Phía trên trục hoành, đỉnh là O', 'Bên phải trục tung', 'Cắt trục hoành tại hai điểm'], why: S`\(a = -2 \lt 0\) nên parabol nằm phía dưới trục hoành, \(O\) là điểm cao nhất.` },
+    { q: S`Điểm nào thuộc đồ thị \(y = \dfrac12 x^2\)?`, a: [S`\((2;\, 2)\)`, S`\((2;\, 1)\)`, S`\((-2;\, -2)\)`, S`\((4;\, 4)\)`], why: S`Với \(x = 2\): \(\dfrac12 \cdot 2^2 = 2\). Đúng bằng tung độ 2.` },
+    { q: S`Đồ thị \(y = ax^2\) đi qua \(A(2;\, 8)\). Giá trị của \(a\) là`, a: ['2', '4', '16', '1/2'], why: S`Thay \(x = 2,\ y = 8\): \(8 = a \cdot 4 \Rightarrow a = 2\).` },
+    { q: S`Trục đối xứng của parabol \(y = 3x^2\) là`, a: ['Trục tung Oy', 'Trục hoành Ox', S`Đường thẳng \(y = x\)`, S`Đường thẳng \(y = 3\)`], why: 'Mọi parabol y = ax² đều nhận trục tung làm trục đối xứng.' },
+    { q: S`Với \(y = -x^2\), khi \(x = -3\) thì \(y\) bằng`, a: ['−9', '9', '−6', '6'], why: S`\(y = -(-3)^2 = -9\). Bình phương trước, dấu trừ đứng ngoài giữ nguyên.` },
+    { q: S`Các điểm thuộc \((P): y = x^2\) có tung độ bằng 4 là`, a: [S`\((2;\, 4)\) và \((-2;\, 4)\)`, S`Chỉ \((2;\, 4)\)`, S`\((4;\, 16)\)`, S`\((4;\, 2)\) và \((4;\, -2)\)`], why: S`\(x^2 = 4 \iff x = \pm 2\). Có hai điểm, đừng quên nghiệm âm.` },
+    { q: S`Để vẽ \(y = \dfrac14 x^2\) cho tung độ là số nguyên, nên chọn \(x\) bằng`, a: ['−4; −2; 0; 2; 4', '−2; −1; 0; 1; 2', '0; 1; 2; 3; 4', '−1; 0; 1; 2; 3'], why: S`\(x = \pm 2\) cho \(y = 1\), \(x = \pm 4\) cho \(y = 4\): số đẹp, đối xứng qua 0.` },
+    { q: S`Hoành độ giao điểm của \((P): y = x^2\) và \((d): y = x + 2\) là nghiệm của phương trình`, a: [S`\(x^2 - x - 2 = 0\)`, S`\(x^2 + x + 2 = 0\)`, S`\(x^2 + x - 2 = 0\)`, S`\(x^2 - x + 2 = 0\)`], why: S`Cho hai vế bằng nhau: \(x^2 = x + 2 \iff x^2 - x - 2 = 0\).` },
+  ],
+  models: [
+    { title: 'Vẽ parabol và tìm điểm có tung độ gấp đôi hoành độ', pts: 1.5,
+      de: S`Cho hàm số \(y = \dfrac12 x^2\) có đồ thị \((P)\).<br>a) Vẽ \((P)\) trên mặt phẳng tọa độ \(Oxy\).<br>b) Tìm các điểm thuộc \((P)\) có tung độ gấp đôi hoành độ.`,
+      fig: Fig.parab({ a: 0.5, xr: [-5, 5], yr: [-1, 9], w: 300, ticksX: [-4, -2, 2, 4], ticksY: [2, 8], pts: [[-4, 8], [-2, 2], [2, 2], [4, 8, '(4; 8)', -58, -8]], name: [-4.9, 6.6, '(P)'], label: 'Parabol y = x²/2' }),
+      steps: [
+        { part: 'a) Vẽ (P) – 0,75 điểm' },
+        { s: S`Bảng giá trị:
+            <table><tr><td>\(x\)</td><td>\(-4\)</td><td>\(-2\)</td><td>\(0\)</td><td>\(2\)</td><td>\(4\)</td></tr>
+            <tr><td>\(y = \frac12 x^2\)</td><td>\(8\)</td><td>\(2\)</td><td>\(0\)</td><td>\(2\)</td><td>\(8\)</td></tr></table>`, p: 0.25 },
+        { s: S`Vẽ hệ trục \(Oxy\) có mũi tên, ghi \(x,\ y,\ O\); đánh dấu 5 điểm \((-4;8),\ (-2;2),\ (0;0),\ (2;2),\ (4;8)\); nối thành đường cong trơn và ghi tên \((P)\) (hình bên).`, p: 0.5, warn: 'Nối gấp khúc, đỉnh nhọn hoặc thiếu tên trục, thiếu O đều bị trừ.' },
+        { part: 'b) Tìm điểm – 0,75 điểm' },
+        { s: S`Gọi \(M(x_0;\, y_0)\) là điểm cần tìm. Vì tung độ gấp đôi hoành độ nên \(y_0 = 2x_0\). Vì \(M \in (P)\) nên \(y_0 = \dfrac12 x_0^2\). Suy ra \(\dfrac12 x_0^2 = 2x_0\).`, p: 0.25 },
+        { s: S`\(\iff x_0^2 - 4x_0 = 0 \iff x_0(x_0 - 4) = 0 \iff x_0 = 0\) hoặc \(x_0 = 4\).`, p: 0.25, warn: S`Chia hai vế cho \(x_0\) sẽ mất nghiệm \(x_0 = 0\) – bị trừ 0,25.` },
+        { s: S`\(x_0 = 0 \Rightarrow y_0 = 0\); \(x_0 = 4 \Rightarrow y_0 = 8\). Vậy có hai điểm: \(O(0;\, 0)\) và \(M(4;\, 8)\).`, p: 0.25 },
+      ],
+      loi: ['Bảng giá trị thiếu hoặc không đối xứng.', 'Vẽ parabol gấp khúc, nhọn ở đỉnh, không ghi tên (P), x, y, O.', 'Chia hai vế cho x₀ làm mất điểm O.', 'Kết luận thiếu điểm hoặc viết ngược (tung; hoành).'] },
+  ],
+  present: [
+    'Lập bảng giá trị đủ 5 cặp số, đối xứng qua 0, trước khi vẽ.',
+    'Hệ trục có mũi tên, ghi x, y, O; đánh dấu đúng 5 điểm trên lưới.',
+    'Nối cong trơn qua đỉnh O (không gấp khúc), ghi tên (P) cạnh đồ thị.',
+    'Câu b: gọi tọa độ điểm, lập phương trình, không chia hai vế cho x.',
+    'Kết luận đủ mọi điểm tìm được, viết đúng dạng (hoành độ; tung độ).',
+  ],
+  practice: [
+    { lv: 'Cơ bản', pts: 1.5, h: 72,
+      de: S`Cho hàm số \(y = -x^2\) có đồ thị \((P)\).<br>a) Vẽ \((P)\).<br>b) Điểm \(A(-3;\, -9)\) có thuộc \((P)\) không? Tìm các điểm thuộc \((P)\) có tung độ bằng \(-4\).`,
+      ans: S`a) Bảng: \(x = -2;-1;0;1;2 \Rightarrow y = -4;-1;0;-1;-4\). b) \(A\) thuộc \((P)\); hai điểm \((2;\, -4)\) và \((-2;\, -4)\).`,
+      fig: Fig.parab({ a: -1, xr: [-3.5, 3.5], yr: [-9.5, 1], w: 220, ticksX: [-3, -2, -1, 1, 2], ticksY: [-1, -4, -9], pts: [[-2, -4], [-1, -1], [1, -1], [2, -4], [-3, -9, 'A', 8, 4]], name: [2.1, -6.5, '(P)'] }),
+      barem: [[S`Bảng giá trị đúng (5 điểm)`, 0.25], [S`Vẽ đúng parabol, đủ tên trục, O, (P)`, 0.5], [S`Thay \(x = -3\): \(-(-3)^2 = -9\), kết luận \(A \in (P)\)`, 0.25], [S`\(-x^2 = -4 \iff x = \pm 2\)`, 0.25], [S`Kết luận hai điểm \((2;-4),\ (-2;-4)\)`, 0.25]] },
+    { lv: 'Khá', pts: 1.5, h: 76,
+      de: S`Cho hàm số \(y = \dfrac14 x^2\) có đồ thị \((P)\).<br>a) Vẽ \((P)\).<br>b) Tìm các điểm thuộc \((P)\) cách đều hai trục tọa độ.`,
+      ans: S`a) \(x = -4;-2;0;2;4 \Rightarrow y = 4;1;0;1;4\). b) \(O(0;0),\ (4;\, 4),\ (-4;\, 4)\).`,
+      fig: Fig.parab({ a: 0.25, xr: [-5, 5], yr: [-1, 5], w: 240, ticksX: [-4, -2, 2, 4], ticksY: [1, 4], pts: [[-4, 4], [-2, 1], [2, 1], [4, 4]], name: [3.1, 3.4, '(P)'] }),
+      barem: [[S`Bảng giá trị đúng`, 0.25], [S`Vẽ đúng parabol`, 0.5], [S`Cách đều hai trục \(\iff |y_0| = |x_0| \iff \frac14 x_0^2 = |x_0|\)`, 0.25], [S`Xét \(x_0 \ge 0\): \(x_0 = 0\) hoặc \(4\); \(x_0 \lt 0\): \(x_0 = -4\)`, 0.25], [S`Kết luận ba điểm \(O,\ (4;4),\ (-4;4)\)`, 0.25]] },
+    { lv: 'Nâng cao', pts: 1.5, h: 86,
+      de: S`Cho \((P): y = -\dfrac12 x^2\) và đường thẳng \((d): y = x - 4\).<br>a) Vẽ \((P)\) và \((d)\) trên cùng một hệ trục tọa độ.<br>b) Tìm tọa độ giao điểm của \((P)\) và \((d)\) bằng phép tính.`,
+      ans: S`b) \((2;\, -2)\) và \((-4;\, -8)\).`,
+      fig: Fig.parab({ a: -0.5, xr: [-5, 5], yr: [-9, 2], w: 260, ticksX: [-4, -2, 2, 4], ticksY: [-2, -4, -8], pts: [[-4, -8], [-2, -2], [2, -2, '(2; −2)', 8, 4], [4, -8]], line: { m: 1, n: -4 }, lineLabel: [3.1, 0.6, '(d)'], name: [-4.9, -5.5, '(P)'] }),
+      barem: [[S`Bảng giá trị của \((P)\): \(x = -4;-2;0;2;4 \Rightarrow y = -8;-2;0;-2;-8\)`, 0.25], [S`Vẽ đúng \((P)\)`, 0.25], [S`Vẽ \((d)\) qua hai điểm \((0;-4)\) và \((4;0)\)`, 0.25], [S`Phương trình hoành độ giao điểm \(-\frac12 x^2 = x - 4 \iff x^2 + 2x - 8 = 0\)`, 0.25], [S`Giải được \(x = 2\) hoặc \(x = -4\)`, 0.25], [S`Tính \(y\) và kết luận \((2;-2),\ (-4;-8)\)`, 0.25]] },
+  ],
+});
+
+</script>
+<script>/* data/vao-10/cd02-pt-bac-hai-viete.js */
+/* Chủ đề 2 – Bài 2 (1 điểm): Phương trình bậc hai – điều kiện có nghiệm, định lí Viète. */
+Topics.add({
+  id: 'pt-bac-hai-viete', no: 2, bai: 'Bài 2 · 1 điểm',
+  title: 'Phương trình bậc hai – điều kiện có nghiệm, định lí Viète',
+  desc: 'Xét dấu Δ để biết số nghiệm; dùng Viète tính giá trị biểu thức của hai nghiệm mà không giải phương trình.',
+  remind: [
+    S`\(\Delta = b^2 - 4ac\); \(b = 2b'\) thì \(\Delta' = b'^2 - ac\).`,
+    S`\(\Delta \gt 0\): 2 nghiệm phân biệt; \(\Delta = 0\): nghiệm kép; \(\Delta \lt 0\): vô nghiệm.`,
+    S`\(a \cdot c \lt 0 \Rightarrow\) luôn có 2 nghiệm phân biệt trái dấu.`,
+    S`Viète: \(S = x_1 + x_2 = -\dfrac{b}{a}\), \(P = x_1 x_2 = \dfrac{c}{a}\).`,
+  ],
+  theory: [
+    { t: 'Số nghiệm theo biệt thức',
+      b: S`<p>Phương trình \(ax^2 + bx + c = 0\ (a \ne 0)\), biệt thức \(\Delta = b^2 - 4ac\).</p>
+        <table><tr><th>\(\Delta\)</th><th>Số nghiệm</th><th>Công thức</th></tr>
+        <tr><td>\(\Delta \gt 0\)</td><td>2 nghiệm phân biệt</td><td>\(x_{1,2} = \dfrac{-b \pm \sqrt\Delta}{2a}\)</td></tr>
+        <tr><td>\(\Delta = 0\)</td><td>nghiệm kép</td><td>\(x_1 = x_2 = -\dfrac{b}{2a}\)</td></tr>
+        <tr><td>\(\Delta \lt 0\)</td><td>vô nghiệm</td><td>—</td></tr></table>
+        <p>Khi \(b = 2b'\) (hệ số b chẵn) dùng \(\Delta' = b'^2 - ac\), nghiệm \(x_{1,2} = \dfrac{-b' \pm \sqrt{\Delta'}}{a}\).</p>` },
+    { t: 'Điều kiện có nghiệm',
+      b: S`<ul><li>Có nghiệm \(\iff \Delta \ge 0\) (hoặc \(\Delta' \ge 0\)).</li><li>Có 2 nghiệm phân biệt \(\iff \Delta \gt 0\).</li>
+        <li>Nếu \(a \cdot c \lt 0\) thì \(\Delta = b^2 - 4ac \gt 0\): phương trình chắc chắn có 2 nghiệm phân biệt, trái dấu.</li></ul>`,
+      warn: S`Phương trình có tham số m: tìm điều kiện có nghiệm TRƯỚC, cuối bài phải đối chiếu giá trị m tìm được với điều kiện đó.` },
+    { t: 'Định lí Viète',
+      b: S`<p>Nếu \(x_1, x_2\) là hai nghiệm của \(ax^2 + bx + c = 0\ (a \ne 0)\) thì
+        \[S = x_1 + x_2 = -\frac{b}{a}, \qquad P = x_1 x_2 = \frac{c}{a}.\]</p>
+        <p>Nhẩm nghiệm: \(a + b + c = 0 \Rightarrow x_1 = 1,\ x_2 = \dfrac{c}{a}\); \(a - b + c = 0 \Rightarrow x_1 = -1,\ x_2 = -\dfrac{c}{a}\).</p>` },
+    { t: 'Biểu thức đối xứng – đưa về S và P',
+      b: S`<table><tr><th>Biểu thức</th><th>Theo S, P</th></tr>
+        <tr><td>\(x_1^2 + x_2^2\)</td><td>\(S^2 - 2P\)</td></tr>
+        <tr><td>\((x_1 - x_2)^2\)</td><td>\(S^2 - 4P\)</td></tr>
+        <tr><td>\(\dfrac{1}{x_1} + \dfrac{1}{x_2}\)</td><td>\(\dfrac{S}{P}\)</td></tr>
+        <tr><td>\(\dfrac{x_1}{x_2} + \dfrac{x_2}{x_1}\)</td><td>\(\dfrac{S^2 - 2P}{P}\)</td></tr>
+        <tr><td>\(x_1^3 + x_2^3\)</td><td>\(S^3 - 3SP\)</td></tr></table>
+        <p><b>Biểu thức không đối xứng</b> (ví dụ có \(x_1^2\) mà không có \(x_2^2\)): dùng \(x_1\) là nghiệm, \(a x_1^2 = -b x_1 - c\), để hạ bậc rồi mới dùng Viète.</p>` },
+  ],
+  tips: [
+    { t: 'Tổng trừ b, tích c chia a', b: S`\(S = -\dfrac{b}{a}\) (nhớ dấu trừ), \(P = \dfrac{c}{a}\) (không có dấu trừ).` },
+    { t: 'a, c trái dấu – chắc chắn có nghiệm', b: S`Thấy \(a \cdot c \lt 0\) là kết luận ngay hai nghiệm phân biệt, khỏi tính \(\Delta\).` },
+    { t: 'Trước Viète phải có nghiệm', b: 'Luôn viết một dòng: "Vì Δ > 0 (hoặc a·c < 0) nên phương trình có hai nghiệm x₁, x₂. Theo Viète…". Thiếu dòng này là mất điểm.' },
+    { t: 'Bình phương tổng trừ hai tích', b: S`\(x_1^2 + x_2^2 = (x_1 + x_2)^2 - 2x_1x_2 = S^2 - 2P\).` },
+    { t: 'Không đối xứng thì hạ bậc', b: S`Thay \(x_1^2\) bằng \(\dfrac{-b x_1 - c}{a}\) (vì \(x_1\) là nghiệm) rồi gom về \(S, P\).` },
+  ],
+  quiz: [
+    { q: S`Phương trình \(2x^2 - 5x - 3 = 0\) có \(\Delta\) bằng`, a: ['49', '1', '−1', '25'], why: S`\(\Delta = (-5)^2 - 4 \cdot 2 \cdot (-3) = 25 + 24 = 49\).` },
+    { q: S`Phương trình \(x^2 + 4x + 5 = 0\)`, a: ['Vô nghiệm', 'Có nghiệm kép', 'Có hai nghiệm phân biệt', 'Có hai nghiệm trái dấu'], why: S`\(\Delta' = 2^2 - 5 = -1 \lt 0\) nên vô nghiệm.` },
+    { q: S`Nếu \(a \cdot c \lt 0\) thì phương trình \(ax^2 + bx + c = 0\)`, a: ['Luôn có hai nghiệm phân biệt trái dấu', 'Luôn vô nghiệm', 'Luôn có nghiệm kép', 'Có hai nghiệm cùng dấu'], why: S`\(\Delta = b^2 - 4ac \gt 0\) vì \(-4ac \gt 0\); tích hai nghiệm \(\dfrac{c}{a} \lt 0\) nên trái dấu.` },
+    { q: S`Phương trình \(x^2 - 7x + 10 = 0\) có tổng và tích hai nghiệm là`, a: ['S = 7, P = 10', 'S = −7, P = 10', 'S = 7, P = −10', 'S = 10, P = 7'], why: S`\(S = -\dfrac{-7}{1} = 7\), \(P = \dfrac{10}{1} = 10\).` },
+    { q: S`\(x_1^2 + x_2^2\) viết theo \(S, P\) là`, a: [S`\(S^2 - 2P\)`, S`\(S^2 + 2P\)`, S`\(S^2 - 4P\)`, S`\(S - 2P\)`], why: S`\((x_1 + x_2)^2 = x_1^2 + x_2^2 + 2x_1x_2\) nên \(x_1^2 + x_2^2 = S^2 - 2P\).` },
+    { q: S`Phương trình \(3x^2 - 5x + 2 = 0\) có hai nghiệm là`, a: [S`\(1\) và \(\dfrac23\)`, S`\(-1\) và \(-\dfrac23\)`, S`\(1\) và \(-\dfrac23\)`, S`\(\dfrac32\) và \(1\)`], why: S`\(a + b + c = 3 - 5 + 2 = 0\) nên \(x_1 = 1,\ x_2 = \dfrac{c}{a} = \dfrac23\).` },
+    { q: S`Phương trình \(x^2 - 2x + m = 0\) có nghiệm khi và chỉ khi`, a: [S`\(m \le 1\)`, S`\(m \lt 1\)`, S`\(m \ge 1\)`, S`\(m \le 4\)`], why: S`\(\Delta' = 1 - m \ge 0 \iff m \le 1\). "Có nghiệm" thì lấy cả dấu bằng.` },
+    { q: 'Vì sao phải khẳng định phương trình có nghiệm trước khi dùng Viète?', a: ['Vì Viète chỉ đúng khi phương trình có nghiệm', 'Vì giám khảo thích như vậy', 'Vì để tính Δ cho nhanh', 'Không cần, Viète luôn đúng'], why: S`Phương trình vô nghiệm thì không có \(x_1, x_2\) để nói tổng hay tích. Thiếu bước này bị trừ điểm.` },
+  ],
+  models: [
+    { title: 'Chứng minh có hai nghiệm và tính giá trị biểu thức', pts: 1,
+      de: S`Cho phương trình \(2x^2 - 5x - 3 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, tính \(A = x_1^2 + x_2^2 - 3x_1x_2\).`,
+      steps: [
+        { part: 'a) Chứng minh có hai nghiệm – 0,5 điểm' },
+        { s: S`\(\Delta = (-5)^2 - 4 \cdot 2 \cdot (-3) = 25 + 24 = 49\).`, p: 0.25 },
+        { s: S`Vì \(\Delta = 49 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\). <i>(Cách khác: \(a \cdot c = 2 \cdot (-3) = -6 \lt 0\).)</i>`, p: 0.25 },
+        { part: 'b) Tính A – 0,5 điểm' },
+        { s: S`Theo định lí Viète: \(S = x_1 + x_2 = \dfrac52\); \(P = x_1x_2 = -\dfrac32\).`, p: 0.25, warn: 'Sai dấu S (viết −5/2) là lỗi phổ biến nhất.' },
+        { s: S`\(A = (x_1 + x_2)^2 - 2x_1x_2 - 3x_1x_2 = S^2 - 5P = \dfrac{25}{4} + \dfrac{15}{2} = \dfrac{55}{4}\).`, p: 0.25 },
+      ],
+      loi: ['Không kết luận "phương trình có hai nghiệm" trước khi dùng Viète.', 'Viết S = −5/2 (quên dấu trừ của −b/a).', 'Giải phương trình ra nghiệm rồi thay vào khi đề yêu cầu "không giải phương trình".'] },
+    { title: 'Biểu thức không đối xứng – hạ bậc bằng nghiệm', pts: 0.5,
+      de: S`Gọi \(x_1, x_2\) là hai nghiệm của phương trình \(x^2 - 3x - 1 = 0\). Tính \(E = x_1^2 + 3x_2 - x_1x_2\).`,
+      steps: [
+        { s: S`\(a \cdot c = -1 \lt 0\) nên phương trình có hai nghiệm phân biệt. Theo Viète: \(S = 3,\ P = -1\).`, p: 0.25 },
+        { s: S`Vì \(x_1\) là nghiệm nên \(x_1^2 - 3x_1 - 1 = 0 \Rightarrow x_1^2 = 3x_1 + 1\). Do đó \(E = 3x_1 + 1 + 3x_2 - x_1x_2 = 3S + 1 - P = 9 + 1 + 1 = 11\).`, p: 0.25 },
+      ],
+      loi: ['Cố biến đổi E thành S, P trực tiếp (không được vì E không đối xứng).', 'Quên dấu: −x₁x₂ = −P = +1.'] },
+  ],
+  present: [
+    'Tính Δ (hoặc Δ′, hoặc a·c) và viết câu kết luận số nghiệm.',
+    'Viết rõ "Theo định lí Viète: S = …, P = …" trước khi biến đổi.',
+    'Biến đổi biểu thức về S, P từng bước, không nhảy bước.',
+    'Bài có tham số m: đối chiếu với điều kiện có nghiệm rồi mới kết luận.',
+    'Kết quả để dạng phân số tối giản, không làm tròn.',
+  ],
+  practice: [
+    { lv: 'Cơ bản', pts: 1, h: 52,
+      de: S`Cho phương trình \(x^2 - 6x + 4 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, tính \(A = x_1^2 + x_2^2\) và \(B = \dfrac{1}{x_1} + \dfrac{1}{x_2}\).`,
+      ans: S`a) \(\Delta' = 5 \gt 0\). b) \(A = 28\), \(B = \dfrac32\).`,
+      barem: [[S`\(\Delta' = (-3)^2 - 4 = 5\)`, 0.25], [S`\(\Delta' \gt 0\) nên có hai nghiệm phân biệt`, 0.25], [S`Viète: \(S = 6,\ P = 4\)`, 0.25], [S`\(A = S^2 - 2P = 28\); \(B = \dfrac{S}{P} = \dfrac32\)`, 0.25]] },
+    { lv: 'Khá', pts: 1, h: 56,
+      de: S`Cho phương trình \(3x^2 + 4x - 2 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, tính \(C = (x_1 - x_2)^2\) và \(D = \dfrac{x_1}{x_2} + \dfrac{x_2}{x_1}\).`,
+      ans: S`a) \(a \cdot c = -6 \lt 0\). b) \(C = \dfrac{40}{9}\), \(D = -\dfrac{14}{3}\).`,
+      barem: [[S`\(a \cdot c = -6 \lt 0\) (hoặc \(\Delta = 40 \gt 0\))`, 0.25], [S`Kết luận hai nghiệm phân biệt`, 0.25], [S`Viète: \(S = -\dfrac43,\ P = -\dfrac23\)`, 0.25], [S`\(C = S^2 - 4P = \dfrac{40}{9}\); \(D = \dfrac{S^2 - 2P}{P} = -\dfrac{14}{3}\)`, 0.25]] },
+    { lv: 'Nâng cao', pts: 1, h: 66,
+      de: S`Cho phương trình \(x^2 - 2(m+1)x + m^2 + 3 = 0\) (\(m\) là tham số).<br>a) Tìm \(m\) để phương trình có nghiệm.<br>b) Tìm \(m\) để hai nghiệm \(x_1, x_2\) thỏa mãn \(x_1^2 + x_2^2 = 22\).`,
+      ans: S`a) \(m \ge 1\). b) \(m = 2\) (loại \(m = -6\)).`,
+      barem: [[S`\(\Delta' = (m+1)^2 - (m^2 + 3) = 2m - 2\)`, 0.25], [S`Có nghiệm \(\iff 2m - 2 \ge 0 \iff m \ge 1\)`, 0.25], [S`Viète: \(S = 2(m+1),\ P = m^2 + 3\); \(S^2 - 2P = 2m^2 + 8m - 2 = 22\)`, 0.25], [S`\(m^2 + 4m - 12 = 0 \iff m = 2\) hoặc \(m = -6\); đối chiếu \(m \ge 1\) được \(m = 2\)`, 0.25]] },
+  ],
+});
+
+</script>
+<script>/* data/vao-10/cd03-xac-suat.js */
+/* Chủ đề 3 – Bài 3 (1,5 điểm): Xác suất của biến cố (dạng đơn giản). */
+(() => {
+  // Bảng tổng số chấm khi gieo hai xúc xắc (dùng trong lý thuyết).
+  let dice = '<div class="tbl-wrap"><table><tr><th>I \\ II</th>' + [1, 2, 3, 4, 5, 6].map(j => `<th>${j}</th>`).join('') + '</tr>';
+  for (let i = 1; i <= 6; i++) dice += `<tr><th>${i}</th>` + [1, 2, 3, 4, 5, 6].map(j => `<td>(${i};${j})</td>`).join('') + '</tr>';
+  dice += '</table></div>';
+
+  Topics.add({
+    id: 'xac-suat', no: 3, bai: 'Bài 3 · 1,5 điểm',
+    title: 'Xác suất của biến cố (dạng đơn giản)',
+    desc: 'Mô tả không gian mẫu bằng liệt kê, bảng, sơ đồ cây; đếm kết quả thuận lợi; tính P(A) = n(A)/n(Ω).',
+    remind: [
+      S`Không gian mẫu \(\Omega\): tập hợp mọi kết quả có thể; \(n(\Omega)\) là số phần tử.`,
+      S`\(P(A) = \dfrac{n(A)}{n(\Omega)}\) khi các kết quả đồng khả năng.`,
+      S`\(0 \le P(A) \le 1\); rút gọn phân số ở kết quả.`,
+      'Gieo 2 xúc xắc: 36 kết quả (bảng 6 × 6); tung đồng xu n lần: 2ⁿ kết quả.',
+    ],
+    theory: [
+      { t: 'Phép thử, không gian mẫu, biến cố',
+        b: S`<ul><li><b>Phép thử ngẫu nhiên</b>: việc làm mà biết trước các kết quả có thể xảy ra nhưng không biết kết quả nào sẽ xảy ra (gieo xúc xắc, rút thẻ, lấy bóng…).</li>
+          <li><b>Không gian mẫu</b> \(\Omega\): tập hợp tất cả các kết quả có thể. Phải <b>viết ra</b> \(\Omega\) và đếm \(n(\Omega)\).</li>
+          <li><b>Biến cố</b> \(A\): một sự kiện liên quan đến phép thử; <b>kết quả thuận lợi</b> cho \(A\) là kết quả làm \(A\) xảy ra.</li></ul>` },
+      { t: 'Công thức tính xác suất',
+        b: S`<p>Nếu các kết quả của phép thử là <b>đồng khả năng</b> (xúc xắc, đồng xu cân đối; thẻ, bóng giống nhau…) thì
+          \[P(A) = \frac{\text{số kết quả thuận lợi cho } A}{\text{số phần tử của } \Omega} = \frac{n(A)}{n(\Omega)}.\]</p>` },
+      { t: 'Cách liệt kê không gian mẫu',
+        b: S`<ul><li><b>Liệt kê trực tiếp</b> khi ít kết quả: gieo 1 xúc xắc \(\Omega = \{1; 2; 3; 4; 5; 6\}\).</li>
+          <li><b>Sơ đồ hình cây</b> khi làm nhiều bước: tung đồng xu 2 lần \(\Omega = \{SS;\ SN;\ NS;\ NN\}\) – 4 kết quả (không phải 3!).</li>
+          <li><b>Bảng</b> khi gieo hai xúc xắc: 36 kết quả \((i;\ j)\):</li></ul>${dice}` },
+      { t: 'Lấy lần lượt hay lấy cùng lúc?',
+        b: S`<table><tr><th>Cách lấy</th><th>Có thứ tự?</th><th>Ví dụ: 3 thẻ 1, 2, 3 lấy 2 thẻ</th></tr>
+          <tr><td>Lần lượt, <b>không</b> hoàn lại</td><td>Có</td><td>6 kết quả: (1;2), (2;1), (1;3), (3;1), (2;3), (3;2)</td></tr>
+          <tr><td>Lần lượt, <b>có</b> hoàn lại</td><td>Có, được trùng</td><td>9 kết quả (thêm (1;1), (2;2), (3;3))</td></tr>
+          <tr><td>Lấy <b>đồng thời</b> 2 thẻ</td><td>Không</td><td>3 kết quả: {1;2}, {1;3}, {2;3}</td></tr></table>`,
+        warn: 'Đọc kĩ chữ "lần lượt", "hoàn lại", "đồng thời" – đây là chỗ hay đếm sai n(Ω).' },
+    ],
+    tips: [
+      { t: 'Liệt kê trước – đếm sau – chia cuối', b: 'Ba bước cố định: viết Ω, đếm n(Ω); liệt kê kết quả thuận lợi, đếm n(A); chia và rút gọn.' },
+      { t: 'Hai xúc xắc là bảng 6 × 6', b: 'Kẻ bảng 6 dòng 6 cột, tô các ô thỏa điều kiện rồi đếm – không sót, không trùng.' },
+      { t: 'Đồng xu n lần: 2 mũ n', b: '1 lần: 2 kết quả; 2 lần: 4; 3 lần: 8. Vẽ sơ đồ cây để liệt kê.' },
+      { t: 'Xác suất lớn hơn 1 là sai ngay', b: 'Kết quả phải nằm trong đoạn [0; 1]. Ra 7/5 thì đã đếm sai.' },
+      { t: '"Ít nhất một" – nghĩ cách ngược lại', b: 'Đếm các kết quả KHÔNG có cái nào rồi lấy n(Ω) trừ đi cho nhanh.' },
+    ],
+    quiz: [
+      { q: 'Gieo một con xúc xắc cân đối. Số phần tử của không gian mẫu là', a: ['6', '1', '12', '36'], why: S`\(\Omega = \{1; 2; 3; 4; 5; 6\}\) có 6 phần tử.` },
+      { q: 'Tung một đồng xu hai lần. Không gian mẫu là', a: ['{SS; SN; NS; NN}', '{SS; SN; NN}', '{S; N}', '{SN; NS}'], why: 'SN (sấp trước, ngửa sau) khác NS. Có 4 kết quả.' },
+      { q: 'Gieo hai con xúc xắc cân đối. Số kết quả có thể là', a: ['36', '12', '21', '6'], why: 'Mỗi xúc xắc 6 kết quả, ghép thành bảng 6 × 6 = 36 ô.' },
+      { q: 'Hộp có 3 bi đỏ và 2 bi xanh giống nhau về kích thước. Lấy ngẫu nhiên 1 bi. Xác suất lấy được bi xanh là', a: [S`\(\dfrac25\)`, S`\(\dfrac35\)`, S`\(\dfrac23\)`, S`\(\dfrac12\)`], why: S`\(n(\Omega) = 5\), có 2 bi xanh nên \(P = \dfrac25\).` },
+      { q: 'Rút ngẫu nhiên 1 thẻ trong 20 thẻ đánh số 1 đến 20. Xác suất rút được thẻ ghi số chia hết cho 5 là', a: [S`\(\dfrac15\)`, S`\(\dfrac14\)`, S`\(\dfrac{1}{20}\)`, S`\(\dfrac{3}{20}\)`], why: S`Các số 5, 10, 15, 20: 4 thẻ. \(P = \dfrac{4}{20} = \dfrac15\).` },
+      { q: 'Gieo hai con xúc xắc. Xác suất tổng số chấm bằng 7 là', a: [S`\(\dfrac16\)`, S`\(\dfrac{7}{36}\)`, S`\(\dfrac{1}{12}\)`, S`\(\dfrac{5}{36}\)`], why: S`(1;6), (2;5), (3;4), (4;3), (5;2), (6;1): 6 kết quả. \(P = \dfrac{6}{36} = \dfrac16\).` },
+      { q: 'Giá trị nào KHÔNG thể là xác suất của một biến cố?', a: [S`\(\dfrac75\)`, '0', '1', S`\(\dfrac12\)`], why: S`Xác suất luôn thỏa \(0 \le P \le 1\); \(\dfrac75 \gt 1\).` },
+      { q: 'Hộp có 3 thẻ ghi 1, 2, 3. Lấy lần lượt 2 thẻ, không hoàn lại. Số kết quả có thể là', a: ['6', '3', '9', '2'], why: 'Lần đầu 3 cách, lần sau còn 2 cách: 3 · 2 = 6 cặp có thứ tự.' },
+    ],
+    models: [
+      { title: 'Rút lần lượt hai thẻ không hoàn lại', pts: 1.5,
+        de: S`Một hộp có 4 tấm thẻ giống nhau ghi các số 1, 2, 3, 4. Rút ngẫu nhiên lần lượt hai tấm thẻ (rút xong không trả lại vào hộp).<br>a) Mô tả không gian mẫu của phép thử.<br>b) Tính xác suất của các biến cố \(A\): "Tổng hai số trên hai thẻ là số lẻ" và \(B\): "Tích hai số trên hai thẻ chia hết cho 3".`,
+        steps: [
+          { part: 'a) Không gian mẫu – 0,5 điểm' },
+          { s: S`Mỗi kết quả là cặp \((a;\ b)\) với \(a\) là số trên thẻ rút lần 1, \(b\) là số trên thẻ rút lần 2, \(a \ne b\).`, p: 0.25 },
+          { s: S`\(\Omega = \{(1;2), (1;3), (1;4), (2;1), (2;3), (2;4), (3;1), (3;2), (3;4), (4;1), (4;2), (4;3)\}\), \(n(\Omega) = 12\).`, p: 0.25, warn: 'Thiếu các cặp đảo như (2;1) là đếm sai: rút "lần lượt" thì có thứ tự.' },
+          { part: 'b) Tính P(A), P(B) – 1 điểm' },
+          { s: S`Tổng lẻ khi một thẻ lẻ, một thẻ chẵn. Các kết quả thuận lợi cho \(A\): (1;2), (1;4), (2;1), (2;3), (3;2), (3;4), (4;1), (4;3). Có 8 kết quả.`, p: 0.25 },
+          { s: S`\(P(A) = \dfrac{8}{12} = \dfrac23\).`, p: 0.25 },
+          { s: S`Tích chia hết cho 3 khi có thẻ số 3. Các kết quả thuận lợi cho \(B\): (1;3), (2;3), (3;1), (3;2), (3;4), (4;3). Có 6 kết quả.`, p: 0.25 },
+          { s: S`\(P(B) = \dfrac{6}{12} = \dfrac12\).`, p: 0.25 },
+        ],
+        loi: ['Không mô tả Ω mà ghi ngay n(Ω) = 12.', 'Chỉ ghi số kết quả thuận lợi, không liệt kê ra.', 'Không rút gọn phân số ở kết quả.', 'Coi (1;2) và (2;1) là một kết quả.'] },
+    ],
+    present: [
+      'Nêu rõ mỗi kết quả là gì (ví dụ: cặp (a; b) với a là số lần 1).',
+      'Viết đầy đủ Ω hoặc kẻ bảng / sơ đồ cây, ghi n(Ω).',
+      'Liệt kê các kết quả thuận lợi cho từng biến cố, ghi n(A).',
+      'Viết công thức P(A) = n(A)/n(Ω) rồi thay số, rút gọn.',
+      'Mỗi biến cố một câu kết luận riêng.',
+    ],
+    practice: [
+      { lv: 'Cơ bản', pts: 1.5, h: 52,
+        de: S`Gieo một con xúc xắc cân đối và đồng chất một lần.<br>a) Mô tả không gian mẫu.<br>b) Tính xác suất của các biến cố \(A\): "Mặt xuất hiện có số chấm chẵn" và \(B\): "Số chấm xuất hiện chia hết cho 3".`,
+        ans: S`a) \(\Omega = \{1;2;3;4;5;6\}\). b) \(P(A) = \dfrac12\), \(P(B) = \dfrac13\).`,
+        barem: [[S`\(\Omega = \{1; 2; 3; 4; 5; 6\}\), \(n(\Omega) = 6\)`, 0.5], [S`Kết quả thuận lợi cho A: 2, 4, 6`, 0.25], [S`\(P(A) = \dfrac36 = \dfrac12\)`, 0.25], [S`Kết quả thuận lợi cho B: 3, 6`, 0.25], [S`\(P(B) = \dfrac26 = \dfrac13\)`, 0.25]] },
+      { lv: 'Khá', pts: 1.5, h: 62,
+        de: S`Tổ 1 có 5 bạn: An, Bình, Cường (nam) và Dung, Em (nữ). Cô giáo chọn ngẫu nhiên đồng thời 2 bạn đi trực nhật.<br>a) Liệt kê không gian mẫu.<br>b) Tính xác suất của biến cố \(C\): "Chọn được 1 bạn nam và 1 bạn nữ" và \(D\): "Cả hai bạn được chọn đều là nữ".`,
+        ans: S`a) 10 kết quả. b) \(P(C) = \dfrac35\), \(P(D) = \dfrac{1}{10}\).`,
+        barem: [[S`Liệt kê đủ 10 nhóm {An; Bình}, {An; Cường}, {An; Dung}, {An; Em}, {Bình; Cường}, {Bình; Dung}, {Bình; Em}, {Cường; Dung}, {Cường; Em}, {Dung; Em}`, 0.5], [S`Kết quả thuận lợi cho C: 6 nhóm có 1 nam 1 nữ`, 0.25], [S`\(P(C) = \dfrac{6}{10} = \dfrac35\)`, 0.25], [S`Kết quả thuận lợi cho D: {Dung; Em}`, 0.25], [S`\(P(D) = \dfrac{1}{10}\)`, 0.25]] },
+      { lv: 'Nâng cao', pts: 1.5, h: 70,
+        de: S`Gieo đồng thời hai con xúc xắc cân đối và đồng chất.<br>a) Không gian mẫu có bao nhiêu phần tử? Hãy kẻ bảng mô tả.<br>b) Tính xác suất của biến cố \(E\): "Tổng số chấm không nhỏ hơn 10" và \(F\): "Số chấm trên hai xúc xắc hơn kém nhau 2".`,
+        ans: S`a) 36. b) \(P(E) = \dfrac16\), \(P(F) = \dfrac29\).`,
+        barem: [[S`Kẻ bảng 6 × 6, \(n(\Omega) = 36\)`, 0.5], [S`E: (4;6), (5;5), (6;4), (5;6), (6;5), (6;6) – 6 kết quả`, 0.25], [S`\(P(E) = \dfrac{6}{36} = \dfrac16\)`, 0.25], [S`F: (1;3), (3;1), (2;4), (4;2), (3;5), (5;3), (4;6), (6;4) – 8 kết quả`, 0.25], [S`\(P(F) = \dfrac{8}{36} = \dfrac29\)`, 0.25]] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/vao-10/cd04-thuc-te-dai-so-hinh-hoc.js */
+/* Chủ đề 4 – Bài 4 (1 điểm): Toán thực tế đại số – hình học phẳng. */
+(() => {
+  const ring = (X, Y, P, u, R, r) => {
+    const c = (rr) => `M${X(-rr)} ${Y(0)}a${rr * u} ${rr * u} 0 1 0 ${2 * rr * u} 0a${rr * u} ${rr * u} 0 1 0 ${-2 * rr * u} 0Z`;
+    return c(R) + c(r);
+  };
+  Topics.add({
+    id: 'thuc-te-dai-so-hinh-hoc', no: 4, bai: 'Bài 4 · 1 điểm',
+    title: 'Toán thực tế: chu vi, diện tích, cung tròn, quạt, vành khăn – lập biểu thức, phương trình',
+    desc: 'Tính độ dài cung, diện tích hình quạt, viên phân, vành khăn trong tình huống thực tế; lập biểu thức đại số và phương trình bậc hai.',
+    remind: [
+      S`Đường tròn: \(C = 2\pi R\), hình tròn \(S = \pi R^2\).`,
+      S`Cung \(n^\circ\): \(\ell = \dfrac{\pi R n}{180}\); quạt \(n^\circ\): \(S = \dfrac{\pi R^2 n}{360}\).`,
+      S`Vành khăn: \(S = \pi(R^2 - r^2)\); viên phân = quạt − tam giác.`,
+      'Lập phương trình: gọi ẩn, đơn vị, điều kiện → giải → đối chiếu, loại nghiệm.',
+    ],
+    theory: [
+      { t: 'Công thức hình phẳng cần thuộc',
+        b: S`<table><tr><th>Hình</th><th>Chu vi</th><th>Diện tích</th></tr>
+          <tr><td>Hình chữ nhật \(a \times b\)</td><td>\(2(a + b)\)</td><td>\(ab\)</td></tr>
+          <tr><td>Hình vuông cạnh \(a\)</td><td>\(4a\)</td><td>\(a^2\)</td></tr>
+          <tr><td>Tam giác</td><td>tổng 3 cạnh</td><td>\(\frac12 \cdot\) đáy \(\cdot\) cao</td></tr>
+          <tr><td>Hình thang</td><td>tổng 4 cạnh</td><td>\(\frac12 (a + b) h\)</td></tr>
+          <tr><td>Hình thoi</td><td>\(4a\)</td><td>\(\frac12 d_1 d_2\)</td></tr></table>` },
+      { t: 'Đường tròn, cung, hình quạt',
+        b: S`<ul><li>Chu vi đường tròn \(C = 2\pi R = \pi d\); diện tích hình tròn \(S = \pi R^2\).</li>
+          <li>Độ dài cung \(n^\circ\): \(\ell = \dfrac{\pi R n}{180}\).</li>
+          <li>Diện tích hình quạt \(n^\circ\): \(S_q = \dfrac{\pi R^2 n}{360} = \dfrac{\ell R}{2}\).</li></ul>`,
+        warn: 'Kim phút quay 360° trong 60 phút, tức 6° mỗi phút; kim giờ quay 30° mỗi giờ.' },
+      { t: 'Viên phân, vành khăn, quạt vành khăn',
+        b: S`<ul><li><b>Hình viên phân</b> (giới hạn bởi dây và cung): \(S = S_{\text{quạt}} - S_{\text{tam giác}}\).</li>
+          <li><b>Hình vành khăn</b> (giữa hai đường tròn đồng tâm): \(S = \pi R^2 - \pi r^2 = \pi (R^2 - r^2)\).</li>
+          <li><b>Quạt vành khăn</b> góc \(n^\circ\): \(S = \dfrac{\pi (R^2 - r^2) n}{360}\) (quạt giấy, cánh quạt, mặt đồng hồ…).</li></ul>`,
+        fig: Fig.geo({ pts: { O: [0, 0], M: [3, 0], N: [4, 0] }, circles: [{ c: 'O', r: 4 }, { c: 'O', r: 3 }], fill: [(X, Y, P, u) => ring(X, Y, P, u, 4, 3)], segs: 'O-N', dots: 'O', hide: 'M N', lab: { O: [-10, -8] }, texts: [[1.5, 0.25, 'r'], [3.5, 0.25, 'R − r']], w: 220, label: 'Hình vành khăn' }) },
+      { t: 'Lập biểu thức, lập phương trình',
+        b: S`<ol><li>Gọi ẩn \(x\), ghi <b>đơn vị</b> và <b>điều kiện</b> (dương, nhỏ hơn kích thước đã cho…).</li>
+          <li>Biểu diễn các đại lượng chưa biết theo \(x\).</li>
+          <li>Lập phương trình theo dữ kiện còn lại; giải.</li>
+          <li>Đối chiếu điều kiện, <b>loại nghiệm không thỏa</b>, trả lời đúng câu hỏi.</li></ol>
+          <p>Ví dụ biểu thức: taxi 12 000 đ cho 1 km đầu, 15 000 đ mỗi km sau; đi \(x\) km (\(x \ge 1\)) thì \(T = 12\,000 + 15\,000(x - 1)\) đồng.</p>` },
+    ],
+    tips: [
+      { t: 'Cung chia 180, quạt chia 360', b: S`\(\ell = \dfrac{\pi R n}{180}\), \(S_q = \dfrac{\pi R^2 n}{360}\). Độ dài có R mũ 1, diện tích có R mũ 2.` },
+      { t: 'Vành khăn = tròn lớn trừ tròn nhỏ', b: S`\(\pi R^2 - \pi r^2\). Lối đi rộng \(d\) bao quanh bồn bán kính \(r\) thì \(R = r + d\).` },
+      { t: 'Viên phân = quạt trừ tam giác', b: 'Tính hai phần riêng rồi trừ. Góc ở tâm 60° thì tam giác là tam giác đều; 90° là vuông cân.' },
+      { t: 'Giữ π đến cuối, làm tròn một lần', b: 'Viết kết quả theo π trước (ví dụ 7π), rồi mới thay π ≈ 3,14 và làm tròn theo đề.' },
+      { t: 'Đổi đơn vị trước khi tính', b: 'cm với m, phút với giờ: đổi cho cùng đơn vị ngay từ đầu.' },
+    ],
+    quiz: [
+      { q: S`Độ dài cung \(60^\circ\) của đường tròn bán kính 6 cm là`, a: [S`\(2\pi\) cm`, S`\(6\pi\) cm`, S`\(\pi\) cm`, S`\(12\pi\) cm`], why: S`\(\ell = \dfrac{\pi \cdot 6 \cdot 60}{180} = 2\pi\) cm.` },
+      { q: S`Diện tích hình quạt \(90^\circ\), bán kính 4 cm là`, a: [S`\(4\pi\) cm²`, S`\(2\pi\) cm²`, S`\(8\pi\) cm²`, S`\(16\pi\) cm²`], why: S`\(S = \dfrac{\pi \cdot 4^2 \cdot 90}{360} = 4\pi\) cm².` },
+      { q: S`Hình vành khăn giới hạn bởi hai đường tròn đồng tâm bán kính 5 cm và 3 cm có diện tích`, a: [S`\(16\pi\) cm²`, S`\(4\pi\) cm²`, S`\(2\pi\) cm²`, S`\(34\pi\) cm²`], why: S`\(\pi(5^2 - 3^2) = 16\pi\). Không phải \(\pi(5 - 3)^2\).` },
+      { q: S`Đường tròn \((O;\ 2\text{ cm})\), \(\widehat{AOB} = 90^\circ\). Diện tích hình viên phân giới hạn bởi dây AB và cung nhỏ AB là`, a: [S`\(\pi - 2\) cm²`, S`\(\pi\) cm²`, S`\(4\pi - 2\) cm²`, S`\(2\pi - 2\) cm²`], why: S`Quạt: \(\dfrac{\pi \cdot 4 \cdot 90}{360} = \pi\); tam giác vuông cân \(OAB\): \(\dfrac{2 \cdot 2}{2} = 2\). Viên phân \(= \pi - 2\).` },
+      { q: 'Bánh xe đạp có đường kính 0,7 m. Mỗi vòng quay xe đi được khoảng (π ≈ 3,14)', a: ['2,2 m', '1,1 m', '4,4 m', '0,7 m'], why: S`Quãng đường một vòng = chu vi \(= \pi d \approx 3{,}14 \cdot 0{,}7 \approx 2{,}2\) m.` },
+      { q: S`Mảnh vườn hình chữ nhật có chiều dài hơn chiều rộng 5 m, diện tích 84 m². Gọi chiều rộng là \(x\) (m), phương trình là`, a: [S`\(x(x + 5) = 84\)`, S`\(2(x + x + 5) = 84\)`, S`\(x(x - 5) = 84\)`, S`\(x + 5 = 84\)`], why: S`Chiều dài \(x + 5\); diện tích = dài × rộng.` },
+      { q: 'Taxi: 1 km đầu giá 12 000 đ, mỗi km tiếp theo 15 000 đ. Đi x km (x ≥ 1) phải trả', a: [S`\(12\,000 + 15\,000(x - 1)\) đồng`, S`\(12\,000 + 15\,000x\) đồng`, S`\(27\,000x\) đồng`, S`\(15\,000x - 12\,000\) đồng`], why: 'Km đầu tính riêng; còn lại x − 1 km mỗi km 15 000 đ.' },
+      { q: S`Giải \(x(x + 5) = 84\) được \(x = 7\) hoặc \(x = -12\). Chiều rộng mảnh vườn là`, a: ['7 m', '−12 m', '7 m hoặc 12 m', '12 m'], why: S`Chiều rộng phải dương nên loại \(x = -12\).` },
+    ],
+    models: [
+      { title: 'Lối đi hình vành khăn quanh bồn hoa', pts: 1,
+        de: S`Một bồn hoa hình tròn có bán kính 3 m. Người ta làm một lối đi rộng 1 m bao quanh bồn hoa (phần tô đậm trong hình).<br>a) Tính diện tích lối đi (lấy \(\pi \approx 3{,}14\)).<br>b) Lát gạch lối đi với giá 150 000 đồng mỗi mét vuông. Tính số tiền lát gạch.`,
+        fig: Fig.geo({ pts: { O: [0, 0], M: [3, 0], N: [4, 0] }, circles: [{ c: 'O', r: 4 }, { c: 'O', r: 3 }], fill: [(X, Y, P, u) => ring(X, Y, P, u, 4, 3)], segs: 'O-N', dots: 'O', hide: 'M N', lab: { O: [-10, -8] }, texts: [[1.5, 0.25, '3 m'], [3.5, 0.25, '1 m']], w: 220, label: 'Lối đi quanh bồn hoa' }),
+        steps: [
+          { part: 'a) Diện tích lối đi – 0,5 điểm' },
+          { s: S`Lối đi là hình vành khăn: bán kính trong \(r = 3\) m, bán kính ngoài \(R = 3 + 1 = 4\) m.`, p: 0.25 },
+          { s: S`\(S = \pi(R^2 - r^2) = \pi(16 - 9) = 7\pi \approx 7 \cdot 3{,}14 = 21{,}98\) (m²).`, p: 0.25, warn: S`Tính \(\pi \cdot 1^2\) (coi lối đi là hình tròn bán kính 1) là sai hoàn toàn.` },
+          { part: 'b) Chi phí – 0,5 điểm' },
+          { s: S`Số tiền lát gạch: \(21{,}98 \cdot 150\,000 = 3\,297\,000\) (đồng).`, p: 0.25 },
+          { s: 'Vậy diện tích lối đi khoảng 21,98 m², chi phí lát gạch khoảng 3 297 000 đồng.', p: 0.25 },
+        ],
+        loi: ['Quên cộng chiều rộng lối đi vào bán kính.', 'Làm tròn π·7 trước rồi nhân tiền làm sai số.', 'Thiếu đơn vị m², đồng; thiếu câu trả lời.'] },
+      { title: 'Lập phương trình bậc hai từ chu vi và diện tích', pts: 1,
+        de: 'Một mảnh đất hình chữ nhật có chu vi 34 m và diện tích 60 m². Tính chiều dài và chiều rộng của mảnh đất.',
+        steps: [
+          { s: S`Nửa chu vi: \(34 : 2 = 17\) (m). Gọi chiều rộng là \(x\) (m), điều kiện \(0 \lt x \lt 8{,}5\). Chiều dài là \(17 - x\) (m).`, p: 0.25, warn: 'Thiếu điều kiện x < 8,5 thì không loại được nghiệm.' },
+          { s: S`Diện tích 60 m² nên \(x(17 - x) = 60 \iff x^2 - 17x + 60 = 0\).`, p: 0.25 },
+          { s: S`\(\Delta = 289 - 240 = 49\), \(x_1 = \dfrac{17 + 7}{2} = 12\), \(x_2 = \dfrac{17 - 7}{2} = 5\).`, p: 0.25 },
+          { s: S`Đối chiếu điều kiện: \(x = 5\) thỏa, \(x = 12\) loại. Vậy chiều rộng 5 m, chiều dài \(17 - 5 = 12\) m.`, p: 0.25 },
+        ],
+        loi: ['Lấy chu vi chia 4 hoặc quên chia 2.', 'Không đối chiếu điều kiện, kết luận chiều rộng 12 m.', 'Thiếu đơn vị.'] },
+    ],
+    present: [
+      'Ghi rõ đã biết gì: R, r, góc ở tâm n°, đơn vị.',
+      'Viết công thức trước, thay số sau; giữ π đến bước cuối.',
+      'Làm tròn đúng yêu cầu đề (nếu đề không nói thì để dạng có π hoặc 2 chữ số thập phân).',
+      'Bài lập phương trình: gọi ẩn có đơn vị và điều kiện, đối chiếu rồi mới kết luận.',
+      'Câu trả lời cuối có đơn vị (m, m², đồng…).',
+    ],
+    practice: [
+      { lv: 'Cơ bản', pts: 1, h: 50,
+        de: 'Kim phút của một chiếc đồng hồ treo tường dài 10 cm. Hỏi trong 20 phút, đầu kim phút vạch nên một cung tròn dài bao nhiêu xentimét? (lấy π ≈ 3,14, làm tròn đến hàng phần trăm)',
+        ans: S`\(\dfrac{20\pi}{3} \approx 20{,}93\) cm.`,
+        barem: [[S`20 phút kim phút quay \(\dfrac{20}{60} \cdot 360^\circ = 120^\circ\)`, 0.25], [S`Công thức \(\ell = \dfrac{\pi R n}{180}\)`, 0.25], [S`\(\ell = \dfrac{\pi \cdot 10 \cdot 120}{180} = \dfrac{20\pi}{3}\)`, 0.25], [S`\(\approx 20{,}93\) cm, kết luận`, 0.25]] },
+      { lv: 'Khá', pts: 1, h: 58,
+        de: S`Một chiếc quạt giấy khi xòe ra có dạng hình quạt vành khăn với bán kính ngoài 25 cm, bán kính trong 10 cm (phần nan tre không dán giấy) và góc ở tâm \(120^\circ\). Tính diện tích phần giấy dán trên quạt (lấy π ≈ 3,14).`,
+        ans: S`\(175\pi \approx 549{,}5\) cm².`,
+        barem: [[S`Diện tích quạt lớn: \(\dfrac{\pi \cdot 25^2 \cdot 120}{360} = \dfrac{625\pi}{3}\)`, 0.25], [S`Diện tích quạt nhỏ: \(\dfrac{\pi \cdot 10^2 \cdot 120}{360} = \dfrac{100\pi}{3}\)`, 0.25], [S`Phần giấy: \(\dfrac{525\pi}{3} = 175\pi\)`, 0.25], [S`\(\approx 549{,}5\) cm², kết luận`, 0.25]] },
+      { lv: 'Nâng cao', pts: 1, h: 66,
+        de: 'Một khu vườn hình chữ nhật dài 20 m, rộng 15 m. Người ta làm một lối đi có chiều rộng không đổi chạy sát quanh mép bên trong vườn; phần còn lại trồng rau có diện tích 176 m². Tính chiều rộng của lối đi.',
+        ans: '2 m.',
+        barem: [[S`Gọi chiều rộng lối đi là \(x\) (m), \(0 \lt x \lt 7{,}5\)`, 0.25], [S`Phần trồng rau có kích thước \(20 - 2x\) và \(15 - 2x\); phương trình \((20 - 2x)(15 - 2x) = 176\)`, 0.25], [S`\(\iff 2x^2 - 35x + 62 = 0 \iff x = 2\) hoặc \(x = 15{,}5\)`, 0.25], [S`Loại \(x = 15{,}5\); lối đi rộng 2 m`, 0.25]] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/vao-10/cd05-hinh-khong-gian.js */
+/* Chủ đề 5 – Bài 5 (1 điểm): Toán thực tế hình học không gian (đề cho sẵn công thức). */
+Topics.add({
+  id: 'hinh-khong-gian', no: 5, bai: 'Bài 5 · 1 điểm',
+  title: 'Hình học không gian thực tế (công thức cho sẵn)',
+  desc: 'Diện tích xung quanh, toàn phần, thể tích hình trụ, nón, cầu và hình khối ghép; đổi đơn vị sang lít.',
+  remind: [
+    S`Trụ: \(S_{xq} = 2\pi r h\), \(V = \pi r^2 h\).`,
+    S`Nón: \(\ell = \sqrt{r^2 + h^2}\), \(S_{xq} = \pi r \ell\), \(V = \frac13 \pi r^2 h\).`,
+    S`Cầu: \(S = 4\pi R^2\), \(V = \frac43 \pi R^3\).`,
+    S`\(1\ \text{dm}^3 = 1\) lít; \(1\ \text{m}^3 = 1000\) lít; \(1\ \text{cm}^3 = 1\) ml.`,
+  ],
+  theory: [
+    { t: 'Hình trụ',
+      b: S`<ul><li>Diện tích xung quanh \(S_{xq} = 2\pi r h\).</li><li>Diện tích toàn phần \(S_{tp} = 2\pi r h + 2\pi r^2\).</li><li>Thể tích \(V = \pi r^2 h\).</li></ul>`,
+      fig: Fig.solid('tru') },
+    { t: 'Hình nón',
+      b: S`<ul><li>Đường sinh \(\ell = \sqrt{r^2 + h^2}\) (định lí Pythagore).</li><li>\(S_{xq} = \pi r \ell\); \(S_{tp} = \pi r \ell + \pi r^2\).</li><li>\(V = \dfrac13 \pi r^2 h\) – bằng một phần ba hình trụ cùng đáy, cùng chiều cao.</li></ul>`,
+      fig: Fig.solid('non') },
+    { t: 'Hình cầu',
+      b: S`<ul><li>Diện tích mặt cầu \(S = 4\pi R^2\).</li><li>Thể tích \(V = \dfrac43 \pi R^3\); nửa hình cầu \(V = \dfrac23 \pi R^3\).</li></ul>`,
+      fig: Fig.solid('cau') },
+    { t: 'Hình hộp, lăng trụ đứng, chóp đều (lớp 8) và đổi đơn vị',
+      b: S`<ul><li>Hình hộp chữ nhật \(V = abc\); lăng trụ đứng \(V = S_{\text{đáy}} \cdot h\), \(S_{xq} = C_{\text{đáy}} \cdot h\).</li>
+        <li>Hình chóp đều \(V = \dfrac13 S_{\text{đáy}} \cdot h\).</li>
+        <li>\(1\ \text{m}^3 = 1000\ \text{dm}^3 = 1000\) lít; \(1\ \text{dm}^3 = 1\) lít \(= 1000\ \text{cm}^3\).</li>
+        <li><b>Thả vật chìm hoàn toàn</b>: thể tích nước dâng lên = thể tích vật.</li></ul>`,
+      warn: 'Đề cho đường kính thì chia đôi để được bán kính trước khi thay vào công thức.' },
+  ],
+  tips: [
+    { t: 'Gạch chân r, h, ℓ trước khi tính', b: 'Đọc đề, viết riêng một dòng "r = …, h = …" (đã đổi cùng đơn vị). Đường kính thì chia 2.' },
+    { t: 'Nón bằng một phần ba trụ', b: S`Cùng đáy, cùng chiều cao: \(V_{\text{nón}} = \dfrac13 V_{\text{trụ}}\).` },
+    { t: 'Cầu: bốn pi R bình – bốn phần ba pi R lập', b: S`\(S = 4\pi R^2\), \(V = \dfrac43 \pi R^3\). Diện tích mũ 2, thể tích mũ 3.` },
+    { t: 'Nước dâng = vật chìm', b: S`Chiều cao nước dâng \(= \dfrac{V_{\text{vật}}}{S_{\text{đáy cốc}}}\).` },
+    { t: 'Mét khối nhân nghìn ra lít', b: S`\(1\ \text{m}^3 = 1000\) lít; \(1\ \text{dm}^3 = 1\) lít. Đổi ở bước cuối.` },
+  ],
+  quiz: [
+    { q: S`Hình trụ có \(r = 2\) cm, \(h = 5\) cm. Thể tích là`, a: [S`\(20\pi\) cm³`, S`\(10\pi\) cm³`, S`\(40\pi\) cm³`, S`\(\dfrac{20\pi}{3}\) cm³`], why: S`\(V = \pi \cdot 2^2 \cdot 5 = 20\pi\).` },
+    { q: S`Hình nón có \(r = 3\) cm, \(h = 4\) cm. Đường sinh \(\ell\) bằng`, a: ['5 cm', '7 cm', '√7 cm', '12 cm'], why: S`\(\ell = \sqrt{3^2 + 4^2} = 5\).` },
+    { q: S`Hình nón \(r = 3\) cm, \(\ell = 5\) cm có diện tích xung quanh`, a: [S`\(15\pi\) cm²`, S`\(12\pi\) cm²`, S`\(24\pi\) cm²`, S`\(30\pi\) cm²`], why: S`\(S_{xq} = \pi r \ell = 15\pi\).` },
+    { q: 'Hình cầu bán kính 3 cm có thể tích', a: [S`\(36\pi\) cm³`, S`\(12\pi\) cm³`, S`\(108\pi\) cm³`, S`\(27\pi\) cm³`], why: S`\(V = \dfrac43 \pi \cdot 27 = 36\pi\).` },
+    { q: S`\(1\ \text{m}^3\) bằng bao nhiêu lít?`, a: ['1000 lít', '100 lít', '10 lít', '1 lít'], why: S`\(1\ \text{m}^3 = 1000\ \text{dm}^3\) và \(1\ \text{dm}^3 = 1\) lít.` },
+    { q: 'Thả một viên bi chìm hoàn toàn vào cốc nước hình trụ (nước không tràn). Điều nào đúng?', a: ['Thể tích nước dâng lên bằng thể tích viên bi', 'Chiều cao nước dâng bằng đường kính viên bi', 'Thể tích nước trong cốc tăng gấp đôi', 'Mực nước không đổi'], why: 'Viên bi chiếm chỗ của một lượng nước đúng bằng thể tích của nó.' },
+    { q: 'Hình trụ có đường kính đáy 10 cm, chiều cao 8 cm. Diện tích xung quanh là', a: [S`\(80\pi\) cm²`, S`\(160\pi\) cm²`, S`\(40\pi\) cm²`, S`\(200\pi\) cm²`], why: S`\(r = 5\); \(S_{xq} = 2\pi \cdot 5 \cdot 8 = 80\pi\). Quên chia đôi đường kính sẽ ra \(160\pi\).` },
+    { q: 'Hình nón và hình trụ có cùng bán kính đáy, cùng chiều cao. Khi đó', a: [S`\(V_{\text{nón}} = \dfrac13 V_{\text{trụ}}\)`, S`\(V_{\text{nón}} = \dfrac12 V_{\text{trụ}}\)`, S`\(V_{\text{nón}} = V_{\text{trụ}}\)`, S`\(V_{\text{nón}} = 3V_{\text{trụ}}\)`], why: S`\(\dfrac13 \pi r^2 h\) so với \(\pi r^2 h\).` },
+  ],
+  models: [
+    { title: 'Bồn nước inox hình trụ', pts: 1,
+      de: S`Một bồn nước inox dạng hình trụ có đường kính đáy 1,2 m và chiều cao 1,5 m. (Cho công thức \(V = \pi r^2 h\), \(S_{xq} = 2\pi r h\); lấy \(\pi \approx 3{,}14\).)<br>a) Bồn chứa được nhiều nhất bao nhiêu lít nước?<br>b) Tính diện tích inox làm thân bồn (không tính hai đáy).`,
+      fig: Fig.solid('tru', { r: '0,6 m', h: '1,5 m' }),
+      steps: [
+        { part: 'a) Thể tích – 0,75 điểm' },
+        { s: S`Bán kính đáy \(r = 1{,}2 : 2 = 0{,}6\) (m); chiều cao \(h = 1{,}5\) m.`, p: 0.25 },
+        { s: S`\(V = \pi r^2 h = \pi \cdot 0{,}6^2 \cdot 1{,}5 = 0{,}54\pi \approx 1{,}6956\) (m³).`, p: 0.25, warn: 'Thay đường kính 1,2 vào chỗ r làm thể tích gấp 4 lần.' },
+        { s: S`\(1{,}6956\ \text{m}^3 = 1695{,}6\) lít. Vậy bồn chứa được nhiều nhất khoảng 1695,6 lít nước.`, p: 0.25 },
+        { part: 'b) Diện tích thân bồn – 0,25 điểm' },
+        { s: S`\(S_{xq} = 2\pi r h = 2\pi \cdot 0{,}6 \cdot 1{,}5 = 1{,}8\pi \approx 5{,}652\) (m²).`, p: 0.25 },
+      ],
+      loi: ['Không chia đôi đường kính.', 'Quên đổi m³ ra lít hoặc đổi sai (nhân 100).', 'Thiếu đơn vị, thiếu câu trả lời.'] },
+  ],
+  present: [
+    'Viết một dòng tóm tắt: r = …, h = … (cùng đơn vị).',
+    'Chép công thức đề cho, rồi mới thay số.',
+    'Để kết quả theo π, sau đó mới thay π ≈ 3,14 nếu đề yêu cầu.',
+    'Đổi sang lít, ml… đúng đơn vị đề hỏi.',
+    'Kết luận một câu có đơn vị.',
+  ],
+  practice: [
+    { lv: 'Cơ bản', pts: 1, h: 48,
+      de: S`Một quả bóng hình cầu có đường kính 22 cm. Tính diện tích phần da dùng để may quả bóng (cho \(S = 4\pi R^2\), lấy \(\pi \approx 3{,}14\)).`,
+      figQ: Fig.solid('cau', { r: 'R' }),
+      ans: S`\(484\pi \approx 1519{,}76\) cm².`,
+      barem: [[S`\(R = 22 : 2 = 11\) cm`, 0.25], [S`\(S = 4\pi \cdot 11^2\)`, 0.25], [S`\(= 484\pi\)`, 0.25], [S`\(\approx 1519{,}76\) cm², kết luận`, 0.25]] },
+    { lv: 'Khá', pts: 1, h: 58,
+      de: S`Một cây kem ốc quế gồm phần ốc hình nón có bán kính đáy 2,5 cm, chiều cao 10 cm, chứa đầy kem; phía trên là phần kem hình nửa cầu có bán kính 2,5 cm đặt khít miệng nón. Tính thể tích kem (cho \(V_{\text{nón}} = \frac13 \pi r^2 h\), \(V_{\text{cầu}} = \frac43 \pi R^3\); lấy \(\pi \approx 3{,}14\), làm tròn đến hàng phần mười).`,
+      figQ: Fig.solid('kem', { r: '2,5', h: '10' }),
+      ans: S`\(31{,}25\pi \approx 98{,}1\) cm³.`,
+      barem: [[S`\(V_{\text{nón}} = \frac13 \pi \cdot 2{,}5^2 \cdot 10 = \dfrac{62{,}5\pi}{3}\)`, 0.25], [S`\(V_{\text{nửa cầu}} = \frac12 \cdot \frac43 \pi \cdot 2{,}5^3 = \dfrac{31{,}25\pi}{3}\)`, 0.25], [S`Tổng \(= \dfrac{93{,}75\pi}{3} = 31{,}25\pi\)`, 0.25], [S`\(\approx 98{,}1\) cm³, kết luận`, 0.25]] },
+    { lv: 'Nâng cao', pts: 1, h: 58,
+      de: S`Một cốc thủy tinh hình trụ có bán kính đáy bên trong 4 cm, đang chứa nước cao 10 cm. Thả vào cốc 3 viên bi sắt hình cầu bán kính 2 cm; các viên bi chìm hoàn toàn và nước không tràn ra. Hỏi mực nước dâng thêm bao nhiêu xentimét? (cho \(V_{\text{trụ}} = \pi r^2 h\), \(V_{\text{cầu}} = \frac43 \pi R^3\))`,
+      figQ: Fig.solid('coc-bi'),
+      ans: '2 cm (mực nước mới cao 12 cm).',
+      barem: [[S`Thể tích 1 viên bi: \(\frac43 \pi \cdot 2^3 = \dfrac{32\pi}{3}\)`, 0.25], [S`Thể tích 3 viên bi: \(32\pi\) cm³ = thể tích nước dâng`, 0.25], [S`Gọi \(h\) là độ cao nước dâng: \(\pi \cdot 4^2 \cdot h = 32\pi\)`, 0.25], [S`\(h = 2\) cm, kết luận`, 0.25]] },
+  ],
+});
+
+</script>
+<script>/* data/vao-10/cd06-he-phuong-trinh-thuc-te.js */
+/* Chủ đề 6 – Bài 6 (1 điểm, vận dụng cao): Toán thực tế – phương trình, hệ phương trình bậc nhất hai ẩn. */
+Topics.add({
+  id: 'he-phuong-trinh-thuc-te', no: 6, bai: 'Bài 6 · 1 điểm · Vận dụng cao',
+  title: 'Toán thực tế: giải bài toán bằng cách lập hệ phương trình',
+  desc: 'Mua bán – khuyến mãi phần trăm, chuyển động xuôi – ngược dòng, công việc – năng suất, số học. Gọi ẩn, lập hệ, giải, đối chiếu.',
+  remind: [
+    'Gọi ẩn: ghi rõ đại lượng, đơn vị, điều kiện.',
+    S`Giảm \(a\%\): giá mới \(= \text{giá} \cdot (1 - a\%)\); tăng \(a\%\): nhân \((1 + a\%)\).`,
+    S`Xuôi dòng: \(v + v_n\); ngược dòng: \(v - v_n\); quãng đường \(s = v \cdot t\).`,
+    S`Làm riêng xong trong \(x\) ngày thì 1 ngày làm được \(\dfrac1x\) công việc.`,
+  ],
+  theory: [
+    { t: 'Bốn bước giải bài toán bằng cách lập hệ',
+      b: S`<ol><li><b>Gọi ẩn</b> \(x, y\): ghi đại lượng, đơn vị, điều kiện (nguyên dương, lớn hơn số nào…).</li>
+        <li><b>Biểu diễn</b> các đại lượng chưa biết theo \(x, y\) – nên kẻ bảng.</li>
+        <li><b>Lập hệ</b> hai phương trình từ hai dữ kiện; giải bằng cộng đại số hoặc thế.</li>
+        <li><b>Đối chiếu</b> điều kiện rồi <b>trả lời</b> đúng câu hỏi, có đơn vị.</li></ol>` },
+    { t: 'Kẻ bảng để không lẫn dữ kiện',
+      b: S`<p>Ví dụ chuyển động: hàng là đối tượng, cột là đại lượng.</p>
+        <table><tr><th></th><th>Vận tốc (km/h)</th><th>Thời gian (h)</th><th>Quãng đường (km)</th></tr>
+        <tr><td>Xuôi dòng</td><td>\(x + y\)</td><td>\(2\)</td><td>\(2(x + y)\)</td></tr>
+        <tr><td>Ngược dòng</td><td>\(x - y\)</td><td>\(3\)</td><td>\(3(x - y)\)</td></tr></table>
+        <p>Công việc: hai đội cùng làm xong trong 12 ngày thì \(\dfrac1x + \dfrac1y = \dfrac{1}{12}\) (đặt \(a = \dfrac1x,\ b = \dfrac1y\) để giải cho gọn).</p>` },
+    { t: 'Phần trăm – chỗ hay sai nhất',
+      b: S`<ul><li>Giá \(x\) giảm 10%: \(0{,}9x\). Giảm 20% rồi giảm tiếp 10%: \(0{,}8 \cdot 0{,}9 x = 0{,}72x\) (giảm 28%, <b>không</b> phải 30%).</li>
+        <li>Năm nay tăng 15% so với năm ngoái \(x\): \(1{,}15x\).</li>
+        <li>Vượt mức 20% kế hoạch \(x\): thực tế \(1{,}2x\).</li></ul>`,
+      warn: 'Phần trăm luôn tính trên giá trị ban đầu của lần thay đổi đó. Hai lần giảm không được cộng phần trăm.' },
+    { t: 'Giải hệ nhanh bằng cộng đại số',
+      b: S`<p>Nhân hai vế cho hệ số của một ẩn bằng nhau (hoặc đối nhau) rồi trừ (cộng) vế với vế. Hệ có số thập phân: nhân lên để hết số thập phân hoặc nhân phương trình kia cho khéo.</p>
+        <p>Kiểm tra nhanh bằng máy tính cầm tay, nhưng bài làm vẫn phải trình bày các bước biến đổi.</p>` },
+  ],
+  tips: [
+    { t: 'Đề hỏi gì – gọi ẩn cái đó', b: 'Ẩn càng gần câu hỏi càng ít bước. Hỏi giá mỗi loại thì gọi giá mỗi loại.' },
+    { t: 'Hàng là đối tượng, cột là đại lượng', b: 'Kẻ bảng trước khi lập hệ: mỗi ô là một biểu thức theo x, y. Hệ sẽ hiện ra từ hai cột.' },
+    { t: 'Giảm hai lần thì nhân hai lần', b: S`Giảm 20% rồi 10%: \(\times 0{,}8 \times 0{,}9\). Không cộng 20% + 10%.` },
+    { t: 'Xuôi cộng, ngược trừ', b: S`Ca nô xuôi dòng \(v + v_n\), ngược dòng \(v - v_n\). Điều kiện \(v \gt v_n\).` },
+    { t: 'Thử lại trước khi kết luận', b: 'Thay nghiệm vào đề (không phải vào hệ) xem có khớp mọi dữ kiện không.' },
+  ],
+  quiz: [
+    { q: 'Một món hàng giá 200 000 đồng được giảm 10%. Giá sau khi giảm là', a: ['180 000 đồng', '190 000 đồng', '20 000 đồng', '220 000 đồng'], why: S`\(200\,000 \cdot 0{,}9 = 180\,000\).` },
+    { q: S`Giá \(x\) giảm 20% rồi giảm tiếp 10%. Giá cuối cùng là`, a: [S`\(0{,}72x\)`, S`\(0{,}7x\)`, S`\(0{,}3x\)`, S`\(0{,}9x\)`], why: S`\(x \cdot 0{,}8 \cdot 0{,}9 = 0{,}72x\).` },
+    { q: S`Ca nô có vận tốc riêng \(x\) km/h, vận tốc dòng nước \(y\) km/h. Vận tốc xuôi dòng là`, a: [S`\(x + y\)`, S`\(x - y\)`, S`\(y - x\)`, S`\(xy\)`], why: 'Xuôi dòng được nước đẩy thêm nên cộng.' },
+    { q: S`Vòi I chảy riêng đầy bể trong \(x\) giờ. Trong 1 giờ, vòi I chảy được`, a: [S`\(\dfrac1x\) bể`, S`\(x\) bể`, S`\(\dfrac{x}{60}\) bể`, S`\(1 - x\) bể`], why: S`Cả bể là 1 đơn vị công việc; chia đều cho \(x\) giờ.` },
+    { q: 'Mua 2 cây bút và 3 quyển vở hết 54 000 đồng. Gọi giá bút là x, giá vở là y (đồng). Phương trình là', a: [S`\(2x + 3y = 54\,000\)`, S`\(3x + 2y = 54\,000\)`, S`\(x + y = 54\,000\)`, S`\(5(x + y) = 54\,000\)`], why: '2 bút 2x, 3 vở 3y.' },
+    { q: 'Điều kiện của ẩn "số học sinh của lớp" là', a: ['Số nguyên dương', 'Số thực dương', 'Số nguyên', 'Số hữu tỉ'], why: 'Số người phải là số tự nhiên khác 0.' },
+    { q: 'Hai số có tổng 50, số thứ nhất gấp 4 lần số thứ hai. Hệ phương trình là', a: [S`\(x + y = 50,\ x = 4y\)`, S`\(x + y = 50,\ y = 4x\)`, S`\(x - y = 50,\ x = 4y\)`, S`\(x + y = 50,\ x + 4 = y\)`], why: S`"x gấp 4 lần y" viết là \(x = 4y\).` },
+    { q: S`Năm ngoái sản lượng là \(x\) tấn, năm nay tăng 15%. Sản lượng năm nay là`, a: [S`\(1{,}15x\)`, S`\(0{,}15x\)`, S`\(x + 15\)`, S`\(0{,}85x\)`], why: S`\(x + 15\%x = 1{,}15x\).` },
+  ],
+  models: [
+    { title: 'Mua áo trong đợt khuyến mãi', pts: 1,
+      de: S`Trong đợt khuyến mãi, một cửa hàng giảm 10% giá niêm yết mỗi chiếc áo loại I và giảm 20% giá niêm yết mỗi chiếc áo loại II. Bạn An mua 2 áo loại I và 3 áo loại II nên chỉ phải trả 930 000 đồng; nếu không có khuyến mãi thì An phải trả 1 100 000 đồng. Tính giá niêm yết của mỗi loại áo.`,
+      steps: [
+        { s: S`Gọi giá niêm yết một áo loại I là \(x\) (đồng), một áo loại II là \(y\) (đồng); điều kiện \(x, y \gt 0\).`, p: 0.25 },
+        { s: S`Không khuyến mãi: \(2x + 3y = 1\,100\,000\) (1).<br>Có khuyến mãi: \(2 \cdot 0{,}9x + 3 \cdot 0{,}8y = 930\,000 \iff 1{,}8x + 2{,}4y = 930\,000\) (2).`, p: 0.25, warn: 'Viết 2·0,1x (lấy phần được giảm) thay vì 2·0,9x là lỗi hay gặp.' },
+        { s: S`Nhân (1) với 0,9: \(1{,}8x + 2{,}7y = 990\,000\). Trừ vế với vế cho (2): \(0{,}3y = 60\,000 \Rightarrow y = 200\,000\). Thay vào (1): \(2x = 1\,100\,000 - 600\,000 \Rightarrow x = 250\,000\).`, p: 0.25 },
+        { s: 'Hai giá trị thỏa điều kiện. Vậy giá niêm yết áo loại I là 250 000 đồng, áo loại II là 200 000 đồng.', p: 0.25 },
+      ],
+      loi: ['Không ghi đơn vị và điều kiện của ẩn.', 'Cộng phần trăm giảm hoặc nhân nhầm với phần được giảm.', 'Chỉ ghi kết quả bấm máy, không trình bày cách giải hệ.', 'Thiếu câu kết luận trả lời đề.'] },
+  ],
+  present: [
+    'Câu "Gọi …" có đủ đại lượng, đơn vị, điều kiện của từng ẩn.',
+    'Mỗi phương trình kèm một câu giải thích nó đến từ dữ kiện nào.',
+    'Trình bày các bước giải hệ (không chỉ ghi kết quả máy tính).',
+    'Đối chiếu điều kiện rồi mới kết luận.',
+    'Câu trả lời cuối đúng câu hỏi, có đơn vị.',
+  ],
+  practice: [
+    { lv: 'Cơ bản', pts: 1, h: 56,
+      de: 'Hai lớp 9A và 9B có tổng cộng 82 học sinh. Trong đợt quyên góp ủng hộ học sinh vùng lũ, mỗi bạn lớp 9A góp 3 quyển vở, mỗi bạn lớp 9B góp 2 quyển vở; cả hai lớp góp được 207 quyển. Tính số học sinh của mỗi lớp.',
+      ans: 'Lớp 9A có 43 học sinh, lớp 9B có 39 học sinh.',
+      barem: [[S`Gọi \(x, y\) là số học sinh lớp 9A, 9B (\(x, y\) nguyên dương)`, 0.25], [S`Lập hệ \(x + y = 82,\ 3x + 2y = 207\)`, 0.25], [S`Giải được \(x = 43,\ y = 39\)`, 0.25], [S`Đối chiếu, kết luận`, 0.25]] },
+    { lv: 'Khá', pts: 1, h: 62,
+      de: 'Một ca nô đi xuôi dòng trong 2 giờ và ngược dòng trong 3 giờ thì được tất cả 97 km. Nếu ca nô đi xuôi dòng trong 3 giờ và ngược dòng trong 2 giờ thì được 103 km. Tính vận tốc riêng của ca nô và vận tốc dòng nước (vận tốc riêng và vận tốc dòng nước không đổi).',
+      ans: 'Vận tốc riêng 20 km/h, vận tốc dòng nước 3 km/h.',
+      barem: [[S`Gọi \(x\), \(y\) (km/h) là vận tốc riêng và vận tốc dòng nước, \(x \gt y \gt 0\); xuôi \(x + y\), ngược \(x - y\)`, 0.25], [S`\(2(x + y) + 3(x - y) = 97 \iff 5x - y = 97\); \(3(x + y) + 2(x - y) = 103 \iff 5x + y = 103\)`, 0.25], [S`Cộng vế: \(10x = 200 \Rightarrow x = 20\); \(y = 3\)`, 0.25], [S`Đối chiếu, kết luận`, 0.25]] },
+    { lv: 'Nâng cao', pts: 1, h: 70,
+      de: 'Hai đội công nhân cùng làm một đoạn đường thì 12 ngày xong. Nếu đội I làm một mình trong 6 ngày, sau đó đội II làm tiếp một mình trong 15 ngày thì xong đoạn đường đó. Hỏi nếu làm riêng thì mỗi đội làm xong đoạn đường trong bao nhiêu ngày?',
+      ans: 'Đội I: 36 ngày; đội II: 18 ngày.',
+      barem: [[S`Gọi \(x, y\) (ngày) là thời gian đội I, II làm riêng xong, \(x, y \gt 12\); một ngày làm được \(\frac1x, \frac1y\) công việc`, 0.25], [S`Lập hệ \(\frac1x + \frac1y = \frac{1}{12}\); \(\frac6x + \frac{15}{y} = 1\)`, 0.25], [S`Đặt \(a = \frac1x,\ b = \frac1y\): giải được \(b = \frac{1}{18},\ a = \frac{1}{36}\)`, 0.25], [S`\(x = 36,\ y = 18\); đối chiếu, kết luận`, 0.25]] },
+  ],
+});
+
+</script>
+<script>/* data/vao-10/cd07-hinh-7a.js */
+/* Chủ đề 7 – Bài 7 câu a: bốn điểm cùng thuộc đường tròn, song song, vuông góc, bằng nhau, hệ thức. */
+(() => {
+  const tanFig = Fig.geo({
+    pts: { O: [0, 0], M: [5, 0], A: [0.8, 1.833], B: [0.8, -1.833], H: [0.8, 0], I: [2.5, 0] },
+    circles: [{ c: 'O', r: 2 }, { c: 'I', r: 2.5, dash: true }],
+    segs: 'M-A M-B O-A O-B A-B O-M', dots: 'O I H', rights: [['M', 'A', 'O'], ['M', 'B', 'O'], ['A', 'H', 'M']],
+    lab: { H: [10, 14], I: [0, 16], O: [-12, 4] }, w: 320, label: 'Hai tiếp tuyến MA, MB',
+  });
+  const tri = { A: [1.2, 4], B: [0, 0], C: [5, 0], D: [2.628, 2.497], E: [0.413, 1.376], H: [1.2, 1.14] };
+  Topics.add({
+    id: 'hinh-7a', no: 7, bai: 'Bài 7a · khoảng 1 điểm', rules: true,
+    title: 'Hình học 7a: bốn điểm cùng thuộc đường tròn, song song, vuông góc, hệ thức',
+    desc: 'Chứng minh bốn điểm cùng thuộc một đường tròn theo đúng quy định (không dùng dấu hiệu tứ giác nội tiếp); vuông góc, song song; hệ thức bằng tam giác đồng dạng.',
+    remind: [
+      'Bốn điểm cùng thuộc đường tròn: chỉ ra chúng cách đều một điểm.',
+      'Hai góc vuông cùng nhìn đoạn XY ⇒ hai tam giác vuông nội tiếp đường tròn đường kính XY.',
+      'Không dùng 3 dấu hiệu tứ giác nội tiếp; được dùng: tứ giác nội tiếp ⇒ tổng hai góc đối 180°.',
+      'Hệ thức tích AB·AC = AD·AE: chứng minh hai tam giác đồng dạng.',
+    ],
+    theory: [
+      { t: 'Bốn điểm cùng thuộc một đường tròn – cách được chấm điểm',
+        b: S`<p>Theo quy định thống nhất, <b>không được dùng</b> ba dấu hiệu "tổng hai góc đối bằng 180°", "hai góc bằng nhau cùng nhìn một cạnh", "góc ngoài bằng góc trong đối". Phải chỉ ra <b>bốn điểm cách đều một điểm</b>.</p>
+          <p><b>Mẫu chủ lực – hai góc vuông cùng nhìn đoạn \(XY\):</b> \(\widehat{XAY} = \widehat{XBY} = 90^\circ\). Gọi \(I\) là trung điểm \(XY\). Tam giác \(XAY\) vuông tại \(A\) nên nội tiếp đường tròn đường kính \(XY\) (tâm \(I\)), tức \(IA = IX = IY = \dfrac{XY}{2}\). Tương tự \(IB = \dfrac{XY}{2}\). Vậy \(X, A, Y, B\) cùng thuộc đường tròn tâm \(I\), bán kính \(\dfrac{XY}{2}\).</p>`,
+        warn: 'Phải nêu rõ TÂM và BÁN KÍNH của đường tròn đi qua bốn điểm.' },
+      { t: 'Kiến thức về đường tròn được dùng trực tiếp',
+        b: S`<ul><li>Góc nội tiếp chắn nửa đường tròn là góc vuông.</li><li>Các góc nội tiếp cùng chắn một cung (hoặc chắn các cung bằng nhau) thì bằng nhau; góc nội tiếp bằng nửa góc ở tâm cùng chắn một cung.</li>
+          <li>Tứ giác nội tiếp thì tổng hai góc đối bằng \(180^\circ\) (định lí thuận – được dùng sau khi đã chứng minh 4 điểm cùng thuộc đường tròn).</li>
+          <li>Tiếp tuyến vuông góc với bán kính tại tiếp điểm; hai tiếp tuyến cắt nhau tại \(M\): \(MA = MB\), \(MO\) là phân giác góc \(AMB\).</li></ul>` },
+      { t: 'Chứng minh vuông góc, song song, bằng nhau',
+        b: S`<ul><li><b>Vuông góc</b>: chỉ ra đường trung trực (hai điểm cách đều hai đầu đoạn thẳng); đường cao của tam giác; góc nội tiếp chắn nửa đường tròn.</li>
+          <li><b>Song song</b>: cùng vuông góc với một đường thẳng; cặp góc so le trong / đồng vị bằng nhau.</li>
+          <li><b>Hai góc bằng nhau</b>: cùng chắn một cung; cùng phụ (cùng bù) với một góc; hai tam giác đồng dạng.</li></ul>` },
+      { t: 'Hệ thức – tam giác đồng dạng',
+        b: S`<p>Muốn chứng minh \(MA^2 = MH \cdot MO\) hay \(AE \cdot AB = AD \cdot AC\): viết thành tỉ số \(\dfrac{AE}{AC} = \dfrac{AD}{AB}\) rồi tìm hai tam giác chứa bốn đoạn đó, chứng minh đồng dạng (thường là g.g: một góc chung + một cặp góc vuông).</p>`,
+        warn: S`Hệ thức lượng trong tam giác vuông (\(MA^2 = MH \cdot MO\)…) KHÔNG được dùng thẳng – phải chứng minh lại bằng tam giác đồng dạng.` },
+    ],
+    tips: [
+      { t: 'Hai góc vuông chung cạnh huyền – lấy trung điểm', b: 'Thấy hai góc 90° cùng nhìn một đoạn: gọi trung điểm đoạn đó, bốn điểm cách đều trung điểm.' },
+      { t: 'Tâm – bán kính – kết luận', b: 'Câu 7a luôn kết thúc bằng: "Vậy …, …, …, … cùng thuộc đường tròn tâm …, bán kính …".' },
+      { t: 'Tích bằng tích – tìm cặp tam giác', b: 'Chuyển thành tỉ số, mỗi tỉ số lấy một đoạn của mỗi tam giác. Đồng dạng g.g thì tìm góc chung và góc vuông.' },
+      { t: 'Tiếp tuyến – vẽ ngay góc vuông', b: 'Đề có tiếp tuyến tại A: đánh dấu góc vuông giữa tiếp tuyến và OA ngay khi vẽ hình.' },
+      { t: 'Hình to, đúng, đủ kí hiệu', b: 'Vẽ đường tròn bằng compa, hình chiếm 1/3 trang; tam giác nhọn đừng vẽ cân để không "thấy" điều chưa chứng minh.' },
+    ],
+    quiz: [
+      { q: 'Theo quy định thống nhất, cách nào được dùng để chứng minh bốn điểm cùng thuộc một đường tròn?', a: ['Chỉ ra bốn điểm cách đều một điểm', 'Tứ giác có tổng hai góc đối bằng 180°', 'Hai góc bằng nhau cùng nhìn một cạnh', 'Góc ngoài bằng góc trong đối'], why: 'Ba dấu hiệu tứ giác nội tiếp không được dùng; phải chỉ ra một điểm cách đều cả bốn điểm.' },
+      { q: S`Tam giác \(ABC\) vuông tại \(A\) nội tiếp đường tròn có tâm là`, a: ['Trung điểm BC', 'Trung điểm AB', 'Đỉnh A', 'Trọng tâm tam giác'], why: 'Đường tròn ngoại tiếp tam giác vuông có tâm là trung điểm cạnh huyền.' },
+      { q: 'Góc nội tiếp chắn nửa đường tròn có số đo', a: ['90°', '180°', '45°', '60°'], why: 'Đây là nhận xét về góc nội tiếp trong SGK – được dùng trực tiếp.' },
+      { q: S`\(MA\) là tiếp tuyến của \((O)\) tại \(A\). Khi đó`, a: [S`\(MA \perp OA\)`, S`\(MA \parallel OA\)`, S`\(MA = OA\)`, S`\(MA \perp OM\)`], why: 'Tiếp tuyến vuông góc với bán kính tại tiếp điểm.' },
+      { q: S`Tứ giác \(ABCD\) nội tiếp đường tròn, \(\widehat{A} = 70^\circ\). Khi đó \(\widehat{C}\) bằng`, a: ['110°', '70°', '20°', '90°'], why: 'Tứ giác nội tiếp thì tổng hai góc đối bằng 180° (định lí thuận được dùng).' },
+      { q: S`Hai góc nội tiếp cùng chắn cung \(BC\) thì`, a: ['Bằng nhau', 'Bù nhau', 'Phụ nhau', 'Gấp đôi nhau'], why: 'Nhận xét trong SGK: các góc nội tiếp cùng chắn một cung thì bằng nhau.' },
+      { q: S`Để chứng minh \(AE \cdot AB = AD \cdot AC\) ta thường`, a: ['Chứng minh hai tam giác đồng dạng', 'Dùng định lí Pythagore', 'Dùng hệ thức lượng trong tam giác vuông', 'Tính độ dài từng đoạn'], why: S`Viết thành \(\dfrac{AE}{AC} = \dfrac{AD}{AB}\) rồi chứng minh \(\triangle AEC \backsim \triangle ADB\).` },
+      { q: 'Trung tuyến ứng với cạnh huyền của tam giác vuông', a: ['Bằng nửa cạnh huyền', 'Bằng cạnh huyền', 'Vuông góc với cạnh huyền', 'Bằng cạnh góc vuông nhỏ'], why: 'Đây là tính chất quen thuộc từ lớp 8, dùng để chỉ ra bốn điểm cách đều trung điểm.' },
+    ],
+    models: [
+      { title: 'Hai tiếp tuyến cắt nhau', pts: 2,
+        de: S`Từ điểm \(M\) nằm ngoài đường tròn \((O)\), kẻ hai tiếp tuyến \(MA, MB\) (\(A, B\) là các tiếp điểm). Gọi \(H\) là giao điểm của \(MO\) và \(AB\).<br>a) Chứng minh bốn điểm \(M, A, O, B\) cùng thuộc một đường tròn.<br>b) Chứng minh \(MO \perp AB\).<br>c) Chứng minh \(MA^2 = MH \cdot MO\).`,
+        fig: tanFig,
+        steps: [
+          { part: 'a) Bốn điểm cùng thuộc đường tròn – 1 điểm' },
+          { s: S`\(MA\) là tiếp tuyến tại \(A\) nên \(MA \perp OA\), tức \(\widehat{MAO} = 90^\circ\). Tương tự \(\widehat{MBO} = 90^\circ\).`, p: 0.25 },
+          { s: S`Gọi \(I\) là trung điểm \(MO\). Tam giác \(MAO\) vuông tại \(A\) nên nội tiếp đường tròn đường kính \(MO\): \(IA = IM = IO = \dfrac{MO}{2}\).`, p: 0.25 },
+          { s: S`Tương tự, tam giác \(MBO\) vuông tại \(B\) nên \(IB = \dfrac{MO}{2}\).`, p: 0.25 },
+          { s: S`Vậy \(M, A, O, B\) cùng thuộc đường tròn tâm \(I\), bán kính \(\dfrac{MO}{2}\).`, p: 0.25, warn: S`Viết "tứ giác \(MAOB\) có \(\widehat{A} + \widehat{B} = 180^\circ\) nên nội tiếp" là dùng dấu hiệu bị cấm – không được điểm.` },
+          { part: 'b) MO ⊥ AB – 0,5 điểm' },
+          { s: S`\(MA = MB\) (tính chất hai tiếp tuyến cắt nhau) và \(OA = OB\) (bán kính).`, p: 0.25 },
+          { s: S`Do đó \(M\) và \(O\) cùng cách đều \(A, B\), nên \(MO\) là đường trung trực của \(AB\). Vậy \(MO \perp AB\) tại \(H\).`, p: 0.25 },
+          { part: 'c) MA² = MH·MO – 0,5 điểm' },
+          { s: S`Xét \(\triangle MHA\) và \(\triangle MAO\): \(\widehat{M}\) chung, \(\widehat{MHA} = \widehat{MAO} = 90^\circ\). Nên \(\triangle MHA \backsim \triangle MAO\) (g.g).`, p: 0.25, warn: 'Ghi thẳng "theo hệ thức lượng trong tam giác vuông MAO" là không được điểm – phải chứng minh đồng dạng.' },
+          { s: S`Suy ra \(\dfrac{MH}{MA} = \dfrac{MA}{MO}\), do đó \(MA^2 = MH \cdot MO\).`, p: 0.25 },
+        ],
+        loi: ['Dùng dấu hiệu tứ giác nội tiếp (tổng hai góc đối 180°).', 'Không nêu tâm và bán kính đường tròn.', 'Dùng thẳng hệ thức lượng trong tam giác vuông.', 'Viết sai thứ tự đỉnh tương ứng khi ghi hai tam giác đồng dạng.'] },
+    ],
+    present: [
+      'Vẽ hình to bằng thước, compa; ghi đủ tên điểm, kí hiệu góc vuông.',
+      'Mỗi khẳng định có lí do ngay sau chữ "vì / do" (tiếp tuyến, góc nội tiếp chắn nửa đường tròn…).',
+      'Câu 4 điểm: nêu điểm cách đều, kết luận đủ tâm và bán kính.',
+      'Tam giác đồng dạng: ghi đúng thứ tự đỉnh tương ứng và trường hợp (g.g).',
+      'Không viện dẫn kiến thức bị cấm; nếu cần thì chứng minh lại ngắn gọn.',
+    ],
+    practice: [
+      { lv: 'Cơ bản', pts: 1.5, h: 78,
+        de: S`Cho tam giác \(ABC\) nhọn, các đường cao \(BD\) và \(CE\) cắt nhau tại \(H\).<br>a) Chứng minh bốn điểm \(B, C, D, E\) cùng thuộc một đường tròn.<br>b) Chứng minh \(AE \cdot AB = AD \cdot AC\).`,
+        ans: S`a) Đường tròn tâm là trung điểm \(BC\), bán kính \(\dfrac{BC}{2}\). b) \(\triangle ADB \backsim \triangle AEC\) (g.g).`,
+        fig: Fig.geo({ pts: tri, circles: [{ c: [2.5, 0], r: 2.5, dash: true }], segs: 'A-B B-C C-A B-D C-E', rights: [['B', 'D', 'C'], ['C', 'E', 'B']], dots: 'H', w: 260 }),
+        barem: [[S`\(\widehat{BDC} = \widehat{BEC} = 90^\circ\) (đường cao)`, 0.25], [S`Gọi \(K\) là trung điểm \(BC\): hai tam giác vuông \(BDC, BEC\) có \(KD = KE = KB = KC = \dfrac{BC}{2}\)`, 0.25], [S`Kết luận bốn điểm thuộc đường tròn tâm \(K\), bán kính \(\dfrac{BC}{2}\)`, 0.25], [S`\(\triangle ADB\) và \(\triangle AEC\): \(\widehat{A}\) chung, \(\widehat{ADB} = \widehat{AEC} = 90^\circ\)`, 0.25], [S`\(\triangle ADB \backsim \triangle AEC\) (g.g)`, 0.25], [S`\(\dfrac{AD}{AE} = \dfrac{AB}{AC} \Rightarrow AE \cdot AB = AD \cdot AC\)`, 0.25]] },
+      { lv: 'Khá', pts: 1.5, h: 78,
+        de: S`Cho tam giác \(ABC\) nhọn, các đường cao \(BD\) và \(CE\) cắt nhau tại \(H\).<br>a) Chứng minh bốn điểm \(A, D, H, E\) cùng thuộc một đường tròn. Xác định tâm \(I\) của đường tròn đó.<br>b) Chứng minh \(\widehat{ADE} = \widehat{AHE}\).`,
+        ans: S`a) Tâm \(I\) là trung điểm \(AH\). b) Hai góc nội tiếp cùng chắn cung \(AE\) của đường tròn \((I)\).`,
+        fig: Fig.geo({ pts: tri, circles: [{ c: [1.2, 2.57], r: 1.43, dash: true }], segs: 'A-B B-C C-A B-D C-E A-H D-E', rights: [['A', 'D', 'H'], ['A', 'E', 'H']], dots: 'H', w: 260 }),
+        barem: [[S`\(\widehat{ADH} = \widehat{AEH} = 90^\circ\)`, 0.25], [S`Gọi \(I\) là trung điểm \(AH\): \(ID = IE = IA = IH = \dfrac{AH}{2}\) (trung tuyến ứng cạnh huyền)`, 0.25], [S`Kết luận: \(A, D, H, E\) thuộc đường tròn tâm \(I\), bán kính \(\dfrac{AH}{2}\)`, 0.25], [S`Trong đường tròn \((I)\), \(\widehat{ADE}\) và \(\widehat{AHE}\) là hai góc nội tiếp`, 0.25], [S`cùng chắn cung \(AE\)`, 0.25], [S`nên \(\widehat{ADE} = \widehat{AHE}\)`, 0.25]] },
+      { lv: 'Nâng cao', pts: 1.5, h: 82,
+        de: S`Cho đường tròn \((O)\) đường kính \(AB\), \(C\) là một điểm trên đường tròn (\(C\) khác \(A, B\)). Tiếp tuyến tại \(A\) của \((O)\) cắt đường thẳng \(BC\) tại \(D\).<br>a) Chứng minh \(AC \perp BD\).<br>b) Chứng minh \(DA^2 = DC \cdot DB\).`,
+        ans: S`a) \(\widehat{ACB} = 90^\circ\) (góc nội tiếp chắn nửa đường tròn). b) \(\triangle DCA \backsim \triangle DAB\) (g.g).`,
+        fig: Fig.geo({ pts: { A: [-2, 0], B: [2, 0], O: [0, 0], C: [-1, 1.732], D: [-2, 2.309] }, circles: [{ c: 'O', r: 2 }], segs: 'A-B B-D A-D A-C', rights: [['A', 'C', 'B'], ['D', 'A', 'B']], dots: 'O', lab: { O: [0, 16] }, w: 240 }),
+        barem: [[S`\(\widehat{ACB} = 90^\circ\) vì là góc nội tiếp chắn nửa đường tròn`, 0.25], [S`\(D\) thuộc đường thẳng \(BC\) nên \(AC \perp BD\)`, 0.25], [S`\(\widehat{DAB} = 90^\circ\) (tiếp tuyến vuông góc bán kính); \(\widehat{DCA} = 90^\circ\)`, 0.25], [S`\(\triangle DCA\) và \(\triangle DAB\): \(\widehat{D}\) chung, \(\widehat{DCA} = \widehat{DAB} = 90^\circ\)`, 0.25], [S`\(\triangle DCA \backsim \triangle DAB\) (g.g)`, 0.25], [S`\(\dfrac{DC}{DA} = \dfrac{DA}{DB} \Rightarrow DA^2 = DC \cdot DB\)`, 0.25]] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/vao-10/cd08-hinh-7b.js */
+/* Chủ đề 8 – Bài 7 câu b: hệ thức, các yếu tố bằng nhau, thẳng hàng, đồng quy. */
+(() => {
+  const big = { A: [2, 4.5], B: [0, 0], C: [6, 0], O: [3, 1.361], H: [2, 1.778], K: [4, -1.778], F: [2, 0], D: [3.352, 2.979], E: [0.99, 2.227], M: [3, 0] };
+  const tri = { A: [1.2, 4], B: [0, 0], C: [5, 0], D: [2.628, 2.497], E: [0.413, 1.376], H: [1.2, 1.14], F: [1.2, 0] };
+  Topics.add({
+    id: 'hinh-7b', no: 8, bai: 'Bài 7b · khoảng 1 điểm', rules: true,
+    title: 'Hình học 7b: hệ thức, bằng nhau, thẳng hàng, đồng quy',
+    desc: 'Hình bình hành trong đường tròn, ba điểm thẳng hàng, đường trung bình, hệ thức cộng từ hai cặp tam giác đồng dạng, góc cùng phụ.',
+    remind: [
+      'Thẳng hàng: góc bẹt 180°, hoặc điểm là trung điểm đường chéo hình bình hành, hoặc cùng song song / vuông góc với một đường.',
+      'Đồng quy: ba đường cao (trung tuyến, phân giác, trung trực) của một tam giác.',
+      'Đường trung bình: song song cạnh thứ ba và bằng nửa cạnh đó.',
+      'Hai góc cùng phụ (cùng bù) với góc thứ ba thì bằng nhau – được dùng trực tiếp.',
+    ],
+    theory: [
+      { t: 'Chứng minh ba điểm thẳng hàng',
+        b: S`<ul><li>Chỉ ra \(\widehat{XYZ} = 180^\circ\) (cộng các góc kề nhau).</li>
+          <li>\(Y\) là trung điểm của đoạn \(XZ\) (ví dụ: giao điểm hai đường chéo hình bình hành là trung điểm mỗi đường chéo).</li>
+          <li>\(XY\) và \(XZ\) cùng song song (hoặc cùng vuông góc) với một đường thẳng – theo tiên đề Euclid.</li>
+          <li>\(Y\) nằm trên một đường đã biết đi qua \(X, Z\) (đường trung trực, đường kính…).</li></ul>` },
+      { t: 'Chứng minh ba đường đồng quy',
+        b: S`<ul><li>Ba đường đó là ba đường cao (hoặc ba trung tuyến, ba phân giác, ba trung trực) của cùng một tam giác.</li>
+          <li>Gọi giao điểm của hai đường, chứng minh điểm đó thuộc đường thứ ba.</li></ul>
+          <p>Ví dụ: các đường cao \(BD, CE\) cắt nhau tại \(H\) thì \(H\) là trực tâm, nên \(AH \perp BC\).</p>` },
+      { t: 'Hình bình hành, đường trung bình',
+        b: S`<ul><li>Tứ giác có các cặp cạnh đối song song là hình bình hành; hai đường chéo cắt nhau tại trung điểm mỗi đường.</li>
+          <li>Đường trung bình của tam giác song song với cạnh thứ ba và bằng nửa cạnh ấy: dùng để chứng minh \(AH = 2\,OM\), \(OH = \dfrac{BC}{2}\)…</li></ul>`,
+        fig: Fig.geo({ pts: big, circles: [{ c: 'O', r: 3.294 }], segs: 'A-B B-C C-A A-F B-D C-E A-K B-K C-K', dash: 'H-K O-M', rights: [['A', 'F', 'C']], dots: 'O H M', lab: { H: [-12, -4], M: [6, 14], F: [-8, 14], O: [12, 0] }, w: 280, label: 'Đường kính AK, hình bình hành BHCK' }) },
+      { t: 'Hệ thức "cộng" từ hai cặp tam giác đồng dạng',
+        b: S`<p>Muốn chứng minh \(BH \cdot BD + CH \cdot CE = BC^2\): chứng minh riêng \(BH \cdot BD = BF \cdot BC\) và \(CH \cdot CE = CF \cdot CB\) bằng tam giác đồng dạng, rồi cộng vế: \(BC(BF + CF) = BC \cdot BC = BC^2\).</p>`,
+        warn: 'Câu b, c được dùng kết quả của câu trước kể cả khi em chưa chứng minh được câu trước – đừng bỏ trống.' },
+    ],
+    tips: [
+      { t: 'Thẳng hàng – nghĩ đến trung điểm', b: 'Trung điểm M của BC cũng là trung điểm HK khi BHCK là hình bình hành ⇒ H, M, K thẳng hàng.' },
+      { t: 'Đường kính AK – có ngay hai góc vuông', b: S`\(\widehat{ABK} = \widehat{ACK} = 90^\circ\) (góc nội tiếp chắn nửa đường tròn).` },
+      { t: 'Cùng vuông góc thì song song', b: 'BK ⊥ AB và CH ⊥ AB ⇒ BK ∥ CH. Đây là cách nhanh nhất ra cạnh song song.' },
+      { t: 'Cùng phụ một góc – bằng nhau', b: S`Trong tam giác vuông có đường cao: \(\widehat{HAC} = \widehat{ABC}\) vì cùng phụ với \(\widehat{C}\).` },
+      { t: 'Tổng tích – tách ra hai tích rồi cộng', b: 'Gặp hệ thức có dấu cộng: chứng minh từng tích bằng một tích có chung thừa số, rồi cộng vế.' },
+    ],
+    quiz: [
+      { q: S`Cách nào chứng minh được ba điểm \(A, B, C\) thẳng hàng?`, a: [S`\(\widehat{ABC} = 180^\circ\)`, S`\(\widehat{ABC} = 90^\circ\)`, S`\(AB = BC\)`, S`\(AB + BC \gt AC\)`], why: 'Góc bẹt (180°) thì ba điểm thẳng hàng.' },
+      { q: 'Tứ giác có hai cặp cạnh đối song song là', a: ['Hình bình hành', 'Hình thang cân', 'Tứ giác nội tiếp', 'Hình vuông'], why: 'Đây là định nghĩa hình bình hành.' },
+      { q: 'Hai đường chéo của hình bình hành', a: ['Cắt nhau tại trung điểm của mỗi đường', 'Luôn bằng nhau', 'Luôn vuông góc', 'Không cắt nhau'], why: 'Tính chất hình bình hành – dùng để chứng minh thẳng hàng.' },
+      { q: 'Ba đường cao của một tam giác', a: ['Cùng đi qua một điểm (trực tâm)', 'Song song với nhau', 'Bằng nhau', 'Cắt nhau tại tâm đường tròn ngoại tiếp'], why: 'Ba đường cao đồng quy tại trực tâm.' },
+      { q: 'Đường trung bình của tam giác', a: ['Song song với cạnh thứ ba và bằng nửa cạnh đó', 'Vuông góc với cạnh thứ ba', 'Bằng cạnh thứ ba', 'Đi qua trọng tâm'], why: 'Dùng để chứng minh AH = 2OM, OH = BC/2…' },
+      { q: S`\(\triangle ABC \backsim \triangle DEF\) theo tỉ số \(k\) thì`, a: [S`\(\dfrac{AB}{DE} = k\)`, S`\(\dfrac{AB}{EF} = k\)`, S`\(\dfrac{DE}{AB} = k\)`, S`\(AB \cdot DE = k\)`], why: 'Tỉ số đồng dạng là tỉ số các cạnh tương ứng theo đúng thứ tự đỉnh.' },
+      { q: 'Hai góc cùng phụ với một góc thứ ba thì', a: ['Bằng nhau', 'Bù nhau', 'Phụ nhau', 'Không so sánh được'], why: 'Kiến thức thống nhất: được dùng trực tiếp không cần chứng minh.' },
+      { q: 'Qua một điểm nằm ngoài một đường thẳng, số đường thẳng song song với đường thẳng đó là', a: ['Đúng một', 'Hai', 'Vô số', 'Không có'], why: 'Tiên đề Euclid – cơ sở để chứng minh thẳng hàng bằng song song.' },
+    ],
+    models: [
+      { title: 'Hình bình hành BHCK, thẳng hàng và AH = 2OM', pts: 2,
+        de: S`Cho tam giác \(ABC\) nhọn (\(AB \lt AC\)) nội tiếp đường tròn \((O)\), các đường cao \(AF, BD, CE\) cắt nhau tại \(H\). Vẽ đường kính \(AK\) của \((O)\), gọi \(M\) là trung điểm \(BC\).<br>a) Chứng minh tứ giác \(BHCK\) là hình bình hành.<br>b) Chứng minh ba điểm \(H, M, K\) thẳng hàng.<br>c) Chứng minh \(AH = 2\,OM\).`,
+        fig: Fig.geo({ pts: big, circles: [{ c: 'O', r: 3.294 }], segs: 'A-B B-C C-A A-F B-D C-E A-K B-K C-K', dash: 'H-K O-M', rights: [['A', 'F', 'C']], dots: 'O H M', lab: { H: [-12, -4], M: [6, 14], F: [-8, 14], O: [12, 0] }, w: 300 }),
+        steps: [
+          { part: 'a) BHCK là hình bình hành – 1 điểm' },
+          { s: S`\(\widehat{ABK} = 90^\circ\) (góc nội tiếp chắn nửa đường tròn) nên \(BK \perp AB\).`, p: 0.25 },
+          { s: S`\(CE \perp AB\) (đường cao) nên \(CH \perp AB\). Do đó \(BK \parallel CH\).`, p: 0.25 },
+          { s: S`Tương tự \(\widehat{ACK} = 90^\circ \Rightarrow CK \perp AC\); \(BH \perp AC\). Do đó \(CK \parallel BH\).`, p: 0.25 },
+          { s: S`Tứ giác \(BHCK\) có các cặp cạnh đối song song nên là hình bình hành.`, p: 0.25 },
+          { part: 'b) H, M, K thẳng hàng – 0,5 điểm' },
+          { s: S`\(BHCK\) là hình bình hành nên hai đường chéo \(BC\) và \(HK\) cắt nhau tại trung điểm của mỗi đường.`, p: 0.25 },
+          { s: S`\(M\) là trung điểm \(BC\) nên \(M\) cũng là trung điểm \(HK\). Vậy \(H, M, K\) thẳng hàng.`, p: 0.25 },
+          { part: 'c) AH = 2OM – 0,5 điểm' },
+          { s: S`\(O\) là trung điểm \(AK\) (tâm đường tròn, \(AK\) là đường kính), \(M\) là trung điểm \(HK\).`, p: 0.25 },
+          { s: S`Nên \(OM\) là đường trung bình của \(\triangle AHK\), suy ra \(OM = \dfrac{AH}{2}\), tức \(AH = 2\,OM\).`, p: 0.25 },
+        ],
+        loi: ['Chỉ ghi "BK ∥ CH" mà không nêu hai đường cùng vuông góc với AB.', 'Kết luận thẳng hàng vì "nhìn hình thấy thẳng".', 'Quên nêu O là trung điểm AK.'] },
+    ],
+    present: [
+      'Mỗi cặp song song: nêu rõ cùng vuông góc với đường nào, vì sao vuông góc.',
+      'Thẳng hàng: chỉ ra lí do hình học (trung điểm, góc bẹt…), không "nhìn hình".',
+      'Hệ thức: ghi hai tam giác đồng dạng đúng thứ tự đỉnh, rồi suy ra tỉ số.',
+      'Được dùng kết quả câu trước: ghi "theo câu a)".',
+      'Góc bằng nhau do cùng phụ: ghi rõ cùng phụ với góc nào.',
+    ],
+    practice: [
+      { lv: 'Cơ bản', pts: 1.5, h: 80,
+        de: S`Từ điểm \(M\) nằm ngoài đường tròn \((O)\) kẻ hai tiếp tuyến \(MA, MB\) (\(A, B\) là tiếp điểm). Vẽ đường kính \(AC\) của \((O)\). Gọi \(H\) là giao điểm của \(OM\) và \(AB\).<br>a) Chứng minh \(OM \perp AB\).<br>b) Chứng minh \(BC \parallel OM\).<br>c) Chứng minh \(OH = \dfrac{BC}{2}\).`,
+        ans: S`a) \(OM\) là trung trực của \(AB\). b) cùng vuông góc với \(AB\). c) \(OH\) là đường trung bình của \(\triangle ABC\).`,
+        fig: Fig.geo({ pts: { O: [0, 0], M: [5, 0], A: [0.8, 1.833], B: [0.8, -1.833], C: [-0.8, -1.833], H: [0.8, 0] }, circles: [{ c: 'O', r: 2 }], segs: 'M-A M-B A-B O-M A-C B-C', rights: [['A', 'H', 'M'], ['A', 'B', 'C']], dots: 'O', lab: { H: [10, 14], O: [-6, 16] }, w: 260 }),
+        barem: [[S`\(MA = MB\) (hai tiếp tuyến cắt nhau), \(OA = OB\)`, 0.25], [S`\(OM\) là trung trực của \(AB\) nên \(OM \perp AB\) tại \(H\), \(H\) là trung điểm \(AB\)`, 0.25], [S`\(\widehat{ABC} = 90^\circ\) (góc nội tiếp chắn nửa đường tròn) nên \(BC \perp AB\)`, 0.25], [S`\(BC\) và \(OM\) cùng vuông góc với \(AB\) nên \(BC \parallel OM\)`, 0.25], [S`\(O\) là trung điểm \(AC\), \(H\) là trung điểm \(AB\)`, 0.25], [S`\(OH\) là đường trung bình của \(\triangle ABC\) nên \(OH = \dfrac{BC}{2}\)`, 0.25]] },
+      { lv: 'Khá', pts: 1.5, h: 80,
+        de: S`Cho tam giác \(ABC\) nhọn, các đường cao \(AF, BD, CE\) cắt nhau tại \(H\).<br>a) Chứng minh \(BH \cdot BD = BF \cdot BC\).<br>b) Chứng minh \(CH \cdot CE = CF \cdot CB\).<br>c) Chứng minh \(BH \cdot BD + CH \cdot CE = BC^2\).`,
+        ans: S`a) \(\triangle BFH \backsim \triangle BDC\). b) \(\triangle CFH \backsim \triangle CEB\). c) Cộng vế, \(BF + CF = BC\).`,
+        fig: Fig.geo({ pts: tri, segs: 'A-B B-C C-A A-F B-D C-E', rights: [['A', 'F', 'C'], ['B', 'D', 'C'], ['C', 'E', 'B']], dots: 'H', lab: { H: [12, -2] }, w: 250 }),
+        barem: [[S`\(\triangle BFH\) và \(\triangle BDC\): \(\widehat{B}\) chung, \(\widehat{BFH} = \widehat{BDC} = 90^\circ\) nên đồng dạng (g.g)`, 0.25], [S`\(\dfrac{BF}{BD} = \dfrac{BH}{BC} \Rightarrow BH \cdot BD = BF \cdot BC\)`, 0.25], [S`\(\triangle CFH \backsim \triangle CEB\) (g.g: \(\widehat{C}\) chung, góc vuông)`, 0.25], [S`\(\Rightarrow CH \cdot CE = CF \cdot CB\)`, 0.25], [S`Cộng vế: \(BH \cdot BD + CH \cdot CE = BC(BF + CF)\)`, 0.25], [S`\(F\) nằm giữa \(B, C\) (tam giác nhọn) nên \(BF + CF = BC\); kết luận \(= BC^2\)`, 0.25]] },
+      { lv: 'Nâng cao', pts: 1.5, h: 86,
+        de: S`Cho tam giác \(ABC\) vuông tại \(A\), đường cao \(AH\). Gọi \(D, E\) lần lượt là hình chiếu của \(H\) trên \(AB, AC\); \(M\) là trung điểm \(BC\).<br>a) Chứng minh tứ giác \(ADHE\) là hình chữ nhật và \(AH = DE\).<br>b) Chứng minh \(\widehat{AED} = \widehat{ABC}\).<br>c) Chứng minh \(AM \perp DE\).`,
+        ans: S`b) \(\widehat{AED} = \widehat{HAC} = \widehat{ABC}\). c) \(\widehat{MAB} = \widehat{ABC} = \widehat{AED}\), suy ra \(\widehat{AKE} = 90^\circ\) với \(K = AM \cap DE\).`,
+        fig: Fig.geo({ pts: { A: [0, 0], B: [4, 0], C: [0, 3], H: [1.44, 1.92], D: [1.44, 0], E: [0, 1.92], M: [2, 1.5], K: [0.922, 0.691] }, segs: 'A-B B-C C-A A-H H-D H-E D-E A-M', rights: [['B', 'A', 'C'], ['A', 'H', 'B']], dots: 'M', lab: { K: [-4, 16], D: [0, 16], A: [-10, 10] }, w: 250 }),
+        barem: [[S`Tứ giác \(ADHE\) có ba góc vuông nên là hình chữ nhật`, 0.25], [S`Hai đường chéo hình chữ nhật bằng nhau: \(AH = DE\)`, 0.25], [S`Gọi \(I\) là giao điểm \(AH, DE\): \(IA = IE\) nên \(\widehat{AED} = \widehat{HAC}\)`, 0.25], [S`\(\widehat{HAC} = \widehat{ABC}\) (cùng phụ với \(\widehat{ACB}\)); suy ra \(\widehat{AED} = \widehat{ABC}\)`, 0.25], [S`\(MA = MB = \dfrac{BC}{2}\) (trung tuyến ứng cạnh huyền) nên \(\widehat{MAB} = \widehat{ABC} = \widehat{AED}\)`, 0.25], [S`Gọi \(K = AM \cap DE\): \(\widehat{KAE} + \widehat{AEK} = \widehat{MAC} + \widehat{MAB} = 90^\circ\) nên \(\widehat{AKE} = 90^\circ\), tức \(AM \perp DE\)`, 0.25]] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/vao-10/cd09-hinh-7c.js */
+/* Chủ đề 9 – Bài 7 câu c (vận dụng cao): tính độ dài, chu vi, diện tích, số đo góc. */
+(() => {
+  const circ = (X, Y, cx, cy, r, u) => `M${X(cx - r)} ${Y(cy)}a${r * u} ${r * u} 0 1 0 ${2 * r * u} 0a${r * u} ${r * u} 0 1 0 ${-2 * r * u} 0Z`;
+  const poly = (X, Y, ps) => 'M' + ps.map(([x, y]) => `${X(x)} ${Y(y)}`).join('L') + 'Z';
+  const s3 = Math.sqrt(3);
+  Topics.add({
+    id: 'hinh-7c', no: 9, bai: 'Bài 7c · khoảng 1 điểm · Vận dụng cao', rules: true,
+    title: 'Hình học 7c: tính độ dài, chu vi, diện tích, số đo góc',
+    desc: 'Tam giác đều, vuông cân nội tiếp; tỉ số đồng dạng và tỉ số diện tích; hình quạt, viên phân, phần hình tròn nằm ngoài đa giác.',
+    remind: [
+      S`Tam giác đều cạnh \(a\): \(h = \frac{a\sqrt3}{2}\), \(R = \frac{a\sqrt3}{3}\), \(r = \frac{a\sqrt3}{6}\), \(S = \frac{a^2\sqrt3}{4}\).`,
+      S`Vuông cân cạnh góc vuông \(a\): huyền \(a\sqrt2\), \(R = \frac{a\sqrt2}{2}\), \(S = \frac{a^2}{2}\).`,
+      S`Đồng dạng tỉ số \(k\): tỉ số chu vi \(k\), tỉ số diện tích \(k^2\).`,
+      'Góc nội tiếp = nửa góc ở tâm cùng chắn một cung; dây bằng bán kính ⇒ góc ở tâm 60°.',
+    ],
+    theory: [
+      { t: 'Công thức được dùng trực tiếp (kiến thức thống nhất)',
+        b: S`<table><tr><th></th><th>Tam giác đều cạnh \(a\)</th><th>Vuông cân, cạnh góc vuông \(a\)</th></tr>
+          <tr><td>Đường cao / cạnh huyền</td><td>\(h = \dfrac{a\sqrt3}{2}\)</td><td>huyền \(a\sqrt2\)</td></tr>
+          <tr><td>Bán kính ngoại tiếp</td><td>\(R = \dfrac{a\sqrt3}{3}\)</td><td>\(R = \dfrac{a\sqrt2}{2}\)</td></tr>
+          <tr><td>Bán kính nội tiếp</td><td>\(r = \dfrac{a\sqrt3}{6}\)</td><td>\(r = \dfrac{(2 - \sqrt2)a}{2}\)</td></tr>
+          <tr><td>Diện tích</td><td>\(S = \dfrac{a^2\sqrt3}{4}\)</td><td>\(S = \dfrac{a^2}{2}\)</td></tr></table>` },
+      { t: 'Tính độ dài: Pythagore + đồng dạng',
+        b: S`<ul><li>Định lí Pythagore trong tam giác vuông.</li>
+          <li>Tam giác đồng dạng cho tỉ lệ cạnh: \(\triangle HBA \backsim \triangle ABC \Rightarrow BH = \dfrac{AB^2}{BC}\) (phải chứng minh đồng dạng trước).</li>
+          <li>Đường cao từ diện tích: \(AB \cdot AC = AH \cdot BC\) (hai cách tính diện tích tam giác vuông).</li>
+          <li>Tỉ số lượng giác theo định nghĩa: \(\sin\alpha = \dfrac{\text{đối}}{\text{huyền}}\), \(\cos\alpha = \dfrac{\text{kề}}{\text{huyền}}\) – được dùng; các hệ thức giữa chúng phải chứng minh lại.</li></ul>` },
+      { t: 'Diện tích phần tô – trừ cho đúng',
+        b: S`<ul><li>Phần hình tròn nằm ngoài tam giác: \(S_{\text{tròn}} - S_{\text{tam giác}}\).</li>
+          <li>Viên phân: \(S_{\text{quạt}} - S_{\text{tam giác cân tại tâm}}\).</li>
+          <li>Phần giữa hai tiếp tuyến và cung nhỏ: \(S_{\text{tứ giác}} - S_{\text{quạt}}\).</li>
+          <li>Đồng dạng tỉ số \(k\) thì \(\dfrac{S_1}{S_2} = k^2\).</li></ul>`,
+        fig: Fig.geo({ pts: { A: [-2, 0], B: [2, 0], O: [0, 0], C: [1, s3] }, circles: [{ c: 'O', r: 2 }], fill: [(X, Y, P, u) => circ(X, Y, 0, 0, 2, u) + poly(X, Y, [[-2, 0], [2, 0], [1, s3]])], segs: 'A-B B-C C-A O-C', rights: [['A', 'C', 'B']], dots: 'O', lab: { O: [0, 16] }, w: 230, label: 'Phần hình tròn nằm ngoài tam giác' }),
+        warn: 'Để kết quả theo R và π, √3 nếu đề không yêu cầu làm tròn.' },
+      { t: 'Số đo góc',
+        b: S`<ul><li>Góc nội tiếp bằng nửa góc ở tâm cùng chắn một cung; góc nội tiếp chắn nửa đường tròn là \(90^\circ\).</li>
+          <li>Dây cung bằng bán kính \(\Rightarrow\) tam giác tạo với tâm là tam giác đều \(\Rightarrow\) góc ở tâm \(60^\circ\).</li>
+          <li>Tam giác vuông có cạnh góc vuông bằng nửa cạnh huyền thì góc đối diện cạnh đó bằng \(30^\circ\) (vì \(\sin = \dfrac12\)).</li></ul>` },
+    ],
+    tips: [
+      { t: 'Thấy 30° – 60° – 90°: cạnh nhỏ bằng nửa huyền', b: S`Cạnh đối diện góc 30° bằng nửa cạnh huyền; cạnh còn lại bằng \(\dfrac{\sqrt3}{2}\) cạnh huyền.` },
+      { t: 'Dây bằng bán kính – tam giác đều hiện ra', b: 'OB = OC = BC thì tam giác OBC đều: góc ở tâm 60°, diện tích dùng công thức a²√3/4.' },
+      { t: 'Diện tích tỉ số k bình phương', b: 'Đồng dạng tỉ số 1/2 thì diện tích chỉ còn 1/4, không phải 1/2.' },
+      { t: 'Phần tô = cái lớn trừ cái nhỏ', b: 'Vẽ lại hình, tô màu phần cần tính, xác định hình lớn bao ngoài và phần bị khoét.' },
+      { t: 'Biết R – tính mọi thứ theo R', b: 'Đề cho bán kính chữ R: mọi độ dài, diện tích viết theo R, không thay số.' },
+    ],
+    quiz: [
+      { q: S`Tam giác đều cạnh \(a\) có bán kính đường tròn ngoại tiếp là`, a: [S`\(\dfrac{a\sqrt3}{3}\)`, S`\(\dfrac{a\sqrt3}{2}\)`, S`\(\dfrac{a\sqrt3}{6}\)`, S`\(a\sqrt3\)`], why: S`\(R = \dfrac23 h = \dfrac23 \cdot \dfrac{a\sqrt3}{2} = \dfrac{a\sqrt3}{3}\).` },
+      { q: S`Diện tích tam giác đều cạnh \(a\) là`, a: [S`\(\dfrac{a^2\sqrt3}{4}\)`, S`\(\dfrac{a^2\sqrt3}{2}\)`, S`\(\dfrac{a^2}{2}\)`, S`\(a^2\sqrt3\)`], why: S`\(S = \dfrac12 \cdot a \cdot \dfrac{a\sqrt3}{2} = \dfrac{a^2\sqrt3}{4}\).` },
+      { q: S`\(\triangle ABC \backsim \triangle DEF\) theo tỉ số 2. Tỉ số diện tích \(\dfrac{S_{ABC}}{S_{DEF}}\) bằng`, a: ['4', '2', '8', '1/2'], why: 'Tỉ số diện tích bằng bình phương tỉ số đồng dạng: 2² = 4.' },
+      { q: S`Góc nội tiếp chắn cung có số đo \(120^\circ\) có số đo`, a: ['60°', '120°', '240°', '30°'], why: 'Góc nội tiếp bằng nửa số đo cung bị chắn.' },
+      { q: S`Tam giác vuông cân có cạnh góc vuông \(a\) thì cạnh huyền bằng`, a: [S`\(a\sqrt2\)`, S`\(2a\)`, S`\(a\sqrt3\)`, S`\(\dfrac{a\sqrt2}{2}\)`], why: S`Pythagore: \(\sqrt{a^2 + a^2} = a\sqrt2\).` },
+      { q: 'Tam giác vuông có hai cạnh góc vuông 6 cm và 8 cm. Cạnh huyền dài', a: ['10 cm', '14 cm', '12 cm', '√28 cm'], why: S`\(\sqrt{36 + 64} = 10\).` },
+      { q: S`Trong \((O;\ R)\), dây \(AB = R\). Khi đó \(\widehat{AOB}\) bằng`, a: ['60°', '90°', '120°', '30°'], why: S`\(OA = OB = AB = R\) nên tam giác \(OAB\) đều.` },
+      { q: S`Tam giác \(ABC\) vuông tại \(A\), \(\widehat{B} = 30^\circ\), \(BC = 10\) cm. Khi đó \(AC\) bằng`, a: ['5 cm', '10 cm', '5√3 cm', '20 cm'], why: 'Cạnh đối diện góc 30° bằng nửa cạnh huyền.' },
+    ],
+    models: [
+      { title: 'Tam giác nội tiếp nửa đường tròn – diện tích phần tô', pts: 1.5,
+        de: S`Cho đường tròn \((O;\ R)\) đường kính \(AB\). Lấy điểm \(C\) trên đường tròn sao cho \(\widehat{CAB} = 30^\circ\).<br>a) Tính \(BC\) và \(AC\) theo \(R\).<br>b) Tính diện tích phần hình tròn nằm ngoài tam giác \(ABC\) theo \(R\).<br>c) Tính diện tích hình viên phân giới hạn bởi dây \(BC\) và cung nhỏ \(BC\).`,
+        fig: Fig.geo({ pts: { A: [-2, 0], B: [2, 0], O: [0, 0], C: [1, s3] }, circles: [{ c: 'O', r: 2 }], fill: [(X, Y, P, u) => circ(X, Y, 0, 0, 2, u) + poly(X, Y, [[-2, 0], [2, 0], [1, s3]])], segs: 'A-B B-C C-A O-C', rights: [['A', 'C', 'B']], dots: 'O', lab: { O: [0, 16] }, w: 240 }),
+        steps: [
+          { part: 'a) Tính BC, AC – 0,5 điểm' },
+          { s: S`\(\widehat{ACB} = 90^\circ\) (góc nội tiếp chắn nửa đường tròn), nên \(\widehat{ABC} = 90^\circ - 30^\circ = 60^\circ\). Tam giác \(OBC\) có \(OB = OC = R\), \(\widehat{OBC} = 60^\circ\) nên là tam giác đều: \(BC = R\).`, p: 0.25 },
+          { s: S`Pythagore trong \(\triangle ACB\): \(AC = \sqrt{AB^2 - BC^2} = \sqrt{4R^2 - R^2} = R\sqrt3\).`, p: 0.25 },
+          { part: 'b) Phần hình tròn ngoài tam giác – 0,5 điểm' },
+          { s: S`\(S_{\text{tròn}} = \pi R^2\); \(S_{ABC} = \dfrac12 AC \cdot BC = \dfrac12 \cdot R\sqrt3 \cdot R = \dfrac{R^2\sqrt3}{2}\).`, p: 0.25 },
+          { s: S`Diện tích cần tìm: \(\pi R^2 - \dfrac{R^2\sqrt3}{2} = \dfrac{R^2(2\pi - \sqrt3)}{2}\).`, p: 0.25 },
+          { part: 'c) Viên phân – 0,5 điểm' },
+          { s: S`\(\widehat{BOC} = 60^\circ\) (tam giác \(OBC\) đều): \(S_{\text{quạt}} = \dfrac{\pi R^2 \cdot 60}{360} = \dfrac{\pi R^2}{6}\); \(S_{OBC} = \dfrac{R^2\sqrt3}{4}\).`, p: 0.25 },
+          { s: S`\(S_{\text{viên phân}} = \dfrac{\pi R^2}{6} - \dfrac{R^2\sqrt3}{4} = \dfrac{R^2(2\pi - 3\sqrt3)}{12}\).`, p: 0.25 },
+        ],
+        loi: ['Không giải thích vì sao tam giác OBC đều.', 'Nhầm diện tích tam giác vuông: lấy AB·AC/2.', 'Trừ nhầm thứ tự (tam giác − hình tròn).', 'Viết tan 30° = sin 30°/cos 30° mà không chứng minh lại.'] },
+    ],
+    present: [
+      'Mỗi độ dài tính được ghi rõ dùng định lí nào (Pythagore, đồng dạng, tam giác đều…).',
+      'Công thức tam giác đều, vuông cân: được dùng ngay, ghi công thức rồi thay số.',
+      'Phần tô: viết rõ phép trừ "hình lớn − hình nhỏ" trước khi thay số.',
+      'Kết quả theo R thì rút gọn, để dạng có π, √3.',
+      'Hệ thức lượng, hệ thức lượng giác: chứng minh lại, không viện dẫn.',
+    ],
+    practice: [
+      { lv: 'Cơ bản', pts: 1.5, h: 66,
+        de: S`Tam giác đều \(ABC\) có cạnh 6 cm nội tiếp đường tròn \((O)\).<br>a) Tính bán kính \(R\) của đường tròn \((O)\).<br>b) Tính diện tích tam giác \(ABC\).<br>c) Tính diện tích phần hình tròn nằm ngoài tam giác \(ABC\) (lấy \(\pi \approx 3{,}14\), \(\sqrt3 \approx 1{,}732\), làm tròn đến hàng phần trăm).`,
+        ans: S`a) \(R = 2\sqrt3\) cm. b) \(9\sqrt3\) cm². c) \(12\pi - 9\sqrt3 \approx 22{,}09\) cm² (π ≈ 3,14).`,
+        fig: Fig.geo({ pts: { A: [0, 2 * s3], B: [-3, -s3], C: [3, -s3], O: [0, 0] }, circles: [{ c: 'O', r: 2 * s3 }], segs: 'A-B B-C C-A O-A', dots: 'O', lab: { O: [10, 8] }, w: 220 }),
+        barem: [[S`\(R = \dfrac{a\sqrt3}{3} = \dfrac{6\sqrt3}{3}\)`, 0.25], [S`\(R = 2\sqrt3\) cm`, 0.25], [S`\(S = \dfrac{a^2\sqrt3}{4} = \dfrac{36\sqrt3}{4}\)`, 0.25], [S`\(= 9\sqrt3\) cm²`, 0.25], [S`\(S_{\text{tròn}} = \pi R^2 = 12\pi\); phần ngoài \(= 12\pi - 9\sqrt3\)`, 0.25], [S`\(\approx 37{,}68 - 15{,}59 = 22{,}09\) cm²`, 0.25]] },
+      { lv: 'Khá', pts: 1.5, h: 72,
+        de: S`Từ điểm \(M\) nằm ngoài đường tròn \((O;\ R)\) với \(OM = 2R\), kẻ hai tiếp tuyến \(MA, MB\) (\(A, B\) là tiếp điểm).<br>a) Tính \(MA\) theo \(R\).<br>b) Tính số đo \(\widehat{AOB}\).<br>c) Tính diện tích phần hình giới hạn bởi hai tiếp tuyến \(MA, MB\) và cung nhỏ \(AB\) theo \(R\).`,
+        ans: S`a) \(R\sqrt3\). b) \(120^\circ\). c) \(R^2\sqrt3 - \dfrac{\pi R^2}{3} = \dfrac{R^2(3\sqrt3 - \pi)}{3}\).`,
+        fig: Fig.geo({ pts: { O: [0, 0], M: [4, 0], A: [1, s3], B: [1, -s3] }, circles: [{ c: 'O', r: 2 }], fill: [(X, Y, P, u) => `M${X(4)} ${Y(0)}L${X(1)} ${Y(s3)}A${2 * u} ${2 * u} 0 0 1 ${X(1)} ${Y(-s3)}Z`], segs: 'M-A M-B O-A O-B O-M', rights: [['M', 'A', 'O'], ['M', 'B', 'O']], dots: 'O', lab: { O: [-12, 4] }, w: 250 }),
+        barem: [[S`\(MA \perp OA\); Pythagore: \(MA = \sqrt{OM^2 - OA^2} = \sqrt{4R^2 - R^2}\)`, 0.25], [S`\(MA = R\sqrt3\)`, 0.25], [S`\(\cos\widehat{AOM} = \dfrac{OA}{OM} = \dfrac12 \Rightarrow \widehat{AOM} = 60^\circ\)`, 0.25], [S`\(OM\) là phân giác \(\widehat{AOB}\) nên \(\widehat{AOB} = 120^\circ\)`, 0.25], [S`\(S_{MAOB} = 2 \cdot \dfrac12 \cdot R \cdot R\sqrt3 = R^2\sqrt3\); \(S_{\text{quạt}} = \dfrac{\pi R^2 \cdot 120}{360} = \dfrac{\pi R^2}{3}\)`, 0.25], [S`Diện tích cần tìm \(= R^2\sqrt3 - \dfrac{\pi R^2}{3}\)`, 0.25]] },
+      { lv: 'Nâng cao', pts: 1.5, h: 76,
+        de: S`Cho đường tròn \((O;\ R)\) đường kính \(BC\), điểm \(A\) thuộc đường tròn sao cho \(AB = R\). Kẻ đường cao \(AH\) của tam giác \(ABC\).<br>a) Tính \(AC\) theo \(R\).<br>b) Tính \(AH\) và \(BH\) theo \(R\).<br>c) Tính tỉ số diện tích của tam giác \(HBA\) và tam giác \(ABC\).`,
+        ans: S`a) \(R\sqrt3\). b) \(AH = \dfrac{R\sqrt3}{2}\), \(BH = \dfrac{R}{2}\). c) \(\dfrac14\).`,
+        fig: Fig.geo({ pts: { B: [-2, 0], C: [2, 0], O: [0, 0], A: [-1, s3], H: [-1, 0] }, circles: [{ c: 'O', r: 2 }], segs: 'B-C A-B A-C A-H', rights: [['B', 'A', 'C'], ['A', 'H', 'C']], dots: 'O', lab: { O: [0, 16], H: [0, 16] }, w: 240 }),
+        barem: [[S`\(\widehat{BAC} = 90^\circ\) (góc nội tiếp chắn nửa đường tròn)`, 0.25], [S`\(AC = \sqrt{BC^2 - AB^2} = \sqrt{4R^2 - R^2} = R\sqrt3\)`, 0.25], [S`\(AB \cdot AC = AH \cdot BC\) (hai lần diện tích) \(\Rightarrow AH = \dfrac{R \cdot R\sqrt3}{2R} = \dfrac{R\sqrt3}{2}\)`, 0.25], [S`\(\triangle HBA \backsim \triangle ABC\) (g.g) \(\Rightarrow \dfrac{BH}{AB} = \dfrac{AB}{BC} \Rightarrow BH = \dfrac{R^2}{2R} = \dfrac{R}{2}\)`, 0.25], [S`Tỉ số đồng dạng \(k = \dfrac{AB}{BC} = \dfrac12\)`, 0.25], [S`Tỉ số diện tích \(k^2 = \dfrac14\)`, 0.25]] },
+    ],
+  });
+})();
+
+</script>
+<script>/* data/vao-10/cd10-kien-thuc-thong-nhat.js */
+/* Chủ đề 10 – Luật chơi: kiến thức được dùng trực tiếp và phải chứng minh lại (thống nhất 2026 – 2027). */
+(() => {
+  const YES = 'Được dùng trực tiếp';
+  const NO = 'Không được dùng trực tiếp – phải chứng minh lại hoặc đổi cách';
+  const D1 = 'Chỉ được dùng khi đề bài cho sẵn';
+  const D2 = 'Được dùng nếu ghi rõ "theo SGK"';
+  Topics.add({
+    id: 'kien-thuc-thong-nhat', no: 10, bai: 'Luật chơi · áp dụng cho Bài 4, 7', rules: true,
+    title: 'Kiến thức thống nhất: được dùng ngay hay phải chứng minh lại',
+    desc: 'Danh sách kiến thức Sở cho dùng trực tiếp, danh sách phải chứng minh lại, và 7 mẫu chứng minh lại ngắn gọn để học thuộc.',
+    remind: [
+      'Không dùng: 3 dấu hiệu tứ giác nội tiếp, phân giác ngoài, các tính chất đường kính – dây.',
+      'Chứng minh lại: hệ thức cạnh – đường cao tam giác vuông; tan = sin/cos, sin² + cos² = 1…',
+      'Được dùng: nhận xét về góc nội tiếp; công thức tam giác đều, vuông cân; trung tuyến bằng nửa cạnh ⇒ vuông.',
+      'Tam giác cân có góc Ở ĐÁY 45° mới là vuông cân.',
+    ],
+    theory: [
+      { t: 'Được dùng trực tiếp (không cần chứng minh)',
+        b: S`<ul><li>Các chú ý, nhận xét về <b>góc nội tiếp</b> trong SGK.</li>
+          <li>Tam giác vuông có một góc \(45^\circ\); tam giác có hai góc \(45^\circ\); tam giác cân có một góc \(45^\circ\) là tam giác vuông cân.</li>
+          <li>Tam giác có <b>đường trung tuyến ứng với một cạnh bằng nửa cạnh ấy</b> là tam giác vuông (cho sử dụng từ lớp 8).</li>
+          <li>Thừa nhận các tính chất của tam giác cân, tam giác vuông cân, tam giác đều.</li>
+          <li>Công nhận mọi công thức độ dài, bán kính đường tròn ngoại tiếp – nội tiếp, diện tích của tam giác vuông cân, tam giác đều.</li>
+          <li>Hai góc cùng phụ, cùng bù với một góc thứ ba thì bằng nhau.</li>
+          <li>Tính chất đường phân giác <b>trong</b> của tam giác (yêu cầu cần đạt của chương trình).</li></ul>`,
+        warn: S`Câu "tam giác cân có một góc 45° là tam giác vuông cân" chỉ đúng khi 45° là góc ở đáy. Góc ở đỉnh 45° thì các góc là 45°, 67,5°, 67,5° – không vuông. Khi trình bày hãy viết "tam giác cân có góc ở đáy bằng 45°".` },
+      { t: 'Không được dùng – phải chứng minh lại hoặc đổi cách',
+        b: S`<ul><li>Đường kính vuông góc với một dây thì đi qua trung điểm của dây ấy.</li>
+          <li>Đường kính đi qua trung điểm của một dây không đi qua tâm thì vuông góc với dây ấy.</li>
+          <li>Đường kính vuông góc với dây cung AB thì đi qua điểm chính giữa của cung AB và ngược lại.</li>
+          <li>Chứng minh tứ giác nội tiếp bằng dấu hiệu "tổng hai góc đối bằng 180°", "hai góc bằng nhau cùng nhìn một cạnh", "góc ngoài bằng góc đối trong".</li>
+          <li>Tính chất đường phân giác <b>ngoài</b> của tam giác.</li>
+          <li>Một số hệ thức về cạnh và đường cao trong tam giác vuông.</li>
+          <li>\(\tan\alpha = \dfrac{\sin\alpha}{\cos\alpha}\), \(\cot\alpha = \dfrac{\cos\alpha}{\sin\alpha}\), \(\tan\alpha \cdot \cot\alpha = 1\), \(\sin^2\alpha + \cos^2\alpha = 1\).</li></ul>` },
+      { t: '7 mẫu chứng minh lại – học thuộc',
+        b: S`<table><tr><th>#</th><th>Kết quả</th><th>Viết lại trong bài</th></tr>
+          <tr><td>1</td><td>Đường kính ⊥ dây ⇒ qua trung điểm</td><td>\(OA = OB\) ⇒ \(\triangle OAB\) cân tại \(O\); \(OH \perp AB\) nên \(OH\) vừa là đường cao vừa là trung tuyến ⇒ \(HA = HB\).</td></tr>
+          <tr><td>2</td><td>Qua trung điểm dây ⇒ ⊥ dây</td><td>\(\triangle OAB\) cân tại \(O\), \(OH\) là trung tuyến nên cũng là đường cao ⇒ \(OH \perp AB\).</td></tr>
+          <tr><td>3</td><td>Đường kính ⊥ dây AB ⇒ qua điểm chính giữa cung AB</td><td>\(\triangle OAB\) cân, \(OM \perp AB\) ⇒ \(OM\) là phân giác: \(\widehat{AOM} = \widehat{BOM}\) ⇒ cung \(AM\) = cung \(BM\).</td></tr>
+          <tr><td>4</td><td>Bốn điểm cùng thuộc đường tròn</td><td>Hai góc vuông cùng nhìn \(XY\): trung điểm \(I\) của \(XY\) cách đều bốn điểm (trung tuyến ứng cạnh huyền).</td></tr>
+          <tr><td>5</td><td>Phân giác ngoài</td><td>Qua \(C\) kẻ \(CF \parallel AE\) (\(F \in AB\)) ⇒ \(\triangle ACF\) cân, \(AF = AC\); Thalès: \(\dfrac{EB}{EC} = \dfrac{AB}{AF} = \dfrac{AB}{AC}\).</td></tr>
+          <tr><td>6</td><td>\(AB^2 = BH \cdot BC\), \(AH^2 = HB \cdot HC\), \(AH \cdot BC = AB \cdot AC\)</td><td>\(\triangle HBA \backsim \triangle ABC\) (g.g) ⇒ \(AB^2 = BH \cdot BC\); \(\triangle HBA \backsim \triangle HAC\) ⇒ \(AH^2 = HB \cdot HC\); hai cách tính diện tích ⇒ \(AH \cdot BC = AB \cdot AC\).</td></tr>
+          <tr><td>7</td><td>\(\tan = \sin/\cos\), \(\sin^2 + \cos^2 = 1\)</td><td>Viết theo cạnh: \(\dfrac{\sin\alpha}{\cos\alpha} = \dfrac{\text{đối}/\text{huyền}}{\text{kề}/\text{huyền}} = \dfrac{\text{đối}}{\text{kề}}\); \(\sin^2 + \cos^2 = \dfrac{\text{đối}^2 + \text{kề}^2}{\text{huyền}^2} = 1\) (Pythagore).</td></tr></table>` },
+    ],
+    tips: [
+      { t: 'Bốn cấm – hai chứng minh lại', b: 'Cấm: dấu hiệu tứ giác nội tiếp, phân giác ngoài, đường kính – dây, đường kính – điểm chính giữa cung. Chứng minh lại: hệ thức lượng tam giác vuông, hệ thức lượng giác.' },
+      { t: 'Đường kính – dây: nghĩ ngay tam giác cân', b: 'Hai bán kính OA = OB tạo tam giác cân; đường cao = trung tuyến = phân giác.' },
+      { t: 'Hệ thức lượng: đồng dạng một dòng', b: 'Viết "△HBA ∽ △ABC (g.g: chung góc B, góc vuông)" rồi suy ra tỉ số – đủ điểm.' },
+      { t: 'Lượng giác: dựng tam giác vuông', b: 'Biết tan α = 3/4: vẽ tam giác vuông cạnh đối 3, kề 4, huyền 5 rồi đọc sin, cos – không cần sin² + cos² = 1.' },
+      { t: 'Góc 45° ở đáy', b: 'Tam giác cân chỉ thành vuông cân khi góc ở đáy bằng 45°.' },
+    ],
+    quiz: [
+      { q: '"Đường kính vuông góc với một dây thì đi qua trung điểm của dây ấy."', a: [NO, YES, D1, D2], why: 'Theo quy định thống nhất phải chứng minh lại bằng tam giác cân OAB.' },
+      { q: '"Góc nội tiếp chắn nửa đường tròn là góc vuông."', a: [YES, NO, D1, D2], why: 'Đây là nhận xét về góc nội tiếp trong SGK – được dùng trực tiếp.' },
+      { q: '"Tứ giác có tổng hai góc đối bằng 180° thì nội tiếp được đường tròn."', a: [NO, YES, D1, D2], why: 'Ba dấu hiệu tứ giác nội tiếp không được dùng; phải chỉ ra bốn điểm cách đều một điểm.' },
+      { q: '"Tam giác có trung tuyến ứng với một cạnh bằng nửa cạnh ấy là tam giác vuông."', a: [YES, NO, D1, D2], why: 'Được dùng trực tiếp (kiến thức lớp 8).' },
+      { q: S`"\(\sin^2\alpha + \cos^2\alpha = 1\)."`, a: [NO, YES, D1, D2], why: 'Phải chứng minh lại từ định nghĩa và định lí Pythagore.' },
+      { q: S`"Trong tam giác \(ABC\) vuông tại \(A\), đường cao \(AH\): \(AB^2 = BH \cdot BC\)."`, a: [NO, YES, D1, D2], why: S`Phải chứng minh lại: \(\triangle HBA \backsim \triangle ABC\) (g.g).` },
+      { q: '"Hai góc cùng bù với một góc thứ ba thì bằng nhau."', a: [YES, NO, D1, D2], why: 'Được dùng trực tiếp theo hướng dẫn thống nhất.' },
+      { q: S`Tam giác cân có góc ở đỉnh bằng \(45^\circ\) là`, a: ['Tam giác không vuông (các góc 45°, 67,5°, 67,5°)', 'Tam giác vuông cân', 'Tam giác đều', 'Tam giác vuông tại đỉnh'], why: 'Chỉ khi góc ở đáy bằng 45° thì tam giác cân mới là vuông cân.' },
+    ],
+    models: [
+      { title: 'Đường kính và dây – chứng minh lại rồi tính', pts: 1,
+        de: S`Cho đường tròn \((O;\ 5\text{ cm})\) và dây \(AB = 8\) cm không đi qua tâm. Gọi \(H\) là trung điểm của \(AB\).<br>a) Chứng minh \(OH \perp AB\).<br>b) Tính khoảng cách từ \(O\) đến dây \(AB\).`,
+        fig: Fig.geo({ pts: { O: [0, 0], A: [-4, -3], B: [4, -3], H: [0, -3] }, circles: [{ c: 'O', r: 5 }], segs: 'A-B O-A O-B O-H', rights: [['O', 'H', 'B']], dots: 'O', lab: { H: [0, 16], O: [0, -10] }, w: 220 }),
+        steps: [
+          { part: 'a) OH ⊥ AB – 0,5 điểm' },
+          { s: S`\(OA = OB = 5\) cm (bán kính) nên \(\triangle OAB\) cân tại \(O\).`, p: 0.25 },
+          { s: S`\(OH\) là đường trung tuyến của tam giác cân \(OAB\) nên đồng thời là đường cao: \(OH \perp AB\).`, p: 0.25, warn: 'Viết "đường kính đi qua trung điểm của dây thì vuông góc với dây" là dùng kiến thức bị cấm.' },
+          { part: 'b) Khoảng cách – 0,5 điểm' },
+          { s: S`Khoảng cách từ \(O\) đến \(AB\) là \(OH\); \(HB = \dfrac{AB}{2} = 4\) cm.`, p: 0.25 },
+          { s: S`Pythagore trong \(\triangle OHB\) vuông tại \(H\): \(OH = \sqrt{OB^2 - HB^2} = \sqrt{25 - 16} = 3\) (cm).`, p: 0.25 },
+        ],
+        loi: ['Viện dẫn tính chất đường kính – dây thay vì chứng minh lại.', 'Quên chia đôi AB.', 'Thiếu đơn vị.'] },
+      { title: 'Tam giác vuông có đường cao – không dùng hệ thức lượng', pts: 1,
+        de: S`Cho tam giác \(ABC\) vuông tại \(A\) có \(AB = 6\) cm, \(AC = 8\) cm, đường cao \(AH\). Tính \(BC\), \(BH\) và \(AH\).`,
+        fig: Fig.geo({ pts: { A: [0, 4.8], B: [-3.6, 0], C: [6.4, 0], H: [0, 0] }, segs: 'A-B B-C C-A A-H', rights: [['B', 'A', 'C'], ['A', 'H', 'C']], lab: { H: [0, 16] }, rs: 0.5, w: 260 }),
+        steps: [
+          { s: S`Pythagore: \(BC = \sqrt{AB^2 + AC^2} = \sqrt{36 + 64} = 10\) (cm).`, p: 0.25 },
+          { s: S`Xét \(\triangle HBA\) và \(\triangle ABC\): \(\widehat{B}\) chung, \(\widehat{BHA} = \widehat{BAC} = 90^\circ\) nên \(\triangle HBA \backsim \triangle ABC\) (g.g).`, p: 0.25, warn: 'Viết thẳng "theo hệ thức lượng AB² = BH·BC" không được điểm.' },
+          { s: S`Suy ra \(\dfrac{BH}{AB} = \dfrac{AB}{BC} \Rightarrow BH = \dfrac{AB^2}{BC} = \dfrac{36}{10} = 3{,}6\) (cm).`, p: 0.25 },
+          { s: S`Hai cách tính diện tích: \(AH \cdot BC = AB \cdot AC \Rightarrow AH = \dfrac{6 \cdot 8}{10} = 4{,}8\) (cm).`, p: 0.25 },
+        ],
+        loi: ['Dùng hệ thức lượng không chứng minh.', 'Ghi sai thứ tự đỉnh khi viết hai tam giác đồng dạng.'] },
+    ],
+    present: [
+      'Gặp kết quả trong danh sách "không được dùng": viết 1–2 dòng chứng minh lại theo mẫu.',
+      'Ghi lí do sau mỗi bước: "vì OA = OB", "vì cùng phụ với góc C"…',
+      'Tam giác đồng dạng: ghi trường hợp (g.g) và thứ tự đỉnh tương ứng.',
+      'Kiến thức được dùng trực tiếp: vẫn nêu tên để giám khảo thấy căn cứ.',
+      'Kết luận có đơn vị đo.',
+    ],
+    practice: [
+      { lv: 'Cơ bản', pts: 1, h: 52,
+        de: S`Cho đường tròn \((O;\ 13\text{ cm})\) và dây \(AB = 24\) cm. Gọi \(H\) là chân đường vuông góc kẻ từ \(O\) đến \(AB\).<br>a) Chứng minh \(H\) là trung điểm của \(AB\) (không dùng tính chất đường kính – dây).<br>b) Tính \(OH\).`,
+        ans: S`a) \(\triangle OAB\) cân tại \(O\), đường cao \(OH\) cũng là trung tuyến. b) \(OH = 5\) cm.`,
+        barem: [[S`\(OA = OB\) nên \(\triangle OAB\) cân tại \(O\)`, 0.25], [S`\(OH\) là đường cao nên cũng là trung tuyến, \(H\) là trung điểm \(AB\)`, 0.25], [S`\(HA = 12\) cm`, 0.25], [S`\(OH = \sqrt{13^2 - 12^2} = 5\) cm`, 0.25]] },
+      { lv: 'Khá', pts: 1, h: 56,
+        de: S`Cho góc nhọn \(\alpha\) có \(\tan\alpha = \dfrac34\).<br>a) Tính \(\sin\alpha\) và \(\cos\alpha\) (không dùng hệ thức \(\sin^2\alpha + \cos^2\alpha = 1\)).<br>b) Tính \(P = \dfrac{2\sin\alpha + \cos\alpha}{\sin\alpha - 2\cos\alpha}\).`,
+        ans: S`a) \(\sin\alpha = \dfrac35\), \(\cos\alpha = \dfrac45\). b) \(P = -2\).`,
+        barem: [[S`Dựng tam giác vuông có góc nhọn \(\alpha\), cạnh đối \(3k\), cạnh kề \(4k\) (\(k \gt 0\))`, 0.25], [S`Cạnh huyền \(\sqrt{9k^2 + 16k^2} = 5k\) (Pythagore)`, 0.25], [S`\(\sin\alpha = \dfrac{3k}{5k} = \dfrac35\), \(\cos\alpha = \dfrac45\)`, 0.25], [S`\(P = \dfrac{6/5 + 4/5}{3/5 - 8/5} = \dfrac{2}{-1} = -2\)`, 0.25]] },
+      { lv: 'Nâng cao', pts: 1, h: 62,
+        de: S`Cho tam giác \(ABC\) vuông tại \(A\) có \(AB = 9\) cm, \(AC = 12\) cm, đường cao \(AH\). Tính \(BC\), \(BH\), \(AH\) và \(HC\). Trình bày đầy đủ, không viện dẫn hệ thức lượng trong tam giác vuông.`,
+        ans: S`\(BC = 15\), \(BH = 5{,}4\), \(AH = 7{,}2\), \(HC = 9{,}6\) (cm).`,
+        fig: Fig.geo({ pts: { A: [0, 7.2], B: [-5.4, 0], C: [9.6, 0], H: [0, 0] }, segs: 'A-B B-C C-A A-H', rights: [['B', 'A', 'C'], ['A', 'H', 'C']], lab: { H: [0, 16] }, rs: 0.8, w: 260 }),
+        barem: [[S`\(BC = \sqrt{81 + 144} = 15\) cm`, 0.25], [S`\(\triangle HBA \backsim \triangle ABC\) (g.g: \(\widehat{B}\) chung, góc vuông)`, 0.25], [S`\(BH = \dfrac{AB^2}{BC} = \dfrac{81}{15} = 5{,}4\) cm; \(HC = 15 - 5{,}4 = 9{,}6\) cm`, 0.25], [S`\(AH = \dfrac{AB \cdot AC}{BC} = \dfrac{108}{15} = 7{,}2\) cm (hai cách tính diện tích)`, 0.25]] },
+    ],
+  });
+})();
+
+</script>
+<script>/* assets/js/app.js */
+/* =====================================================================
+   APP – điều hướng theo hash và hiển thị:
+   #/                 trang chủ (cấu trúc đề, các chủ đề, tiến độ)
+   #/cd/<mã>/<tab>    một chủ đề; tab: lt · meo · hieu · mau · phieu · ai
+   #/lo-trinh         lộ trình 26 tuần
+   Nội dung lấy từ Topics (data/cdNN-*.js). Không sửa tệp này khi chỉ thêm nội dung.
+   ===================================================================== */
+const App = (() => {
+  const { esc, $, $$, h, get, set, shuffle, pt, sum, plain, copy, toast } = U;
+
+  const TABS = [
+    ['lt', '📘', 'Lý thuyết'],
+    ['meo', '💡', 'Mẹo nhớ'],
+    ['hieu', '✅', 'Hiểu bài'],
+    ['mau', '✍️', 'Tự luận mẫu'],
+    ['phieu', '🖨️', 'Phiếu làm bài'],
+    ['ai', '🤖', 'Nhờ AI nhận xét'],
+  ];
+
+  // Cấu trúc đề theo hướng dẫn thống nhất của Sở GD&ĐT TP.HCM (năm học 2026–2027).
+  const STRUCT = [
+    ['Bài 1', '1,5', 'Vẽ đồ thị y = ax²; tìm điểm thuộc đồ thị thỏa điều kiện', ['ham-so-parabol']],
+    ['Bài 2', '1,0', 'Điều kiện có nghiệm của phương trình bậc hai; Viète', ['pt-bac-hai-viete']],
+    ['Bài 3', '1,5', 'Xác suất (dạng đơn giản)', ['xac-suat']],
+    ['Bài 4', '1,0', 'Thực tế đại số – hình học: chu vi, diện tích, cung, quạt, viên phân, vành khăn; lập biểu thức, phương trình', ['thuc-te-dai-so-hinh-hoc']],
+    ['Bài 5', '1,0', 'Hình học không gian thực tế, cho sẵn công thức', ['hinh-khong-gian']],
+    ['Bài 6', '1,0', 'Thực tế vận dụng cao: phương trình, hệ phương trình bậc nhất hai ẩn', ['he-phuong-trinh-thuc-te']],
+    ['Bài 7', '3,0', 'Hình học phẳng 3 câu: a) bốn điểm cùng đường tròn, song song, vuông góc… b) hệ thức, thẳng hàng, đồng quy… c) tính toán (vận dụng cao)', ['hinh-7a', 'hinh-7b', 'hinh-7c']],
+  ];
+
+  // Quy định thống nhất (dùng trong prompt và chủ đề "Luật chơi").
+  const RULES = {
+    no: [
+      'Đường kính vuông góc với dây thì đi qua trung điểm của dây (và chiều ngược lại) – phải chứng minh lại bằng tam giác cân.',
+      'Đường kính vuông góc với dây cung AB thì đi qua điểm chính giữa cung AB và ngược lại – phải chứng minh lại.',
+      'Ba dấu hiệu tứ giác nội tiếp (tổng hai góc đối 180°; hai góc bằng nhau cùng nhìn một cạnh; góc ngoài bằng góc trong đối) – KHÔNG được dùng; phải chỉ ra bốn điểm cách đều một điểm.',
+      'Tính chất đường phân giác ngoài của tam giác – không được dùng.',
+      'Hệ thức về cạnh và đường cao trong tam giác vuông – phải chứng minh lại bằng tam giác đồng dạng.',
+      'Các hệ thức tan = sin/cos, cot = cos/sin, tan·cot = 1, sin² + cos² = 1 – phải chứng minh lại từ định nghĩa.',
+    ],
+    yes: [
+      'Các chú ý, nhận xét về góc nội tiếp trong SGK (góc nội tiếp chắn nửa đường tròn là góc vuông; cùng chắn một cung thì bằng nhau…).',
+      'Tam giác vuông có một góc 45°, tam giác có hai góc 45°, tam giác cân có góc ở đáy 45° là tam giác vuông cân.',
+      'Tam giác có trung tuyến ứng với một cạnh bằng nửa cạnh ấy là tam giác vuông.',
+      'Tính chất và mọi công thức độ dài, bán kính đường tròn ngoại tiếp – nội tiếp, diện tích của tam giác cân, vuông cân, đều.',
+      'Hai góc cùng phụ (cùng bù) với một góc thứ ba thì bằng nhau.',
+      'Tính chất đường phân giác trong của tam giác.',
+    ],
+  };
+
+  // Lộ trình 26 tuần (tóm tắt từ kế hoạch 6 tháng).
+  const ROADMAP = [
+    ['GĐ1 · Xây móng, khóa điểm dễ', [
+      [1, '30/11 – 6/12', 'Làm đề chẩn đoán; hệ phương trình bậc nhất hai ẩn', 'he-phuong-trinh-thuc-te'],
+      [2, '7/12 – 13/12', 'Lập hệ phương trình: chuyển động, năng suất, phần trăm', 'he-phuong-trinh-thuc-te'],
+      [3, '14/12 – 20/12', 'Hệ thức lượng, tỉ số lượng giác – chứng minh lại', 'kien-thuc-thong-nhat'],
+      [4, '21/12 – 27/12', 'Ôn thi học kì I trên trường', ''],
+      [5, '28/12 – 3/1', 'Đường tròn: dây cung, tiếp tuyến (chứng minh lại)', 'kien-thuc-thong-nhat'],
+      [6, '4/1 – 10/1', 'Độ dài cung, hình quạt, viên phân, vành khăn', 'thuc-te-dai-so-hinh-hoc'],
+      [7, '11/1 – 17/1', 'Hàm số y = ax² – vẽ đồ thị, tìm điểm', 'ham-so-parabol'],
+      [8, '18/1 – 24/1', 'Phương trình bậc hai, điều kiện có nghiệm, Viète', 'pt-bac-hai-viete'],
+      [9, '25/1 – 31/1', 'Viète nâng cao + KIỂM TRA ĐỊNH KÌ 1', 'pt-bac-hai-viete'],
+    ]],
+    ['GĐ2 · Thực tế và hình học trọng tâm', [
+      [10, '1/2 – 7/2', 'Nghỉ Tết: 20 phút mỗi ngày đọc lại Mẹo nhớ', ''],
+      [11, '8/2 – 14/2', 'Lấy lại nhịp: mỗi ngày 2 câu Bài 1, 2 câu Bài 2', 'ham-so-parabol'],
+      [12, '15/2 – 21/2', 'Xác suất: không gian mẫu, bảng, sơ đồ cây', 'xac-suat'],
+      [13, '22/2 – 28/2', 'Xác suất theo mô hình; lỗi có thứ tự / có hoàn lại', 'xac-suat'],
+      [14, '1/3 – 7/3', 'Lập biểu thức, phương trình bậc hai từ bài toán thực tế', 'thuc-te-dai-so-hinh-hoc'],
+      [15, '8/3 – 14/3', 'Bài 6 vận dụng cao: hệ phương trình nhiều tầng', 'he-phuong-trinh-thuc-te'],
+      [16, '15/3 – 21/3', 'Câu 7a: bốn điểm cùng thuộc đường tròn', 'hinh-7a'],
+      [17, '22/3 – 28/3', 'Câu 7b: hệ thức, thẳng hàng, đồng quy', 'hinh-7b'],
+      [18, '29/3 – 4/4', 'KIỂM TRA ĐỊNH KÌ 2 – đề đủ 7 bài, 120 phút', ''],
+    ]],
+    ['GĐ3 · Luyện đề và tăng tốc', [
+      [19, '5/4 – 11/4', 'Hình khối thực tế; đổi đơn vị, làm tròn', 'hinh-khong-gian'],
+      [20, '12/4 – 18/4', 'Câu 7c: tính độ dài, diện tích, góc', 'hinh-7c'],
+      [21, '19/4 – 25/4', 'Đề 1, 2 bấm giờ 120 phút', ''],
+      [22, '26/4 – 2/5', 'Nghỉ lễ; đề 3; ôn thi học kì II', ''],
+      [23, '3/5 – 9/5', 'Thi học kì II; đề 4', ''],
+      [24, '10/5 – 16/5', 'Đề 5, 6', ''],
+      [25, '17/5 – 23/5', 'Đề 7, 8; luyện phân bổ thời gian', ''],
+      [26, '24/5 – 30/5', 'Giảm tải: ôn Mẹo nhớ, sổ lỗi, luật chứng minh lại', 'kien-thuc-thong-nhat'],
+    ]],
+  ];
+
+  /* ---------- Tiến độ ---------- */
+  const prog = id => get('p:' + id, {});
+  const saveProg = (id, patch) => set('p:' + id, Object.assign(prog(id), patch));
+
+  /* ---------- Khung trang ---------- */
+  const view = () => $('#view');
+  function topBar() {
+    const [a, b] = CONFIG.brand;
+    return `<header class="top"><a class="brand-link" href="#/"><h1 class="brand">${esc(a)} <span>${esc(b)}</span></h1></a>
+      <p class="sub">${esc(CONFIG.sub)}</p><p class="author">${esc(CONFIG.author)} · Năm học ${esc(CONFIG.year)}</p>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi nền sáng/tối">🌓</button></header>`;
+  }
+
+  /* ---------- Trang chủ ---------- */
+  function home() {
+    const topics = Topics.list;
+    const cards = topics.map(t => {
+      const p = prog(t.id), q = t.quiz.length;
+      const chips = [
+        p.read ? '<span class="chip ok">📘 Đã học</span>' : '',
+        p.quiz !== undefined ? `<span class="chip ${p.quiz === q ? 'ok' : ''}">✅ ${p.quiz}/${q}</span>` : '',
+        p.model ? '<span class="chip ok">✍️ Đã xem mẫu</span>' : '',
+        p.printed ? '<span class="chip ok">🖨️ Đã in</span>' : '',
+      ].join('');
+      return `<a class="tcard" href="#/cd/${t.id}/lt"><span class="tno">${t.no}</span>
+        <span class="tbody"><span class="tbai">${esc(t.bai)}</span><span class="ttitle">${t.title}</span>
+        <span class="tdesc">${t.desc}</span><span class="chips">${chips}</span></span></a>`;
+    }).join('');
+    const rows = STRUCT.map(([b, d, nd, ids]) => `<tr><th scope="row">${b}</th><td class="num">${d}</td><td>${esc(nd)}</td>
+      <td>${ids.map(id => { const t = Topics.get(id); return t ? `<a href="#/cd/${id}/lt">Chủ đề ${t.no}</a>` : ''; }).join(' · ')}</td></tr>`).join('');
+    view().innerHTML = `${topBar()}<main class="wrap">
+      <section class="hero card"><p class="pill">🎯 ${esc(CONFIG.examLine)}</p>
+        <h2>Mỗi chủ đề học theo 6 bước</h2>
+        <ol class="steps6"><li>📘 Đọc <b>lý thuyết</b></li><li>💡 Thuộc <b>mẹo nhớ</b></li><li>✅ Làm <b>trắc nghiệm hiểu bài</b></li>
+        <li>✍️ Xem <b>bài tự luận mẫu</b> và barem</li><li>🖨️ <b>In phiếu</b>, tự làm trên giấy</li><li>🤖 Chụp ảnh, <b>nhờ AI nhận xét</b></li></ol>
+        <p class="hint-line">Vùng an toàn 7 điểm: Bài 1–5 và câu 7a. Học chắc phần này trước, rồi mới chinh phục Bài 6, 7b, 7c.</p>
+      </section>
+      <h2 class="sec">Cấu trúc đề thi (thống nhất 2026 – 2027)</h2>
+      <div class="card table-wrap"><table class="struct"><thead><tr><th>Bài</th><th>Điểm</th><th>Nội dung</th><th>Học ở</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <h2 class="sec">10 chủ đề luyện thi</h2>
+      <div class="tgrid">${cards}</div>
+      <div class="two">
+        <a class="card link-card" href="#/cd/kien-thuc-thong-nhat/lt"><span class="big">📜</span><b>Luật chơi</b><span>Kiến thức được dùng ngay và phải chứng minh lại</span></a>
+        <a class="card link-card" href="#/lo-trinh"><span class="big">📅</span><b>Lộ trình 26 tuần</b><span>30/11/2026 – 30/5/2027, tuần nào học chủ đề nào</span></a>
+      </div></main>`;
+  }
+
+  /* ---------- Lộ trình ---------- */
+  function roadmap() {
+    const body = ROADMAP.map(([gd, weeks]) => `<h2 class="sec">${esc(gd)}</h2><div class="card table-wrap"><table class="struct">
+      <thead><tr><th>Tuần</th><th>Thời gian</th><th>Học gì</th><th>Chủ đề</th></tr></thead><tbody>${weeks.map(([n, d, w, id]) => {
+        const t = id && Topics.get(id);
+        return `<tr><th scope="row">${n}</th><td class="nowrap">${d}</td><td>${esc(w)}</td><td>${t ? `<a href="#/cd/${id}/lt">Chủ đề ${t.no}</a>` : '—'}</td></tr>`;
+      }).join('')}</tbody></table></div>`).join('');
+    view().innerHTML = `${topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/">← Trang chủ</a></div>
+      <section class="card hero"><h2>Lộ trình 26 tuần</h2><p>Mỗi tuần: 5 buổi × 90 phút (10 phút ôn mẹo nhớ · 15 phút giữ điểm dễ · 45 phút chủ đề tuần · 15 phút ghi sổ lỗi · 5 phút tự đánh giá), thứ Bảy kiểm tra nhanh 45 phút. Tuần 9 và tuần 18 là hai cửa kiểm tra: chưa đạt thì ôn lại 1 tuần rồi mới đi tiếp.</p></section>
+      ${body}</main>`;
+  }
+
+  /* ---------- Trang chủ đề ---------- */
+  function topic(id, tab) {
+    const t = Topics.get(id);
+    if (!t) return home();
+    if (!TABS.some(x => x[0] === tab)) tab = 'lt';
+    const i = Topics.list.indexOf(t), prev = Topics.list[i - 1], next = Topics.list[i + 1];
+    const tabs = TABS.map(([k, ic, name]) => `<a class="tab${k === tab ? ' on' : ''}" href="#/cd/${id}/${k}" ${k === tab ? 'aria-current="page"' : ''}><span aria-hidden="true">${ic}</span> ${name}</a>`).join('');
+    const ti = TABS.findIndex(x => x[0] === tab), nt = TABS[ti + 1];
+    const nextBtn = nt ? `<a class="btn primary" href="#/cd/${id}/${nt[0]}">Tiếp: ${nt[1]} ${nt[2]} →</a>`
+      : (next ? `<a class="btn primary" href="#/cd/${next.id}/lt">Sang chủ đề ${next.no} →</a>` : '<a class="btn primary" href="#/">Về trang chủ</a>');
+    view().innerHTML = `${topBar()}<main class="wrap">
+      <div class="toolbar"><a class="back" href="#/">← Các chủ đề</a>
+        <span class="nav-mini">${prev ? `<a href="#/cd/${prev.id}/${tab}">‹ Chủ đề ${prev.no}</a>` : ''}${next ? `<a href="#/cd/${next.id}/${tab}">Chủ đề ${next.no} ›</a>` : ''}</span></div>
+      <section class="thead card"><span class="tno big">${t.no}</span><div><p class="tbai">${esc(t.bai)}</p><h2>${t.title}</h2><p class="tdesc">${t.desc}</p></div></section>
+      <nav class="tabs" aria-label="Các bước học">${tabs}</nav>
+      <section id="pane" class="pane"></section>
+      <div class="pane-foot">${nextBtn}</div></main>`;
+    const pane = $('#pane');
+    ({ lt: paneTheory, meo: paneTips, hieu: paneQuiz, mau: paneModel, phieu: paneSheet, ai: paneAI })[tab](t, pane);
+    const on = $('.tab.on'); if (on && on.scrollIntoView) on.scrollIntoView({ block: 'nearest', inline: 'center' });
+  }
+
+  /* ---------- 📘 Lý thuyết ---------- */
+  function paneTheory(t, pane) {
+    saveProg(t.id, { read: true });
+    pane.innerHTML = `<div class="card remind"><h3>Nhắc nhanh</h3><ul>${t.remind.map(r => `<li>${r}</li>`).join('')}</ul></div>` +
+      t.theory.map((x, i) => `<article class="card kt"><h3><span class="kno">${i + 1}</span>${x.t}</h3><div class="kb">${x.b}</div>
+        ${x.fig ? `<div class="figbox">${x.fig}</div>` : ''}${x.warn ? `<p class="warn">⚠️ ${x.warn}</p>` : ''}</article>`).join('');
+  }
+
+  /* ---------- 💡 Mẹo nhớ ---------- */
+  function paneTips(t, pane) {
+    pane.innerHTML = `<p class="lead">Đọc to từng câu mẹo, che phần giải thích và tự nhắc lại. Mỗi tối trước khi ngủ đọc lại một lần.</p>
+      <div class="tips">${t.tips.map(x => `<article class="card tip"><p class="tip-key">💡 ${x.t}</p><div class="tip-b">${x.b}</div></article>`).join('')}</div>`;
+  }
+
+  /* ---------- ✅ Trắc nghiệm hiểu bài ---------- */
+  function paneQuiz(t, pane) {
+    const qs = t.quiz.map((q, i) => ({ i, q: q.q, why: q.why, good: q.a[0], opts: shuffle(q.a) }));
+    let done = 0, right = 0;
+    pane.innerHTML = `<p class="lead">${qs.length} câu kiểm tra em đã <b>hiểu</b> lý thuyết chưa. Chọn một đáp án; sai thì đọc lời giải thích rồi làm câu tiếp.</p>
+      <div class="quiz">${qs.map((q, k) => `<article class="card qcard" data-k="${k}"><p class="qtext"><b>Câu ${k + 1}.</b> ${q.q}</p>
+        <div class="opts">${q.opts.map((o, j) => `<button type="button" class="opt" data-j="${j}"><span class="ol">${'ABCD'[j]}</span><span>${o}</span></button>`).join('')}</div>
+        <div class="why" hidden></div></article>`).join('')}</div>
+      <div class="card score" id="score" hidden></div>`;
+    $$('.qcard', pane).forEach(card => {
+      const q = qs[+card.dataset.k];
+      $$('.opt', card).forEach(btn => btn.addEventListener('click', () => {
+        if (card.classList.contains('locked')) return;
+        card.classList.add('locked');
+        const pick = q.opts[+btn.dataset.j], ok = pick === q.good;
+        $$('.opt', card).forEach(b => { b.disabled = true; if (q.opts[+b.dataset.j] === q.good) b.classList.add('good'); });
+        if (!ok) btn.classList.add('bad');
+        const w = $('.why', card); w.hidden = false;
+        w.innerHTML = `${ok ? '<b class="okc">Đúng rồi!</b>' : '<b class="badc">Chưa đúng.</b>'} ${q.why}`;
+        done++; if (ok) right++;
+        if (done === qs.length) finish();
+      }));
+    });
+    function finish() {
+      const best = Math.max(right, prog(t.id).quiz ?? 0);
+      saveProg(t.id, { quiz: best });
+      const s = $('#score'); s.hidden = false;
+      const msg = right === qs.length ? 'Tuyệt vời! Em đã hiểu bài. Sang bước Tự luận mẫu nhé.'
+        : right >= qs.length - 2 ? 'Khá tốt. Đọc lại phần giải thích các câu sai rồi làm lại cho đủ điểm.'
+          : 'Em nên đọc lại Lý thuyết và Mẹo nhớ rồi làm lại.';
+      s.innerHTML = `<p class="big-score">${right}/${qs.length}</p><p>${msg}</p><button class="btn" type="button" id="redo">↻ Làm lại (đảo đáp án)</button>`;
+      $('#redo').addEventListener('click', () => paneQuiz(t, pane));
+      s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  /* ---------- ✍️ Tự luận mẫu ---------- */
+  function stepHTML(st) {
+    if (st.part) return `<li class="part">${st.part}</li>`;
+    return `<li class="st"><div class="st-t">${st.s}${st.warn ? `<p class="warn">⚠️ ${st.warn}</p>` : ''}</div>${st.p ? `<span class="pts">${pt(st.p)}đ</span>` : '<span class="pts empty"></span>'}</li>`;
+  }
+  function paneModel(t, pane) {
+    saveProg(t.id, { model: true });
+    pane.innerHTML = t.models.map((m, mi) => `<article class="card model" data-m="${mi}">
+        <p class="pill soft">Bài mẫu ${mi + 1} · ${pt(m.pts)} điểm</p><h3>${m.title}</h3>
+        <div class="de"><b>Đề.</b> ${m.de}</div>${m.fig ? `<div class="figbox">${m.fig}</div>` : ''}
+        <div class="reveal-bar"><button class="btn" type="button" data-act="one">👣 Hiện từng bước</button><button class="btn ghost" type="button" data-act="all">Hiện toàn bộ</button></div>
+        <p class="lead small">Tự làm ra nháp trước, rồi mới mở lời giải để so cách trình bày. Cột bên phải là điểm của từng bước theo barem.</p>
+        <ol class="steps">${m.steps.map(stepHTML).join('')}</ol>
+        <div class="loi"><h4>Lỗi hay bị trừ điểm ở bài này</h4><ul>${m.loi.map(x => `<li>${x}</li>`).join('')}</ul></div>
+      </article>`).join('') +
+      `<article class="card present"><h3>Trình bày thế nào để không bị trừ điểm</h3><ul class="checks">${t.present.map(x => `<li>${x}</li>`).join('')}</ul></article>`;
+    $$('.model', pane).forEach(card => {
+      const items = $$('.steps > li', card);
+      let shown = 0;
+      const show = n => { shown = n; items.forEach((li, i) => li.classList.toggle('hid', i >= n)); };
+      show(0);
+      card.addEventListener('click', e => {
+        const b = e.target.closest('[data-act]'); if (!b) return;
+        if (b.dataset.act === 'all') show(items.length);
+        else { let n = shown + 1; while (n < items.length && items[n - 1].classList.contains('part')) n++; show(Math.min(n, items.length)); }
+        if (shown >= items.length) $$('[data-act]', card).forEach(x => { x.disabled = true; });
+      });
+    });
+  }
+
+  /* ---------- 🖨️ Phiếu làm bài ---------- */
+  function sheetHTML(t, o) {
+    const total = sum(t.practice.map(p => p.pts));
+    const head = `<div class="sh-head"><span>TOÁN VÀO 10 · PHIẾU LUYỆN THI</span><span>Chủ đề ${t.no} · ${esc(t.bai)}</span></div>`;
+    const modelPage = o.model ? `<section class="sh-page">${head}<h1 class="sh-title">BÀI MẪU – TRÌNH BÀY ĐỦ ĐIỂM</h1><p class="sh-sub">${t.title}</p>
+      ${t.models.map((m, i) => `<div class="sh-model"><p><b>Bài mẫu ${i + 1} (${pt(m.pts)} điểm). ${m.title}.</b> ${m.de}</p>${m.fig ? `<div class="sh-fig">${m.fig}</div>` : ''}
+        <ol class="sh-steps">${m.steps.map(st => st.part ? `<li class="part">${st.part}</li>` : `<li><span>${st.s}</span>${st.p ? `<b class="sh-pt">${pt(st.p)}đ</b>` : ''}</li>`).join('')}</ol>
+        <p class="sh-loi"><b>Hay bị trừ điểm:</b> ${m.loi.join(' · ')}</p></div>`).join('')}</section>` : '';
+    const work = `<section class="sh-page">${head}<h1 class="sh-title">PHIẾU LÀM BÀI</h1><p class="sh-sub">${t.title}</p>
+      <p class="sh-info">Họ và tên: ........................................................ Lớp: .............. Ngày: ......../......../........ Điểm: ......../${pt(total)}</p>
+      <div class="sh-remind"><b>Nhắc nhanh:</b><ul>${t.remind.map(r => `<li>${r}</li>`).join('')}</ul></div>
+      ${t.practice.map((p, i) => `<div class="sh-q"><p><b>Bài ${i + 1}</b> <i>(${p.lv} · ${pt(p.pts)} điểm).</i> ${p.de}</p>${p.figQ ? `<div class="sh-fig">${p.figQ}</div>` : ''}
+        <div class="sh-write" style="height:${p.h || 60}mm"></div></div>`).join('')}
+      <div class="sh-check"><b>Tự soát trước khi chụp ảnh nộp:</b> ${t.present.slice(0, 4).map(x => `<span>☐ ${plainShort(x)}</span>`).join('')}</div>
+      <div class="sh-ai">🤖 <b>Làm xong:</b> chụp ảnh rõ từng trang → mở web <b>Toán vào 10</b> → Chủ đề ${t.no} → mục <b>Nhờ AI nhận xét</b> → bấm <b>Sao chép prompt</b> → dán vào ChatGPT / Gemini / Claude cùng ảnh bài làm.</div></section>`;
+    const keyPage = o.key ? `<section class="sh-page">${head}<h1 class="sh-title">ĐÁP ÁN – HƯỚNG DẪN CHẤM</h1><p class="sh-sub">${t.title}</p>
+      ${t.practice.map((p, i) => `<div class="sh-key"><p><b>Bài ${i + 1} (${pt(p.pts)} điểm).</b> Đáp số: ${p.ans}</p>${p.fig ? `<div class="sh-fig">${p.fig}</div>` : ''}
+        <table class="sh-barem"><tbody>${p.barem.map(([s, x]) => `<tr><td>${s}</td><td class="num">${pt(x)}</td></tr>`).join('')}</tbody></table></div>`).join('')}</section>` : '';
+    return `<div class="sheet math">${modelPage}${work}${keyPage}</div>`;
+  }
+  function plainShort(html) { return String(html).replace(/<[^>]+>/g, ''); }
+
+  function paneSheet(t, pane) {
+    const o = get('sheetOpt', { model: false, key: false });
+    pane.innerHTML = `<div class="card sheet-tools">
+        <p class="lead">Phiếu A4 gồm <b>nhắc nhanh</b>, <b>${t.practice.length} bài</b> (cơ bản → khá → nâng cao) và khung ô li để làm ngay trên giấy. Bấm <b>In / Lưu PDF</b>; trên iPad chọn Chia sẻ → In.</p>
+        <div class="opts-row"><label class="tog"><input type="checkbox" id="oModel" ${o.model ? 'checked' : ''}> Kèm trang bài mẫu (in trước)</label>
+        <label class="tog"><input type="checkbox" id="oKey" ${o.key ? 'checked' : ''}> Kèm đáp án – hướng dẫn chấm (trang cuối, cho phụ huynh/thầy cô)</label></div>
+        <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ In / Lưu PDF</button></div></div>
+      <div class="paper-wrap" id="paper"></div>`;
+    const draw = () => { $('#paper').innerHTML = sheetHTML(t, get('sheetOpt', o)); };
+    draw();
+    ['oModel', 'oKey'].forEach(idk => $('#' + idk).addEventListener('change', () => {
+      set('sheetOpt', { model: $('#oModel').checked, key: $('#oKey').checked }); draw();
+    }));
+    $('#printBtn').addEventListener('click', async () => {
+      const b = $('#printBtn'); b.disabled = true; b.textContent = 'Đang chuẩn bị…';
+      await MathTS.done($('#paper'));
+      let root = $('#print-root'); if (!root) { root = h('<div id="print-root"></div>'); document.body.appendChild(root); }
+      root.innerHTML = $('#paper').innerHTML;
+      document.body.classList.add('printing');
+      saveProg(t.id, { printed: true });
+      const end = () => { document.body.classList.remove('printing'); root.innerHTML = ''; b.disabled = false; b.textContent = '🖨️ In / Lưu PDF'; window.removeEventListener('afterprint', end); };
+      window.addEventListener('afterprint', end);
+      setTimeout(() => { window.print(); setTimeout(() => { if (document.body.classList.contains('printing')) end(); }, 1500); }, 60);
+    });
+  }
+
+  /* ---------- 🤖 Prompt nhờ AI ---------- */
+  function promptGrade(t) {
+    const total = sum(t.practice.map(p => p.pts));
+    const de = t.practice.map((p, i) => `Bài ${i + 1} (${p.lv}, ${pt(p.pts)} điểm): ${plain(p.de)}`).join('\n\n');
+    const key = t.practice.map((p, i) => `Bài ${i + 1} – đáp số: ${plain(p.ans)}\n${p.barem.map(([s, x]) => `  • ${plain(s)} (${pt(x)} điểm)`).join('\n')}`).join('\n\n');
+    const rules = t.rules ? `\n\nQUY ĐỊNH CHẤM THỐNG NHẤT CỦA SỞ GD&ĐT TP.HCM (2026–2027)\nKhông được dùng trực tiếp (dùng là trừ điểm bước đó):\n${RULES.no.map(x => '- ' + x).join('\n')}\nĐược dùng trực tiếp:\n${RULES.yes.map(x => '- ' + x).join('\n')}` : '';
+    return `Bạn là thầy giáo dạy Toán lớp 9 giỏi, nhiều năm luyện thi vào lớp 10 TP.HCM. Em là học sinh lớp 9. Em gửi kèm ẢNH bài làm trên phiếu luyện thi "Chủ đề ${t.no}: ${plain(t.title)}" (${t.bai}).
+
+ĐỀ BÀI TRÊN PHIẾU
+${de}
+
+ĐÁP ÁN VÀ HƯỚNG DẪN CHẤM (chỉ để thầy chấm, KHÔNG đưa nguyên lời giải cho em khi em chưa tự làm)
+${key}${rules}
+
+THẦY HÃY LÀM ĐÚNG THỨ TỰ SAU
+1. Đọc ảnh và chép lại thật ngắn em đã làm được gì ở từng bài. Chỗ nào ảnh mờ hoặc không đọc được thì hỏi lại em, không đoán.
+2. Chấm từng bài theo hướng dẫn chấm: ghi điểm từng bước, chỉ rõ bước nào bị trừ và vì sao (thiếu điều kiện, thiếu kết luận, quên đơn vị, làm tròn sai, dùng kiến thức không được dùng…). Bài làm cách khác mà đúng vẫn cho đủ điểm.
+3. Khen một điều em làm tốt.
+4. Với phần em làm SAI hoặc CHƯA LÀM: không giải hộ ngay. Đưa "Gợi ý 1" là một câu hỏi dẫn dắt ngắn rồi DỪNG LẠI chờ em trả lời. Nếu em vẫn bí thì đưa "Gợi ý 2" cụ thể hơn. Chỉ khi em nhắn "cho em xem lời giải" mới trình bày lời giải mẫu từng bước, mỗi bước ghi rõ vì sao làm vậy và được mấy điểm.
+5. Viết thật dễ hiểu cho học sinh lớp 9: câu ngắn, xưng "thầy" gọi "em", công thức viết rõ ràng (ví dụ x^2, √3, phân số a/b).
+6. Kết thúc bằng: tổng điểm …/${pt(total)} và đúng 3 việc em cần sửa ở lần làm sau.`;
+  }
+  function promptHint(t) {
+    const de = t.practice.map((p, i) => `Bài ${i + 1}: ${plain(p.de)}`).join('\n\n');
+    return `Bạn là thầy giáo dạy Toán lớp 9 luyện thi vào lớp 10 TP.HCM. Em đang làm phiếu "Chủ đề ${t.no}: ${plain(t.title)}" và bị bí, chưa làm được.
+
+ĐỀ BÀI
+${de}
+
+Em bí ở: [em ghi số bài, câu và chỗ bí, ví dụ "Bài 2b, không biết bắt đầu từ đâu"]
+Em đã làm được: [em chép phần đã làm, hoặc gửi ảnh]
+
+THẦY HÃY
+1. Không giải hộ. Hỏi em một câu dẫn dắt ngắn để em tự nghĩ ra bước tiếp theo, rồi dừng chờ em trả lời.
+2. Nếu em trả lời sai hoặc vẫn bí, gợi ý cụ thể hơn một chút (chỉ một bước).
+3. Khi em làm xong, kiểm tra lại và chỉ ra chỗ trình bày dễ bị trừ điểm.
+4. Câu ngắn, dễ hiểu, xưng "thầy" gọi "em".`;
+  }
+  function paneAI(t, pane) {
+    const ais = CONFIG.ai.map(a => `<a class="btn" href="${a.url}" target="_blank" rel="noopener">Mở ${esc(a.name)} ↗</a>`).join('');
+    pane.innerHTML = `<div class="card ai-how"><h3>3 bước nhờ AI chấm và hướng dẫn</h3>
+        <ol class="how"><li><b>In phiếu</b> (tab Phiếu làm bài) và tự làm trên giấy, không xem đáp án.</li>
+        <li><b>Chụp ảnh</b> rõ, thẳng, đủ sáng từng trang bài làm.</li>
+        <li>Bấm <b>Sao chép prompt</b> bên dưới → mở ChatGPT / Gemini / Claude → <b>dán prompt và gửi kèm ảnh</b>. Trả lời các câu hỏi gợi ý của AI để tự làm nốt phần chưa xong.</li></ol>
+        <p class="warn">⚠️ Prompt đã chứa đáp án để AI chấm cho đúng. Em đừng đọc phần đáp án trong prompt trước khi tự làm nhé.</p></div>
+      ${[['A', '📸 Chấm bài và hướng dẫn phần chưa làm', 'Dùng sau khi em đã làm xong phiếu (gửi kèm ảnh).', promptGrade(t)],
+        ['B', '🧭 Gợi ý khi đang bí (không giải hộ)', 'Dùng khi đang làm mà bí: sửa hai dòng trong ngoặc vuông rồi gửi.', promptHint(t)]]
+        .map(([k, title, note, text]) => `<article class="card prompt"><h3>Prompt ${k}. ${title}</h3><p class="lead small">${note}</p>
+          <details><summary>Xem nội dung prompt</summary><pre class="no-math">${esc(text)}</pre></details>
+          <div class="row"><button class="btn primary" type="button" data-copy="${k}">📋 Sao chép prompt ${k}</button>${ais}</div></article>`).join('')}`;
+    const texts = { A: promptGrade(t), B: promptHint(t) };
+    $$('[data-copy]', pane).forEach(b => b.addEventListener('click', async () => {
+      const ok = await copy(texts[b.dataset.copy]);
+      toast(ok ? 'Đã sao chép. Mở AI, dán vào ô chat và gửi kèm ảnh bài làm.' : 'Không sao chép được – mở "Xem nội dung prompt" và chép tay.');
+    }));
+  }
+
+  /* ---------- Điều hướng ---------- */
+  function route() {
+    const parts = (location.hash || '#/').replace(/^#\/?/, '').split('/');
+    if (parts[0] === 'cd') topic(parts[1], parts[2] || 'lt');
+    else if (parts[0] === 'lo-trinh') roadmap();
+    else home();
+    window.scrollTo(0, 0);
+    bindTheme();
+  }
+  function bindTheme() {
+    const b = $('#themeBtn'); if (!b) return;
+    b.addEventListener('click', () => {
+      const cur = document.documentElement.dataset.theme;
+      const dark = cur ? cur === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+      set('theme', document.documentElement.dataset.theme);
+    });
+  }
+  function start() {
+    const th = get('theme', ''); if (th) document.documentElement.dataset.theme = th;
+    window.addEventListener('hashchange', route);
+    route();
+  }
+  return { start, promptGrade, promptHint, sheetHTML, RULES, STRUCT };
+})();
+
+document.addEventListener('DOMContentLoaded', App.start);
+
+</script>
+</body>
+</html>
