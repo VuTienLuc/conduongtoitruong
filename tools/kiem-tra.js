@@ -148,7 +148,14 @@ if (ctx.LuyenDe) ctx.LuyenDe.ids().forEach(id => {
     if (!near(bs, d.pts)) err(w, `tổng barem ${bs} ≠ ${d.pts}`);
     (d.barem || []).forEach(b => { if (!near(b[1] * 4, Math.round(b[1] * 4))) err(w, `điểm ${b[1]} không là bội 0,25`); checkStr(w, b[0]); });
     [d.de, d.ans, d.ten, ...(d.loi || [])].forEach(x => checkStr(w, x));
+    if (d.goi) { if (d.goi.length !== 3) err(w, 'gợi ý phải đủ 3 nấc (Nhận dạng, Hướng đi, Khung lời giải)'); d.goi.forEach(x => checkStr(w + ' › gợi ý', x)); }
+    if (L.the) {
+      if (!d.cc || !d.cc.length || !d.q || !d.ch) err(w, 'bộ có Thẻ công cụ: mỗi đề cần cc, q, ch');
+      (d.cc || []).forEach(c => { if (!L.the.some(x => x.id === c)) err(w, `mã công cụ không có trong Thẻ: ${c}`); });
+    }
   });
+  (L.the || []).forEach(r => { if (!r.id || !r.ten || !r.cc) err(W, 'Thẻ công cụ thiếu id/ten/cc'); checkStr(W + ' › Thẻ', r.cc); });
+  if (L.giam && !(L.giam.length === 2 && L.giam[0] < L.giam[1])) err(W, 'giam phải là [k1, k2] với k1 < k2');
 });
 
 // 3) Liên kết trong app.js trỏ tới chủ đề có thật.

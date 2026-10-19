@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Xuất bộ đề luyện vào 10 thành tệp PDF A4: de-luyen/<mã chủ đề>/De-01.pdf … De-10.pdf
-(trang 1: đề + khung ô li; trang 2: đáp án – hướng dẫn chấm).
+(trang 1: đề + khung ô li; [trang Gợi ý từng nấc nếu đề có]; trang cuối: đáp án – hướng dẫn chấm).
+Bộ có Thẻ công cụ: thêm de-luyen/the-cong-cu-hinh-hoc.pdf (1 trang).
 Chạy: python3 tools/xuat-de-pdf.py [mã chủ đề …]   (cần Playwright + Chromium; tự mở máy chủ tĩnh tạm).
-Kiểm tra luôn: mỗi tệp đúng 2 trang, không lỗi công thức (mjx-merror)."""
+Kiểm tra luôn: mỗi tệp đúng số trang (2, hoặc 3 nếu có gợi ý), không lỗi công thức (mjx-merror)."""
 import asyncio, os, re, sys, threading, functools, http.server, socketserver
 from playwright.async_api import async_playwright
 
@@ -31,7 +32,7 @@ async def main(only):
         b = await p.chromium.launch()
         pg = await b.new_page()
         await pg.goto(base + '#/vao-10'); await pg.wait_for_timeout(800)
-        ids = await pg.evaluate('LuyenDe.ids()')
+        ids = await pg.evaluate('LuyenDe.ids()'); the_done = False
         for tid in ids:
             if only and tid not in only: continue
             n = await pg.evaluate(f"LuyenDe.get('{tid}').de.length")
@@ -44,9 +45,16 @@ async def main(only):
                 if await pg.locator('#print-root mjx-merror').count(): fails.append(f'{tid} đề {k}: lỗi công thức')
                 f = os.path.join(OUT, tid, f'De-{k:02d}.pdf')
                 await pg.pdf(path=f, format='A4', prefer_css_page_size=True, print_background=True)
-                np_ = pages(f)
-                if np_ != 2: fails.append(f'{tid} đề {k}: {np_} trang (cần 2: đề + đáp án)')
+                np_, want = pages(f), await pg.evaluate(f"LuyenDe.pages(LuyenDe.get('{tid}'), {k}, {{ key: true }})")
+                if np_ != want: fails.append(f'{tid} đề {k}: {np_} trang (cần {want}: đề{" + gợi ý" if want == 3 else ""} + đáp án)')
             print(f'{tid}: đã xuất {n} tệp PDF vào de-luyen/{tid}/')
+            if await pg.evaluate(f"!!LuyenDe.get('{tid}').the") and not the_done:
+                await pg.evaluate(f"document.getElementById('print-root').innerHTML = LuyenDe.theHTML(Topics.get('{tid}'))")
+                await pg.evaluate("MathTS.done(document.getElementById('print-root'))")
+                f = os.path.join(OUT, 'the-cong-cu-hinh-hoc.pdf')
+                await pg.pdf(path=f, format='A4', prefer_css_page_size=True, print_background=True)
+                if pages(f) != 1: fails.append(f'Thẻ công cụ: {pages(f)} trang (cần 1)')
+                the_done = True; print('Thẻ công cụ: de-luyen/the-cong-cu-hinh-hoc.pdf')
         await b.close()
     srv.shutdown()
     for x in fails: print('✗', x)

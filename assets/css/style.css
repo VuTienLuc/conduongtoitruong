@@ -319,3 +319,35 @@ h3.sub{margin:22px 0 0}
 .ld-item.on{border-color:var(--accent,#2b6cb0);box-shadow:0 0 0 2px var(--accent,#2b6cb0) inset}
 .ld-item.ok b::after{content:" ✓";color:#2f855a}
 .ld-src{font-size:9.5pt;color:#555;margin-top:6px}
+/* Luyện đề – trang Gợi ý từng nấc, Thẻ công cụ, Luyện tư duy mỗi ngày */
+.ld-howto{font-size:10.5pt;margin:4px 0 6px}
+.ld-ask{font-size:10.5pt;border:1px solid #777;border-radius:6px;padding:4px 10px;margin:0 0 8px;display:flex;flex-wrap:wrap;gap:2px 14px}
+.ld-ask b{width:100%}
+.ld-nac{border:1.5px dashed #666;border-radius:8px;padding:6px 10px;margin:0 0 8px;font-size:11pt;break-inside:avoid}
+.ld-nac-h{font-weight:700;margin-bottom:2px}
+.ld-nac.off{border-style:dotted;color:#666;font-size:10pt}
+.ld-the-mini{font-size:9.5pt;margin-top:6px;break-inside:avoid}
+table.ld-the{width:100%;border-collapse:collapse;margin:4px 0}
+.sheet table.ld-the td,.sheet table.ld-the th,table.ld-the td,table.ld-the th{border:1px solid #888;padding:3px 6px;text-align:left;vertical-align:top}
+.ld-the-mini table.ld-the td{padding:2px 5px}
+.ld-ex{font-size:9pt}
+table.ld-the{table-layout:fixed}
+table.ld-the.full{font-size:10.5pt}
+.ld-tools{margin:8px 0}
+.ld-hint .ld-nac{background:var(--surface);color:var(--ink);border-color:var(--line);font-size:16px}
+.td-h{margin:0 0 6px;font-weight:700}
+.td-gt{margin:0 0 6px;font-size:15px}
+.td-gt summary{cursor:pointer;color:var(--primary);font-weight:700}
+.td-fig .fig{max-width:260px}
+.td-q{margin:4px 0 8px}
+.td-tools{display:flex;flex-wrap:wrap;gap:8px}
+.td-opt,.td-step{border:2px solid var(--line);border-radius:12px;background:var(--surface);padding:8px 12px;text-align:left;font-size:15px;line-height:1.4;min-height:44px;max-width:100%}
+.td-steps{display:grid;gap:8px;margin:6px 0}
+.td-step.used{opacity:.45}
+.td-opt.good{background:var(--ok-soft);border-color:var(--ok)}
+.td-opt.bad{background:var(--bad-soft);border-color:var(--bad)}
+.td-opt:disabled,.td-step:disabled{cursor:default}
+.td-pick,.td-right{margin:4px 0;padding-left:22px;font-size:15px}
+.td-pick li,.td-right li{margin:2px 0}
+.td-fb{margin-top:6px;font-size:15px}
+.td-fb .muted{color:var(--muted)}

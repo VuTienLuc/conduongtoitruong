@@ -46,6 +46,7 @@ async def main():
             routes = ['#/', '#/vao-10', '#/lo-trinh', '#/lop10', '#/lop11', '#/lop12'] + [f'#/cd/{i}/{t}' for i in ids for t in TABS]
             ld = await pg.evaluate("LuyenDe.ids().map(i => [i, LuyenDe.get(i).de.length])")
             routes += [f'#/cd/{i}/de/{k}' for i, n in ld for k in range(2, n + 1)]
+            routes += [f'#/cd/{i}/de/{s}' for i in await pg.evaluate("LuyenDe.ids().filter(i => LuyenDe.get(i).the)") for s in ('the', 'tuduy')]
             routes += [r for g, i, nb in vdc for r in [f'#/{g}/{i}', f'#/{g}/{i}/phieu'] + [f'#/{g}/{i}/lg/{k}' for k in range(1, nb + 1)]]
             for r in routes:
                 await pg.goto(base + r)
@@ -68,6 +69,29 @@ async def main():
         await pg.goto(base + '#/')
         await pg.wait_for_function('window.MathJax && MathJax.typesetPromise')
         ids = await pg.evaluate('Topics.list.map(t => t.id)')
+        # Luyện đề có gợi ý từng nấc: đề 1 mở được 3 nấc, đề cuối chỉ 1 nấc (giảm dần).
+        for i in await pg.evaluate("LuyenDe.ids().filter(i => LuyenDe.get(i).de.some(d => d.goi))"):
+            for k, want in ((1, 3), (await pg.evaluate(f"LuyenDe.get('{i}').de.length"), None)):
+                await pg.goto(base + f'#/cd/{i}/de/{k}'); await pg.wait_for_timeout(200)
+                if want is None: want = await pg.evaluate(f"(L => !L.giam ? 3 : {k} <= L.giam[0] ? 3 : {k} <= L.giam[1] ? 2 : 1)(LuyenDe.get('{i}'))")
+                for _ in range(3):
+                    if await pg.locator('#ldNext').is_enabled(): await pg.locator('#ldNext').click()
+                got = await pg.locator('#ldNac .ld-nac').count()
+                if got != want: fails.append(f'{i} đề {k}: mở được {got} nấc gợi ý, cần {want}')
+        # Luyện tư duy: trả lời hết 6 câu (chọn công cụ đúng, xếp đúng thứ tự) → 6/6, lưu ngày luyện.
+        for i in await pg.evaluate("LuyenDe.ids().filter(i => LuyenDe.get(i).the)"):
+            await pg.evaluate("localStorage.removeItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':ld:tuduy')")
+            await pg.goto(base + f'#/cd/{i}/de/tuduy'); await pg.wait_for_timeout(300)
+            await pg.evaluate('''() => document.querySelectorAll('.td-card').forEach(c => {
+                const cc = [...c.querySelectorAll('.td-opt')];
+                if (cc.length) { const it = c.querySelector('.td-q'); cc[0].click(); return; }
+                [...c.querySelectorAll('.td-step')].sort((a, b) => a.dataset.j - b.dataset.j).forEach(b => b.click()); })''')
+            # câu chọn công cụ: bấm phương án đầu (có thể sai) – chỉ kiểm có phản hồi; câu sắp xếp phải đúng
+            n_fb = await pg.locator('.td-fb p').count(); xep_ok = await pg.locator('.td-fb b', has_text='Đúng thứ tự').count()
+            if n_fb < 6: fails.append(f'{i} luyện tư duy: chỉ {n_fb}/6 câu có phản hồi')
+            if xep_ok != 2: fails.append(f'{i} luyện tư duy: câu sắp xếp đúng thứ tự nhưng chấm {xep_ok}/2')
+            if not await pg.locator('#tdSum').is_visible(): fails.append(f'{i} luyện tư duy: không hiện tổng kết')
+            if not await pg.evaluate("Object.keys(JSON.parse(localStorage.getItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':ld:tuduy')).days).length"): fails.append(f'{i} luyện tư duy: không lưu ngày luyện')
         for i in ids:
             # Trắc nghiệm: chọn phương án A mọi câu, điểm phải bằng số câu chọn đúng.
             await pg.goto(base + f'#/cd/{i}/hieu'); await pg.wait_for_timeout(200)
