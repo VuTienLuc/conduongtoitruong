@@ -398,6 +398,41 @@ chk('LĐ1 đề 18', _pts(Q_(-1, 3), lambda x, y: y - (2 * x - 9), True), [(-9, 
 chk('LĐ1 đề 19', _pts(Q_(1, 4), lambda x, y: y - x, True), [(0, 0), (4, 4)])
 chk('LĐ1 đề 20', (_pts(3, lambda x, y: y - 12, True), _pts(3, lambda x, y: y + 3, True)), ([(-2, 12), (2, 12)], []))
 
+# ---------- Luyện đề Bài 2 (data/vao-10/luyen-de/ld02-pt-bac-hai-viete.js): tính bằng nghiệm thật (sympy), không qua Viète ----------
+def _r2(a, b, c):  # hai nghiệm thật, x1 > x2
+    r = sp.solve(a * xx_ ** 2 + b * xx_ + c, xx_); assert len(r) == 2 and all(v.is_real for v in r); return sorted(r, key=lambda v: -float(v))
+xx_ = sp.symbols('xx_'); Q_ = sp.Rational
+def _v(e, a, b, c, sym=True):  # giá trị biểu thức e(x1, x2); sym: kiểm cả khi đổi chỗ hai nghiệm
+    x1, x2 = _r2(a, b, c); v = sp.nsimplify(sp.simplify(e(x1, x2)))
+    if sym: assert sp.simplify(e(x2, x1) - v) == 0
+    return v
+chk('LĐ2 đề 1', _v(lambda u, v: u**2 + v**2 - u / 2 - v / 2, 2, 5, -4), Q_(23, 2))
+chk('LĐ2 đề 2', _v(lambda u, v: u / v + v / u, 1, -6, 2), 16)
+chk('LĐ2 đề 3', _v(lambda u, v: u**2 / v + v**2 / u, 1, -3, -5), Q_(-72, 5))
+chk('LĐ2 đề 4', _v(lambda u, v: u * (u - 2) + v * (v - 2), 3, -4, -2), Q_(4, 9))
+chk('LĐ2 đề 5', _v(lambda u, v: (u - v)**2 - u - v, 1, -5, 2), 12)
+chk('LĐ2 đề 6', _v(lambda u, v: 1 / u + 1 / v - u * v, 2, -7, 2), Q_(5, 2))
+chk('LĐ2 đề 7', _v(lambda u, v: u**3 + v**3, 2, -3, -1), Q_(45, 8))
+chk('LĐ2 đề 8', _v(lambda u, v: 3 * u**2 * v + 3 * u * v**2 - u - v, 2, 4, -1), 5)
+chk('LĐ2 đề 9', _v(lambda u, v: (u + 1) / v + (v + 1) / u, 1, -3, -2), -8)
+chk('LĐ2 đề 10 (x1, x2 bất kì)', [_v(lambda u, v: u**2 + 5 * v - 3, 1, -5, 3, False), _v(lambda u, v: v**2 + 5 * u - 3, 1, -5, 3, False)], [19, 19])
+chk('LĐ2 đề 11', (2 * -7 < 0, _v(lambda u, v: sp.Abs(u) + sp.Abs(v), 2, -3, -7)), (True, sp.sqrt(65) / 2))
+m_ = sp.symbols('m', real=True); _x1, _x2 = sp.symbols('x1 x2')
+_s12 = sp.solve(_x1**2 - 2 * m_ * _x1 + 2 * m_ - 3, _x1)
+chk('LĐ2 đề 12a: Δ\' − (m − 1)² − 2', sp.expand(m_**2 - (2 * m_ - 3) - (m_ - 1)**2 - 2), 0)
+chk('LĐ2 đề 12b: A(m) − (4m² − 4m + 6)', sp.expand(sp.simplify(_s12[0]**2 + _s12[1]**2 - (4 * m_**2 - 4 * m_ + 6))), 0)
+chk('LĐ2 đề 12b: A = 14', sorted(sp.solve(4 * m_**2 - 4 * m_ + 6 - 14, m_)), [-1, 2])
+chk('LĐ2 đề 13', _v(lambda u, v: u**2 + v**2 - 1 / u - 1 / v, 1, -4, 1), 10)
+chk('LĐ2 đề 14', _v(lambda u, v: (2 * u - v) * (2 * v - u), 3, -8, 2), Q_(-74, 9))
+chk('LĐ2 đề 15', _v(lambda u, v: u / (v + 2) + v / (u + 2), 1, 3, -1), Q_(-5, 3))
+chk('LĐ2 đề 16 (x1 > x2)', _v(lambda u, v: u - v, 5, 2, -4, False), 2 * sp.sqrt(21) / 5)
+chk('LĐ2 đề 17 (x1, x2 bất kì)', [_v(lambda u, v: u**2 + v + 2021, 1, -1, -5, False), _v(lambda u, v: v**2 + u + 2021, 1, -1, -5, False)], [2027, 2027])
+chk('LĐ2 đề 18', _v(lambda u, v: (u - 1) * (v - 1) + u**2 + v**2, 2, -9, 5), Q_(57, 4))
+chk('LĐ2 đề 19', _v(lambda u, v: u**2 + v**2 - 3 * u * v, 3, -5, -1), Q_(40, 9))
+chk('LĐ2 đề 20 (x1, x2 bất kì)', [_v(lambda u, v: (u**2 + 2 * u - 2024) * (v**2 + 2 * v + 1), 1, 2, -2025, False), _v(lambda u, v: (v**2 + 2 * v - 2024) * (u**2 + 2 * u + 1), 1, 2, -2025, False)], [2026, 2026])
+chk('LĐ2: Δ\' ghi trong đề', [(b // 2)**2 - a * c for a, b, c in [(1, -6, 2), (3, -4, -2), (2, 4, -1), (1, -4, 1), (3, -8, 2), (5, 2, -4)]], [7, 10, 6, 3, 10, 21])
+chk('LĐ2: Δ ghi trong đề', [b * b - 4 * a * c for a, b, c in [(2, 5, -4), (1, -3, -5), (2, -7, 2), (2, -3, -1), (1, -3, -2), (1, 3, -1), (1, -1, -5), (2, -9, 5), (3, -5, -1)]], [57, 29, 33, 17, 17, 13, 21, 41, 37])
+
 # ---------- Luyện đề Bài 6 (data/vao-10/luyen-de/ld06-he-phuong-trinh-thuc-te.js): giải lại bằng sympy ----------
 a_, b_, T_ = sp.symbols('a b T', positive=True)
 sol = sp.solve([sp.Eq(a_ / 3 + 2 * b_ / 3, T_ + 9), sp.Eq(b_ / 3 + 2 * a_ / 3, T_ + 6), sp.Eq(T_ * (a_ + b_), a_ * b_)], [a_, b_, T_], dict=True)

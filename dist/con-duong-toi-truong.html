@@ -4721,6 +4721,203 @@ LuyenDe.add('ham-so-parabol', {
 });
 
 </script>
+<script>/* data/vao-10/luyen-de/ld02-pt-bac-hai-viete.js */
+/* Luyện đề – Bài 2 (1,0 điểm): phương trình bậc hai – a) chứng minh có hai nghiệm (phân biệt, trái dấu); b) không giải phương trình,
+   tính giá trị biểu thức của hai nghiệm bằng định lí Viète. Nội dung lớp 9 học kì II (Chương VI, KNTT). 20 đề đúng dạng Bài 2 của đề tuyển sinh TP.HCM.
+   Barem theo hướng dẫn chấm của Sở (đề 2026 – 2027): a) 0,25; b) Viète 0,25 + biến đổi về S, P 0,25 + tính đúng 0,25.
+   Dạng bài lấy theo các đề trong tai-lieu/lop9/Lớp 9 - Tài liệu/Đề thi/ (phương trình và biểu thức đã đổi, đáp số kiểm bằng tools/kiem-dap-so.py):
+   - Đề tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Bài 2)
+   - Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 2 – 12, 14, 16)
+   Dạng gặp nhiều nhất: biểu thức đối xứng đưa về S, P (tổng bình phương, phân thức, lập phương); biểu thức không đối xứng dùng
+   "x₁ là nghiệm" để hạ bậc; hai nghiệm trái dấu; phương trình chứa tham số. */
+LuyenDe.add('pt-bac-hai-viete', {
+  phut: 10,
+  soat: ['Tính đúng Δ (hoặc Δ\u2032, a·c) và kết luận', 'Ghi rõ "theo định lí Viète" S, P', 'Biến đổi biểu thức về S, P (hoặc hạ bậc bằng nghiệm)', 'Thay số, rút gọn phân số đúng'],
+  de: [
+    { ten: 'Tổng bình phương kèm tổng nghiệm', nguon: 'Đề tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM, Bài 2', pts: 1, h: 110,
+      de: S`Cho phương trình \(2x^2 + 5x - 4 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = x_1^2 + x_2^2 - \dfrac12 x_1 - \dfrac12 x_2\).`,
+      ans: S`a) \(\Delta = 5^2 - 4 \cdot 2 \cdot (-4) = 57 \gt 0\). b) \(A = \dfrac{23}{2}\)`,
+      barem: [
+        [S`a) \(\Delta = 5^2 - 4 \cdot 2 \cdot (-4) = 57 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = -\dfrac{5}{2}\), \(P = x_1 x_2 = -2\)`, 0.25],
+        [S`\(A = (x_1 + x_2)^2 - 2x_1x_2 - \tfrac12(x_1 + x_2) = S^2 - 2P - \tfrac12 S\)`, 0.25],
+        [S`\(A = \dfrac{25}{4} + 4 + \dfrac54 = \dfrac{23}{2}\)`, 0.25]],
+      loi: ['Viết x₁² + x₂² = S² + 2P', 'Sai dấu S = 5/2'] },
+    { ten: 'Tổng hai thương nghiệm', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 12, đề 2: biểu thức x₁/x₂ + x₂/x₁)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 - 6x + 2 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = \dfrac{x_1}{x_2} + \dfrac{x_2}{x_1}\).`,
+      ans: S`a) \(\Delta' = (-3)^2 - 1 \cdot 2 = 7 \gt 0\). b) \(A = 16\)`,
+      barem: [
+        [S`a) \(\Delta' = (-3)^2 - 1 \cdot 2 = 7 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = 6\), \(P = x_1 x_2 = 2\)`, 0.25],
+        [S`\(A = \dfrac{x_1^2 + x_2^2}{x_1 x_2} = \dfrac{S^2 - 2P}{P}\)`, 0.25],
+        [S`\(A = \dfrac{36 - 4}{2} = 16\)`, 0.25]],
+      loi: ['Quy đồng sai: (x₁ + x₂)/(x₁x₂)', 'Quên điều kiện x₁x₂ ≠ 0 (P = 2 ≠ 0)'] },
+    { ten: 'Tổng hai phân thức bậc hai', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 3, đề 1 và Cụm 11, đề 3: x₁²/x₂ + x₂²/x₁)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 - 3x - 5 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = \dfrac{x_1^2}{x_2} + \dfrac{x_2^2}{x_1}\).`,
+      ans: S`a) \(\Delta = (-3)^2 - 4 \cdot 1 \cdot (-5) = 29 \gt 0\). b) \(A = -\dfrac{72}{5}\)`,
+      barem: [
+        [S`a) \(\Delta = (-3)^2 - 4 \cdot 1 \cdot (-5) = 29 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = 3\), \(P = x_1 x_2 = -5\)`, 0.25],
+        [S`\(A = \dfrac{x_1^3 + x_2^3}{x_1 x_2}\), với \(x_1^3 + x_2^3 = (x_1 + x_2)^3 - 3x_1x_2(x_1 + x_2) = S^3 - 3PS\)`, 0.25],
+        [S`\(A = \dfrac{27 + 45}{-5} = -\dfrac{72}{5}\)`, 0.25]],
+      loi: ['Viết x₁³ + x₂³ = S³ − 3P', 'Sai dấu khi chia cho P âm'] },
+    { ten: 'Biểu thức dạng x₁(x₁ − k) + x₂(x₂ − k)', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 2, đề 2 và đề 3: x₁(x₁ − k) + x₂(x₂ − k))', pts: 1, h: 110,
+      de: S`Cho phương trình \(3x^2 - 4x - 2 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(M = x_1(x_1 - 2) + x_2(x_2 - 2)\).`,
+      ans: S`a) \(\Delta' = (-2)^2 - 3 \cdot (-2) = 10 \gt 0\). b) \(M = \dfrac49\)`,
+      barem: [
+        [S`a) \(\Delta' = (-2)^2 - 3 \cdot (-2) = 10 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = \dfrac{4}{3}\), \(P = x_1 x_2 = -\dfrac{2}{3}\)`, 0.25],
+        [S`\(M = x_1^2 + x_2^2 - 2(x_1 + x_2) = S^2 - 2P - 2S\)`, 0.25],
+        [S`\(M = \dfrac{16}{9} + \dfrac43 - \dfrac83 = \dfrac49\)`, 0.25]],
+      loi: ['Khai triển thiếu dấu ngoặc', 'Quy đồng phân số sai'] },
+    { ten: 'Bình phương hiệu hai nghiệm', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 8, đề 1: (x₁ − x₂)² − x₁ − x₂)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 - 5x + 2 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = (x_1 - x_2)^2 - x_1 - x_2\).`,
+      ans: S`a) \(\Delta = (-5)^2 - 4 \cdot 1 \cdot 2 = 17 \gt 0\). b) \(A = 12\)`,
+      barem: [
+        [S`a) \(\Delta = (-5)^2 - 4 \cdot 1 \cdot 2 = 17 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = 5\), \(P = x_1 x_2 = 2\)`, 0.25],
+        [S`\((x_1 - x_2)^2 = (x_1 + x_2)^2 - 4x_1x_2 = S^2 - 4P\), nên \(A = S^2 - 4P - S\)`, 0.25],
+        [S`\(A = 25 - 8 - 5 = 12\)`, 0.25]],
+      loi: ['Viết (x₁ − x₂)² = S² − 2P', 'Quên trừ S'] },
+    { ten: 'Tổng nghịch đảo hai nghiệm', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 5, đề 2: biểu thức chứa 1/x₁ + 1/x₂)', pts: 1, h: 110,
+      de: S`Cho phương trình \(2x^2 - 7x + 2 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = \dfrac{1}{x_1} + \dfrac{1}{x_2} - x_1 x_2\).`,
+      ans: S`a) \(\Delta = (-7)^2 - 4 \cdot 2 \cdot 2 = 33 \gt 0\). b) \(A = \dfrac52\)`,
+      barem: [
+        [S`a) \(\Delta = (-7)^2 - 4 \cdot 2 \cdot 2 = 33 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = \dfrac{7}{2}\), \(P = x_1 x_2 = 1\)`, 0.25],
+        [S`\(\dfrac{1}{x_1} + \dfrac{1}{x_2} = \dfrac{x_1 + x_2}{x_1 x_2} = \dfrac SP\), nên \(A = \dfrac SP - P\)`, 0.25],
+        [S`\(A = \dfrac{7/2}{1} - 1 = \dfrac52\)`, 0.25]],
+      loi: ['Viết 1/x₁ + 1/x₂ = 1/(x₁ + x₂)', 'Nhầm P = 2'] },
+    { ten: 'Tổng lập phương hai nghiệm', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 4, đề 1: biểu thức chứa x₁³ + x₂³)', pts: 1, h: 110,
+      de: S`Cho phương trình \(2x^2 - 3x - 1 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = x_1^3 + x_2^3\).`,
+      ans: S`a) \(\Delta = (-3)^2 - 4 \cdot 2 \cdot (-1) = 17 \gt 0\). b) \(A = \dfrac{45}{8}\)`,
+      barem: [
+        [S`a) \(\Delta = (-3)^2 - 4 \cdot 2 \cdot (-1) = 17 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = \dfrac{3}{2}\), \(P = x_1 x_2 = -\dfrac{1}{2}\)`, 0.25],
+        [S`\(A = (x_1 + x_2)^3 - 3x_1x_2(x_1 + x_2) = S^3 - 3PS\)`, 0.25],
+        [S`\(A = \dfrac{27}{8} + \dfrac94 = \dfrac{45}{8}\)`, 0.25]],
+      loi: ['Nhớ sai hằng đẳng thức tổng hai lập phương', 'Sai dấu −3PS khi P âm'] },
+    { ten: 'Đặt nhân tử chung x₁x₂', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 11, đề 2 và Cụm 14, đề 2: 3x₁²x₂ + 3x₁x₂² − x₁ − x₂)', pts: 1, h: 110,
+      de: S`Cho phương trình \(2x^2 + 4x - 1 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = 3x_1^2x_2 + 3x_1x_2^2 - x_1 - x_2\).`,
+      ans: S`a) \(\Delta' = 2^2 - 2 \cdot (-1) = 6 \gt 0\). b) \(A = 5\)`,
+      barem: [
+        [S`a) \(\Delta' = 2^2 - 2 \cdot (-1) = 6 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = -2\), \(P = x_1 x_2 = -\dfrac{1}{2}\)`, 0.25],
+        [S`\(A = 3x_1x_2(x_1 + x_2) - (x_1 + x_2) = 3PS - S\)`, 0.25],
+        [S`\(A = 3 \cdot \left(-\dfrac12\right) \cdot (-2) - (-2) = 5\)`, 0.25]],
+      loi: ['Đặt nhân tử chung sai', 'Sai dấu khi trừ S âm'] },
+    { ten: 'Tổng hai phân thức có mẫu là nghiệm', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 16, đề 1 và Cụm 14, đề 1: tổng hai phân thức)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 - 3x - 2 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = \dfrac{x_1 + 1}{x_2} + \dfrac{x_2 + 1}{x_1}\).`,
+      ans: S`a) \(\Delta = (-3)^2 - 4 \cdot 1 \cdot (-2) = 17 \gt 0\). b) \(A = -8\)`,
+      barem: [
+        [S`a) \(\Delta = (-3)^2 - 4 \cdot 1 \cdot (-2) = 17 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = 3\), \(P = x_1 x_2 = -2\)`, 0.25],
+        [S`\(A = \dfrac{x_1^2 + x_1 + x_2^2 + x_2}{x_1x_2} = \dfrac{S^2 - 2P + S}{P}\)`, 0.25],
+        [S`\(A = \dfrac{9 + 4 + 3}{-2} = -8\)`, 0.25]],
+      loi: ['Quy đồng thiếu số hạng x₁ + x₂', 'Sai dấu −2P khi P âm'] },
+    { ten: 'Biểu thức không đối xứng – dùng x₁ là nghiệm', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 10, đề 3 và Cụm 16, đề 2: biểu thức không đối xứng, thay x₁² từ phương trình)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 - 5x + 3 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(B = x_1^2 + 5x_2 - 3\).`,
+      ans: S`a) \(\Delta = (-5)^2 - 4 \cdot 1 \cdot 3 = 13 \gt 0\). b) \(B = 19\)`,
+      barem: [
+        [S`a) \(\Delta = (-5)^2 - 4 \cdot 1 \cdot 3 = 13 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = 5\), \(P = x_1 x_2 = 3\)`, 0.25],
+        [S`\(x_1\) là nghiệm nên \(x_1^2 - 5x_1 + 3 = 0\), tức \(x_1^2 = 5x_1 - 3\). Do đó \(B = 5x_1 - 3 + 5x_2 - 3 = 5(x_1 + x_2) - 6\)`, 0.25],
+        [S`\(B = 5 \cdot 5 - 6 = 19\)`, 0.25]],
+      loi: ['Cố biến đổi về S, P khi biểu thức không đối xứng', 'Thay x₁² = 5x₁ + 3 (sai dấu)'] },
+    { ten: 'Hai nghiệm trái dấu – tổng giá trị tuyệt đối', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 5, đề 3: chứng minh hai nghiệm trái dấu)', pts: 1, h: 110,
+      de: S`Cho phương trình \(2x^2 - 3x - 7 = 0\).<br>a) Chứng minh phương trình có hai nghiệm trái dấu \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = |x_1| + |x_2|\).`,
+      ans: S`a) \(a \cdot c = 2 \cdot (-7) = -14 \lt 0\). b) \(A = \dfrac{\sqrt{65}}{2}\)`,
+      barem: [
+        [S`a) \(a \cdot c = 2 \cdot (-7) = -14 \lt 0\) nên phương trình có hai nghiệm trái dấu \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = \dfrac{3}{2}\), \(P = x_1 x_2 = -\dfrac{7}{2}\)`, 0.25],
+        [S`Hai nghiệm trái dấu nên \(|x_1| + |x_2| = |x_1 - x_2|\), và \(A^2 = (x_1 - x_2)^2 = S^2 - 4P\)`, 0.25],
+        [S`\(A^2 = \dfrac94 + 14 = \dfrac{65}{4}\), \(A \gt 0\) nên \(A = \dfrac{\sqrt{65}}{2}\)`, 0.25]],
+      loi: ['Viết |x₁| + |x₂| = |x₁ + x₂|', 'Không giải thích vì sao lấy A > 0'] },
+    { ten: 'Phương trình chứa tham số m', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 12, đề 3: phương trình chứa tham số, x₁² + x₂² theo m)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 - 2mx + 2m - 3 = 0\) (\(m\) là tham số).<br>a) Chứng minh phương trình luôn có hai nghiệm phân biệt \(x_1, x_2\) với mọi \(m\).<br>b) Tính \(A = x_1^2 + x_2^2\) theo \(m\) và tìm \(m\) để \(A = 14\).`,
+      ans: S`a) \(\Delta' = (m - 1)^2 + 2 \gt 0\). b) \(A = 4m^2 - 4m + 6\); \(A = 14 \iff m = 2\) hoặc \(m = -1\).`,
+      barem: [
+        [S`a) \(\Delta' = m^2 - (2m - 3) = (m - 1)^2 + 2 \gt 0\) với mọi \(m\) nên phương trình luôn có hai nghiệm phân biệt`, 0.25],
+        [S`b) Theo định lí Viète: \(S = 2m\), \(P = 2m - 3\)`, 0.25],
+        [S`\(A = S^2 - 2P = 4m^2 - 4m + 6\)`, 0.25],
+        [S`\(A = 14 \iff 4m^2 - 4m - 8 = 0 \iff m^2 - m - 2 = 0 \iff m = 2\) hoặc \(m = -1\)`, 0.25]],
+      loi: ['Viết Δ\' = m² − 2m − 3 (sai dấu)', 'Quên viết thành tổng bình phương cộng số dương'] },
+    { ten: 'Bình phương trừ tổng nghịch đảo', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 6, đề 2: biểu thức chứa x₁² + x₂² và 1/x₁, 1/x₂)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 - 4x + 1 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = x_1^2 + x_2^2 - \dfrac{1}{x_1} - \dfrac{1}{x_2}\).`,
+      ans: S`a) \(\Delta' = (-2)^2 - 1 \cdot 1 = 3 \gt 0\). b) \(A = 10\)`,
+      barem: [
+        [S`a) \(\Delta' = (-2)^2 - 1 \cdot 1 = 3 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = 4\), \(P = x_1 x_2 = 1\)`, 0.25],
+        [S`\(A = (S^2 - 2P) - \dfrac{x_1 + x_2}{x_1x_2} = S^2 - 2P - \dfrac SP\)`, 0.25],
+        [S`\(A = 16 - 2 - 4 = 10\)`, 0.25]],
+      loi: ['Quy đồng 1/x₁ + 1/x₂ sai', 'Nhầm dấu trừ trước phân thức'] },
+    { ten: 'Tích hai biểu thức bậc nhất của nghiệm', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 7, đề 1: biểu thức chứa 2x₁ − x₂, 2x₂ − x₁)', pts: 1, h: 110,
+      de: S`Cho phương trình \(3x^2 - 8x + 2 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = (2x_1 - x_2)(2x_2 - x_1)\).`,
+      ans: S`a) \(\Delta' = (-4)^2 - 3 \cdot 2 = 10 \gt 0\). b) \(A = -\dfrac{74}{9}\)`,
+      barem: [
+        [S`a) \(\Delta' = (-4)^2 - 3 \cdot 2 = 10 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = \dfrac{8}{3}\), \(P = x_1 x_2 = \dfrac{2}{3}\)`, 0.25],
+        [S`\(A = 4x_1x_2 - 2x_1^2 - 2x_2^2 + x_1x_2 = 5P - 2(S^2 - 2P) = 9P - 2S^2\)`, 0.25],
+        [S`\(A = 9 \cdot \dfrac23 - 2 \cdot \dfrac{64}{9} = 6 - \dfrac{128}{9} = -\dfrac{74}{9}\)`, 0.25]],
+      loi: ['Khai triển thiếu một số hạng', 'Viết S² = 64/3'] },
+    { ten: 'Tổng hai phân thức có mẫu x + k', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 3, đề 3: x₁/(x₂ + 2) + x₂/(x₁ + 2))', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 + 3x - 1 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = \dfrac{x_1}{x_2 + 2} + \dfrac{x_2}{x_1 + 2}\).`,
+      ans: S`a) \(\Delta = 3^2 - 4 \cdot 1 \cdot (-1) = 13 \gt 0\). b) \(A = -\dfrac53\)`,
+      barem: [
+        [S`a) \(\Delta = 3^2 - 4 \cdot 1 \cdot (-1) = 13 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = -3\), \(P = x_1 x_2 = -1\)`, 0.25],
+        [S`Tử: \(x_1(x_1 + 2) + x_2(x_2 + 2) = S^2 - 2P + 2S = 5\); mẫu: \((x_2 + 2)(x_1 + 2) = P + 2S + 4 = -3\)`, 0.25],
+        [S`\(A = \dfrac{5}{-3} = -\dfrac53\)`, 0.25]],
+      loi: ['Khai triển mẫu thiếu số 4', 'Quên kiểm tra mẫu khác 0'] },
+    { ten: 'Hiệu hai nghiệm (x₁ > x₂)', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 8, đề 1: biểu thức chứa (x₁ − x₂)²)', pts: 1, h: 110,
+      de: S`Cho phương trình \(5x^2 + 2x - 4 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = x_1 - x_2\) với \(x_1 \gt x_2\).`,
+      ans: S`a) \(\Delta' = 1^2 - 5 \cdot (-4) = 21 \gt 0\). b) \(A = \dfrac{2\sqrt{21}}{5}\)`,
+      barem: [
+        [S`a) \(\Delta' = 1^2 - 5 \cdot (-4) = 21 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = -\dfrac{2}{5}\), \(P = x_1 x_2 = -\dfrac{4}{5}\)`, 0.25],
+        [S`\(A^2 = (x_1 - x_2)^2 = S^2 - 4P = \dfrac{4}{25} + \dfrac{16}{5} = \dfrac{84}{25}\)`, 0.25],
+        [S`\(x_1 \gt x_2\) nên \(A \gt 0\): \(A = \dfrac{\sqrt{84}}{5} = \dfrac{2\sqrt{21}}{5}\)`, 0.25]],
+      loi: ['Lấy cả A = −2√21/5', 'Sai dấu 4P khi P âm'] },
+    { ten: 'Biểu thức không đối xứng chứa số lớn', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 16, đề 2: P = x₁(x₁ + x₂) − x₂ + 2012)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 - x - 5 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(P = x_1^2 + x_2 + 2021\).`,
+      ans: S`a) \(\Delta = (-1)^2 - 4 \cdot 1 \cdot (-5) = 21 \gt 0\). b) \(P = 2027\)`,
+      barem: [
+        [S`a) \(\Delta = (-1)^2 - 4 \cdot 1 \cdot (-5) = 21 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = 1\), \(P = x_1 x_2 = -5\)`, 0.25],
+        [S`\(x_1\) là nghiệm nên \(x_1^2 = x_1 + 5\). Do đó \(P = x_1 + 5 + x_2 + 2021 = S + 2026\)`, 0.25],
+        [S`\(P = 1 + 2026 = 2027\)`, 0.25]],
+      loi: ['Thay x₁² = x₁ − 5', 'Cố tính x₁² + x₂ qua S, P'] },
+    { ten: 'Biểu thức hỗn hợp', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 12, đề 1: biểu thức hỗn hợp)', pts: 1, h: 110,
+      de: S`Cho phương trình \(2x^2 - 9x + 5 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(M = (x_1 - 1)(x_2 - 1) + x_1^2 + x_2^2\).`,
+      ans: S`a) \(\Delta = (-9)^2 - 4 \cdot 2 \cdot 5 = 41 \gt 0\). b) \(M = \dfrac{57}{4}\)`,
+      barem: [
+        [S`a) \(\Delta = (-9)^2 - 4 \cdot 2 \cdot 5 = 41 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = \dfrac{9}{2}\), \(P = x_1 x_2 = \dfrac{5}{2}\)`, 0.25],
+        [S`\(M = x_1x_2 - (x_1 + x_2) + 1 + S^2 - 2P = S^2 - P - S + 1\)`, 0.25],
+        [S`\(M = \dfrac{81}{4} - \dfrac52 - \dfrac92 + 1 = \dfrac{57}{4}\)`, 0.25]],
+      loi: ['Khai triển (x₁ − 1)(x₂ − 1) = P − S − 1', 'Quy đồng sai'] },
+    { ten: 'Tổng bình phương trừ k lần tích', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 16, đề 3: x₁² + x₂² − 3x₁x₂)', pts: 1, h: 110,
+      de: S`Cho phương trình \(3x^2 - 5x - 1 = 0\).<br>a) Chứng minh phương trình có hai nghiệm phân biệt \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(A = x_1^2 + x_2^2 - 3x_1x_2\).`,
+      ans: S`a) \(\Delta = (-5)^2 - 4 \cdot 3 \cdot (-1) = 37 \gt 0\). b) \(A = \dfrac{40}{9}\)`,
+      barem: [
+        [S`a) \(\Delta = (-5)^2 - 4 \cdot 3 \cdot (-1) = 37 \gt 0\) nên phương trình có hai nghiệm phân biệt \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = \dfrac{5}{3}\), \(P = x_1 x_2 = -\dfrac{1}{3}\)`, 0.25],
+        [S`\(A = S^2 - 2P - 3P = S^2 - 5P\)`, 0.25],
+        [S`\(A = \dfrac{25}{9} + \dfrac53 = \dfrac{40}{9}\)`, 0.25]],
+      loi: ['Viết A = S² − P', 'Sai dấu khi P âm'] },
+    { ten: 'Hai nghiệm trái dấu – dùng nghiệm để rút gọn', nguon: 'Tuyển tập đề tham khảo tuyển sinh lớp 10 môn Toán năm 2026 – 2027 sở GD&ĐT TP HCM (Cụm 5, đề 3 và Cụm 9, đề 2: thay x² từ phương trình, số lớn)', pts: 1, h: 110,
+      de: S`Cho phương trình \(x^2 + 2x - 2025 = 0\).<br>a) Chứng minh phương trình có hai nghiệm trái dấu \(x_1, x_2\).<br>b) Không giải phương trình, hãy tính giá trị của biểu thức \(B = (x_1^2 + 2x_1 - 2024)(x_2^2 + 2x_2 + 1)\).`,
+      ans: S`a) \(a \cdot c = 1 \cdot (-2025) = -2025 \lt 0\). b) \(B = 2026\)`,
+      barem: [
+        [S`a) \(a \cdot c = 1 \cdot (-2025) = -2025 \lt 0\) nên phương trình có hai nghiệm trái dấu \(x_1, x_2\)`, 0.25],
+        [S`b) Theo định lí Viète: \(S = x_1 + x_2 = -2\), \(P = x_1 x_2 = -2025\)`, 0.25],
+        [S`\(x_1, x_2\) là nghiệm nên \(x_1^2 + 2x_1 = 2025\), \(x_2^2 + 2x_2 = 2025\)`, 0.25],
+        [S`\(B = (2025 - 2024)(2025 + 1) = 2026\)`, 0.25]],
+      loi: ['Khai triển cả biểu thức rồi tính theo S, P (rất dài, dễ sai)', 'Nhầm x² + 2x = −2025'] },
+  ],
+});
+
+</script>
 <script>/* data/vao-10/luyen-de/ld04-thuc-te-dai-so-hinh-hoc.js */
 /* Luyện đề – Bài 4 (1,0 điểm): toán thực tế đại số – hình học (chu vi, diện tích, vành khăn, hình quạt; lập biểu thức, phương trình).
    Nội dung lớp 9 học kì I (đường tròn, độ dài cung, diện tích hình quạt, hình vành khăn – Chương V; biểu thức, phương trình, bất phương trình bậc nhất – Chương I, II, III).
