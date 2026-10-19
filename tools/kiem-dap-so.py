@@ -372,6 +372,32 @@ D = dac_trung([150, 160, 170, 180, 190, 200], 10, [8, 17, 32, 23, 12, 8]); chk('
 D = dac_trung([3, 6, 9, 12, 15], 3, [20, 55, 45, 30, 10]); chk('GN bài 6: tb, Q3, Mo', (round(float(D[0]), 2), float(D[3]), round(float(D[4]), 2)), (9.66, 12.0, 8.33))
 
 
+# ---------- Luyện đề Bài 1 (data/vao-10/luyen-de/ld01-ham-so-parabol.js): giải lại câu b bằng sympy ----------
+x0_ = sp.symbols('x0', real=True); Q_ = sp.Rational
+def _pts(a, cond, keepO=False):  # mọi điểm (x0; a·x0²) của (P) thỏa cond(x0, y0) = 0, sắp theo x0
+    y = a * x0_ ** 2; r = sorted(set(sp.solve(sp.Eq(cond(x0_, y), 0), x0_)))
+    return [(v, a * v ** 2) for v in r if keepO or v != 0]
+chk('LĐ1 đề 1', _pts(Q_(1, 2), lambda x, y: y - 8), [(-4, 8), (4, 8)])
+chk('LĐ1 đề 2', (-6, Q_(-1, 4) * 36), (-6, -9))
+chk('LĐ1 đề 3', _pts(Q_(-1, 3), lambda x, y: y - x), [(-3, -3)])
+chk('LĐ1 đề 4', _pts(-2, lambda x, y: y - 2 * x), [(-1, -2)])
+chk('LĐ1 đề 5', _pts(Q_(1, 4), lambda x, y: x - 2 * y), [(2, 1)])
+chk('LĐ1 đề 6', _pts(-1, lambda x, y: sp.Abs(y) - sp.Abs(x)), [(-1, -1), (1, -1)])
+chk('LĐ1 đề 7', _pts(Q_(1, 2), lambda x, y: y + x), [(-2, 2)])
+chk('LĐ1 đề 8', _pts(2, lambda x, y: y - (-3 * x + 2), True), [(-2, 8), (Q_(1, 2), Q_(1, 2))])
+chk('LĐ1 đề 9', _pts(Q_(-1, 2), lambda x, y: x + y + 4, True), [(-2, -2), (4, -8)])
+chk('LĐ1 đề 10', _pts(1, lambda x, y: x * y + 27, True), [(-3, 9)])
+chk('LĐ1 đề 11', [(v, Q_(1, 3) * v ** 2) for v in sorted(sp.solve(x0_ ** 2 - x0_ - 6, x0_))], [(-2, Q_(4, 3)), (3, 3)])
+chk('LĐ1 đề 12', _pts(Q_(-1, 4), lambda x, y: y - (x - 3), True), [(-6, -9), (2, -1)])
+chk('LĐ1 đề 13', _pts(3, lambda x, y: y - (5 * x - 2), True), [(Q_(2, 3), Q_(4, 3)), (1, 3)])
+chk('LĐ1 đề 14', _pts(Q_(1, 2), lambda x, y: x ** 2 + y ** 2 - 8, True), [(-2, 2), (2, 2)])
+chk('LĐ1 đề 15', _pts(Q_(-1, 2), lambda x, y: sp.Abs(y) - 2 * sp.Abs(x)), [(-4, -8), (4, -8)])
+chk('LĐ1 đề 16', _pts(2, lambda x, y: y - 18, True), [(-3, 18), (3, 18)])
+chk('LĐ1 đề 17', _pts(Q_(-3, 4), lambda x, y: y - 3 * x), [(-4, -12)])
+chk('LĐ1 đề 18', _pts(Q_(-1, 3), lambda x, y: y - (2 * x - 9), True), [(-9, -27), (3, -3)])
+chk('LĐ1 đề 19', _pts(Q_(1, 4), lambda x, y: y - x, True), [(0, 0), (4, 4)])
+chk('LĐ1 đề 20', (_pts(3, lambda x, y: y - 12, True), _pts(3, lambda x, y: y + 3, True)), ([(-2, 12), (2, 12)], []))
+
 # ---------- Luyện đề Bài 6 (data/vao-10/luyen-de/ld06-he-phuong-trinh-thuc-te.js): giải lại bằng sympy ----------
 a_, b_, T_ = sp.symbols('a b T', positive=True)
 sol = sp.solve([sp.Eq(a_ / 3 + 2 * b_ / 3, T_ + 9), sp.Eq(b_ / 3 + 2 * a_ / 3, T_ + 6), sp.Eq(T_ * (a_ + b_), a_ * b_)], [a_, b_, T_], dict=True)
