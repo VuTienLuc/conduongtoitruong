@@ -2,6 +2,7 @@
 """Xuất bộ đề luyện vào 10 thành tệp PDF A4: de-luyen/<mã chủ đề>/De-01.pdf … De-10.pdf
 (trang 1: đề + khung ô li; [trang Gợi ý từng nấc nếu đề có]; trang cuối: đáp án – hướng dẫn chấm).
 Bộ có Thẻ công cụ: thêm de-luyen/the-cong-cu-hinh-hoc.pdf (1 trang).
+Ngữ văn vào 10: de-luyen/ngu-van/De-<mã>.pdf (đề → bài làm có gợi ý → hướng dẫn chấm); chỉ xuất phần này: python3 tools/xuat-de-pdf.py ngu-van
 Chạy: python3 tools/xuat-de-pdf.py [mã chủ đề …]   (cần Playwright + Chromium; tự mở máy chủ tĩnh tạm).
 Kiểm tra luôn: mỗi tệp đúng số trang (2, hoặc 3 nếu có gợi ý), không lỗi công thức (mjx-merror)."""
 import asyncio, os, re, sys, threading, functools, http.server, socketserver
@@ -55,6 +56,19 @@ async def main(only):
                 await pg.pdf(path=f, format='A4', prefer_css_page_size=True, print_background=True)
                 if pages(f) != 1: fails.append(f'Thẻ công cụ: {pages(f)} trang (cần 1)')
                 the_done = True; print('Thẻ công cụ: de-luyen/the-cong-cu-hinh-hoc.pdf')
+        # Ngữ văn vào 10: mỗi đề một PDF (đề → bài làm có gợi ý → hướng dẫn chấm), mức gợi ý tự động theo thứ tự đề
+        if not only or 'ngu-van' in only:
+            mas = await pg.evaluate("typeof Van !== 'undefined' ? Van.list().map(e => e.ma) : []")
+            os.makedirs(os.path.join(OUT, 'ngu-van'), exist_ok=True)
+            for ma in mas:
+                await pg.evaluate('''ma => { let r = document.getElementById('print-root');
+                    if (!r) { r = document.createElement('div'); r.id = 'print-root'; document.body.appendChild(r); }
+                    r.innerHTML = Van.sheetHTML(Van.get(ma)); document.body.classList.add('printing'); }''', ma)
+                await pg.evaluate("MathTS.done(document.getElementById('print-root'))")
+                f = os.path.join(OUT, 'ngu-van', f'De-{ma}.pdf')
+                await pg.pdf(path=f, format='A4', prefer_css_page_size=True, print_background=True)
+                if pages(f) < 3: fails.append(f'Ngữ văn đề {ma}: chỉ {pages(f)} trang (cần đề + bài làm + hướng dẫn chấm)')
+            if mas: print(f'ngu-van: đã xuất {len(mas)} tệp PDF vào de-luyen/ngu-van/')
         await b.close()
     srv.shutdown()
     for x in fails: print('✗', x)

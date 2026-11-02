@@ -47,6 +47,7 @@ async def main():
             ld = await pg.evaluate("LuyenDe.ids().map(i => [i, LuyenDe.get(i).de.length])")
             routes += [f'#/cd/{i}/de/{k}' for i, n in ld for k in range(2, n + 1)]
             routes += [f'#/cd/{i}/de/{s}' for i in await pg.evaluate("LuyenDe.ids().filter(i => LuyenDe.get(i).the)") for s in ('the', 'tuduy')]
+            routes += ['#/van-10', '#/van-10/phuong-phap', '#/xuong', '#/xuong/prompt', '#/xuong/nhap'] + [f'#/van-10/de/{m}' for m in await pg.evaluate("Van.list().map(e => e.ma)")]
             routes += [r for g, i, nb in vdc for r in [f'#/{g}/{i}', f'#/{g}/{i}/phieu'] + [f'#/{g}/{i}/lg/{k}' for k in range(1, nb + 1)]]
             for r in routes:
                 await pg.goto(base + r)
@@ -92,6 +93,19 @@ async def main():
             if xep_ok != 2: fails.append(f'{i} luyện tư duy: câu sắp xếp đúng thứ tự nhưng chấm {xep_ok}/2')
             if not await pg.locator('#tdSum').is_visible(): fails.append(f'{i} luyện tư duy: không hiện tổng kết')
             if not await pg.evaluate("Object.keys(JSON.parse(localStorage.getItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':ld:tuduy')).days).length"): fails.append(f'{i} luyện tư duy: không lưu ngày luyện')
+        # Xưởng dữ liệu: menu prompt ra đủ hướng dẫn và lệnh cho cả hai loại; nhập câu trả lời AI mẫu (lỗi dấu \, $…$, trích dẫn) → đúng mẫu, xem trước sạch.
+        await pg.goto(base + '#/xuong/prompt'); await pg.wait_for_timeout(200)
+        for loai in ('van', 'toan'):
+            await pg.locator(f'[name=xLoai][value={loai}]').check(); await pg.wait_for_timeout(100)
+            n = await pg.evaluate("[...document.querySelectorAll('#xOut textarea')].filter(t => t.value.length > 80).length")
+            if n < 3: fails.append(f'menu prompt {loai}: chỉ có {n} ô prompt')
+            if loai == 'van' and not await pg.evaluate("document.querySelector('#xHd').value.includes('truoc_1929')"): fails.append('hướng dẫn Gem Ngữ văn thiếu quy định ngữ liệu')
+        mau = open(os.path.join(ROOT, 'docs/mau-nhap/toan-bai3-cau-tra-loi-ai.txt'), encoding='utf-8').read()
+        await pg.goto(base + '#/xuong/nhap'); await pg.wait_for_timeout(200)
+        await pg.fill('#nIn', mau); await pg.click('#nGo'); await pg.wait_for_timeout(500)
+        await pg.evaluate("MathTS.done(document.getElementById('nOut'))")
+        r = await pg.evaluate(r"({ ok: document.querySelectorAll('.xw-res.ok').length, merr: document.querySelectorAll('#nOut mjx-merror').length, pages: document.querySelectorAll('#nOut .sh-page').length, raw: /\\\(|\$/.test(document.querySelector('#nOut .paper-wrap').innerText) })")
+        if r['ok'] != 1 or r['merr'] or r['pages'] < 4 or r['raw']: fails.append(f'nhập dữ liệu mẫu Toán: {r}')
         for i in ids:
             # Trắc nghiệm: chọn phương án A mọi câu, điểm phải bằng số câu chọn đúng.
             await pg.goto(base + f'#/cd/{i}/hieu'); await pg.wait_for_timeout(200)

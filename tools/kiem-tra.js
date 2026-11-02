@@ -21,7 +21,7 @@ const load = f => {
   if (/\bTODO\b|\bFIXME\b|phần còn lại giữ nguyên/.test(code)) err(f, 'còn chỗ làm tắt (TODO/FIXME/phần còn lại)');
   // Công thức trong chuỗi nháy đơn bị mất dấu \ khi chạy: phải viết bằng S`…`.
   if (f.startsWith('data/')) code.split('\n').forEach((l, i) => { if (/(^|[\s,(:\[])'[^'`]*\\[(\[][^'`]*'/.test(l)) err(`${f}:${i + 1}`, 'công thức \\( \\) trong chuỗi thường – dùng S`…`'); });
-  try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.LuyenDe = typeof LuyenDe !== 'undefined' ? LuyenDe : globalThis.LuyenDe; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc;`, ctx, { filename: f }); }
+  try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.LuyenDe = typeof LuyenDe !== 'undefined' ? LuyenDe : globalThis.LuyenDe; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc; globalThis.NhapDL = typeof NhapDL !== 'undefined' ? NhapDL : globalThis.NhapDL; globalThis.Van = typeof Van !== 'undefined' ? Van : globalThis.Van;`, ctx, { filename: f }); }
   catch (e) { err(f, 'lỗi khi chạy – ' + e.message); }
 };
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -139,7 +139,8 @@ let nLD = 0;
 if (ctx.LuyenDe) ctx.LuyenDe.ids().forEach(id => {
   const L = ctx.LuyenDe.get(id), W = `Luyện đề ${id}`;
   if (!ids.has(id)) err(W, 'không có chủ đề vào 10 mã này');
-  if (!L.de || !L.de.length || L.de.length % 10) err(W, `số đề phải là bội của 10 (đang có ${(L.de || []).length})`);
+  const goc = (L.de || []).filter(d => !d.nhap);   // đề soạn sẵn; đề nhập từ AI (nhap) được thêm số lượng bất kì
+  if (!L.de || !L.de.length || (goc.length && goc.length % 10)) err(W, `số đề soạn sẵn phải là bội của 10 (đang có ${goc.length})`);
   (L.de || []).forEach((d, i) => {
     const w = `${W} › đề ${i + 1}`; nLD++;
     ['ten', 'nguon', 'de', 'ans'].forEach(k => { if (!d[k]) err(w, `thiếu ${k}`); });
@@ -149,7 +150,7 @@ if (ctx.LuyenDe) ctx.LuyenDe.ids().forEach(id => {
     (d.barem || []).forEach(b => { if (!near(b[1] * 4, Math.round(b[1] * 4))) err(w, `điểm ${b[1]} không là bội 0,25`); checkStr(w, b[0]); });
     [d.de, d.ans, d.ten, ...(d.loi || [])].forEach(x => checkStr(w, x));
     if (d.goi) { if (d.goi.length !== 3) err(w, 'gợi ý phải đủ 3 nấc (Nhận dạng, Hướng đi, Khung lời giải)'); d.goi.forEach(x => checkStr(w + ' › gợi ý', x)); }
-    if (L.the) {
+    if (L.the && !d.nhap) {
       if (!d.cc || !d.cc.length || !d.q || !d.ch) err(w, 'bộ có Thẻ công cụ: mỗi đề cần cc, q, ch');
       (d.cc || []).forEach(c => { if (!L.the.some(x => x.id === c)) err(w, `mã công cụ không có trong Thẻ: ${c}`); });
     }
@@ -158,6 +159,12 @@ if (ctx.LuyenDe) ctx.LuyenDe.ids().forEach(id => {
   if (L.giam && !(L.giam.length === 2 && L.giam[0] < L.giam[1])) err(W, 'giam phải là [k1, k2] với k1 < k2');
 });
 
+// 2c) Dữ liệu nhập từ AI (data/nhap/*.js): cùng bộ kiểm với web; chuỗi đã chuẩn hoá phải sạch công thức, thẻ HTML.
+let nNhap = 0;
+if (ctx.NhapDL) ctx.NhapDL.items.forEach(x => { nNhap++; const W = `Nhập ${x.file || ''}`; x.r.errs.forEach(e => err(W, e)); });
+const walkStr = (w, v) => { if (typeof v === 'string') checkStr(w, v); else if (v && typeof v === 'object') Object.values(v).forEach(y => walkStr(w, y)); };
+if (ctx.Van) ctx.Van.list().forEach(e => walkStr(`Ngữ văn đề ${e.ma}`, e));
+
 // 3) Liên kết trong app.js trỏ tới chủ đề có thật.
 const app = fs.readFileSync(path.join(ROOT, 'assets/js/app.js'), 'utf8');
 const used = new Set([...app.matchAll(/\[('[a-z0-9-]+'(?:,\s*'[a-z0-9-]+')*)\]\]/g)].flatMap(m => m[1].split(',').map(s => s.trim().replace(/'/g, ''))));
@@ -165,6 +172,7 @@ const used = new Set([...app.matchAll(/\[('[a-z0-9-]+'(?:,\s*'[a-z0-9-]+')*)\]\]
 used.forEach(id => { if (id && !/^lop\d+$/.test(id) && !ids.has(id)) err('app.js', `liên kết tới chủ đề không có: ${id}`); });
 
 console.log(`Ôn thi vào 10: ${T.length} chủ đề, ${sum(T.map(t => t.quiz.length))} câu trắc nghiệm, ${sum(T.map(t => t.models.length))} bài mẫu, ${sum(T.map(t => t.practice.length))} bài tự luyện, ${nLD} đề luyện (${ctx.LuyenDe ? ctx.LuyenDe.ids().length : 0} chủ đề).`);
+console.log(`Ngữ văn vào 10: ${ctx.Van ? ctx.Van.list().length : 0} đề · dữ liệu nhập từ AI: ${nNhap} tệp.`);
 console.log(`Lớp 10–12 (VD–VDC): ${V.length} chủ đề, ${sum(V.map(t => t.dang.length))} dạng, ${sum(V.map(t => sum(t.dang.map(d => d.bt.length))))} bài tương tự.`);
 warns.forEach(w => console.log('! ' + w));
 if (errs.length) { errs.forEach(e => console.log(e)); console.log(`KẾT QUẢ: CHƯA ĐẠT ✗ (${errs.length} lỗi)`); process.exit(1); }

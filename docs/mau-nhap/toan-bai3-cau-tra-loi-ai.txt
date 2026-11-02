@@ -1,0 +1,16 @@
+Dưới đây là 2 đề luyện Bài 3 theo yêu cầu của thầy [1]:
+```json
+{"loai":"luyen_de_toan","bai":3,
+ "de":[{"ten":"Gieo xúc xắc – liệt kê không gian mẫu","nguon":"Tuyển tập đề tham khảo 2026 – 2027 (Cụm 1, đề 1: gieo xúc xắc)","diem":1.5,
+   "de":"Gieo một con xúc xắc cân đối và đồng chất hai lần liên tiếp.\na) Mô tả không gian mẫu và cho biết số phần tử của không gian mẫu.\nb) Tính xác suất của biến cố A: \"Tổng số chấm hai lần gieo nhỏ hơn 5\" [2].",
+   "dap_so":"a) $n(\Omega) = 36$; b) $P(A) = \dfrac{1}{6}$",
+   "loi_giai":[{"buoc":"a) $\Omega = \{(i; j) \mid 1 \le i, j \le 6\}$, với $i, j$ là số chấm lần 1, lần 2","diem":0.5},{"buoc":"$n(\Omega) = 6 \cdot 6 = 36$","diem":0.25},
+     {"buoc":"b) Kết quả thuận lợi (tổng < 5): $(1;1), (1;2), (2;1), (1;3), (3;1), (2;2)$, có 6 kết quả","diem":0.5},{"buoc":"$P(A) = \frac{6}{36} = \frac{1}{6}$","diem":0.25}],
+   "loi_hay_sai":["Quên cặp có thứ tự như (1;2) và (2;1) là hai kết quả khác nhau"]},
+  {"ten":"Bảng số liệu – xác suất thực nghiệm","nguon":"Đề tuyển sinh 2026 – 2027, Bài 3","diem":1.5,
+   "de":"Kết quả khảo sát số giờ tự học mỗi ngày của 40 học sinh lớp 9 cho bởi bảng sau.\na) Có bao nhiêu học sinh tự học từ 3 giờ trở lên?\nb) Chọn ngẫu nhiên một học sinh. Tính xác suất học sinh đó tự học dưới 2 giờ.",
+   "bang":[["Số giờ","1","2","3","4"],["Số học sinh","6","14","12","8"]],
+   "dap_so":"a) 20 học sinh; b) $\\dfrac{3}{20}$",
+   "loi_giai":[{"buoc":"a) Số học sinh tự học từ 3 giờ trở lên: $12 + 8 = 20$","diem":0.5},{"buoc":"b) Không gian mẫu có 40 kết quả đồng khả năng","diem":0.25},{"buoc":"Có 6 học sinh tự học dưới 2 giờ (1 giờ)","diem":0.25},{"buoc":"$P = \\dfrac{6}{40} = \\dfrac{3}{20}$","diem":0.5}],
+   "loi_hay_sai":["Tính cả học sinh tự học đúng 2 giờ vào \"dưới 2 giờ\""]}]}
+```

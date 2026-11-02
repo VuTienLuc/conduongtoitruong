@@ -351,3 +351,55 @@ table.ld-the.full{font-size:10.5pt}
 .td-pick li,.td-right li{margin:2px 0}
 .td-fb{margin-top:6px;font-size:15px}
 .td-fb .muted{color:var(--muted)}
+/* Ngữ văn vào 10 (van.js) */
+.van-phan{font:700 12pt/1.3 "Times New Roman",serif;margin:10px 0 4px;letter-spacing:.3px}
+.van-vb{border:1px solid #888;border-radius:6px;padding:6px 14px;margin:4px 0 8px;font-size:11.5pt;break-inside:avoid}
+.van-vb-ten{text-align:center;font-weight:700;margin:2px 0 4px}
+.van-tho{display:flex;flex-direction:column;align-items:center}
+.van-tho p{margin:0 0 6px;line-height:1.55}
+.van-xuoi p{text-indent:1.2em;margin:0 0 4px;text-align:justify}
+.van-vb-tg{text-align:right;font-style:italic;margin:2px 0}
+.van-ct{font-size:10pt;font-style:italic;margin:2px 0}
+.van-cau{padding-left:0;list-style:none;margin:4px 0}
+.van-cau li{margin:3px 0}
+.van-het{text-align:center;font-style:italic;margin-top:10px}
+.van-q{margin:6px 0 8px}
+.van-q > p{margin:0 0 2px}
+.van-tip{font-size:10.5pt;margin:1px 0;color:#333}
+.van-mau{font-size:10.5pt;margin:1px 0}
+.van-khung{font-size:10.5pt;margin:2px 0;padding-left:20px}
+.van-dy{font-size:10.5pt;border:1px dashed #777;border-radius:6px;padding:4px 10px;margin:2px 0}
+.van-dy p,.van-dy ol{margin:2px 0}
+.van-tu{font-size:10.5pt;margin:3px 0}
+.van-barem th{border:1px solid #888;padding:3px 6px;background:#f0f0f0}
+.van-row-h td{background:#f6f6f6}
+.van-row-p td{background:#e9e9e9}
+/* Xưởng dữ liệu (xuong.js) */
+.xw-foot{text-align:center;margin:18px 0 0;font-size:15px}
+.xw-steps{padding-left:22px}
+.xw-steps li{margin:4px 0}
+.xw-box{margin:12px 0}
+.xw-h{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0}
+.xw-ta{width:100%;font:14px/1.5 var(--f-body);border:1.5px solid var(--grid);border-radius:10px;padding:8px;background:var(--surface);color:var(--ink);resize:vertical}
+.xw-form label{display:flex;flex-direction:column;gap:4px;font-size:15px;font-weight:600}
+.xw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:10px 0}
+.xw-grid[hidden]{display:none}
+.xw-form input:not([type=radio]):not([type=checkbox]),.xw-form select{font:inherit;font-size:16px;padding:8px 10px;border:1.5px solid var(--grid);border-radius:10px;background:var(--surface);color:var(--ink);min-height:44px}
+.xw-wide{margin:8px 0}
+.xw-drop textarea{width:100%;font:14px/1.5 var(--f-body);border:2px dashed var(--grid);border-radius:12px;padding:10px;background:var(--surface);color:var(--ink)}
+.xw-drop.on textarea{border-color:var(--primary)}
+.xw-res.bad{border-color:var(--bad)}
+.xw-res.ok{border-color:var(--ok)}
+.xw-err li{color:var(--bad)}
+.xw-warn li{color:var(--warn)}
+.xw-list{list-style:none;padding:0;margin:0}
+.xw-list li{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--grid)}
+.xw-list .btn{min-height:40px;padding:6px 14px}
+.xw-pre summary{cursor:pointer;font-weight:700;margin:8px 0}
+.ld-may{font-style:normal;font-weight:600;font-size:12px;color:var(--muted)}
+.ld-hinh{font-size:11pt;border-left:3px solid #999;padding-left:8px}
+.van-barem td:first-child{width:52px;white-space:nowrap}
+.td-card{min-width:0;overflow-wrap:anywhere}
+.td-step,.td-opt{min-width:0;width:100%}
+.td-card mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+.xw-form label.tog{flex-direction:row;align-items:center;gap:8px;font-weight:600}
