@@ -423,6 +423,7 @@ table.ld-the.full{font-size:10.5pt}
 .ot-goi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px 14px;font-size:10.5pt;border:1px dashed #777;border-radius:6px;padding:5px 9px}
 .ot-goi p{margin:1px 0}
 .ld-ot{margin:6px 0;font-weight:600}
+.ot-can{font-size:10pt;font-style:italic;margin:1px 0 2px;color:#333}
 
 </style>
 </head>
@@ -3732,9 +3733,9 @@ const OnTap = (() => {
     return `<section class="sh-page ot-page">${head('CON ĐƯỜNG TỚI TRƯỜNG · PHIẾU ÔN TẬP TOÁN VÀO 10', `${esc(e.ma)} · đợt ${e.dot}`)}
       <h1 class="sh-title">PHIẾU ÔN TẬP ${e.phut} PHÚT</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]} · từ cơ bản đến nâng cao</p>
       <p class="sh-info">Họ và tên: ........................................................ Lớp: .............. Ngày: ......../......../........ Thời gian bắt đầu: ............</p>
-      ${e.muc_tieu.length || e.kt.length ? `<div class="sh-remind ot-kt">${e.muc_tieu.length ? `<p><b>Mục tiêu:</b> ${e.muc_tieu.join('; ')}.</p>` : ''}${e.kt.length ? `<b>Nhắc nhanh:</b><ul>${e.kt.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}</div>` : ''}
+      ${e.muc_tieu.length || e.kt.length ? `<div class="sh-remind ot-kt">${e.muc_tieu.length ? `<p><b>Mục tiêu:</b> ${e.muc_tieu.join('; ')}.</p>` : ''}${e.kt.length ? `<b>Kiến thức cần nhớ:</b><ul>${e.kt.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}</div>` : ''}
       ${e.phan.map((p, k) => `<h2 class="sh-h">PHẦN ${CHU[k]} – ${p.muc.toUpperCase()} (${p.phut} phút)</h2>
-        ${p.bai.map(b => `<div class="sh-q"><div class="sh-de"><b>Bài ${b.so}.</b> ${b.de}</div>${lines(b.dong)}</div>`).join('')}`).join('')}
+        ${p.bai.map(b => `<div class="sh-q"><div class="sh-de"><b>Bài ${b.so}.</b> ${b.de}</div>${b.can ? `<p class="ot-can">🔑 Cần nhớ: ${b.can}</p>` : ''}${lines(b.dong)}</div>`).join('')}`).join('')}
       ${goi.length ? `<div class="sh-hints"><h2 class="sh-h">GỢI Ý – CHỈ XEM KHI BÍ</h2><div class="ot-goi">${goi.map(b => `<p><b>Bài ${b.so}:</b> ${b.goi}</p>`).join('')}</div></div>` : ''}
       <div class="sh-check"><b>Tự đánh giá:</b>${(e.tdg.length ? e.tdg : ['Làm hết phần Cơ bản trong thời gian', 'Trình bày đủ bước, có kết luận', 'Đánh dấu bài sai để làm lại sau 3 ngày']).map(x => `<span>☐ ${x}</span>`).join('')}
         <span>Thời gian làm: ............ phút · Số bài đúng: ......../${allBai(e).length}</span></div></section>`;
@@ -3742,7 +3743,7 @@ const OnTap = (() => {
   function pageLoiGiai(e) {
     return `<section class="sh-page ot-page">${head('ĐÁP ÁN – LỜI GIẢI', `${esc(e.ma)} · đợt ${e.dot}`)}<h1 class="sh-title">LỜI GIẢI PHIẾU ÔN TẬP</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]}</p>
       ${e.phan.map((p, k) => `<h2 class="sh-h">PHẦN ${CHU[k]} – ${p.muc.toUpperCase()}</h2>${p.bai.map(b => `<div class="sh-vd"><p><b>Bài ${b.so}.</b> <b>Đáp số:</b> ${b.dap}</p>
-        <ol class="sh-lg">${b.lg.map(x => `<li>${x}</li>`).join('')}</ol>${b.nguon ? `<p class="ld-src">Nguồn: ${b.nguon}</p>` : ''}</div>`).join('')}`).join('')}</section>`;
+        ${b.can ? `<p class="ot-can">🔑 Kiến thức dùng: ${b.can}</p>` : ''}<ol class="sh-lg">${b.lg.map(x => `<li>${x}</li>`).join('')}</ol>${b.nguon ? `<p class="ld-src">Nguồn: ${b.nguon}</p>` : ''}</div>`).join('')}`).join('')}</section>`;
   }
   const sheetHTML = (e, o = {}) => `<div class="sheet math ot-sheet">${pagePhieu(e)}${o.key ? pageLoiGiai(e) : ''}</div>`;
 
@@ -3753,10 +3754,10 @@ const OnTap = (() => {
     const L = [`---`, `loai: on_tap_toan`, `ma: ${e.ma}`, `bai: ${e.bai}`, `chu_de: ${plain(e.chu_de || TEN[e.bai])}`, `dot: ${e.dot}`, `thoi_gian: ${e.phut}`, `---`, '',
       `# Phiếu ôn tập ${e.phut} phút – ${plain(e.chu_de || TEN[e.bai])} (đợt ${e.dot})`, ''];
     if (e.muc_tieu.length) L.push('## Mục tiêu', ...e.muc_tieu.map(x => `- ${plain(x)}`), '');
-    if (e.kt.length) L.push('## Nhắc nhanh kiến thức', ...e.kt.map(x => `- ${plain(x)}`), '');
+    if (e.kt.length) L.push('## Kiến thức cần nhớ', ...e.kt.map(x => `- ${plain(x)}`), '');
     e.phan.forEach((p, k) => {
       L.push(`## Phần ${CHU[k]} – ${plain(p.muc)} (${p.phut} phút)`, '');
-      p.bai.forEach(b => { L.push(`### Bài ${b.so}`, plain(b.de)); if (b.nguon) L.push(`*Nguồn:* ${plain(b.nguon)}`); if (b.goi) L.push(`> Gợi ý: ${plain(b.goi)}`); L.push(`*Dòng kẻ:* ${b.dong}`, ''); });
+      p.bai.forEach(b => { L.push(`### Bài ${b.so}`, plain(b.de)); if (b.nguon) L.push(`*Nguồn:* ${plain(b.nguon)}`); if (b.can) L.push(`*Cần nhớ:* ${plain(b.can)}`); if (b.goi) L.push(`> Gợi ý: ${plain(b.goi)}`); L.push(`*Dòng kẻ:* ${b.dong}`, ''); });
     });
     if (e.tdg.length) L.push('## Tự đánh giá', ...e.tdg.map(x => `- [ ] ${plain(x)}`), '');
     L.push('## Đáp án và lời giải', '');
@@ -3892,7 +3893,7 @@ const NhapDL = (() => {
       const l = raw.replace(/\s+$/, ''); let m;
       if ((m = l.match(/^##\s+(.*)$/))) {
         const h = m[1]; cur = null;
-        if (/^Mục tiêu/i.test(h)) sec = 'mt'; else if (/^Nhắc nhanh/i.test(h)) sec = 'kt'; else if (/^Tự đánh giá/i.test(h)) sec = 'tdg';
+        if (/^Mục tiêu/i.test(h)) sec = 'mt'; else if (/^(Nhắc nhanh|Kiến thức cần nhớ)/i.test(h)) sec = 'kt'; else if (/^Tự đánh giá/i.test(h)) sec = 'tdg';
         else if (/^Đáp án/i.test(h)) sec = 'da';
         else if ((m = h.match(/^Phần\s+\S+\s*[–-]\s*(.+?)\s*\((\d+)\s*phút\)/i))) { sec = 'ph'; phan = { muc: m[1].trim(), phut: +m[2], bai: [] }; j.phan.push(phan); }
         else sec = '';
@@ -3909,6 +3910,7 @@ const NhapDL = (() => {
       else if (sec === 'tdg' && (m = l.match(/^[-*]\s+(?:\[[ x]\]\s*)?(.*)/))) j.tu_danh_gia.push(m[1]);
       else if (sec === 'ph' && cur) {
         if ((m = l.match(/^\*Nguồn:\*\s*(.*)/i))) cur.nguon = m[1];
+        else if ((m = l.match(/^\*Cần nhớ:\*\s*(.*)/i))) cur.can_nho = m[1];
         else if ((m = l.match(/^>\s*Gợi ý:\s*(.*)/i))) cur.goi_y = m[1];
         else if ((m = l.match(/^\*Dòng kẻ:\*\s*(\d+)/i))) cur.dong_ke = +m[1];
         else if (l.trim()) cur.de += (cur.de ? '\n' : '') + l.trim();
@@ -3971,6 +3973,7 @@ const NhapDL = (() => {
       if (!j.ma) errs.push('Thiếu "ma" (mã phiếu)');
       const ph = Array.isArray(j.phan) ? j.phan : [], tg = +j.thoi_gian || 90;
       if (ph.length < 2) errs.push('Cần ít nhất 2 phần (Cơ bản → Nâng cao) trong "phan"');
+      if ((Array.isArray(j.kien_thuc) ? j.kien_thuc.filter(Boolean).length : 0) < 3) errs.push('Thiếu mục "kien_thuc": cần nhắc lại ít nhất 3 kiến thức cần nhớ để làm các bài trong phiếu');
       const all = [];
       ph.forEach((p, k) => {
         if (!p.muc) errs.push(`Phần ${k + 1}: thiếu "muc"`); if (!(+p.phut > 0)) errs.push(`Phần ${k + 1}: thiếu "phut"`);
@@ -3979,6 +3982,7 @@ const NhapDL = (() => {
           if (!b.de) errs.push(`${w}: thiếu "de"`); if (!b.dap_so) errs.push(`${w}: thiếu "dap_so"`);
           if (!(Array.isArray(b.loi_giai) ? b.loi_giai.length : b.loi_giai)) errs.push(`${w}: thiếu "loi_giai"`);
           if (!b.nguon) warns.push(`${w}: chưa ghi "nguon"`);
+          if (!b.can_nho) warns.push(`${w}: chưa ghi "can_nho" (kiến thức cần nhớ của bài)`);
           all.push({ w, f: fp(b.de), nguon: b.nguon });
         });
         if (!(p.bai || []).length) errs.push(`Phần ${k + 1}: chưa có bài nào`);
@@ -4060,7 +4064,7 @@ const NhapDL = (() => {
     return { ma: String(j.ma), bai, id: BAI[bai], chu_de: norm(j.chu_de), dot: +j.dot || 1, phut: +j.thoi_gian || 90, src,
       muc_tieu: normArr(j.muc_tieu), kt: normArr(j.kien_thuc), tdg: normArr(j.tu_danh_gia),
       phan: (j.phan || []).map(p => ({ muc: norm(p.muc), phut: +p.phut, bai: (p.bai || []).map(b => ({ so: ++so, de: norm(b.de), f: fp(b.de),
-        nguon: norm(b.nguon), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
+        nguon: norm(b.nguon), can: norm(b.can_nho), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
   }
   function apply(j, src) {
     const r = check(j);
@@ -4205,9 +4209,9 @@ Sai ở đâu thì sửa rồi mới xuất.`;
 
   const MAU_ONTAP = S`{"loai":"on_tap_toan","ma":"OT-B3-02","bai":3,"chu_de":"Bài 3 – Xác suất","dot":2,"thoi_gian":90,
  "muc_tieu":["mục tiêu ngắn của buổi ôn"],
- "kien_thuc":["nhắc nhanh kiến thức, công thức dùng trong phiếu, ví dụ $P(A) = \\dfrac{n(A)}{n(\\Omega)}$"],
+ "kien_thuc":["Tên kiến thức: phát biểu đúng SGK, công thức, ví dụ Xác suất của biến cố: $P(A) = \\dfrac{n(A)}{n(\\Omega)}$ khi các kết quả đồng khả năng – Lưu ý: …","(4–8 mục, đủ để làm mọi bài trong phiếu)"],
  "phan":[
-  {"muc":"Cơ bản","phut":25,"bai":[{"so":1,"de":"đề bài, các ý xuống dòng bằng \n","nguon":"tên tài liệu trong notebook – đề/cụm – bài số","goi_y":"gợi ý phương pháp, không lộ đáp số","dong_ke":6,
+  {"muc":"Cơ bản","phut":25,"bai":[{"so":1,"de":"đề bài, các ý xuống dòng bằng \n","nguon":"tên tài liệu trong notebook – đề/cụm – bài số","can_nho":"kiến thức cần nhớ để làm bài này (tên định lí, công thức)","goi_y":"gợi ý phương pháp, không lộ đáp số","dong_ke":6,
     "dap_so":"đáp số ngắn","loi_giai":["bước 1 …","bước 2 …"]}]},
   {"muc":"Khá","phut":35,"bai":[…]},
   {"muc":"Nâng cao","phut":25,"bai":[…]}],
@@ -4226,14 +4230,16 @@ thoi_gian: 90
 ## Mục tiêu
 - …
 
-## Nhắc nhanh kiến thức
-- …
+## Kiến thức cần nhớ
+- Tên kiến thức: phát biểu, công thức – Lưu ý: …
+- (4–8 mục, đủ để làm mọi bài trong phiếu)
 
 ## Phần A – Cơ bản (25 phút)
 
 ### Bài 1
 Đề bài (công thức trong $...$)
 *Nguồn:* tên tài liệu – đề/cụm – bài số
+*Cần nhớ:* kiến thức dùng cho bài này
 > Gợi ý: …
 *Dòng kẻ:* 6
 
@@ -4261,7 +4267,13 @@ CÁCH LẬP PHIẾU
 3. Lệnh ghi "giữ nguyên đề gốc" thì chép đúng đề và ghi nguồn CHÍNH XÁC (tên tài liệu – đề số/cụm – bài số); lệnh ghi "đổi số liệu" thì đổi số liệu, bối cảnh và vẫn ghi nguồn dạng tham khảo.
 4. MỖI ĐỢT PHẢI KHÁC các đợt trước: không lấy lại bài nào trong danh sách "Đã dùng" của lệnh, kể cả bài giống hệt nhưng ở tài liệu khác; ưu tiên tài liệu và dạng bài chưa dùng.
 5. Mỗi bài có "goi_y" (một câu, không lộ đáp số), "dong_ke" (số dòng kẻ để làm, 4–14), "dap_so" ngắn và "loi_giai" chia bước như bài thi.
-6. "kien_thuc": chỉ nhắc kiến thức, công thức thật sự dùng trong phiếu; "tu_danh_gia": điều học sinh tự kiểm sau buổi ôn.
+6. "tu_danh_gia": điều học sinh tự kiểm sau buổi ôn.
+
+KIẾN THỨC CẦN NHỚ (bắt buộc, đặt đầu phiếu)
+- Nhắc lại ĐẦY ĐỦ kiến thức cần nhớ để làm được MỌI bài trong phiếu: định nghĩa, định lí, tính chất, công thức, quy tắc, cách trình bày; đúng thuật ngữ và kí hiệu SGK Toán 9 (GDPT 2018) trong nguồn.
+- 4–8 mục, xếp theo thứ tự dùng trong phiếu; mỗi mục: tên kiến thức – phát biểu ngắn gọn hoặc công thức – lưu ý hay sai (nếu có).
+- Chủ đề hình học: chỉ nhắc kiến thức được dùng trực tiếp theo quy định chấm thi; kiến thức phải chứng minh lại thì ghi rõ "phải chứng minh lại".
+- Mỗi bài có "can_nho": chỉ ra kiến thức nào trong mục trên dùng cho bài đó (một dòng).
 
 ${md ? S`ĐẦU RA BẮT BUỘC (MARKDOWN)
 - Chỉ trả lời bằng MỘT khối code ${BT}markdown duy nhất. Không viết chữ nào trước hay sau khối code. Không dùng Canvas. Không chèn số trích dẫn [1].
@@ -4278,6 +4290,7 @@ TỰ KIỂM trước khi xuất
 1. Giải lại từng bài, đối chiếu đáp số với lời giải trong nguồn (nếu có).
 2. Đúng chủ đề, đúng số bài và số phút từng phần; độ khó tăng dần.
 3. Không bài nào trùng danh sách "Đã dùng", không hai bài trùng nhau trong phiếu.
+4. Mục kiến thức cần nhớ đủ để làm mọi bài; mỗi bài có "can_nho".
 Sai ở đâu thì sửa rồi mới xuất.`;
 
   const SUA = (loai, loi) => S`Câu trả lời vừa rồi chưa đúng mẫu hoặc còn lỗi. Giữ nguyên nội dung vừa soạn (không đổi văn bản, số liệu), sửa các lỗi sau rồi viết lại TOÀN BỘ thành MỘT khối ${BT}json đúng mẫu:
@@ -4304,6 +4317,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
     const soat = 90 - o.p1 - o.p2 - o.p3;
     return [`Phiếu ôn tập 90 phút | Chủ đề: ${b[1]} (${PT(b[2])} điểm trong đề tuyển sinh) | Đợt: ${dot} | Mã: ${ma} | Định dạng: ${o.dd === 'md' ? 'Markdown' : 'JSON'}`,
       'Tìm trong notebook các bài tập đúng chủ đề này, xếp từ cơ bản đến nâng cao:',
+      '- Đầu phiếu: nhắc lại đầy đủ kiến thức cần nhớ để làm các bài này (định nghĩa, định lí, công thức, lưu ý hay sai); mỗi bài ghi kiến thức cần nhớ của bài đó.',
       `- Phần A – Cơ bản: ${o.n1} bài, ${o.p1} phút`, `- Phần B – Khá: ${o.n2} bài, ${o.p2} phút`, `- Phần C – Nâng cao: ${o.n3} bài, ${o.p3} phút`, `- Soát bài: ${soat} phút (tổng 90 phút)`,
       o.goc === 'giu' ? 'Bài lấy từ tài liệu: giữ nguyên đề gốc, ghi nguồn chính xác (tên tài liệu – đề/cụm – bài số).' : 'Bài lấy từ tài liệu: đổi số liệu và bối cảnh, ghi nguồn dạng tham khảo.',
       `Đợt ${dot} phải KHÁC các đợt trước: không lấy lại bài nào trong danh sách "Đã dùng"; ưu tiên tài liệu và dạng bài chưa dùng.`,

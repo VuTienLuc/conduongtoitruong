@@ -410,3 +410,4 @@ table.ld-the.full{font-size:10.5pt}
 .ot-goi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px 14px;font-size:10.5pt;border:1px dashed #777;border-radius:6px;padding:5px 9px}
 .ot-goi p{margin:1px 0}
 .ld-ot{margin:6px 0;font-weight:600}
+.ot-can{font-size:10pt;font-style:italic;margin:1px 0 2px;color:#333}

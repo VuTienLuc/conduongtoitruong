@@ -34,9 +34,9 @@ const OnTap = (() => {
     return `<section class="sh-page ot-page">${head('CON ĐƯỜNG TỚI TRƯỜNG · PHIẾU ÔN TẬP TOÁN VÀO 10', `${esc(e.ma)} · đợt ${e.dot}`)}
       <h1 class="sh-title">PHIẾU ÔN TẬP ${e.phut} PHÚT</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]} · từ cơ bản đến nâng cao</p>
       <p class="sh-info">Họ và tên: ........................................................ Lớp: .............. Ngày: ......../......../........ Thời gian bắt đầu: ............</p>
-      ${e.muc_tieu.length || e.kt.length ? `<div class="sh-remind ot-kt">${e.muc_tieu.length ? `<p><b>Mục tiêu:</b> ${e.muc_tieu.join('; ')}.</p>` : ''}${e.kt.length ? `<b>Nhắc nhanh:</b><ul>${e.kt.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}</div>` : ''}
+      ${e.muc_tieu.length || e.kt.length ? `<div class="sh-remind ot-kt">${e.muc_tieu.length ? `<p><b>Mục tiêu:</b> ${e.muc_tieu.join('; ')}.</p>` : ''}${e.kt.length ? `<b>Kiến thức cần nhớ:</b><ul>${e.kt.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}</div>` : ''}
       ${e.phan.map((p, k) => `<h2 class="sh-h">PHẦN ${CHU[k]} – ${p.muc.toUpperCase()} (${p.phut} phút)</h2>
-        ${p.bai.map(b => `<div class="sh-q"><div class="sh-de"><b>Bài ${b.so}.</b> ${b.de}</div>${lines(b.dong)}</div>`).join('')}`).join('')}
+        ${p.bai.map(b => `<div class="sh-q"><div class="sh-de"><b>Bài ${b.so}.</b> ${b.de}</div>${b.can ? `<p class="ot-can">🔑 Cần nhớ: ${b.can}</p>` : ''}${lines(b.dong)}</div>`).join('')}`).join('')}
       ${goi.length ? `<div class="sh-hints"><h2 class="sh-h">GỢI Ý – CHỈ XEM KHI BÍ</h2><div class="ot-goi">${goi.map(b => `<p><b>Bài ${b.so}:</b> ${b.goi}</p>`).join('')}</div></div>` : ''}
       <div class="sh-check"><b>Tự đánh giá:</b>${(e.tdg.length ? e.tdg : ['Làm hết phần Cơ bản trong thời gian', 'Trình bày đủ bước, có kết luận', 'Đánh dấu bài sai để làm lại sau 3 ngày']).map(x => `<span>☐ ${x}</span>`).join('')}
         <span>Thời gian làm: ............ phút · Số bài đúng: ......../${allBai(e).length}</span></div></section>`;
@@ -44,7 +44,7 @@ const OnTap = (() => {
   function pageLoiGiai(e) {
     return `<section class="sh-page ot-page">${head('ĐÁP ÁN – LỜI GIẢI', `${esc(e.ma)} · đợt ${e.dot}`)}<h1 class="sh-title">LỜI GIẢI PHIẾU ÔN TẬP</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]}</p>
       ${e.phan.map((p, k) => `<h2 class="sh-h">PHẦN ${CHU[k]} – ${p.muc.toUpperCase()}</h2>${p.bai.map(b => `<div class="sh-vd"><p><b>Bài ${b.so}.</b> <b>Đáp số:</b> ${b.dap}</p>
-        <ol class="sh-lg">${b.lg.map(x => `<li>${x}</li>`).join('')}</ol>${b.nguon ? `<p class="ld-src">Nguồn: ${b.nguon}</p>` : ''}</div>`).join('')}`).join('')}</section>`;
+        ${b.can ? `<p class="ot-can">🔑 Kiến thức dùng: ${b.can}</p>` : ''}<ol class="sh-lg">${b.lg.map(x => `<li>${x}</li>`).join('')}</ol>${b.nguon ? `<p class="ld-src">Nguồn: ${b.nguon}</p>` : ''}</div>`).join('')}`).join('')}</section>`;
   }
   const sheetHTML = (e, o = {}) => `<div class="sheet math ot-sheet">${pagePhieu(e)}${o.key ? pageLoiGiai(e) : ''}</div>`;
 
@@ -55,10 +55,10 @@ const OnTap = (() => {
     const L = [`---`, `loai: on_tap_toan`, `ma: ${e.ma}`, `bai: ${e.bai}`, `chu_de: ${plain(e.chu_de || TEN[e.bai])}`, `dot: ${e.dot}`, `thoi_gian: ${e.phut}`, `---`, '',
       `# Phiếu ôn tập ${e.phut} phút – ${plain(e.chu_de || TEN[e.bai])} (đợt ${e.dot})`, ''];
     if (e.muc_tieu.length) L.push('## Mục tiêu', ...e.muc_tieu.map(x => `- ${plain(x)}`), '');
-    if (e.kt.length) L.push('## Nhắc nhanh kiến thức', ...e.kt.map(x => `- ${plain(x)}`), '');
+    if (e.kt.length) L.push('## Kiến thức cần nhớ', ...e.kt.map(x => `- ${plain(x)}`), '');
     e.phan.forEach((p, k) => {
       L.push(`## Phần ${CHU[k]} – ${plain(p.muc)} (${p.phut} phút)`, '');
-      p.bai.forEach(b => { L.push(`### Bài ${b.so}`, plain(b.de)); if (b.nguon) L.push(`*Nguồn:* ${plain(b.nguon)}`); if (b.goi) L.push(`> Gợi ý: ${plain(b.goi)}`); L.push(`*Dòng kẻ:* ${b.dong}`, ''); });
+      p.bai.forEach(b => { L.push(`### Bài ${b.so}`, plain(b.de)); if (b.nguon) L.push(`*Nguồn:* ${plain(b.nguon)}`); if (b.can) L.push(`*Cần nhớ:* ${plain(b.can)}`); if (b.goi) L.push(`> Gợi ý: ${plain(b.goi)}`); L.push(`*Dòng kẻ:* ${b.dong}`, ''); });
     });
     if (e.tdg.length) L.push('## Tự đánh giá', ...e.tdg.map(x => `- [ ] ${plain(x)}`), '');
     L.push('## Đáp án và lời giải', '');

@@ -73,7 +73,7 @@ const NhapDL = (() => {
       const l = raw.replace(/\s+$/, ''); let m;
       if ((m = l.match(/^##\s+(.*)$/))) {
         const h = m[1]; cur = null;
-        if (/^Mục tiêu/i.test(h)) sec = 'mt'; else if (/^Nhắc nhanh/i.test(h)) sec = 'kt'; else if (/^Tự đánh giá/i.test(h)) sec = 'tdg';
+        if (/^Mục tiêu/i.test(h)) sec = 'mt'; else if (/^(Nhắc nhanh|Kiến thức cần nhớ)/i.test(h)) sec = 'kt'; else if (/^Tự đánh giá/i.test(h)) sec = 'tdg';
         else if (/^Đáp án/i.test(h)) sec = 'da';
         else if ((m = h.match(/^Phần\s+\S+\s*[–-]\s*(.+?)\s*\((\d+)\s*phút\)/i))) { sec = 'ph'; phan = { muc: m[1].trim(), phut: +m[2], bai: [] }; j.phan.push(phan); }
         else sec = '';
@@ -90,6 +90,7 @@ const NhapDL = (() => {
       else if (sec === 'tdg' && (m = l.match(/^[-*]\s+(?:\[[ x]\]\s*)?(.*)/))) j.tu_danh_gia.push(m[1]);
       else if (sec === 'ph' && cur) {
         if ((m = l.match(/^\*Nguồn:\*\s*(.*)/i))) cur.nguon = m[1];
+        else if ((m = l.match(/^\*Cần nhớ:\*\s*(.*)/i))) cur.can_nho = m[1];
         else if ((m = l.match(/^>\s*Gợi ý:\s*(.*)/i))) cur.goi_y = m[1];
         else if ((m = l.match(/^\*Dòng kẻ:\*\s*(\d+)/i))) cur.dong_ke = +m[1];
         else if (l.trim()) cur.de += (cur.de ? '\n' : '') + l.trim();
@@ -152,6 +153,7 @@ const NhapDL = (() => {
       if (!j.ma) errs.push('Thiếu "ma" (mã phiếu)');
       const ph = Array.isArray(j.phan) ? j.phan : [], tg = +j.thoi_gian || 90;
       if (ph.length < 2) errs.push('Cần ít nhất 2 phần (Cơ bản → Nâng cao) trong "phan"');
+      if ((Array.isArray(j.kien_thuc) ? j.kien_thuc.filter(Boolean).length : 0) < 3) errs.push('Thiếu mục "kien_thuc": cần nhắc lại ít nhất 3 kiến thức cần nhớ để làm các bài trong phiếu');
       const all = [];
       ph.forEach((p, k) => {
         if (!p.muc) errs.push(`Phần ${k + 1}: thiếu "muc"`); if (!(+p.phut > 0)) errs.push(`Phần ${k + 1}: thiếu "phut"`);
@@ -160,6 +162,7 @@ const NhapDL = (() => {
           if (!b.de) errs.push(`${w}: thiếu "de"`); if (!b.dap_so) errs.push(`${w}: thiếu "dap_so"`);
           if (!(Array.isArray(b.loi_giai) ? b.loi_giai.length : b.loi_giai)) errs.push(`${w}: thiếu "loi_giai"`);
           if (!b.nguon) warns.push(`${w}: chưa ghi "nguon"`);
+          if (!b.can_nho) warns.push(`${w}: chưa ghi "can_nho" (kiến thức cần nhớ của bài)`);
           all.push({ w, f: fp(b.de), nguon: b.nguon });
         });
         if (!(p.bai || []).length) errs.push(`Phần ${k + 1}: chưa có bài nào`);
@@ -241,7 +244,7 @@ const NhapDL = (() => {
     return { ma: String(j.ma), bai, id: BAI[bai], chu_de: norm(j.chu_de), dot: +j.dot || 1, phut: +j.thoi_gian || 90, src,
       muc_tieu: normArr(j.muc_tieu), kt: normArr(j.kien_thuc), tdg: normArr(j.tu_danh_gia),
       phan: (j.phan || []).map(p => ({ muc: norm(p.muc), phut: +p.phut, bai: (p.bai || []).map(b => ({ so: ++so, de: norm(b.de), f: fp(b.de),
-        nguon: norm(b.nguon), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
+        nguon: norm(b.nguon), can: norm(b.can_nho), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
   }
   function apply(j, src) {
     const r = check(j);

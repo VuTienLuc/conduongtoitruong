@@ -113,7 +113,7 @@ async def main():
         await pg.locator('[name=xLoai][value=ontap]').check(); await pg.select_option('#oBai', '3'); await pg.wait_for_timeout(150)
         for dd in ('json', 'md'):
             await pg.select_option('#oDd', dd); await pg.wait_for_timeout(150)
-            ok = await pg.evaluate(f"document.querySelector('#xHd').value.includes('{'```markdown' if dd == 'md' else 'on_tap_toan'}') && document.querySelector('#xL0').value.includes('Đợt')")
+            ok = await pg.evaluate(f"document.querySelector('#xHd').value.includes('{'```markdown' if dd == 'md' else 'on_tap_toan'}') && document.querySelector('#xL0').value.includes('Đợt') && document.querySelector('#xHd').value.includes('KIẾN THỨC CẦN NHỚ') && document.querySelector('#xL0').value.includes('kiến thức cần nhớ')")
             if not ok: fails.append(f'menu prompt phiếu ôn tập ({dd}): thiếu hướng dẫn hoặc lệnh')
         mau = open(os.path.join(ROOT, 'docs/mau-nhap/on-tap-bai3-mau.txt'), encoding='utf-8').read()
         await pg.goto(base + '#/xuong/nhap'); await pg.wait_for_timeout(200)

@@ -99,9 +99,9 @@ Sai ở đâu thì sửa rồi mới xuất.`;
 
   const MAU_ONTAP = S`{"loai":"on_tap_toan","ma":"OT-B3-02","bai":3,"chu_de":"Bài 3 – Xác suất","dot":2,"thoi_gian":90,
  "muc_tieu":["mục tiêu ngắn của buổi ôn"],
- "kien_thuc":["nhắc nhanh kiến thức, công thức dùng trong phiếu, ví dụ $P(A) = \\dfrac{n(A)}{n(\\Omega)}$"],
+ "kien_thuc":["Tên kiến thức: phát biểu đúng SGK, công thức, ví dụ Xác suất của biến cố: $P(A) = \\dfrac{n(A)}{n(\\Omega)}$ khi các kết quả đồng khả năng – Lưu ý: …","(4–8 mục, đủ để làm mọi bài trong phiếu)"],
  "phan":[
-  {"muc":"Cơ bản","phut":25,"bai":[{"so":1,"de":"đề bài, các ý xuống dòng bằng \n","nguon":"tên tài liệu trong notebook – đề/cụm – bài số","goi_y":"gợi ý phương pháp, không lộ đáp số","dong_ke":6,
+  {"muc":"Cơ bản","phut":25,"bai":[{"so":1,"de":"đề bài, các ý xuống dòng bằng \n","nguon":"tên tài liệu trong notebook – đề/cụm – bài số","can_nho":"kiến thức cần nhớ để làm bài này (tên định lí, công thức)","goi_y":"gợi ý phương pháp, không lộ đáp số","dong_ke":6,
     "dap_so":"đáp số ngắn","loi_giai":["bước 1 …","bước 2 …"]}]},
   {"muc":"Khá","phut":35,"bai":[…]},
   {"muc":"Nâng cao","phut":25,"bai":[…]}],
@@ -120,14 +120,16 @@ thoi_gian: 90
 ## Mục tiêu
 - …
 
-## Nhắc nhanh kiến thức
-- …
+## Kiến thức cần nhớ
+- Tên kiến thức: phát biểu, công thức – Lưu ý: …
+- (4–8 mục, đủ để làm mọi bài trong phiếu)
 
 ## Phần A – Cơ bản (25 phút)
 
 ### Bài 1
 Đề bài (công thức trong $...$)
 *Nguồn:* tên tài liệu – đề/cụm – bài số
+*Cần nhớ:* kiến thức dùng cho bài này
 > Gợi ý: …
 *Dòng kẻ:* 6
 
@@ -155,7 +157,13 @@ CÁCH LẬP PHIẾU
 3. Lệnh ghi "giữ nguyên đề gốc" thì chép đúng đề và ghi nguồn CHÍNH XÁC (tên tài liệu – đề số/cụm – bài số); lệnh ghi "đổi số liệu" thì đổi số liệu, bối cảnh và vẫn ghi nguồn dạng tham khảo.
 4. MỖI ĐỢT PHẢI KHÁC các đợt trước: không lấy lại bài nào trong danh sách "Đã dùng" của lệnh, kể cả bài giống hệt nhưng ở tài liệu khác; ưu tiên tài liệu và dạng bài chưa dùng.
 5. Mỗi bài có "goi_y" (một câu, không lộ đáp số), "dong_ke" (số dòng kẻ để làm, 4–14), "dap_so" ngắn và "loi_giai" chia bước như bài thi.
-6. "kien_thuc": chỉ nhắc kiến thức, công thức thật sự dùng trong phiếu; "tu_danh_gia": điều học sinh tự kiểm sau buổi ôn.
+6. "tu_danh_gia": điều học sinh tự kiểm sau buổi ôn.
+
+KIẾN THỨC CẦN NHỚ (bắt buộc, đặt đầu phiếu)
+- Nhắc lại ĐẦY ĐỦ kiến thức cần nhớ để làm được MỌI bài trong phiếu: định nghĩa, định lí, tính chất, công thức, quy tắc, cách trình bày; đúng thuật ngữ và kí hiệu SGK Toán 9 (GDPT 2018) trong nguồn.
+- 4–8 mục, xếp theo thứ tự dùng trong phiếu; mỗi mục: tên kiến thức – phát biểu ngắn gọn hoặc công thức – lưu ý hay sai (nếu có).
+- Chủ đề hình học: chỉ nhắc kiến thức được dùng trực tiếp theo quy định chấm thi; kiến thức phải chứng minh lại thì ghi rõ "phải chứng minh lại".
+- Mỗi bài có "can_nho": chỉ ra kiến thức nào trong mục trên dùng cho bài đó (một dòng).
 
 ${md ? S`ĐẦU RA BẮT BUỘC (MARKDOWN)
 - Chỉ trả lời bằng MỘT khối code ${BT}markdown duy nhất. Không viết chữ nào trước hay sau khối code. Không dùng Canvas. Không chèn số trích dẫn [1].
@@ -172,6 +180,7 @@ TỰ KIỂM trước khi xuất
 1. Giải lại từng bài, đối chiếu đáp số với lời giải trong nguồn (nếu có).
 2. Đúng chủ đề, đúng số bài và số phút từng phần; độ khó tăng dần.
 3. Không bài nào trùng danh sách "Đã dùng", không hai bài trùng nhau trong phiếu.
+4. Mục kiến thức cần nhớ đủ để làm mọi bài; mỗi bài có "can_nho".
 Sai ở đâu thì sửa rồi mới xuất.`;
 
   const SUA = (loai, loi) => S`Câu trả lời vừa rồi chưa đúng mẫu hoặc còn lỗi. Giữ nguyên nội dung vừa soạn (không đổi văn bản, số liệu), sửa các lỗi sau rồi viết lại TOÀN BỘ thành MỘT khối ${BT}json đúng mẫu:
@@ -198,6 +207,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
     const soat = 90 - o.p1 - o.p2 - o.p3;
     return [`Phiếu ôn tập 90 phút | Chủ đề: ${b[1]} (${PT(b[2])} điểm trong đề tuyển sinh) | Đợt: ${dot} | Mã: ${ma} | Định dạng: ${o.dd === 'md' ? 'Markdown' : 'JSON'}`,
       'Tìm trong notebook các bài tập đúng chủ đề này, xếp từ cơ bản đến nâng cao:',
+      '- Đầu phiếu: nhắc lại đầy đủ kiến thức cần nhớ để làm các bài này (định nghĩa, định lí, công thức, lưu ý hay sai); mỗi bài ghi kiến thức cần nhớ của bài đó.',
       `- Phần A – Cơ bản: ${o.n1} bài, ${o.p1} phút`, `- Phần B – Khá: ${o.n2} bài, ${o.p2} phút`, `- Phần C – Nâng cao: ${o.n3} bài, ${o.p3} phút`, `- Soát bài: ${soat} phút (tổng 90 phút)`,
       o.goc === 'giu' ? 'Bài lấy từ tài liệu: giữ nguyên đề gốc, ghi nguồn chính xác (tên tài liệu – đề/cụm – bài số).' : 'Bài lấy từ tài liệu: đổi số liệu và bối cảnh, ghi nguồn dạng tham khảo.',
       `Đợt ${dot} phải KHÁC các đợt trước: không lấy lại bài nào trong danh sách "Đã dùng"; ưu tiên tài liệu và dạng bài chưa dùng.`,
