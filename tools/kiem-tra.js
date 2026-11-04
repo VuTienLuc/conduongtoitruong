@@ -21,7 +21,7 @@ const load = f => {
   if (/\bTODO\b|\bFIXME\b|phần còn lại giữ nguyên/.test(code)) err(f, 'còn chỗ làm tắt (TODO/FIXME/phần còn lại)');
   // Công thức trong chuỗi nháy đơn bị mất dấu \ khi chạy: phải viết bằng S`…`.
   if (f.startsWith('data/')) code.split('\n').forEach((l, i) => { if (/(^|[\s,(:\[])'[^'`]*\\[(\[][^'`]*'/.test(l)) err(`${f}:${i + 1}`, 'công thức \\( \\) trong chuỗi thường – dùng S`…`'); });
-  try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.LuyenDe = typeof LuyenDe !== 'undefined' ? LuyenDe : globalThis.LuyenDe; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc; globalThis.NhapDL = typeof NhapDL !== 'undefined' ? NhapDL : globalThis.NhapDL; globalThis.Van = typeof Van !== 'undefined' ? Van : globalThis.Van;`, ctx, { filename: f }); }
+  try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.LuyenDe = typeof LuyenDe !== 'undefined' ? LuyenDe : globalThis.LuyenDe; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc; globalThis.NhapDL = typeof NhapDL !== 'undefined' ? NhapDL : globalThis.NhapDL; globalThis.Van = typeof Van !== 'undefined' ? Van : globalThis.Van; globalThis.OnTap = typeof OnTap !== 'undefined' ? OnTap : globalThis.OnTap;`, ctx, { filename: f }); }
   catch (e) { err(f, 'lỗi khi chạy – ' + e.message); }
 };
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -164,6 +164,7 @@ let nNhap = 0;
 if (ctx.NhapDL) ctx.NhapDL.items.forEach(x => { nNhap++; const W = `Nhập ${x.file || ''}`; x.r.errs.forEach(e => err(W, e)); });
 const walkStr = (w, v) => { if (typeof v === 'string') checkStr(w, v); else if (v && typeof v === 'object') Object.values(v).forEach(y => walkStr(w, y)); };
 if (ctx.Van) ctx.Van.list().forEach(e => walkStr(`Ngữ văn đề ${e.ma}`, e));
+if (ctx.OnTap) ctx.OnTap.list().forEach(e => walkStr(`Phiếu ôn tập ${e.ma}`, e));
 
 // 3) Liên kết trong app.js trỏ tới chủ đề có thật.
 const app = fs.readFileSync(path.join(ROOT, 'assets/js/app.js'), 'utf8');
@@ -172,7 +173,7 @@ const used = new Set([...app.matchAll(/\[('[a-z0-9-]+'(?:,\s*'[a-z0-9-]+')*)\]\]
 used.forEach(id => { if (id && !/^lop\d+$/.test(id) && !ids.has(id)) err('app.js', `liên kết tới chủ đề không có: ${id}`); });
 
 console.log(`Ôn thi vào 10: ${T.length} chủ đề, ${sum(T.map(t => t.quiz.length))} câu trắc nghiệm, ${sum(T.map(t => t.models.length))} bài mẫu, ${sum(T.map(t => t.practice.length))} bài tự luyện, ${nLD} đề luyện (${ctx.LuyenDe ? ctx.LuyenDe.ids().length : 0} chủ đề).`);
-console.log(`Ngữ văn vào 10: ${ctx.Van ? ctx.Van.list().length : 0} đề · dữ liệu nhập từ AI: ${nNhap} tệp.`);
+console.log(`Ngữ văn vào 10: ${ctx.Van ? ctx.Van.list().length : 0} đề · phiếu ôn tập 90 phút: ${ctx.OnTap ? ctx.OnTap.list().length : 0} · dữ liệu nhập từ AI: ${nNhap} tệp.`);
 console.log(`Lớp 10–12 (VD–VDC): ${V.length} chủ đề, ${sum(V.map(t => t.dang.length))} dạng, ${sum(V.map(t => sum(t.dang.map(d => d.bt.length))))} bài tương tự.`);
 warns.forEach(w => console.log('! ' + w));
 if (errs.length) { errs.forEach(e => console.log(e)); console.log(`KẾT QUẢ: CHƯA ĐẠT ✗ (${errs.length} lỗi)`); process.exit(1); }

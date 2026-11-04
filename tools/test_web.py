@@ -47,6 +47,7 @@ async def main():
             ld = await pg.evaluate("LuyenDe.ids().map(i => [i, LuyenDe.get(i).de.length])")
             routes += [f'#/cd/{i}/de/{k}' for i, n in ld for k in range(2, n + 1)]
             routes += [f'#/cd/{i}/de/{s}' for i in await pg.evaluate("LuyenDe.ids().filter(i => LuyenDe.get(i).the)") for s in ('the', 'tuduy')]
+            routes += ['#/on-tap'] + [f'#/on-tap/{m}' for m in await pg.evaluate("OnTap.list().map(e => e.ma)")]
             routes += ['#/van-10', '#/van-10/phuong-phap', '#/xuong', '#/xuong/prompt', '#/xuong/nhap'] + [f'#/van-10/de/{m}' for m in await pg.evaluate("Van.list().map(e => e.ma)")]
             routes += [r for g, i, nb in vdc for r in [f'#/{g}/{i}', f'#/{g}/{i}/phieu'] + [f'#/{g}/{i}/lg/{k}' for k in range(1, nb + 1)]]
             for r in routes:
@@ -106,6 +107,28 @@ async def main():
         await pg.evaluate("MathTS.done(document.getElementById('nOut'))")
         r = await pg.evaluate(r"({ ok: document.querySelectorAll('.xw-res.ok').length, merr: document.querySelectorAll('#nOut mjx-merror').length, pages: document.querySelectorAll('#nOut .sh-page').length, raw: /\\\(|\$/.test(document.querySelector('#nOut .paper-wrap').innerText) })")
         if r['ok'] != 1 or r['merr'] or r['pages'] < 4 or r['raw']: fails.append(f'nhập dữ liệu mẫu Toán: {r}')
+        # Phiếu ôn tập 90 phút: menu prompt có lệnh JSON và Markdown kèm danh sách "Đã dùng"; nhập mẫu → lưu → mở phiếu;
+        # nhập lại cùng bài với mã đợt 2 → cảnh báo TRÙNG; Markdown xuất ra đọc lại đúng.
+        await pg.goto(base + '#/xuong/prompt'); await pg.wait_for_timeout(200)
+        await pg.locator('[name=xLoai][value=ontap]').check(); await pg.select_option('#oBai', '3'); await pg.wait_for_timeout(150)
+        for dd in ('json', 'md'):
+            await pg.select_option('#oDd', dd); await pg.wait_for_timeout(150)
+            ok = await pg.evaluate(f"document.querySelector('#xHd').value.includes('{'```markdown' if dd == 'md' else 'on_tap_toan'}') && document.querySelector('#xL0').value.includes('Đợt')")
+            if not ok: fails.append(f'menu prompt phiếu ôn tập ({dd}): thiếu hướng dẫn hoặc lệnh')
+        mau = open(os.path.join(ROOT, 'docs/mau-nhap/on-tap-bai3-mau.txt'), encoding='utf-8').read()
+        await pg.goto(base + '#/xuong/nhap'); await pg.wait_for_timeout(200)
+        await pg.fill('#nIn', mau); await pg.click('#nGo'); await pg.wait_for_timeout(400)
+        await pg.evaluate("MathTS.done(document.getElementById('nOut'))")
+        r = await pg.evaluate("({ ok: document.querySelectorAll('.xw-res.ok').length, merr: document.querySelectorAll('#nOut mjx-merror').length, md: document.querySelectorAll('[data-md]').length })")
+        if r != {'ok': 1, 'merr': 0, 'md': 1}: fails.append(f'nhập phiếu ôn tập mẫu: {r}')
+        await pg.click('[data-save]'); await pg.wait_for_timeout(1800)
+        if not await pg.locator('.ot-sheet').count(): fails.append('phiếu ôn tập vừa lưu không mở được')
+        await pg.goto(base + '#/xuong/nhap'); await pg.wait_for_timeout(300)
+        await pg.fill('#nIn', mau.replace('"ma":"OT-B3-01"', '"ma":"OT-B3-02"').replace('"dot":1', '"dot":2')); await pg.click('#nGo'); await pg.wait_for_timeout(400)
+        if await pg.locator('.xw-warn li', has_text='TRÙNG').count() != 10: fails.append('nhập lại bài cũ: không cảnh báo trùng đợt trước')
+        rt = await pg.evaluate("(() => { const e = OnTap.get('OT-B3-01'); const b = NhapDL.parse(OnTap.toMd(e)); const r = NhapDL.check(b.data); return [r.errs.length, r.n]; })()")
+        if rt != [0, 10]: fails.append(f'Markdown phiếu ôn tập đọc lại sai: {rt}')
+        await pg.evaluate("localStorage.removeItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':nhap:may')")
         for i in ids:
             # Trắc nghiệm: chọn phương án A mọi câu, điểm phải bằng số câu chọn đúng.
             await pg.goto(base + f'#/cd/{i}/hieu'); await pg.wait_for_timeout(200)

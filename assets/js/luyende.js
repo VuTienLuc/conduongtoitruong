@@ -115,7 +115,9 @@ const LuyenDe = (() => {
 
   function pane(t, el, sel) {
     const L = get(t.id);
-    if (!L) { el.innerHTML = '<div class="card empty"><p>Bộ 10 đề luyện của chủ đề này đang được soạn. Thầy cô sẽ bổ sung sớm.</p></div>'; return; }
+    const ot = typeof OnTap !== 'undefined' ? OnTap.ofTopic(t.id) : [];
+    const otLink = ot.length ? `<p class="ld-ot"><a href="#/on-tap">🗂️ Phiếu ôn tập 90 phút của chủ đề này (${ot.length})</a></p>` : '';
+    if (!L) { el.innerHTML = `<div class="card empty"><p>Bộ đề luyện của chủ đề này đang được soạn. Thầy cô sẽ bổ sung sớm.</p>${otLink}</div>`; return; }
     if (L.the && sel === 'the') return paneThe(t, el, L);
     if (L.the && sel === 'tuduy') return paneTuDuy(t, el, L);
     const total = L.de.length, done = L.de.filter((_, i) => isDone(t.id, i + 1)).length;
@@ -124,7 +126,7 @@ const LuyenDe = (() => {
     el.innerHTML = `<div class="card sheet-tools">
         <p class="lead"><b>${total} đề luyện</b> đúng dạng ${baiOf(t)} của đề tuyển sinh. Mỗi đề in thành <b>một tệp PDF</b>: trang đề có khung ô li để làm,${hasGoi ? ' trang <b>Gợi ý từng nấc</b> (giảm dần qua các đề),' : ''} trang sau là đáp án – hướng dẫn chấm. Làm đúng giờ (${L.phut || 12} phút/đề), tự chấm theo barem, sai ở đâu xem lại tab Tự luận mẫu.</p>
         ${L.the ? `<div class="row ld-tools"><a class="btn" href="#/cd/${t.id}/de/tuduy">🧠 Luyện tư duy hôm nay (10 phút)</a><a class="btn" href="#/cd/${t.id}/de/the">📇 Thẻ công cụ</a></div>` : ''}
-        <p class="chips"><span class="chip">Đã làm ${done}/${total}</span></p>
+        <p class="chips"><span class="chip">Đã làm ${done}/${total}</span></p>${otLink}
         <div class="ld-list">${L.de.map((x, i) => `<a class="ld-item${i + 1 === k ? ' on' : ''}${isDone(t.id, i + 1) ? ' ok' : ''}" href="#/cd/${t.id}/de/${i + 1}"><b>Đề ${i + 1}${x.nhap ? (x.may ? ' <i class="ld-may" title="Nhập từ AI, chỉ trên máy này">· máy này</i>' : ' <i class="ld-may" title="Nhập từ AI">· AI</i>') : ''}</b><span>${x.ten}</span></a>`).join('')}</div>
         <div class="opts-row">${hasGoi ? '<label class="tog"><input type="checkbox" id="ldGoi" checked> Kèm trang gợi ý từng nấc</label>' : ''}<label class="tog"><input type="checkbox" id="ldKey"> Kèm đáp án – hướng dẫn chấm (trang cuối mỗi đề)</label>
           <label class="tog"><input type="checkbox" id="ldDone" ${isDone(t.id, k) ? 'checked' : ''}> Em đã làm xong Đề ${k}</label></div>

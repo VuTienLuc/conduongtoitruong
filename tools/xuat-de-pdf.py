@@ -69,6 +69,19 @@ async def main(only):
                 await pg.pdf(path=f, format='A4', prefer_css_page_size=True, print_background=True)
                 if pages(f) < 3: fails.append(f'Ngữ văn đề {ma}: chỉ {pages(f)} trang (cần đề + bài làm + hướng dẫn chấm)')
             if mas: print(f'ngu-van: đã xuất {len(mas)} tệp PDF vào de-luyen/ngu-van/')
+        # Phiếu ôn tập 90 phút: de-luyen/on-tap/<mã>.pdf (phiếu + lời giải)
+        if not only or 'on-tap' in only:
+            mas = await pg.evaluate("typeof OnTap !== 'undefined' ? OnTap.list().map(e => e.ma) : []")
+            os.makedirs(os.path.join(OUT, 'on-tap'), exist_ok=True)
+            for ma in mas:
+                await pg.evaluate('''ma => { let r = document.getElementById('print-root');
+                    if (!r) { r = document.createElement('div'); r.id = 'print-root'; document.body.appendChild(r); }
+                    r.innerHTML = OnTap.sheetHTML(OnTap.get(ma), { key: true }); document.body.classList.add('printing'); }''', ma)
+                await pg.evaluate("MathTS.done(document.getElementById('print-root'))")
+                if await pg.locator('#print-root mjx-merror').count(): fails.append(f'phiếu ôn tập {ma}: lỗi công thức')
+                f = os.path.join(OUT, 'on-tap', f'{ma}.pdf')
+                await pg.pdf(path=f, format='A4', prefer_css_page_size=True, print_background=True)
+            if mas: print(f'on-tap: đã xuất {len(mas)} tệp PDF vào de-luyen/on-tap/')
         await b.close()
     srv.shutdown()
     for x in fails: print('✗', x)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Đưa dữ liệu AI xuất ra (Xưởng dữ liệu) vào hệ thống cho mọi học sinh.
 Chạy: python3 tools/nhap-du-lieu.py
-- Đọc mọi tệp nhap/*.json (hoặc .txt chứa nguyên câu trả lời của AI).
+- Đọc mọi tệp nhap/*.json, *.md (Markdown chuẩn của phiếu ôn tập) hoặc .txt chứa nguyên câu trả lời của AI.
 - Dùng đúng bộ đọc – kiểm của web (assets/js/nhap.js, chạy bằng node): sửa dấu \\ của công thức,
   bỏ số trích dẫn, kiểm trường và điểm. Tệp có lỗi thì bỏ qua và in lỗi.
 - Tệp đạt → data/nhap/<tên>.js (gọi NhapDL.add) và tự thêm thẻ <script> vào index.html giữa
@@ -27,7 +27,7 @@ process.stdout.write(JSON.stringify(out));
 
 def main():
     os.makedirs(SRC, exist_ok=True); os.makedirs(OUT, exist_ok=True)
-    files = sorted(f for f in os.listdir(SRC) if f.lower().endswith(('.json', '.txt')))
+    files = sorted(f for f in os.listdir(SRC) if f.lower().endswith(('.json', '.txt', '.md')))
     if not files:
         print('Thư mục nhap/ trống. Tải "tệp chuẩn" ở Xưởng dữ liệu → Nhập dữ liệu rồi chép vào nhap/.')
     texts = [[f, open(os.path.join(SRC, f), encoding='utf-8').read()] for f in files]

@@ -8,6 +8,7 @@
    - Hai loại dữ liệu (mẫu JSON đầy đủ ở Xưởng dữ liệu → Menu prompt):
      "loai":"luyen_de_toan" → thêm đề vào bộ Luyện đề của bài tương ứng (LuyenDe)
      "loai":"de_van"        → đề Ngữ văn vào 10 (Van)
+     "loai":"on_tap_toan"   → phiếu ôn tập 90 phút theo chủ đề, cơ bản → nâng cao (OnTap); đọc được cả Markdown chuẩn
    - Dữ liệu của hệ thống: data/nhap/*.js gọi NhapDL.add(<json>) (tạo bằng tools/nhap-du-lieu.py).
      Dữ liệu chỉ trên máy này: lưu trong trình duyệt (U.get('nhap:may')), nạp ở App.start().
    ===================================================================== */
@@ -44,6 +45,8 @@ const NhapDL = (() => {
       .replace(/[“”]/g, '"');
   }
   function parse(raw) {
+    const md = mdOf(raw);
+    if (md) return { data: mdToJson(md), notes: ['Đọc từ Markdown chuẩn.'] };
     const notes = [], t = extract(raw);
     if (!t) throw new Error('Không thấy dữ liệu JSON. Hãy dán nguyên câu trả lời của AI (có khối ```json).');
     let v = null, e1 = null;
@@ -54,6 +57,52 @@ const NhapDL = (() => {
     }
     return { data: v, notes };
   }
+
+  /* ---------- 1b. Markdown chuẩn của phiếu ôn tập (mẫu: Xuong.MAU_MD_ONTAP; xuất ngược: OnTap.toMd) ---------- */
+  function mdOf(raw) {
+    let t = String(raw || '').replace(/^\uFEFF/, '').trim();
+    const m = t.match(/```(?:markdown|md)\s*([\s\S]*?)```/i); if (m) t = m[1].trim();
+    return /^---\s*\n[\s\S]*?loai:\s*on_tap_toan/.test(t) ? t : '';
+  }
+  function mdToJson(t) {
+    const fm = t.match(/^---\s*\n([\s\S]*?)\n---/), j = { loai: 'on_tap_toan', muc_tieu: [], kien_thuc: [], phan: [], tu_danh_gia: [] };
+    (fm ? fm[1] : '').split('\n').forEach(l => { const m = l.match(/^(\w+):\s*(.*)$/); if (m) j[m[1]] = /^\d+$/.test(m[2].trim()) ? +m[2].trim() : m[2].trim().replace(/^"|"$/g, ''); });
+    const body = fm ? t.slice(fm[0].length) : t, bai = {};
+    let sec = '', cur = null, phan = null;
+    body.split('\n').forEach(raw => {
+      const l = raw.replace(/\s+$/, ''); let m;
+      if ((m = l.match(/^##\s+(.*)$/))) {
+        const h = m[1]; cur = null;
+        if (/^Mục tiêu/i.test(h)) sec = 'mt'; else if (/^Nhắc nhanh/i.test(h)) sec = 'kt'; else if (/^Tự đánh giá/i.test(h)) sec = 'tdg';
+        else if (/^Đáp án/i.test(h)) sec = 'da';
+        else if ((m = h.match(/^Phần\s+\S+\s*[–-]\s*(.+?)\s*\((\d+)\s*phút\)/i))) { sec = 'ph'; phan = { muc: m[1].trim(), phut: +m[2], bai: [] }; j.phan.push(phan); }
+        else sec = '';
+        return;
+      }
+      if ((m = l.match(/^###\s+Bài\s+(\d+)/i))) {
+        const n = +m[1];
+        if (sec === 'ph' && phan) { cur = bai[n] = { so: n, de: '', loi_giai: [] }; phan.bai.push(cur); }
+        else if (sec === 'da') cur = bai[n] || null;
+        return;
+      }
+      if (sec === 'mt' && (m = l.match(/^[-*]\s+(.*)/))) j.muc_tieu.push(m[1]);
+      else if (sec === 'kt' && (m = l.match(/^[-*]\s+(.*)/))) j.kien_thuc.push(m[1]);
+      else if (sec === 'tdg' && (m = l.match(/^[-*]\s+(?:\[[ x]\]\s*)?(.*)/))) j.tu_danh_gia.push(m[1]);
+      else if (sec === 'ph' && cur) {
+        if ((m = l.match(/^\*Nguồn:\*\s*(.*)/i))) cur.nguon = m[1];
+        else if ((m = l.match(/^>\s*Gợi ý:\s*(.*)/i))) cur.goi_y = m[1];
+        else if ((m = l.match(/^\*Dòng kẻ:\*\s*(\d+)/i))) cur.dong_ke = +m[1];
+        else if (l.trim()) cur.de += (cur.de ? '\n' : '') + l.trim();
+      } else if (sec === 'da' && cur) {
+        if ((m = l.match(/^\*\*Đáp số:\*\*\s*(.*)/i))) cur.dap_so = m[1];
+        else if ((m = l.match(/^\d+[.)]\s+(.*)/))) cur.loi_giai.push(m[1]);
+      }
+    });
+    return j;
+  }
+  // Dấu vân tay một bài (để phát hiện bài lấy lại ở đợt trước): bỏ dấu, kí hiệu, khoảng trắng, lệnh LaTeX.
+  const fp = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd')
+    .replace(/\\[a-z]+|<[^>]*>|[^a-z0-9]/g, '').slice(0, 90);
 
   /* ---------- 2. Chuẩn hoá chuỗi ---------- */
   function mathFix(m) { return m.replace(/</g, ' \\lt ').replace(/>/g, ' \\gt ').replace(/\s{2,}/g, ' '); }
@@ -97,6 +146,33 @@ const NhapDL = (() => {
       });
       return { loai, errs, warns, n: de.length, ten: `Toán – Bài ${bai} (${de.length} đề)`, id: BAI[bai] };
     }
+    if (loai === 'on_tap_toan') {
+      const bai = String(j.bai ?? '').toLowerCase().replace(/^bài\s*/, '');
+      if (!BAI[bai]) errs.push(`"bai" phải là 1, 2, 3, 4, 5, 6, "7a", "7b" hoặc "7c" (đang là ${JSON.stringify(j.bai)})`);
+      if (!j.ma) errs.push('Thiếu "ma" (mã phiếu)');
+      const ph = Array.isArray(j.phan) ? j.phan : [], tg = +j.thoi_gian || 90;
+      if (ph.length < 2) errs.push('Cần ít nhất 2 phần (Cơ bản → Nâng cao) trong "phan"');
+      const all = [];
+      ph.forEach((p, k) => {
+        if (!p.muc) errs.push(`Phần ${k + 1}: thiếu "muc"`); if (!(+p.phut > 0)) errs.push(`Phần ${k + 1}: thiếu "phut"`);
+        (Array.isArray(p.bai) ? p.bai : []).forEach((b, i) => {
+          const w = `Phần ${k + 1} (${p.muc || '?'}) bài ${b.so || i + 1}`;
+          if (!b.de) errs.push(`${w}: thiếu "de"`); if (!b.dap_so) errs.push(`${w}: thiếu "dap_so"`);
+          if (!(Array.isArray(b.loi_giai) ? b.loi_giai.length : b.loi_giai)) errs.push(`${w}: thiếu "loi_giai"`);
+          if (!b.nguon) warns.push(`${w}: chưa ghi "nguon"`);
+          all.push({ w, f: fp(b.de), nguon: b.nguon });
+        });
+        if (!(p.bai || []).length) errs.push(`Phần ${k + 1}: chưa có bài nào`);
+      });
+      const tong = sum(ph.map(p => +p.phut || 0));
+      if (tong > tg || tong < tg - 15) errs.push(`Tổng thời gian các phần ${tong} phút, cần từ ${tg - 15} đến ${tg} phút (còn lại để soát bài)`);
+      all.forEach((x, i) => { if (all.findIndex(y => y.f === x.f) < i) errs.push(`${x.w}: trùng với một bài khác trong cùng phiếu`); });
+      // khác các đợt trước: so với các phiếu đã có của cùng chủ đề
+      if (typeof OnTap !== 'undefined') OnTap.list().filter(e => e.bai === bai && e.ma !== String(j.ma)).forEach(e => e.phan.forEach(p => p.bai.forEach(b => {
+        all.forEach(x => { if (x.f && x.f === b.f) warns.push(`${x.w}: TRÙNG với phiếu ${e.ma} (đợt ${e.dot}) bài ${b.so} – nên thay bằng bài khác`); });
+      })));
+      return { loai, errs, warns, n: all.length, ten: `Phiếu ôn tập 90 phút – Bài ${bai}, đợt ${j.dot || '?'} (${all.length} bài)`, id: BAI[bai], bai, dup: warns.some(w => /TRÙNG/.test(w)) };
+    }
     if (loai === 'de_van') {
       const dh = j.doc_hieu || {}, vb = dh.van_ban || {}, vt = j.viet || {};
       if (!j.ma_de) errs.push('Thiếu "ma_de"');
@@ -123,7 +199,7 @@ const NhapDL = (() => {
       if (!near(tong, 10)) errs.push(`Tổng điểm cả đề = ${tong}, cần 10`);
       return { loai, errs, warns, n: 1, ten: `Ngữ văn – đề ${j.ma_de || '?'}`, id: j.ma_de };
     }
-    errs.push('Không nhận ra loại dữ liệu: cần "loai":"de_van" (Ngữ văn) hoặc "loai":"luyen_de_toan" (Toán).');
+    errs.push('Không nhận ra loại dữ liệu: cần "loai":"de_van" (Ngữ văn), "luyen_de_toan" (đề luyện Toán) hoặc "on_tap_toan" (phiếu ôn tập 90 phút).');
     return { loai: '?', errs, warns };
   }
 
@@ -158,6 +234,15 @@ const NhapDL = (() => {
       checklist: normArr(j.checklist),
     };
   }
+  function onTapEntry(j, src) {
+    const bai = String(j.bai).toLowerCase().replace(/^bài\s*/, '');
+    const lg = x => (Array.isArray(x) ? x.map(y => typeof y === 'object' ? (y.buoc ?? y.noi_dung ?? '') : y) : String(x || '').split(/\n+/)).map(y => norm(y)).filter(Boolean);
+    let so = 0;
+    return { ma: String(j.ma), bai, id: BAI[bai], chu_de: norm(j.chu_de), dot: +j.dot || 1, phut: +j.thoi_gian || 90, src,
+      muc_tieu: normArr(j.muc_tieu), kt: normArr(j.kien_thuc), tdg: normArr(j.tu_danh_gia),
+      phan: (j.phan || []).map(p => ({ muc: norm(p.muc), phut: +p.phut, bai: (p.bai || []).map(b => ({ so: ++so, de: norm(b.de), f: fp(b.de),
+        nguon: norm(b.nguon), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
+  }
   function apply(j, src) {
     const r = check(j);
     if (r.errs.length) return r;
@@ -166,6 +251,7 @@ const NhapDL = (() => {
       LuyenDe.get(r.id).de.push(...toanItems(j, src));
     }
     if (r.loai === 'de_van' && typeof Van !== 'undefined') Van.add(vanEntry(j, src));
+    if (r.loai === 'on_tap_toan' && typeof OnTap !== 'undefined') OnTap.add(onTapEntry(j, src));
     return r;
   }
 
@@ -177,11 +263,12 @@ const NhapDL = (() => {
   function loadLocal() {
     local().forEach(x => {
       if (x.json.loai === 'de_van' && typeof Van !== 'undefined' && Van.get(String(x.json.ma_de))) return;   // hệ thống đã có mã đề này
+      if (x.json.loai === 'on_tap_toan' && typeof OnTap !== 'undefined' && OnTap.get(String(x.json.ma))) return;
       items.push({ json: x.json, src: 'may-nay', key: x.key, r: apply(x.json, 'may-nay') });
     });
   }
   function saveLocal(j) {
-    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
+    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
     const a = local().filter(x => x.key !== key); a.push({ key, json: j, luc: new Date().toISOString() }); U.set(LKEY, a);
     return key;
   }
@@ -190,8 +277,8 @@ const NhapDL = (() => {
   function fileName(j) {
     const r = check(j), d = new Date(), ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
     const safe = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase();
-    return r.loai === 'de_van' ? `van-${safe(j.ma_de)}.json` : `toan-bai${safe(j.bai)}-${ymd}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
+    return r.loai === 'de_van' ? `van-${safe(j.ma_de)}.json` : r.loai === 'on_tap_toan' ? `on-tap-${safe(j.ma)}.json` : `toan-bai${safe(j.bai)}-${ymd}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
   }
 
-  return { BAI, DANG_VAN, extract, parse, repair, norm, check, toanItems, vanEntry, add, items, loadLocal, saveLocal, removeLocal, local, fileName };
+  return { BAI, DANG_VAN, extract, parse, repair, norm, check, toanItems, vanEntry, onTapEntry, mdToJson, fp, add, items, loadLocal, saveLocal, removeLocal, local, fileName };
 })();

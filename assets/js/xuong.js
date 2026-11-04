@@ -2,6 +2,7 @@
    XƯỞNG DỮ LIỆU (dành cho thầy cô) – tài liệu ở NotebookLM → AI xuất JSON đúng mẫu → đưa vào web
    #/xuong          quy trình 4 bước + dữ liệu đã lưu trên máy này
    #/xuong/prompt   menu prompt: hướng dẫn Gem (dán một lần), lệnh từng đề, lệnh sửa JSON
+                    – Ngữ văn đề luyện · Toán đề luyện theo bài · Toán phiếu ôn tập 90 phút (JSON hoặc Markdown, đợt sau tránh bài đợt trước)
    #/xuong/nhap     nhập dữ liệu: dán câu trả lời AI hoặc kéo tệp .json → kiểm → xem trước, in → lưu máy này / tải tệp chuẩn
    Mẫu JSON ở đây phải khớp với NhapDL.check (assets/js/nhap.js). Sửa mẫu thì sửa cả hai.
    ===================================================================== */
@@ -96,12 +97,89 @@ TỰ KIỂM trước khi xuất
 3. Đủ số đề như lệnh, đúng số điểm của bài.
 Sai ở đâu thì sửa rồi mới xuất.`;
 
+  const MAU_ONTAP = S`{"loai":"on_tap_toan","ma":"OT-B3-02","bai":3,"chu_de":"Bài 3 – Xác suất","dot":2,"thoi_gian":90,
+ "muc_tieu":["mục tiêu ngắn của buổi ôn"],
+ "kien_thuc":["nhắc nhanh kiến thức, công thức dùng trong phiếu, ví dụ $P(A) = \\dfrac{n(A)}{n(\\Omega)}$"],
+ "phan":[
+  {"muc":"Cơ bản","phut":25,"bai":[{"so":1,"de":"đề bài, các ý xuống dòng bằng \n","nguon":"tên tài liệu trong notebook – đề/cụm – bài số","goi_y":"gợi ý phương pháp, không lộ đáp số","dong_ke":6,
+    "dap_so":"đáp số ngắn","loi_giai":["bước 1 …","bước 2 …"]}]},
+  {"muc":"Khá","phut":35,"bai":[…]},
+  {"muc":"Nâng cao","phut":25,"bai":[…]}],
+ "tu_danh_gia":["3–5 điều học sinh tự kiểm sau buổi ôn"]}`;
+  const MAU_MD_ONTAP = S`---
+loai: on_tap_toan
+ma: OT-B3-02
+bai: 3
+chu_de: Bài 3 – Xác suất
+dot: 2
+thoi_gian: 90
+---
+
+# Phiếu ôn tập 90 phút – Bài 3 – Xác suất (đợt 2)
+
+## Mục tiêu
+- …
+
+## Nhắc nhanh kiến thức
+- …
+
+## Phần A – Cơ bản (25 phút)
+
+### Bài 1
+Đề bài (công thức trong $...$)
+*Nguồn:* tên tài liệu – đề/cụm – bài số
+> Gợi ý: …
+*Dòng kẻ:* 6
+
+## Phần B – Khá (35 phút)
+…
+
+## Phần C – Nâng cao (25 phút)
+…
+
+## Tự đánh giá
+- [ ] …
+
+## Đáp án và lời giải
+
+### Bài 1
+**Đáp số:** …
+1. bước 1
+2. bước 2`;
+  const HD_ONTAP = (md) => S`VAI TRÒ
+Em là giáo viên luyện thi Toán vào 10 TP.HCM nhiều năm. Việc của em: TÌM trong notebook NotebookLM đã gắn (đề tuyển sinh, đề tham khảo, đề minh họa, đề cương, SGK Toán 9, tài liệu chuyên đề, phiếu bài tập) các bài tập đúng MỘT chủ đề của đề tuyển sinh để lập PHIẾU ÔN TẬP cho học sinh làm trong 90 phút, xếp từ cơ bản đến nâng cao, kèm gợi ý và lời giải.
+
+CÁCH LẬP PHIẾU
+1. Chỉ lấy bài đúng chủ đề trong lệnh; tìm ở NHIỀU tài liệu khác nhau, không lấy quá 2 bài từ cùng một đề.
+2. Xếp ba phần: Cơ bản (nhận biết dạng, áp dụng trực tiếp) → Khá (bài đúng mức đề tuyển sinh) → Nâng cao (câu khó nhất của chủ đề trong các đề). Số bài, số phút từng phần theo lệnh; tổng phút các phần + thời gian soát = 90.
+3. Lệnh ghi "giữ nguyên đề gốc" thì chép đúng đề và ghi nguồn CHÍNH XÁC (tên tài liệu – đề số/cụm – bài số); lệnh ghi "đổi số liệu" thì đổi số liệu, bối cảnh và vẫn ghi nguồn dạng tham khảo.
+4. MỖI ĐỢT PHẢI KHÁC các đợt trước: không lấy lại bài nào trong danh sách "Đã dùng" của lệnh, kể cả bài giống hệt nhưng ở tài liệu khác; ưu tiên tài liệu và dạng bài chưa dùng.
+5. Mỗi bài có "goi_y" (một câu, không lộ đáp số), "dong_ke" (số dòng kẻ để làm, 4–14), "dap_so" ngắn và "loi_giai" chia bước như bài thi.
+6. "kien_thuc": chỉ nhắc kiến thức, công thức thật sự dùng trong phiếu; "tu_danh_gia": điều học sinh tự kiểm sau buổi ôn.
+
+${md ? S`ĐẦU RA BẮT BUỘC (MARKDOWN)
+- Chỉ trả lời bằng MỘT khối code ${BT}markdown duy nhất. Không viết chữ nào trước hay sau khối code. Không dùng Canvas. Không chèn số trích dẫn [1].
+- Giữ đúng các dòng đầu (khối ---), đúng tên các mục ##, ### như MẪU; bài đánh số liên tục 1, 2, 3… qua các phần; mục "Đáp án và lời giải" có đủ mọi bài.
+- Công thức trong $...$ (một dấu gạch: $\dfrac{3}{8}$). Không dùng bảng Markdown; bảng số liệu viết thành dòng "Giá trị: 1, 2, 3 | Tần số: 4, 5, 6".
+MẪU:
+${MAU_MD_ONTAP}` : S`${DAU_RA}
+- Mọi công thức đặt trong $...$, trong chuỗi JSON viết HAI dấu gạch: "$\\dfrac{3}{8}$", "$\\Omega$". Không viết dấu < > trần trong công thức: dùng "$\\lt$", "$\\gt$", "$\\le$", "$\\ge$". Xuống dòng trong đề bằng \n.
+- Bài đánh số liên tục 1, 2, 3… qua các phần.
+MẪU:
+${MAU_ONTAP}`}
+
+TỰ KIỂM trước khi xuất
+1. Giải lại từng bài, đối chiếu đáp số với lời giải trong nguồn (nếu có).
+2. Đúng chủ đề, đúng số bài và số phút từng phần; độ khó tăng dần.
+3. Không bài nào trùng danh sách "Đã dùng", không hai bài trùng nhau trong phiếu.
+Sai ở đâu thì sửa rồi mới xuất.`;
+
   const SUA = (loai, loi) => S`Câu trả lời vừa rồi chưa đúng mẫu hoặc còn lỗi. Giữ nguyên nội dung vừa soạn (không đổi văn bản, số liệu), sửa các lỗi sau rồi viết lại TOÀN BỘ thành MỘT khối ${BT}json đúng mẫu:
 ${loi && loi.length ? loi.map(x => '- ' + x).join('\n') : '- Sai tên trường, thiếu phần chấm điểm hoặc thiếu dấu \\\\ của công thức.'}
 
 ${DAU_RA}
 MẪU:
-${loai === 'de_van' ? MAU_VAN : MAU_TOAN}`;
+${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
 
   function lenhVan(o, k) {
     const ma = o.tien + String(o.so + k).padStart(2, '0');
@@ -112,6 +190,22 @@ ${loai === 'de_van' ? MAU_VAN : MAU_TOAN}`;
       'Tổng hợp các đề, hướng dẫn chấm, bài văn mẫu trong notebook để soạn đề mới dành cho học sinh lực học trung bình; không chép nguyên câu hỏi nào.',
       o.rieng ? `Yêu cầu riêng: ${o.rieng}` : '',
       `Trả về đúng một khối ${BT}json theo mẫu trong hướng dẫn ("loai":"de_van", "ma_de":"${ma}", đủ gợi ý, khung đoạn văn, dàn ý, hướng dẫn chấm).`].filter(Boolean).join('\n');
+  }
+  function lenhOnTap(o, k) {
+    const b = BAI_TOAN.find(x => x[0] === o.bai), dot = o.dot + k, ma = `OT-B${o.bai.toUpperCase()}-${String(dot).padStart(2, '0')}`;
+    const tl = o.tl.split('\n').map(x => x.trim()).filter(Boolean), uu = tl.length ? Array.from({ length: Math.min(4, tl.length) }, (_, i) => tl[((dot - 1) * 3 + i) % tl.length]) : [];
+    const dung = [...OnTap.daDung(o.bai), ...o.them.split('\n').map(x => x.trim()).filter(Boolean)].slice(-80);
+    const soat = 90 - o.p1 - o.p2 - o.p3;
+    return [`Phiếu ôn tập 90 phút | Chủ đề: ${b[1]} (${PT(b[2])} điểm trong đề tuyển sinh) | Đợt: ${dot} | Mã: ${ma} | Định dạng: ${o.dd === 'md' ? 'Markdown' : 'JSON'}`,
+      'Tìm trong notebook các bài tập đúng chủ đề này, xếp từ cơ bản đến nâng cao:',
+      `- Phần A – Cơ bản: ${o.n1} bài, ${o.p1} phút`, `- Phần B – Khá: ${o.n2} bài, ${o.p2} phút`, `- Phần C – Nâng cao: ${o.n3} bài, ${o.p3} phút`, `- Soát bài: ${soat} phút (tổng 90 phút)`,
+      o.goc === 'giu' ? 'Bài lấy từ tài liệu: giữ nguyên đề gốc, ghi nguồn chính xác (tên tài liệu – đề/cụm – bài số).' : 'Bài lấy từ tài liệu: đổi số liệu và bối cảnh, ghi nguồn dạng tham khảo.',
+      `Đợt ${dot} phải KHÁC các đợt trước: không lấy lại bài nào trong danh sách "Đã dùng"; ưu tiên tài liệu và dạng bài chưa dùng.`,
+      uu.length ? `Ưu tiên tìm trong: ${uu.join('; ')}.` : '',
+      o.rieng ? `Yêu cầu riêng: ${o.rieng}` : '',
+      dung.length ? `Đã dùng (không lấy lại):\n${dung.map(x => '- ' + x).join('\n')}` : 'Đã dùng: chưa có (đợt đầu).',
+      o.dd === 'md' ? `Trả về đúng một khối ${BT}markdown theo MẪU MARKDOWN trong hướng dẫn (loai: on_tap_toan, ma: ${ma}, bai: ${o.bai}, dot: ${dot}).`
+        : `Trả về đúng một khối ${BT}json theo mẫu trong hướng dẫn ("loai":"on_tap_toan", "ma":"${ma}", "bai":${/^\d+$/.test(o.bai) ? o.bai : `"${o.bai}"`}, "dot":${dot}).`].filter(Boolean).join('\n');
   }
   function lenhToan(o, k) {
     const b = BAI_TOAN.find(x => x[0] === o.bai), a = o.so + k * o.moi, z = a + o.moi - 1;
@@ -145,7 +239,7 @@ ${loai === 'de_van' ? MAU_VAN : MAU_TOAN}`;
         <li><b>Gửi lệnh</b> trong Gem, bấm nút sao chép của khối ${BT}json.</li>
         <li><b>Nhập dữ liệu:</b> dán vào đây → web tự sửa lỗi hay gặp, kiểm điểm, cho xem trước và in PDF → <i>Lưu trên máy này</i>.</li>
         <li><b>Đưa lên hệ thống cho mọi học sinh:</b> bấm <i>Tải tệp chuẩn</i>, chép tệp vào thư mục <code>nhap/</code> của dự án rồi chạy <code>python3 tools/nhap-du-lieu.py</code> (hoặc nhắn Claude "nhập dữ liệu mới"), đẩy lên GitHub.</li></ol></section>
-      <div class="two"><a class="card link-card" href="#/xuong/prompt"><span class="big">🧾</span><b>Menu prompt</b><span>Ngữ văn vào 10 · Toán luyện đề theo bài</span></a>
+      <div class="two"><a class="card link-card" href="#/xuong/prompt"><span class="big">🧾</span><b>Menu prompt</b><span>Ngữ văn vào 10 · Toán luyện đề theo bài · Phiếu ôn tập 90 phút</span></a>
         <a class="card link-card" href="#/xuong/nhap"><span class="big">📥</span><b>Nhập dữ liệu</b><span>Dán câu trả lời AI hoặc kéo tệp .json</span></a></div>
       <h2 class="sec">Đã lưu trên máy này (${loc.length})</h2>
       ${loc.length ? `<div class="card"><ul class="xw-list">${loc.map(x => { const r = NhapDL.check(x.json); return `<li><b>${esc(r.ten || x.key)}</b> <span class="muted">${new Date(x.luc).toLocaleString('vi-VN')}</span>
@@ -162,7 +256,8 @@ ${loai === 'de_van' ? MAU_VAN : MAU_TOAN}`;
     view().innerHTML = shell('#/xuong', `<section class="card hero"><h2>🧾 Menu prompt</h2><p>Chọn loại dữ liệu và các lựa chọn. Lần đầu: tạo một Gem trong Gemini, dán <b>Hướng dẫn Gem</b> vào mục Hướng dẫn, mục Kiến thức gắn notebook NotebookLM. Sau đó mỗi lần chỉ cần dán <b>Lệnh</b>.</p></section>
       <div class="card xw-form">
         <div class="opts-row"><label class="tog"><input type="radio" name="xLoai" value="van" ${st.loai === 'van' ? 'checked' : ''}> 📖 Ngữ văn vào 10 – đề luyện</label>
-          <label class="tog"><input type="radio" name="xLoai" value="toan" ${st.loai === 'toan' ? 'checked' : ''}> 📐 Toán vào 10 – đề luyện theo bài</label></div>
+          <label class="tog"><input type="radio" name="xLoai" value="toan" ${st.loai === 'toan' ? 'checked' : ''}> 📐 Toán vào 10 – đề luyện theo bài</label>
+          <label class="tog"><input type="radio" name="xLoai" value="ontap" ${st.loai === 'ontap' ? 'checked' : ''}> 🗂️ Toán vào 10 – phiếu ôn tập 90 phút theo chủ đề</label></div>
         <div class="opts-row"><label class="tog"><input type="radio" name="xNoi" value="gem" ${st.noi === 'gem' ? 'checked' : ''}> Gem có gắn notebook (lệnh ngắn)</label>
           <label class="tog"><input type="radio" name="xNoi" value="nb" ${st.noi === 'nb' ? 'checked' : ''}> Dán thẳng vào NotebookLM (lệnh đầy đủ)</label></div>
         <div class="xw-grid" id="xVan">
@@ -176,41 +271,65 @@ ${loai === 'de_van' ? MAU_VAN : MAU_TOAN}`;
           <label>Bắt đầu từ đề số <input id="xSoT" type="number" min="1" value="${st.so || 1}"></label><label>Số đề mỗi lệnh <input id="xMoi" type="number" min="1" max="10" value="${st.moi}"></label>
           <label>Số lệnh <input id="xLan" type="number" min="1" max="10" value="${st.lan}"></label>
           <label>Mức <select id="xMucT"><option ${st.mucT === 'TB' ? 'selected' : ''}>TB</option><option ${st.mucT === 'KHA' ? 'selected' : ''}>KHA</option><option ${st.mucT === 'GIOI' ? 'selected' : ''}>GIOI</option></select></label></div>
+        <div id="xOnTap">
+          <div class="xw-grid">
+            <label>Chủ đề <select id="oBai">${BAI_TOAN.map(b => `<option value="${b[0]}" ${st.oBai === b[0] ? 'selected' : ''}>${b[1]}</option>`).join('')}</select></label>
+            <label>Đợt số (tự tăng) <input id="oDot" type="number" min="1"></label><label>Số phiếu (đợt liên tiếp) <input id="oN" type="number" min="1" max="5" value="${st.oN || 1}"></label>
+            <label>Định dạng AI trả về <select id="oDd"><option value="json" ${st.oDd !== 'md' ? 'selected' : ''}>JSON (nhập thẳng vào web)</option><option value="md" ${st.oDd === 'md' ? 'selected' : ''}>Markdown .md chuẩn</option></select></label>
+            <label>Bài lấy từ tài liệu <select id="oGoc"><option value="giu" ${st.oGoc !== 'doi' ? 'selected' : ''}>Giữ nguyên đề gốc, ghi nguồn</option><option value="doi" ${st.oGoc === 'doi' ? 'selected' : ''}>Đổi số liệu</option></select></label></div>
+          <div class="xw-grid xw-3">
+            <label>Cơ bản: số bài <input id="oN1" type="number" min="1" max="8" value="${st.n1 || 4}"></label><label>Cơ bản: phút <input id="oP1" type="number" min="5" max="60" value="${st.p1 || 25}"></label>
+            <label>Khá: số bài <input id="oN2" type="number" min="1" max="8" value="${st.n2 || 4}"></label><label>Khá: phút <input id="oP2" type="number" min="5" max="60" value="${st.p2 || 35}"></label>
+            <label>Nâng cao: số bài <input id="oN3" type="number" min="1" max="6" value="${st.n3 || 2}"></label><label>Nâng cao: phút <input id="oP3" type="number" min="5" max="60" value="${st.p3 || 25}"></label></div>
+          <p class="muted" id="oTong"></p>
+          <label class="xw-wide">Bài đã dùng thêm (ngoài các phiếu đã nhập vào web – mỗi dòng một bài: nguồn – tóm tắt) <textarea id="oThem" rows="3" class="xw-ta"></textarea></label>
+          <label class="xw-wide">Tài liệu trong notebook để xoay vòng (tuỳ chọn, mỗi dòng một tên; mỗi đợt ưu tiên một nhóm khác) <textarea id="oTl" rows="3" class="xw-ta">${esc(U.get('xuong:tailieu', ''))}</textarea></label>
+          <p class="muted" id="oDung"></p></div>
         <label class="xw-wide">Cấu trúc theo (tên đề trong notebook, bỏ trống nếu theo cấu trúc chung) <input id="xTheo" value="${esc(st.theo)}"></label>
         <label class="xw-wide">Yêu cầu riêng (lỗi học sinh hay mắc, chủ đề muốn có…) <input id="xRieng" value="${esc(st.rieng)}"></label>
       </div><div id="xOut"></div>`);
     const draw = () => {
       const loai = document.querySelector('[name=xLoai]:checked').value, noi = document.querySelector('[name=xNoi]:checked').value;
-      $i('xVan').hidden = loai !== 'van'; $i('xToan').hidden = loai !== 'toan';
+      $i('xVan').hidden = loai !== 'van'; $i('xToan').hidden = loai !== 'toan'; $i('xOnTap').hidden = loai !== 'ontap';
+      $i('xTheo').parentElement.hidden = loai === 'ontap';
+      const oBai = $i('oBai').value; if ($i('oBai').dataset.last !== oBai) { $i('oDot').value = OnTap.nextDot(oBai); $i('oThem').value = U.get('xuong:them:' + oBai, ''); $i('oBai').dataset.last = oBai; }
       const o = { loai, noi, tien: $i('xTien').value.trim() || 'V', so: loai === 'van' ? +$i('xSo').value || 0 : +$i('xSoT').value || 1, n: Math.min(+$i('xN').value || 1, 20), muc: $i('xMuc').value,
         viet: $i('xViet').value, ngl: $i('xNgl').value, theo: $i('xTheo').value.trim(), rieng: $i('xRieng').value.trim(),
-        bai: $i('xBai').value, moi: Math.min(+$i('xMoi').value || 5, 10), lan: Math.min(+$i('xLan').value || 1, 10), mucT: $i('xMucT').value };
-      U.set('xuong:prompt', o);
-      const hd = loai === 'van' ? HD_VAN : HD_TOAN;
-      const ls = loai === 'van' ? Array.from({ length: o.n }, (_, k) => lenhVan(o, k)) : Array.from({ length: o.lan }, (_, k) => lenhToan({ ...o, muc: o.mucT }, k));
+        bai: $i('xBai').value, moi: Math.min(+$i('xMoi').value || 5, 10), lan: Math.min(+$i('xLan').value || 1, 10), mucT: $i('xMucT').value,
+        oBai, oN: Math.min(+$i('oN').value || 1, 5), oDd: $i('oDd').value, oGoc: $i('oGoc').value,
+        n1: +$i('oN1').value || 4, n2: +$i('oN2').value || 4, n3: +$i('oN3').value || 2, p1: +$i('oP1').value || 25, p2: +$i('oP2').value || 35, p3: +$i('oP3').value || 25 };
+      U.set('xuong:prompt', o); U.set('xuong:tailieu', $i('oTl').value); U.set('xuong:them:' + oBai, $i('oThem').value);
+      const soat = 90 - o.p1 - o.p2 - o.p3;
+      $i('oTong').textContent = `Tổng: ${o.n1 + o.n2 + o.n3} bài · ${o.p1 + o.p2 + o.p3} phút làm + ${soat} phút soát = 90 phút${soat < 0 || soat > 15 ? ' ⚠️ chỉnh lại để thời gian soát từ 0 đến 15 phút' : ''}.`;
+      $i('oDung').textContent = `Đã dùng ở các phiếu ${OnTap.TEN[oBai] ? 'của chủ đề này' : ''} trong web: ${OnTap.daDung(oBai).length} bài – lệnh tự đưa vào danh sách "Đã dùng" để đợt mới không lặp.`;
+      const hd = loai === 'van' ? HD_VAN : loai === 'ontap' ? HD_ONTAP(o.oDd === 'md') : HD_TOAN;
+      const ls = loai === 'van' ? Array.from({ length: o.n }, (_, k) => lenhVan(o, k))
+        : loai === 'ontap' ? Array.from({ length: o.oN }, (_, k) => lenhOnTap({ bai: oBai, dot: +$i('oDot').value || 1, dd: o.oDd, goc: o.oGoc, n1: o.n1, n2: o.n2, n3: o.n3, p1: o.p1, p2: o.p2, p3: o.p3, rieng: o.rieng, them: $i('oThem').value, tl: $i('oTl').value }, k))
+        : Array.from({ length: o.lan }, (_, k) => lenhToan({ ...o, muc: o.mucT }, k));
       const full = l => noi === 'nb' ? `${hd}\n\n=== LỆNH ===\n${l}` : l;
       $i('xOut').innerHTML = (noi === 'gem' ? box('xHd', '① Hướng dẫn Gem (dán một lần vào mục Hướng dẫn của Gem)', hd, 'Mục Kiến thức của Gem: thêm notebook NotebookLM chứa tài liệu.') : '')
-        + `<div class="card xw-box"><div class="xw-h"><b>${noi === 'gem' ? '②' : '①'} Lệnh từng đề (${ls.length})</b><button class="btn" type="button" id="xAll">⬇️ Tải tất cả lệnh (.txt)</button></div>
+        + `<div class="card xw-box"><div class="xw-h"><b>${noi === 'gem' ? '②' : '①'} Lệnh ${loai === 'ontap' ? 'từng phiếu' : 'từng đề'} (${ls.length})</b><button class="btn" type="button" id="xAll">⬇️ Tải tất cả lệnh (.txt)</button></div>
           <p class="muted">${noi === 'gem' ? 'Mỗi lệnh gửi trong một cuộc trò chuyện mới của Gem.' : 'NotebookLM có thể cắt câu trả lời dài: nếu JSON bị cụt, dùng Gem hoặc giảm số đề mỗi lệnh.'}</p>
           ${ls.map((l, i) => `<div class="xw-h"><span>Lệnh ${i + 1}</span><button class="btn ghost" type="button" data-copy="xL${i}">📋 Chép lệnh ${i + 1}</button></div><textarea id="xL${i}" class="xw-ta" readonly rows="${noi === 'nb' ? 6 : 5}">${esc(full(l))}</textarea>`).join('')}</div>`
-        + box('xSua', `${noi === 'gem' ? '③' : '②'} Lệnh sửa (khi AI trả về sai mẫu, thiếu chấm điểm)`, SUA(loai === 'van' ? 'de_van' : 'luyen_de_toan'), 'Trang Nhập dữ liệu tự tạo lệnh sửa kèm danh sách lỗi cụ thể.');
+        + box('xSua', `${noi === 'gem' ? '③' : '②'} Lệnh sửa (khi AI trả về sai mẫu, thiếu chấm điểm)`, SUA(loai === 'van' ? 'de_van' : loai === 'ontap' ? 'on_tap_toan' : 'luyen_de_toan'), 'Trang Nhập dữ liệu tự tạo lệnh sửa kèm danh sách lỗi cụ thể (cả bài bị trùng đợt trước).');
       bindCopy($i('xOut'));
       $i('xAll').addEventListener('click', () => download(`lenh-${loai}-${new Date().toISOString().slice(0, 10)}.txt`, ls.map(full).join('\n=====\n'), 'text/plain'));
     };
-    view().querySelectorAll('input, select').forEach(x => x.addEventListener('input', draw));
+    view().querySelectorAll('input, select, textarea').forEach(x => x.addEventListener('input', draw));
     draw();
   }
 
   /* ---------- Nhập dữ liệu ---------- */
   function previewHTML(j, r) {
     if (r.loai === 'de_van') return Van.sheetHTML(NhapDL.vanEntry(j, 'xem'), { muc: 'day' });
+    if (r.loai === 'on_tap_toan') return OnTap.sheetHTML(NhapDL.onTapEntry(j, 'xem'), { key: true });
     const t = Topics.get(r.id) || { id: r.id, bai: 'Bài', title: '' };
     return LuyenDe.sheetHTML(t, { key: true }, null, { phut: 12, de: NhapDL.toanItems(j, 'xem') });
   }
   function nhapPage() {
-    view().innerHTML = shell('#/xuong', `<section class="card hero"><h2>📥 Nhập dữ liệu</h2><p>Dán nguyên câu trả lời của AI (có khối ${BT}json) hoặc kéo các tệp <code>.json</code> vào ô dưới. Web tự tách JSON, sửa dấu \\ của công thức, đổi $…$ thành công thức, bỏ số trích dẫn, rồi kiểm điểm từng câu.</p></section>
+    view().innerHTML = shell('#/xuong', `<section class="card hero"><h2>📥 Nhập dữ liệu</h2><p>Dán nguyên câu trả lời của AI (khối ${BT}json, hoặc ${BT}markdown của phiếu ôn tập) hoặc kéo các tệp <code>.json</code>, <code>.md</code> vào ô dưới. Web tự tách JSON, sửa dấu \\ của công thức, đổi $…$ thành công thức, bỏ số trích dẫn, rồi kiểm điểm từng câu.</p></section>
       <div class="card"><div id="nDrop" class="xw-drop"><textarea id="nIn" rows="10" placeholder="Dán câu trả lời của AI vào đây…"></textarea>
-        <p class="muted">hoặc <label class="btn ghost"><input type="file" id="nFile" accept=".json,.txt,application/json" multiple hidden> Chọn tệp .json</label> · kéo thả tệp vào ô này</p></div>
+        <p class="muted">hoặc <label class="btn ghost"><input type="file" id="nFile" accept=".json,.md,.txt,application/json,text/markdown" multiple hidden> Chọn tệp .json</label> · kéo thả tệp vào ô này</p></div>
         <div class="row"><button class="btn primary" type="button" id="nGo">🔎 Kiểm tra</button></div></div>
       <div id="nOut"></div>`);
     const run = srcs => {
@@ -221,22 +340,23 @@ ${loai === 'de_van' ? MAU_VAN : MAU_TOAN}`;
         return `<div class="card xw-res ${r.errs.length ? 'bad' : 'ok'}"><h3>${esc(s.name)} · ${esc(r.ten || 'không rõ loại')}</h3>
           <p class="chips"><span class="chip ${r.errs.length ? 'warnc' : 'ok'}">${r.errs.length ? `${r.errs.length} lỗi` : 'Đúng mẫu ✓'}</span>${r.warns.length ? `<span class="chip">${r.warns.length} lưu ý</span>` : ''}${res.notes.map(n => `<span class="chip">${esc(n)}</span>`).join('')}</p>
           ${r.errs.length ? `<ul class="xw-err">${r.errs.map(x => `<li>✗ ${esc(x)}</li>`).join('')}</ul>` : ''}${r.warns.length ? `<ul class="xw-warn">${r.warns.map(x => `<li>! ${esc(x)}</li>`).join('')}</ul>` : ''}
-          <div class="row">${r.errs.length ? '' : `<button class="btn primary" type="button" data-save="${i}">💾 Lưu trên máy này</button><button class="btn" type="button" data-dl="${i}">⬇️ Tải tệp chuẩn (.json)</button><button class="btn" type="button" data-print="${i}">🖨️ In / Lưu PDF</button>`}
+          <div class="row">${r.errs.length ? '' : `<button class="btn primary" type="button" data-save="${i}">💾 Lưu trên máy này</button><button class="btn" type="button" data-dl="${i}">⬇️ Tải tệp chuẩn (.json)</button><button class="btn" type="button" data-print="${i}">🖨️ In / Lưu PDF</button>${r.loai === 'on_tap_toan' ? `<button class="btn" type="button" data-md="${i}">⬇️ Tải Markdown (.md)</button>` : ''}`}
             ${r.errs.length || r.warns.length ? `<button class="btn" type="button" data-fix="${i}">📋 Chép lệnh sửa</button>` : ''}</div>
           ${r.errs.length ? '' : `<details class="xw-pre" open><summary>Xem trước</summary><div class="paper-wrap" id="nPre${i}"></div></details>`}</div>`;
       }).join('');
       srcs.forEach((s, i) => { if (s.r && !s.r.errs.length) $i(`nPre${i}`).innerHTML = previewHTML(s.res.data, s.r); });
       const S_ = i => srcs[+i];
       $i('nOut').querySelectorAll('[data-fix]').forEach(b => b.addEventListener('click', async () => {
-        const s = S_(b.dataset.fix), loai = s.r ? s.r.loai : (/doc_hieu|de_van/.test(s.text) ? 'de_van' : 'luyen_de_toan');
+        const s = S_(b.dataset.fix), loai = s.r ? s.r.loai : (/doc_hieu|de_van/.test(s.text) ? 'de_van' : /on_tap_toan/.test(s.text) ? 'on_tap_toan' : 'luyen_de_toan');
         const ok = await U.copy(SUA(loai, s.r ? [...s.r.errs, ...s.r.warns] : ['JSON sai cú pháp, không đọc được']));
         U.toast(ok ? 'Đã chép lệnh sửa. Dán vào đúng cuộc trò chuyện với AI vừa rồi.' : 'Không chép được.');
       }));
       $i('nOut').querySelectorAll('[data-save]').forEach(b => b.addEventListener('click', () => {
         const s = S_(b.dataset.save); NhapDL.saveLocal(s.res.data);
         U.toast('Đã lưu trên máy này. Đang mở…');
-        setTimeout(() => { location.hash = s.r.loai === 'de_van' ? `#/van-10/de/${encodeURIComponent(s.res.data.ma_de)}` : `#/cd/${s.r.id}/de`; location.reload(); }, 600);
+        setTimeout(() => { location.hash = s.r.loai === 'de_van' ? `#/van-10/de/${encodeURIComponent(s.res.data.ma_de)}` : s.r.loai === 'on_tap_toan' ? `#/on-tap/${encodeURIComponent(s.res.data.ma)}` : `#/cd/${s.r.id}/de`; location.reload(); }, 600);
       }));
+      $i('nOut').querySelectorAll('[data-md]').forEach(b => b.addEventListener('click', () => { const s = S_(b.dataset.md); download(`${s.res.data.ma}.md`, OnTap.toMd(NhapDL.onTapEntry(s.res.data, 'xem')), 'text/markdown'); }));
       $i('nOut').querySelectorAll('[data-dl]').forEach(b => b.addEventListener('click', () => { const s = S_(b.dataset.dl); download(NhapDL.fileName(s.res.data), JSON.stringify(s.res.data, null, 1)); }));
       $i('nOut').querySelectorAll('[data-print]').forEach(b => b.addEventListener('click', () => {
         const s = S_(b.dataset.print), html = previewHTML(s.res.data, s.r);
@@ -259,5 +379,5 @@ ${loai === 'de_van' ? MAU_VAN : MAU_TOAN}`;
     if (parts[1] === 'prompt') promptPage(); else if (parts[1] === 'nhap') nhapPage(); else home();
     return true;
   }
-  return { route, HD_VAN, HD_TOAN, MAU_VAN, MAU_TOAN, SUA, lenhVan, lenhToan };
+  return { route, HD_VAN, HD_TOAN, HD_ONTAP, MAU_VAN, MAU_TOAN, MAU_ONTAP, MAU_MD_ONTAP, SUA, lenhVan, lenhToan, lenhOnTap };
 })();

@@ -403,3 +403,10 @@ table.ld-the.full{font-size:10.5pt}
 .td-step,.td-opt{min-width:0;width:100%}
 .td-card mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
 .xw-form label.tog{flex-direction:row;align-items:center;gap:8px;font-weight:600}
+/* Phiếu ôn tập 90 phút (ontap.js) */
+.xw-form [hidden]{display:none !important}
+.xw-3{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.ot-kt ul{columns:1}
+.ot-goi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px 14px;font-size:10.5pt;border:1px dashed #777;border-radius:6px;padding:5px 9px}
+.ot-goi p{margin:1px 0}
+.ld-ot{margin:6px 0;font-weight:600}
