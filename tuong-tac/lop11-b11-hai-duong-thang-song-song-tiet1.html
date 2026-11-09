@@ -34,6 +34,10 @@ body{display:flex;align-items:center;justify-content:center;overflow:hidden}
 .slide.on{display:flex}
 .slide.game{padding:0}
 .slide.game iframe{width:100%;height:100%;border:0;display:block;background:#f8fafc}
+.slide.anh{padding:0;align-items:center;justify-content:center;background:var(--paper)}
+.slide.anh img{width:100%;height:100%;object-fit:contain;display:block}
+.slide.anh .anh-loi{display:none;font-size:calc(var(--u)*1.6);color:var(--muted);text-align:center;padding:0 8%}
+.slide.anh.loi img{display:none}.slide.anh.loi .anh-loi{display:block}
 .kicker{font-size:.72em;color:var(--primary);font-weight:600;letter-spacing:.02em;margin:0}
 h1,h2{font-family:var(--serif);color:var(--ink);margin:.1em 0 .35em;line-height:1.2}
 h1{font-size:2.1em} h2{font-size:1.3em}
@@ -1414,6 +1418,12 @@ li{margin:.12em 0}
   <p class="sub">Vị trí tương đối của hai đường thẳng</p>
 </section>
 
+<!-- 0b. Ảnh dẫn vào bài (thầy thêm 09/11/2026) – ảnh lấy từ mạng, cần Internet -->
+<section class="slide anh">
+  <img src="https://i.ibb.co/prrQp6Pq/bb4a13214655.png" alt="Ảnh dẫn vào bài học Hai đường thẳng song song" onerror="this.parentNode.classList.add('loi')">
+  <p class="anh-loi">Chưa tải được ảnh dẫn vào bài – kiểm tra kết nối mạng.</p>
+</section>
+
 <!-- 1. HĐ1 nút giao -->
 <section class="slide">
   <h2>Bốn tuyến đường ở một nút giao</h2>
@@ -1454,23 +1464,16 @@ li{margin:.12em 0}
   <h2>Vị trí tương đối của hai đường thẳng</h2>
   <div class="row">
     <div class="col w2">
-      <svg class="zoomable" viewBox="-10 -12 720 270" style="width:100%" role="img" aria-label="Bốn vị trí tương đối">
-        <g fill="none" stroke="var(--muted)" stroke-width="2">
-          <path d="M10 120 L50 20 L150 20 L110 120 Z"/><path d="M175 120 L215 20 L315 20 L275 120 Z"/>
-          <path d="M340 120 L380 20 L480 20 L440 120 Z"/><path d="M505 120 L545 20 L645 20 L605 120 Z"/>
+      <svg class="zoomable" viewBox="-12 -40 990 320" style="width:100%" role="img" aria-label="Bốn vị trí tương đối của hai đường thẳng a, b: cắt nhau tại M, song song, trùng nhau (cùng nằm trong mặt phẳng α); chéo nhau (a cắt α tại I, b nằm trong α)">
+        <style>.vt2 line{stroke:var(--text);stroke-width:3.4;stroke-linecap:round}.vt2 .mp{fill:none;stroke:var(--text);stroke-width:2.4}.vt2 path{stroke:var(--text);stroke-width:1.6}.vt2 .dot{fill:var(--text)}.vt2 .lb{font-family:var(--serif);font-style:italic;font-size:26px;fill:var(--text)}.vt2 .ct{font-family:var(--serif);font-style:italic;font-size:29px;fill:var(--ink);text-anchor:middle}.vt2 .cp{font-family:var(--font);font-size:25px;fill:var(--ink);text-anchor:middle}</style>
+        <g class="vt2">
+          <g transform="translate(0 0)"><path d="M0 120 L170 120 L215 15 L45 15 Z" class="mp"/><path d="M34 120 A34 34 0 0 0 13.4 88.8" fill="none"/><text x="13" y="114" class="lb">α</text><line x1="55" y1="45" x2="132" y2="110"/><line x1="40" y1="64" x2="172" y2="37"/><circle cx="69.9" cy="57.6" r="3.2" class="dot"/><text x="62" y="44" class="lb">M</text><text x="152" y="64" class="lb">b</text><text x="140" y="104" class="lb">a</text><text x="107" y="166" class="ct">a ∩ b = {M}</text><text x="107" y="200" class="cp">a cắt b tại M</text></g>
+          <g transform="translate(245 0)"><path d="M0 120 L170 120 L215 15 L45 15 Z" class="mp"/><path d="M34 120 A34 34 0 0 0 13.4 88.8" fill="none"/><text x="13" y="114" class="lb">α</text><line x1="40" y1="58" x2="178" y2="25"/><line x1="50" y1="100" x2="188" y2="67"/><text x="98" y="37" class="lb">a</text><text x="156" y="64" class="lb">b</text><text x="107" y="166" class="ct">a ∥ b</text><text x="107" y="200" class="cp">a song song với b</text></g>
+          <g transform="translate(490 0)"><path d="M0 120 L170 120 L215 15 L45 15 Z" class="mp"/><path d="M34 120 A34 34 0 0 0 13.4 88.8" fill="none"/><text x="13" y="114" class="lb">α</text><line x1="48" y1="94" x2="182" y2="44"/><text x="70" y="76" class="lb">a</text><text x="92" y="102" class="lb">b</text><text x="107" y="166" class="ct">a ≡ b</text><text x="107" y="200" class="cp">a trùng với b</text></g>
+          <g transform="translate(735 0)"><path d="M0 120 L170 120 L215 15 L45 15 Z" class="mp"/><path d="M34 120 A34 34 0 0 0 13.4 88.8" fill="none"/><text x="13" y="114" class="lb">α</text><line x1="75" y1="-28" x2="75" y2="62"/><line x1="75" y1="62" x2="75" y2="120" stroke-dasharray="6 5"/><line x1="75" y1="120" x2="75" y2="138"/><line x1="38" y1="110" x2="165" y2="86"/><circle cx="75" cy="62" r="3.4" class="dot"/><text x="86" y="38" class="lb">a</text><text x="84" y="64" class="lb">I</text><text x="146" y="80" class="lb">b</text><text x="107" y="200" class="cp">a và b chéo nhau</text></g>
         </g>
-        <g stroke-width="4">
-          <line x1="35" y1="55" x2="135" y2="95" stroke="var(--c2)"/><line x1="50" y1="100" x2="125" y2="35" stroke="var(--c3)"/>
-          <line x1="200" y1="55" x2="295" y2="40" stroke="var(--c2)"/><line x1="195" y1="100" x2="285" y2="85" stroke="var(--c3)"/>
-          <line x1="360" y1="95" x2="460" y2="50" stroke="var(--c2)"/><line x1="360" y1="95" x2="460" y2="50" stroke="var(--c3)" stroke-dasharray="7 7"/>
-          <line x1="520" y1="95" x2="625" y2="65" stroke="var(--c2)"/><line x1="578" y1="4" x2="582" y2="136" stroke="var(--c3)"/>
-        </g>
-        <g font-family="Be Vietnam Pro" font-size="24" fill="var(--text)" text-anchor="middle">
-          <text x="80" y="162">cắt nhau</text><text x="245" y="162">song song</text>
-          <text x="410" y="162">trùng nhau</text><text x="575" y="162">chéo nhau</text>
-        </g>
-        <path d="M10 195 H480" stroke="var(--ink)" stroke-width="3"/><text x="245" y="230" font-size="24" fill="var(--ink)" text-anchor="middle" font-family="Be Vietnam Pro">đồng phẳng</text>
-        <path d="M505 195 H645" stroke="var(--primary)" stroke-width="3"/><text x="575" y="230" font-size="20" fill="var(--primary)" text-anchor="middle" font-family="Be Vietnam Pro">không đồng phẳng</text>
+        <path d="M0 226 H705" stroke="var(--ink)" stroke-width="3"/><text x="352" y="264" font-size="29" fill="var(--ink)" text-anchor="middle" style="font-family:var(--font)">đồng phẳng</text>
+        <path d="M735 226 H950" stroke="var(--primary)" stroke-width="3"/><text x="842" y="264" font-size="27" fill="var(--primary)" text-anchor="middle" style="font-family:var(--font)">không đồng phẳng</text>
       </svg>
       <div class="box step" data-step="1">a, b <b>không cùng nằm trong mặt phẳng nào</b> thì a, b <b>chéo nhau</b>.</div>
     </div>
