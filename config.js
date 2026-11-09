@@ -7,6 +7,7 @@ window.CONFIG = {
   author: 'Người soạn: thầy Vũ Tiến Lực',
   year: '2026 – 2027',
   examLine: 'Kỳ thi tuyển sinh vào lớp 10 TP.HCM, tháng 6/2027 · 120 phút · 7 bài · 10 điểm',
+  tenPhieu: 'LỚP TOÁN – THẦY VŨ TIẾN LỰC',     // dòng tên in ở đầu mọi phiếu, đề PDF
   // Các trợ lý AI học sinh dùng để nhận xét bài (mở tab mới).
   ai: [
     { name: 'ChatGPT', url: 'https://chatgpt.com/' },

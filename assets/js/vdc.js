@@ -135,7 +135,7 @@ const Vdc = (() => {
   /* ---------- Phiếu PDF ---------- */
   function sheetHTML(t, o) {
     const base = siteBase(), G = GRADES[t.grade];
-    const head = `<div class="sh-head"><span>CON ĐƯỜNG TỚI TRƯỜNG · ${esc(G.name.toUpperCase())} · VẬN DỤNG – VẬN DỤNG CAO</span><span>${esc(t.ky.join(' · '))}</span></div>`;
+    const head = `<div class="sh-head"><span>${U.tenPhieu()} · ${esc(G.name.toUpperCase())} · VẬN DỤNG – VẬN DỤNG CAO</span><span>${esc(t.ky.join(' · '))}</span></div>`;
     let s = `<section class="sh-page">${head}<h1 class="sh-title">PHIẾU LUYỆN TẬP</h1><p class="sh-sub">${t.title}</p>
       <p class="sh-info">Họ và tên: .......................................................... Lớp: .............. Ngày: ......../......../........</p>
       <div class="sh-kt"><p class="sh-h">KIẾN THỨC TRỌNG TÂM</p>${t.kt.map(k => `<div class="sh-kt-i"><b>${k.t}.</b> ${k.b}</div>`).join('')}</div>`;

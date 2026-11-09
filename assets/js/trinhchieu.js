@@ -3,11 +3,14 @@
    - Toàn màn hình (máy không cho thì phủ kín cửa sổ). Mỗi trang một ý: bìa, mục tiêu, từng mục kiến thức, từng ví dụ,
      cần nhớ, rồi từng câu luyện tập. Cỡ chữ tự tính cho nội dung lấp đầy màn hình, chừa lề.
    - Bấm → / phím cách / Enter: hiện bước tiếp (lời giải, đáp án, từng ý đúng – sai) rồi mới sang trang.
-     ← lùi · Home / End · A–D chọn phương án · F bật/tắt toàn màn hình · Esc thoát. Điện thoại, iPad: vuốt trái / phải.
+     ← lùi · Home / End · A–D chọn phương án · - / + chữ nhỏ / to (0: về 100%) · F bật/tắt toàn màn hình · Esc thoát. Điện thoại, iPad: vuốt trái / phải.
    - Biểu tượng ✦ mờ góc dưới phải: công cụ CONFIG.congCuTrinhChieu (⭐, 🖼️) mở ngay trong lúc chiếu (BaiHoc.congCu).
    ===================================================================== */
 const TrinhChieu = (() => {
-  const { esc, $, $$, shuffle } = U;
+  const { esc, $, $$, shuffle, get, set } = U;
+  // Hệ số cỡ chữ thầy chỉnh bằng phím - / + (hoặc nút A− A+), nhân với cỡ chữ tự tính; nhớ cho lần chiếu sau.
+  const CO_MIN = 0.6, CO_MAX = 2;
+  let co = Math.min(CO_MAX, Math.max(CO_MIN, +get('tc:co', 1) || 1));
   const ABCD = 'ABCD', YL = 'abcd';
   let root = null, deck = [], cur = 0, ro = null, keyFn = null;
 
@@ -50,9 +53,17 @@ const TrinhChieu = (() => {
     const H = (sl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) * (bia ? 1 : 0.8);
     let lo = 12, hi = Math.max(16, Math.min(H * (bia ? 0.11 : 0.085), W * (bia ? 0.06 : 0.045)));
     const vua = f => { inn.style.fontSize = f + 'px'; return inn.scrollHeight <= H + 1 && inn.scrollWidth <= inn.clientWidth + 1; };
-    if (vua(hi)) return;
-    for (let t = 0; t < 9; t++) { const m = (lo + hi) / 2; if (vua(m)) lo = m; else hi = m; }
-    vua(lo);
+    let f = hi;
+    if (!vua(hi)) { for (let t = 0; t < 9; t++) { const m = (lo + hi) / 2; if (vua(m)) lo = m; else hi = m; } f = lo; }
+    inn.style.fontSize = (f * co) + 'px';
+    // phóng to quá khung thì cho cuộn trang (con lăn chuột, vuốt dọc)
+    sl.classList.toggle('cuon', sl.scrollHeight > sl.clientHeight + 1);
+    sl.scrollTop = 0;
+  }
+  function doiCo(d) {
+    co = d === 0 ? 1 : Math.round(Math.min(CO_MAX, Math.max(CO_MIN, co + d)) * 10) / 10;
+    set('tc:co', co); fit();
+    const t = $('.tc-cop', root); if (t) t.textContent = Math.round(co * 100) + '%';
   }
 
   /* ---------- Hiện trang, từng bước ---------- */
@@ -94,12 +105,13 @@ const TrinhChieu = (() => {
     root.setAttribute('role', 'dialog'); root.setAttribute('aria-label', 'Trình chiếu bài học'); root.tabIndex = -1;
     root.innerHTML = `<div class="tc-main cc-main"><div class="tc-prog"><i></i></div><section class="tc-slide" aria-live="polite"></section>
       <nav class="tc-bar" aria-label="Điều khiển trình chiếu"><button type="button" data-k="lui" aria-label="Trang trước">‹</button><span class="tc-so"></span>
-      <button type="button" data-k="toi" aria-label="Tiếp">›</button><button type="button" data-k="fs" aria-label="Toàn màn hình">⛶</button><button type="button" data-k="x" aria-label="Thoát trình chiếu">✕</button></nav></div>`;
+      <button type="button" data-k="toi" aria-label="Tiếp">›</button><button type="button" data-k="nho" aria-label="Chữ nhỏ hơn (phím -)">A−</button><span class="tc-cop" title="Cỡ chữ – bấm để về 100%">${Math.round(co * 100)}%</span><button type="button" data-k="lon" aria-label="Chữ to hơn (phím +)">A+</button><button type="button" data-k="fs" aria-label="Toàn màn hình">⛶</button><button type="button" data-k="x" aria-label="Thoát trình chiếu">✕</button></nav></div>`;
     document.body.appendChild(root); document.body.classList.add('bh-noscroll');
     BaiHoc.congCu(root, () => root.focus());
     $('.tc-bar', root).addEventListener('click', ev => {
       const k = ev.target.closest('button') && ev.target.closest('button').dataset.k;
-      if (k === 'lui') lui(); else if (k === 'toi') toi(); else if (k === 'fs') toanManHinh(); else if (k === 'x') dong();
+      if (k === 'lui') lui(); else if (k === 'toi') toi(); else if (k === 'nho') doiCo(-0.1); else if (k === 'lon') doiCo(0.1); else if (k === 'fs') toanManHinh(); else if (k === 'x') dong();
+      else if (ev.target.closest('.tc-cop')) doiCo(0);
     });
     // vuốt trên điện thoại, iPad
     let x0 = null;
@@ -110,6 +122,9 @@ const TrinhChieu = (() => {
       const k = ev.key;
       if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { if (k === 'Enter' && ev.target.closest && ev.target.closest('.bh-cc')) return; ev.preventDefault(); toi(); }
       else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { ev.preventDefault(); lui(); }
+      else if (k === '+' || k === '=') { ev.preventDefault(); doiCo(0.1); }
+      else if (k === '-' || k === '_') { ev.preventDefault(); doiCo(-0.1); }
+      else if (k === '0') doiCo(0);
       else if (k === 'Home') ve(0); else if (k === 'End') ve(deck.length - 1);
       else if (k === 'Escape') dong();
       else if (k === 'f' || k === 'F') toanManHinh();

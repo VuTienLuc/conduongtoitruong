@@ -185,6 +185,11 @@ async def main():
                 if r[0].startswith(f'{n} /'): break
                 if await pg.locator('.tc-opt').count() and not await pg.locator('.tc-opt.good').count(): await pg.keyboard.press('a')
                 else: await pg.keyboard.press('ArrowRight')
+            f0 = await pg.evaluate("parseFloat(document.querySelector('.tc-in').style.fontSize)")
+            await pg.keyboard.press('+'); await pg.keyboard.press('+'); f1 = await pg.evaluate("parseFloat(document.querySelector('.tc-in').style.fontSize)")
+            await pg.keyboard.press('-'); await pg.keyboard.press('-'); await pg.keyboard.press('-'); f2 = await pg.evaluate("parseFloat(document.querySelector('.tc-in').style.fontSize)")
+            await pg.keyboard.press('0'); f3 = await pg.evaluate("parseFloat(document.querySelector('.tc-in').style.fontSize)")
+            if not (f1 > f0 * 1.15 and f2 < f0 * 0.95 and abs(f3 - f0) < 0.6): fails.append(f'trình chiếu cỡ chữ +/-: {f0, f1, f2, f3}')
             last = await pg.locator('.tc-so').inner_text(); good = await pg.evaluate("TrinhChieu.dung(BaiHoc.get(%d, %d)).filter(d => d.loai === 'tn').length" % (l, bb))
             await pg.keyboard.press('Escape'); await pg.keyboard.press('Escape'); await pg.wait_for_timeout(200)
             if not last.startswith(f'{n} /') or tran or not good or await pg.locator('.tc-root').count(): fails.append(f'trình chiếu Toán {l} bài {bb}: {last}, tràn {tran[:3]}, còn mở {await pg.locator(".tc-root").count()}')

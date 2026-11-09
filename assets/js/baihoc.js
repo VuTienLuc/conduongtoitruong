@@ -314,7 +314,7 @@ const BaiHoc = (() => {
   function phieuHTML(e, o) {
     const b = baiOf(e.lop, e.bai), ten = `Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}`, ma = `${e.lop}${String(e.bai).padStart(2, '0')}${o.ma}`;
     const tn = phieuData(e, o.ma);
-    const head = r => `<div class="sh-head"><span>CON ĐƯỜNG TỚI TRƯỜNG · PHIẾU LÀM BÀI TRÊN LỚP</span><span>${r}</span></div>`;
+    const head = r => `<div class="sh-head"><span>${U.tenPhieu()} · PHIẾU LÀM BÀI TRÊN LỚP</span><span>${r}</span></div>`;
     const cot = opts => { const m = Math.max(...opts.map(chuThuong)); return m <= 22 ? 'c4' : m <= 48 ? 'c2' : 'c1'; };
     let s1 = `<section class="sh-page">${head(`Toán ${e.lop} · <span class="bh-tt-ma">Mã ${ma}</span>`)}
       <h1 class="sh-title">PHIẾU LÀM BÀI</h1><p class="sh-sub">Toán ${e.lop} – ${ten}</p>

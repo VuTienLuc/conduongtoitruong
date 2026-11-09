@@ -31,7 +31,7 @@ const OnTap = (() => {
   const head = (l, r) => `<div class="sh-head"><span>${l}</span><span>${r}</span></div>`;
   function pagePhieu(e) {
     const goi = allBai(e).filter(b => b.goi);
-    return `<section class="sh-page ot-page">${head('CON ĐƯỜNG TỚI TRƯỜNG · PHIẾU ÔN TẬP TOÁN VÀO 10', `${esc(e.ma)} · đợt ${e.dot}`)}
+    return `<section class="sh-page ot-page">${head(`${U.tenPhieu()} · PHIẾU ÔN TẬP TOÁN VÀO 10`, `${esc(e.ma)} · đợt ${e.dot}`)}
       <h1 class="sh-title">PHIẾU ÔN TẬP ${e.phut} PHÚT</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]} · từ cơ bản đến nâng cao</p>
       <p class="sh-info">Họ và tên: ........................................................ Lớp: .............. Ngày: ......../......../........ Thời gian bắt đầu: ............</p>
       ${e.muc_tieu.length || e.kt.length ? `<div class="sh-remind ot-kt">${e.muc_tieu.length ? `<p><b>Mục tiêu:</b> ${e.muc_tieu.join('; ')}.</p>` : ''}${e.kt.length ? `<b>Kiến thức cần nhớ:</b><ul>${e.kt.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}</div>` : ''}

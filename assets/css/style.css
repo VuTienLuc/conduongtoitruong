@@ -531,6 +531,9 @@ body.bh-noscroll{overflow:hidden}
 .tc-bar:hover,.tc-bar:focus-within{opacity:1}
 .tc-bar button{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:10px;background:rgba(15,23,42,.08);color:#152033;font-size:18px;line-height:1;cursor:pointer}
 .tc-so{font:600 14px var(--f-body);color:#475569;min-width:4.5em;text-align:center}
+.tc-bar button[data-k=nho],.tc-bar button[data-k=lon]{width:auto;padding:0 8px;font:700 15px var(--f-body)}
+.tc-cop{font:600 13px var(--f-body);color:#475569;min-width:3.2em;text-align:center;cursor:pointer}
+.tc-slide.cuon{overflow-y:auto}
 .tc-root .bh-cc-pane{z-index:4}
 @media (max-aspect-ratio:1/1){.tc-opts{grid-template-columns:1fr}.tc-slide{padding:3vh 5vw 9vh}}
 /* ---------- 🖨️ Phiếu làm bài trên lớp (bài giảng – luyện tập) ---------- */

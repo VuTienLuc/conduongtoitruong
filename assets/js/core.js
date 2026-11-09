@@ -66,5 +66,7 @@ const U = (() => {
     el.textContent = msg; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 2200);
   }
 
-  return { esc, $, $$, h, get, set, shuffle, pt, sum, plain, copy, toast };
+  // Dòng tên in ở đầu mọi phiếu, đề PDF (sửa ở config.js → tenPhieu)
+  const tenPhieu = () => (typeof window !== 'undefined' && window.CONFIG && window.CONFIG.tenPhieu) || 'LỚP TOÁN – THẦY VŨ TIẾN LỰC';
+  return { esc, $, $$, h, get, set, shuffle, pt, sum, plain, copy, toast, tenPhieu };
 })();

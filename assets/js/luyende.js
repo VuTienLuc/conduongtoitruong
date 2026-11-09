@@ -35,7 +35,7 @@ const LuyenDe = (() => {
   function pageDe(t, L, k) {
     const d = L.de[k - 1];
     return `<section class="sh-page ld-page">
-      <div class="sh-head"><span>CON ĐƯỜNG TỚI TRƯỜNG · LUYỆN ĐỀ TUYỂN SINH 10 – MÔN TOÁN</span><span>Đề số ${k}/${L.de.length}${d.goi ? ' · bí thì lật trang Gợi ý' : ''}</span></div>
+      <div class="sh-head"><span>${U.tenPhieu()} · LUYỆN ĐỀ TUYỂN SINH 10 – MÔN TOÁN</span><span>Đề số ${k}/${L.de.length}${d.goi ? ' · bí thì lật trang Gợi ý' : ''}</span></div>
       <h1 class="sh-title">ĐỀ LUYỆN SỐ ${k} – ${baiOf(t).toUpperCase()} (${pt(d.pts.toFixed(1))} điểm)</h1>
       <p class="sh-sub">${t.title} · ${d.ten} · Thời gian gợi ý: ${L.phut || 12} phút</p>
       <p class="sh-info">Họ và tên: ........................................................ Lớp: .............. Ngày: ......../......../........ Điểm: ......../${pt(d.pts)}</p>
@@ -89,7 +89,7 @@ const LuyenDe = (() => {
   function theHTML(t) {
     const L = get(t.id); if (!L || !L.the) return '';
     return `<div class="sheet math"><section class="sh-page ld-page">
-      <div class="sh-head"><span>CON ĐƯỜNG TỚI TRƯỜNG · BÀI 7 HÌNH HỌC PHẲNG</span><span>Thẻ công cụ – dán vào vở</span></div>
+      <div class="sh-head"><span>${U.tenPhieu()} · BÀI 7 HÌNH HỌC PHẲNG</span><span>Thẻ công cụ – dán vào vở</span></div>
       <h1 class="sh-title">THẺ CÔNG CỤ: NHÌN KẾT LUẬN – CHỌN CÔNG CỤ</h1>
       <p class="sh-sub">Dùng cho câu 7a, 7b, 7c · chỉ dùng cách lập luận được phép theo quy định chấm thống nhất</p>
       <div class="ld-ask"><b>Phân tích ngược 4 bước:</b> <span>1) Gạch chân kết luận, xếp nó vào một dòng của thẻ.</span> <span>2) Đánh dấu trên hình mọi góc vuông, mọi đoạn bằng nhau (bán kính, tiếp tuyến, trung điểm).</span> <span>3) Hỏi: câu trước cho mình gì? Câu b thường dùng câu a, câu c thường dùng tỉ số của câu b.</span> <span>4) Viết ngược "muốn có … cần … ; muốn có … cần …", rồi trình bày xuôi.</span></div>

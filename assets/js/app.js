@@ -269,7 +269,7 @@ const App = (() => {
   /* ---------- 🖨️ Phiếu làm bài ---------- */
   function sheetHTML(t, o) {
     const total = sum(t.practice.map(p => p.pts));
-    const head = `<div class="sh-head"><span>TOÁN VÀO 10 · PHIẾU LUYỆN THI</span><span>Chủ đề ${t.no} · ${esc(t.bai)}</span></div>`;
+    const head = `<div class="sh-head"><span>${U.tenPhieu()} · PHIẾU LUYỆN THI VÀO 10</span><span>Chủ đề ${t.no} · ${esc(t.bai)}</span></div>`;
     const modelPage = o.model ? `<section class="sh-page">${head}<h1 class="sh-title">BÀI MẪU – TRÌNH BÀY ĐỦ ĐIỂM</h1><p class="sh-sub">${t.title}</p>
       ${t.models.map((m, i) => `<div class="sh-model"><p><b>Bài mẫu ${i + 1} (${pt(m.pts)} điểm). ${m.title}.</b> ${m.de}</p>${m.fig ? `<div class="sh-fig">${m.fig}</div>` : ''}
         <ol class="sh-steps">${m.steps.map(st => st.part ? `<li class="part">${st.part}</li>` : `<li><span>${st.s}</span>${st.p ? `<b class="sh-pt">${pt(st.p)}đ</b>` : ''}</li>`).join('')}</ol>

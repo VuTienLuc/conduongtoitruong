@@ -54,7 +54,7 @@ const Van = (() => {
 
   function pageDe(e) {
     const c = e.dh.cau, dv = e.dh.dv;
-    return `<section class="sh-page van-page">${head('CON ĐƯỜNG TỚI TRƯỜNG · LUYỆN ĐỀ TUYỂN SINH 10 – MÔN NGỮ VĂN', `Đề ${esc(e.ma)}`)}
+    return `<section class="sh-page van-page">${head(`${U.tenPhieu()} · LUYỆN ĐỀ TUYỂN SINH 10 – MÔN NGỮ VĂN`, `Đề ${esc(e.ma)}`)}
       <h1 class="sh-title">ĐỀ LUYỆN NGỮ VĂN – ĐỀ ${esc(e.ma)}</h1>
       <p class="sh-sub">Thời gian làm bài: ${e.phut} phút (không kể thời gian phát đề)</p>
       <p class="sh-info">Họ và tên: ........................................................ Lớp: .............. Ngày: ......../......../........ Điểm: ......../10</p>
