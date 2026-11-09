@@ -312,7 +312,8 @@ const NhapDL = (() => {
       giang: (j.bai_giang || []).map(m => ({ t: norm(m.tieu_de), b: normBlock(m.noi_dung), luu_y: norm(m.luu_y),
         vd: (m.vi_du || []).map(v => ({ de: normBlock(v.de), lg: lg(v.loi_giai), ds: norm(v.dap_so) })) })),
       tn: (j.trac_nghiem || []).map(q => { const pa = q.phuong_an.map(x => String(x).replace(/^\s*[A-D][.)]\s+/, '')), k = dapIdx(q, pa);
-        return { q: normBlock(q.cau), a: [pa[k], ...pa.filter((_, i) => i !== k)].map(x => norm(x)), why: norm(q.giai_thich), muc: q.muc || '' }; }),
+        return { q: normBlock(q.cau), a: [pa[k], ...pa.filter((_, i) => i !== k)].map(x => norm(x)), goc: [k, ...[0, 1, 2, 3].filter(i => i !== k)],
+          why: norm(q.giai_thich), muc: q.muc || '' }; }),
       ds: (j.dung_sai || []).map(q => ({ q: normBlock(q.cau), y: q.y.map(x => [norm(x.noi_dung).replace(/^[a-d]\)\s*/, ''), boolOf(x.dung)]), why: normBlock(q.giai_thich) })),
       tln: (j.tra_loi_ngan || []).map(q => ({ q: normBlock(q.cau), ans: String(q.dap_an).trim(), why: normBlock(q.giai_thich) })) };
   }

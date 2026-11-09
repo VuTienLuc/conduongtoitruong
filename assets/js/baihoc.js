@@ -123,10 +123,11 @@ const BaiHoc = (() => {
         <span class="nav-mini">${prev ? `<a href="#/bai-hoc/${lop}/${prev.so}">‹ Bài ${prev.so}</a>` : ''}${next ? `<a href="#/bai-hoc/${lop}/${next.so}">Bài ${next.so} ›</a>` : ''}</span></div>
       <section class="thead card"><span class="tno big">${b.so}</span><div><p class="tbai">Toán ${lop} · Tập ${b.chuong.tap} · Chương ${b.chuong.so}. ${esc(b.chuong.ten)}</p>
         <h2>Bài ${b.so}. ${esc(b.ten)}</h2>${e ? `<p class="tdesc">${e.mau ? '<span class="chip warnc">Mẫu minh họa</span> ' : ''}${e.nguon ? `Nguồn: ${e.nguon}` : ''}</p>` : ''}</div></section>
-      ${e ? `<nav class="tabs" aria-label="Bài học">${tabs}</nav><section id="pane" class="pane"></section>` : `<section id="pane" class="pane"></section>`}
+      ${e ? `<nav class="tabs" aria-label="Bài học">${tabs}${typeof TrinhChieu !== 'undefined' ? `<button type="button" class="tab bh-tc-btn" id="bhTC" title="Trình chiếu toàn màn hình (phím ← →)"><span aria-hidden="true">📽️</span> Trình chiếu</button>` : ''}</nav><section id="pane" class="pane"></section>` : `<section id="pane" class="pane"></section>`}
       ${lienQuan(lop, b.so)}
       <div class="pane-foot">${e && !tab ? `<a class="btn primary" href="#/bai-hoc/${lop}/${so}/luyen">Luyện tập ngay ✍️ →</a>` : next ? `<a class="btn primary" href="#/bai-hoc/${lop}/${next.so}">Sang Bài ${next.so} →</a>` : `<a class="btn primary" href="#/bai-hoc/${lop}">Về mục lục</a>`}</div></main>`;
     const pane = $('#pane');
+    if (e && $('#bhTC')) $('#bhTC').addEventListener('click', () => TrinhChieu.mo(e, tab === 'luyen' ? 'luyen' : 'giang'));
     if (!e) { paneTrong(lop, b, pane); return ttMount(lop, b.so, pane); }
     if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
   }
@@ -135,7 +136,7 @@ const BaiHoc = (() => {
   function ttMount(lop, so, pane) {
     const ts = tnOf(lop, so); if (!ts.length) return;
     pane.insertAdjacentHTML('afterbegin', ts.map((t, i) => `<article class="card bh-tt"><h3>🎬 ${esc(t.ten)}</h3>${t.mo_ta ? `<p class="muted small">${esc(t.mo_ta)}</p>` : ''}
-      <div class="bh-frame" data-tt="${i}"><iframe src="${esc(srcOf(t.file))}" title="${esc(t.ten)}" allow="fullscreen; autoplay; clipboard-write" allowfullscreen loading="lazy"></iframe></div>
+      <div class="bh-frame" data-tt="${i}"><iframe class="cc-main" src="${esc(srcOf(t.file))}" title="${esc(t.ten)}" allow="fullscreen; autoplay; clipboard-write" allowfullscreen loading="lazy"></iframe></div>
       <div class="row"><button class="btn primary" type="button" data-fs="${i}">⛶ Toàn màn hình</button><a class="btn ghost" href="${esc(srcOf(t.file))}" target="_blank" rel="noopener">↗ Mở trong tab mới</a>${t.nguon ? `<span class="muted small">${esc(t.nguon)}</span>` : ''}</div></article>`).join(''));
     $$('.bh-frame[data-tt]', pane).forEach(congCu);
     $$('[data-fs]', pane).forEach(btn => btn.addEventListener('click', () => {
@@ -144,7 +145,7 @@ const BaiHoc = (() => {
       if (go) Promise.resolve(go.call(fr)).then(() => ttFocus(fr)).catch(gia); else gia();
     }));
   }
-  const ttFocus = fr => { try { $('iframe', fr).focus(); $('iframe', fr).contentWindow.focus(); } catch (e) { /* khác nguồn */ } };
+  const ttFocus = fr => { try { $(':scope > iframe', fr).focus(); $(':scope > iframe', fr).contentWindow.focus(); } catch (e) { /* khác nguồn */ } };
   function ttThoat(fr) { fr.classList.remove('gia', 'is-full'); document.body.classList.remove('bh-noscroll'); }
   function ttSync() {
     const fe = document.fullscreenElement || document.webkitFullscreenElement;
@@ -159,7 +160,8 @@ const BaiHoc = (() => {
   // → trang mở ngay trong bài giảng: ◧ nửa màn hình (bài giảng thu về nửa trái) · ⛶ cả màn hình · ▁ thu gọn (giữ nguyên trang) · ✕ đóng.
   const CC = () => ((window.CONFIG && window.CONFIG.congCuTrinhChieu) || []).filter(x => x && x.url);
   const icHTML = x => /^(https?:|data:)/.test(String(x.icon || '')) ? `<img src="${esc(x.icon)}" alt="">` : esc(x.icon || '●');
-  function congCu(fr) {
+  function congCu(fr, focusFn) {
+    const ve = focusFn || (() => ttFocus(fr));
     const ds = CC();
     fr.insertAdjacentHTML('beforeend', `<button type="button" class="bh-cc-exit" aria-label="Thoát toàn màn hình">✕</button>${ds.length ? `<div class="bh-cc" data-mode="">
       <div class="bh-cc-pane"><div class="bh-cc-bar"><button type="button" data-m="half" aria-label="Nửa màn hình">◧</button><button type="button" data-m="full" aria-label="Cả màn hình">⛶</button><button type="button" data-m="min" aria-label="Thu gọn">▁</button><button type="button" data-m="off" aria-label="Đóng">✕</button></div></div>
@@ -172,7 +174,7 @@ const BaiHoc = (() => {
     const mode = m => {
       cc.dataset.mode = m; fr.classList.toggle('cc-half', m === 'half');
       cc.classList.toggle('dang', m === 'min');
-      if (m === '' || m === 'min') ttFocus(fr);
+      if (m === '' || m === 'min') ve();
     };
     const menu = on => { cc.classList.toggle('open', on); fab.setAttribute('aria-expanded', on ? 'true' : 'false'); };
     fab.addEventListener('click', () => menu(!cc.classList.contains('open')));
@@ -225,6 +227,13 @@ const BaiHoc = (() => {
   };
   const sameAns = (x, ans) => { const a = numOf(x), b = numOf(ans); return !isNaN(a) && !isNaN(b) ? Math.abs(a - b) < 1e-9 : fold(x).replace(/\s+/g, '') === fold(ans).replace(/\s+/g, ''); };
   const YL = 'abcd';
+  // Lời giải thích AI viết theo thứ tự phương án GỐC ("Phương án D sai…"); web đảo phương án nên đổi chữ cái cho khớp chỗ mới.
+  function doiChu(q, opts) {
+    if (!q.why || !Array.isArray(q.goc)) return q.why || '';
+    const moi = {}; opts.forEach((o, p) => { const i = q.a.indexOf(o); if (i >= 0) moi['ABCD'[q.goc[i]]] = 'ABCD'[p]; });
+    return q.why.replace(/((?:phương|Phương|PHƯƠNG|đáp|Đáp|ĐÁP)\s+án|[Cc]họn|[Cc]âu trả lời)((?:\s*(?:,|và|hoặc|hay|\/)?\s*(?:<\/?b>)?[A-D](?:<\/?b>)?(?![\p{L}\d]))+)/gu,
+      (m, k, ds) => k + ds.replace(/[A-D](?![\p{L}\d])/g, c => moi[c] || c));
+  }
   function paneLuyen(e, pane) {
     const tn = e.tn.map(q => ({ ...q, good: q.a[0], opts: shuffle(q.a) }));
     const total = tn.length + 4 * e.ds.length + e.tln.length, nQ = tn.length + e.ds.length + e.tln.length;
@@ -251,7 +260,7 @@ const BaiHoc = (() => {
         const ok = q.opts[+btn.dataset.j] === q.good;
         $$('.opt', card).forEach(x => { x.disabled = true; if (q.opts[+x.dataset.j] === q.good) x.classList.add('good'); });
         if (!ok) btn.classList.add('bad');
-        why(card, ok, q.why); tick(ok);
+        why(card, ok, doiChu(q, q.opts)); tick(ok);
       }));
     });
     $$('.bh-dsq', pane).forEach(card => {
@@ -307,5 +316,5 @@ const BaiHoc = (() => {
     if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, parts[3] === 'luyen' ? 'luyen' : '');
     return true;
   }
-  return { LOP, LIEN_9, DUNG_9, own, tuVao10, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
+  return { LOP, LIEN_9, DUNG_9, own, tuVao10, doiChu, congCu, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
 })();

@@ -10,3 +10,4 @@
 - `kiem-dap-so.py`: `round(sp.Rational(4,3)*3.14*8, 2) == 33.49` cho False (sympy Float khác float) → tính bằng float/Fraction, tính lại từ số liệu đề (09/11/2026, phần Bài 5 Antigravity viết).
 - Antigravity vừa để JSON trong `nhap/` vừa viết tay `ld*.js` cùng nội dung → lệnh đăng web sẽ nhập lặp; quy tắc `.agents/rules/soan-de-luyen-va-du-lieu.md`.
 - Đề trùng trong một bộ luyện đề (JSON trong `nhap/` + viết tay `ld*.js`) → `kiem-tra.js` báo TRÙNG, lệnh đăng web dừng (09/11/2026).
+- Lời giải thích trắc nghiệm ghi "Phương án D sai…" nhưng web đảo phương án → chữ cái lệch. Sửa: giữ thứ tự gốc (`goc`) và đổi chữ cái khi hiển thị (`BaiHoc.doiChu`) (09/11/2026).

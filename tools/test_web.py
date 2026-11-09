@@ -170,6 +170,24 @@ async def main():
             n = await pg.locator('.bh-q').count()
             if n: await pg.locator('.bh-q').first.locator('.opt').first.click()
             if not ok or not n or await pg.locator('.bh-q .why:not([hidden])').count() != 1: fails.append(f'bài lớp 9 – Bài {so} (nội dung vào 10): thiếu bài giảng, liên kết đề luyện hoặc trắc nghiệm')
+        # 📽️ Trình chiếu bài giảng – luyện tập: đi hết các trang, chữ vừa khung (không tràn), chọn đáp án, Esc thoát; đổi chữ cái trong lời giải thích
+        dc = await pg.evaluate("BaiHoc.doiChu({ a: ['x', 'y', 'z', 'w'], goc: [3, 0, 1, 2], why: 'Phương án D sai; các phương án A, B và C đúng.' }, ['x', 'w', 'y', 'z'])")
+        if dc != 'Phương án A sai; các phương án C, D và B đúng.': fails.append(f'đổi chữ cái lời giải thích: {dc}')
+        for l, bb in [(10, 1), (9, 31)]:
+            await pg.goto(base + f'#/bai-hoc/{l}/{bb}'); await pg.wait_for_timeout(300)
+            await pg.click('#bhTC'); await pg.wait_for_timeout(400)
+            n = int((await pg.locator('.tc-so').inner_text()).split('/')[1])
+            tran = []
+            for k in range(n * 6):
+                await pg.evaluate("TrinhChieu.fit()")
+                r = await pg.evaluate("(() => { const s = document.querySelector('.tc-slide'), i = s.querySelector('.tc-in'), c = getComputedStyle(s); return [document.querySelector('.tc-so').textContent, i.scrollHeight - (s.clientHeight - parseFloat(c.paddingTop) - parseFloat(c.paddingBottom)), parseFloat(i.style.fontSize)]; })()")
+                if r[1] > 2 and r[2] > 12.5: tran.append(r)
+                if r[0].startswith(f'{n} /'): break
+                if await pg.locator('.tc-opt').count() and not await pg.locator('.tc-opt.good').count(): await pg.keyboard.press('a')
+                else: await pg.keyboard.press('ArrowRight')
+            last = await pg.locator('.tc-so').inner_text(); good = await pg.evaluate("TrinhChieu.dung(BaiHoc.get(%d, %d)).filter(d => d.loai === 'tn').length" % (l, bb))
+            await pg.keyboard.press('Escape'); await pg.keyboard.press('Escape'); await pg.wait_for_timeout(200)
+            if not last.startswith(f'{n} /') or tran or not good or await pg.locator('.tc-root').count(): fails.append(f'trình chiếu Toán {l} bài {bb}: {last}, tràn {tran[:3]}, còn mở {await pg.locator(".tc-root").count()}')
         # Trình chiếu gắn vào bài (tuong-tac/): khung 16:9 nạp được trang, có các slide, không lỗi JS bên trong.
         for (l, bb) in await pg.evaluate("Object.keys(BaiHoc.TN).map(k => k.split('-').map(Number))"):
             await pg.goto(base + f'#/bai-hoc/{l}/{bb}'); await pg.wait_for_timeout(1500)

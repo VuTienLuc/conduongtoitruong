@@ -482,11 +482,11 @@ table.ld-the.full{font-size:10.5pt}
 .bh-frame.gia{position:fixed;inset:0;z-index:1000;width:100vw;height:100vh;height:100dvh}
 body.bh-noscroll{overflow:hidden}
 .bh-frame > iframe{transition:width .2s}
-.bh-frame.cc-half > iframe{width:50%}
+.cc-half > .cc-main{width:50% !important}
 .bh-cc,.bh-cc-exit{display:none}
-.bh-frame.is-full .bh-cc{display:block}
-.bh-frame.gia .bh-cc-exit{display:grid;place-items:center;position:absolute;top:8px;right:8px;z-index:6;width:36px;height:36px;border:0;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:16px;opacity:.3;cursor:pointer}
-.bh-frame.gia .bh-cc-exit:hover,.bh-frame.gia .bh-cc-exit:focus-visible{opacity:1}
+.is-full .bh-cc{display:block}
+.gia > .bh-cc-exit{display:grid;place-items:center;position:absolute;top:8px;right:8px;z-index:6;width:36px;height:36px;border:0;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:16px;opacity:.3;cursor:pointer}
+.gia > .bh-cc-exit:hover,.gia > .bh-cc-exit:focus-visible{opacity:1}
 .bh-cc-fab{position:absolute;right:3px;bottom:3px;z-index:7;display:grid;place-items:center;width:26px;height:26px;padding:0;border:0;border-radius:50%;background:rgba(128,128,128,.35);color:#fff;font-size:16px;line-height:1;opacity:.12;cursor:pointer;transition:opacity .2s}
 .bh-cc-fab:hover,.bh-cc-fab:focus-visible,.bh-cc.open .bh-cc-fab{opacity:.85}
 .bh-cc.dang .bh-cc-fab{opacity:.3}
@@ -498,10 +498,54 @@ body.bh-noscroll{overflow:hidden}
 .bh-cc-pane{position:absolute;top:0;right:0;bottom:0;width:50%;z-index:6;display:none;background:#fff;box-shadow:-6px 0 18px rgba(0,0,0,.35)}
 .bh-cc[data-mode="half"] .bh-cc-pane,.bh-cc[data-mode="full"] .bh-cc-pane{display:block}
 .bh-cc[data-mode="full"] .bh-cc-pane{width:100%}
-.bh-frame .bh-cc-pane iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.bh-cc-pane iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .bh-cc-bar{position:absolute;top:8px;left:8px;z-index:2;display:flex;gap:4px;opacity:.3;transition:opacity .2s}
 .bh-cc-bar:hover,.bh-cc-bar:focus-within{opacity:1}
 .bh-cc-bar button{display:grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:8px;background:rgba(20,20,20,.78);color:#fff;font-size:16px;line-height:1;cursor:pointer}
+/* ---------- 📽️ Trình chiếu bài giảng – luyện tập (assets/js/trinhchieu.js): chữ tự co giãn lấp đầy màn hình, chừa lề ---------- */
+.bh-tc-btn{margin-left:auto;cursor:pointer;font:inherit;font-weight:700;background:var(--surface);color:var(--ink)}
+.tc-root{position:fixed;inset:0;z-index:2000;background:#fbfaf6;color:#152033;outline:none;overflow:hidden}
+.tc-main{position:absolute;top:0;left:0;bottom:0;width:100%;transition:width .2s}
+.tc-prog{position:absolute;top:0;left:0;right:0;height:4px;background:rgba(47,111,228,.12);z-index:2}
+.tc-prog i{display:block;height:100%;width:0;background:#2f6fe4;transition:width .25s}
+.tc-slide{position:absolute;inset:0;padding:5vh 6vw 8vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;font-family:var(--f-body);touch-action:pan-y}
+.tc-in{width:100%;line-height:1.45;font-weight:500}
+.tc-slide.bia{text-align:center}
+.tc-in h1{font:800 2.3em/1.15 var(--f-head);margin:.15em 0;color:#152033}
+.tc-in h2{font:800 1.2em/1.25 var(--f-head);margin:0 0 .45em;color:#1d4ed8}
+.tc-qh span{font-weight:600;color:#64748b;font-size:.7em}
+.tc-kicker{font:700 .62em/1.4 var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:#2f6fe4;margin:0}
+.tc-sub{font-size:.85em;color:#475569;margin:.3em 0 0}
+.tc-in ul,.tc-in ol{margin:.2em 0;padding-left:1.3em}
+.tc-in li{margin:.2em 0}
+.tc-in p{margin:.3em 0}
+.tc-body > :first-child{margin-top:0}
+.tc-warn{background:#fff4e5;border-left:.25em solid #f59e0b;padding:.35em .6em;border-radius:.3em;margin-top:.5em}
+.tc-an{visibility:hidden;opacity:0;transition:opacity .25s}
+.tc-an.on{visibility:visible;opacity:1}
+.tc-lg,.tc-why{margin-top:.5em;background:#eef4ff;border-radius:.4em;padding:.35em .7em}
+.tc-ds{margin:.25em 0}
+.tc-can li{margin:.3em 0}
+.tc-opts{display:grid;grid-template-columns:1fr 1fr;gap:.4em .6em;margin-top:.6em}
+.tc-opt{display:flex;gap:.5em;align-items:center;text-align:left;font:inherit;color:inherit;background:#fff;border:.08em solid #cbd5e1;border-radius:.45em;padding:.3em .6em;cursor:pointer;min-height:2.2em}
+.tc-opt b{flex:none;display:grid;place-items:center;width:1.6em;height:1.6em;border-radius:50%;background:#e0e7ff;color:#1e3a8a}
+.tc-opt.good{border-color:#16a34a;background:#dcfce7}
+.tc-opt.good b{background:#16a34a;color:#fff}
+.tc-opt.bad{border-color:#dc2626;background:#fee2e2}
+.tc-opt.bad b{background:#dc2626;color:#fff}
+.tc-dsl{list-style:none;padding:0 !important;margin-top:.5em}
+.tc-dsl li{display:flex;gap:.6em;align-items:baseline;justify-content:space-between;padding:.2em .4em;border-bottom:.05em solid #e2e8f0;cursor:pointer}
+.tc-dsl em{font-style:normal;font-weight:800;flex:none;padding:0 .4em;border-radius:.3em}
+.tc-dsl em.dung{color:#15803d;background:#dcfce7}
+.tc-dsl em.sai{color:#b91c1c;background:#fee2e2}
+.tc-in svg{max-width:100%;height:auto;max-height:42vh}
+.tc-in .figbox{text-align:center;margin:.3em 0}
+.tc-bar{position:absolute;left:10px;bottom:8px;z-index:3;display:flex;align-items:center;gap:6px;opacity:.25;transition:opacity .2s}
+.tc-bar:hover,.tc-bar:focus-within{opacity:1}
+.tc-bar button{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:10px;background:rgba(15,23,42,.08);color:#152033;font-size:18px;line-height:1;cursor:pointer}
+.tc-so{font:600 14px var(--f-body);color:#475569;min-width:4.5em;text-align:center}
+.tc-root .bh-cc-pane{z-index:4}
+@media (max-aspect-ratio:1/1){.tc-opts{grid-template-columns:1fr}.tc-slide{padding:4vh 5vw 9vh}}
 
 </style>
 </head>
@@ -4028,10 +4072,11 @@ const BaiHoc = (() => {
         <span class="nav-mini">${prev ? `<a href="#/bai-hoc/${lop}/${prev.so}">‹ Bài ${prev.so}</a>` : ''}${next ? `<a href="#/bai-hoc/${lop}/${next.so}">Bài ${next.so} ›</a>` : ''}</span></div>
       <section class="thead card"><span class="tno big">${b.so}</span><div><p class="tbai">Toán ${lop} · Tập ${b.chuong.tap} · Chương ${b.chuong.so}. ${esc(b.chuong.ten)}</p>
         <h2>Bài ${b.so}. ${esc(b.ten)}</h2>${e ? `<p class="tdesc">${e.mau ? '<span class="chip warnc">Mẫu minh họa</span> ' : ''}${e.nguon ? `Nguồn: ${e.nguon}` : ''}</p>` : ''}</div></section>
-      ${e ? `<nav class="tabs" aria-label="Bài học">${tabs}</nav><section id="pane" class="pane"></section>` : `<section id="pane" class="pane"></section>`}
+      ${e ? `<nav class="tabs" aria-label="Bài học">${tabs}${typeof TrinhChieu !== 'undefined' ? `<button type="button" class="tab bh-tc-btn" id="bhTC" title="Trình chiếu toàn màn hình (phím ← →)"><span aria-hidden="true">📽️</span> Trình chiếu</button>` : ''}</nav><section id="pane" class="pane"></section>` : `<section id="pane" class="pane"></section>`}
       ${lienQuan(lop, b.so)}
       <div class="pane-foot">${e && !tab ? `<a class="btn primary" href="#/bai-hoc/${lop}/${so}/luyen">Luyện tập ngay ✍️ →</a>` : next ? `<a class="btn primary" href="#/bai-hoc/${lop}/${next.so}">Sang Bài ${next.so} →</a>` : `<a class="btn primary" href="#/bai-hoc/${lop}">Về mục lục</a>`}</div></main>`;
     const pane = $('#pane');
+    if (e && $('#bhTC')) $('#bhTC').addEventListener('click', () => TrinhChieu.mo(e, tab === 'luyen' ? 'luyen' : 'giang'));
     if (!e) { paneTrong(lop, b, pane); return ttMount(lop, b.so, pane); }
     if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
   }
@@ -4040,7 +4085,7 @@ const BaiHoc = (() => {
   function ttMount(lop, so, pane) {
     const ts = tnOf(lop, so); if (!ts.length) return;
     pane.insertAdjacentHTML('afterbegin', ts.map((t, i) => `<article class="card bh-tt"><h3>🎬 ${esc(t.ten)}</h3>${t.mo_ta ? `<p class="muted small">${esc(t.mo_ta)}</p>` : ''}
-      <div class="bh-frame" data-tt="${i}"><iframe src="${esc(srcOf(t.file))}" title="${esc(t.ten)}" allow="fullscreen; autoplay; clipboard-write" allowfullscreen loading="lazy"></iframe></div>
+      <div class="bh-frame" data-tt="${i}"><iframe class="cc-main" src="${esc(srcOf(t.file))}" title="${esc(t.ten)}" allow="fullscreen; autoplay; clipboard-write" allowfullscreen loading="lazy"></iframe></div>
       <div class="row"><button class="btn primary" type="button" data-fs="${i}">⛶ Toàn màn hình</button><a class="btn ghost" href="${esc(srcOf(t.file))}" target="_blank" rel="noopener">↗ Mở trong tab mới</a>${t.nguon ? `<span class="muted small">${esc(t.nguon)}</span>` : ''}</div></article>`).join(''));
     $$('.bh-frame[data-tt]', pane).forEach(congCu);
     $$('[data-fs]', pane).forEach(btn => btn.addEventListener('click', () => {
@@ -4049,7 +4094,7 @@ const BaiHoc = (() => {
       if (go) Promise.resolve(go.call(fr)).then(() => ttFocus(fr)).catch(gia); else gia();
     }));
   }
-  const ttFocus = fr => { try { $('iframe', fr).focus(); $('iframe', fr).contentWindow.focus(); } catch (e) { /* khác nguồn */ } };
+  const ttFocus = fr => { try { $(':scope > iframe', fr).focus(); $(':scope > iframe', fr).contentWindow.focus(); } catch (e) { /* khác nguồn */ } };
   function ttThoat(fr) { fr.classList.remove('gia', 'is-full'); document.body.classList.remove('bh-noscroll'); }
   function ttSync() {
     const fe = document.fullscreenElement || document.webkitFullscreenElement;
@@ -4064,7 +4109,8 @@ const BaiHoc = (() => {
   // → trang mở ngay trong bài giảng: ◧ nửa màn hình (bài giảng thu về nửa trái) · ⛶ cả màn hình · ▁ thu gọn (giữ nguyên trang) · ✕ đóng.
   const CC = () => ((window.CONFIG && window.CONFIG.congCuTrinhChieu) || []).filter(x => x && x.url);
   const icHTML = x => /^(https?:|data:)/.test(String(x.icon || '')) ? `<img src="${esc(x.icon)}" alt="">` : esc(x.icon || '●');
-  function congCu(fr) {
+  function congCu(fr, focusFn) {
+    const ve = focusFn || (() => ttFocus(fr));
     const ds = CC();
     fr.insertAdjacentHTML('beforeend', `<button type="button" class="bh-cc-exit" aria-label="Thoát toàn màn hình">✕</button>${ds.length ? `<div class="bh-cc" data-mode="">
       <div class="bh-cc-pane"><div class="bh-cc-bar"><button type="button" data-m="half" aria-label="Nửa màn hình">◧</button><button type="button" data-m="full" aria-label="Cả màn hình">⛶</button><button type="button" data-m="min" aria-label="Thu gọn">▁</button><button type="button" data-m="off" aria-label="Đóng">✕</button></div></div>
@@ -4077,7 +4123,7 @@ const BaiHoc = (() => {
     const mode = m => {
       cc.dataset.mode = m; fr.classList.toggle('cc-half', m === 'half');
       cc.classList.toggle('dang', m === 'min');
-      if (m === '' || m === 'min') ttFocus(fr);
+      if (m === '' || m === 'min') ve();
     };
     const menu = on => { cc.classList.toggle('open', on); fab.setAttribute('aria-expanded', on ? 'true' : 'false'); };
     fab.addEventListener('click', () => menu(!cc.classList.contains('open')));
@@ -4130,6 +4176,13 @@ const BaiHoc = (() => {
   };
   const sameAns = (x, ans) => { const a = numOf(x), b = numOf(ans); return !isNaN(a) && !isNaN(b) ? Math.abs(a - b) < 1e-9 : fold(x).replace(/\s+/g, '') === fold(ans).replace(/\s+/g, ''); };
   const YL = 'abcd';
+  // Lời giải thích AI viết theo thứ tự phương án GỐC ("Phương án D sai…"); web đảo phương án nên đổi chữ cái cho khớp chỗ mới.
+  function doiChu(q, opts) {
+    if (!q.why || !Array.isArray(q.goc)) return q.why || '';
+    const moi = {}; opts.forEach((o, p) => { const i = q.a.indexOf(o); if (i >= 0) moi['ABCD'[q.goc[i]]] = 'ABCD'[p]; });
+    return q.why.replace(/((?:phương|Phương|PHƯƠNG|đáp|Đáp|ĐÁP)\s+án|[Cc]họn|[Cc]âu trả lời)((?:\s*(?:,|và|hoặc|hay|\/)?\s*(?:<\/?b>)?[A-D](?:<\/?b>)?(?![\p{L}\d]))+)/gu,
+      (m, k, ds) => k + ds.replace(/[A-D](?![\p{L}\d])/g, c => moi[c] || c));
+  }
   function paneLuyen(e, pane) {
     const tn = e.tn.map(q => ({ ...q, good: q.a[0], opts: shuffle(q.a) }));
     const total = tn.length + 4 * e.ds.length + e.tln.length, nQ = tn.length + e.ds.length + e.tln.length;
@@ -4156,7 +4209,7 @@ const BaiHoc = (() => {
         const ok = q.opts[+btn.dataset.j] === q.good;
         $$('.opt', card).forEach(x => { x.disabled = true; if (q.opts[+x.dataset.j] === q.good) x.classList.add('good'); });
         if (!ok) btn.classList.add('bad');
-        why(card, ok, q.why); tick(ok);
+        why(card, ok, doiChu(q, q.opts)); tick(ok);
       }));
     });
     $$('.bh-dsq', pane).forEach(card => {
@@ -4212,7 +4265,149 @@ const BaiHoc = (() => {
     if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, parts[3] === 'luyen' ? 'luyen' : '');
     return true;
   }
-  return { LOP, LIEN_9, DUNG_9, own, tuVao10, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
+  return { LOP, LIEN_9, DUNG_9, own, tuVao10, doiChu, congCu, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
+})();
+
+</script>
+<script>/* assets/js/trinhchieu.js */
+/* =====================================================================
+   TRÌNH CHIẾU BÀI GIẢNG – LUYỆN TẬP ONLINE (nút 📽️ trên trang bài học #/bai-hoc/<lớp>/<bài>)
+   - Toàn màn hình (máy không cho thì phủ kín cửa sổ). Mỗi trang một ý: bìa, mục tiêu, từng mục kiến thức, từng ví dụ,
+     cần nhớ, rồi từng câu luyện tập. Cỡ chữ tự tính cho nội dung lấp đầy màn hình, chừa lề.
+   - Bấm → / phím cách / Enter: hiện bước tiếp (lời giải, đáp án, từng ý đúng – sai) rồi mới sang trang.
+     ← lùi · Home / End · A–D chọn phương án · F bật/tắt toàn màn hình · Esc thoát. Điện thoại, iPad: vuốt trái / phải.
+   - Biểu tượng ✦ mờ góc dưới phải: công cụ CONFIG.congCuTrinhChieu (⭐, 🖼️) mở ngay trong lúc chiếu (BaiHoc.congCu).
+   ===================================================================== */
+const TrinhChieu = (() => {
+  const { esc, $, $$, shuffle } = U;
+  const ABCD = 'ABCD', YL = 'abcd';
+  let root = null, deck = [], cur = 0, ro = null, keyFn = null;
+
+  /* ---------- Dựng các trang từ một bài học ---------- */
+  function dung(e) {
+    const b = BaiHoc.baiOf(e.lop, e.bai), out = [];
+    const ten = `Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}`;
+    out.push({ loai: 'bia', html: `<p class="tc-kicker">Toán ${e.lop}${b ? ` · Chương ${b.chuong.so}. ${esc(b.chuong.ten)}` : ''}</p><h1>${ten}</h1>
+      <p class="tc-sub">Bài giảng – Luyện tập</p>` });
+    if (e.muc_tieu.length) out.push({ html: `<h2>🎯 Học xong bài này, em</h2><ul>${e.muc_tieu.map(x => `<li>${x}</li>`).join('')}</ul>` });
+    let k = 0;
+    e.giang.forEach(m => {
+      if (m.b || m.luu_y) out.push({ html: `<h2>${m.t}</h2>${m.b ? `<div class="tc-body">${m.b}</div>` : ''}${m.luu_y ? `<p class="tc-warn">⚠️ ${m.luu_y}</p>` : ''}` });
+      m.vd.forEach(v => { k++; out.push({ html: `<h2>Ví dụ ${k}</h2><div class="tc-body">${v.de}</div>
+        <div class="tc-an tc-lg" data-b="1"><ol>${v.lg.map(x => `<li>${x}</li>`).join('')}</ol>${v.ds ? `<p class="tc-ds"><b>Đáp số:</b> ${v.ds}</p>` : ''}</div>`, buoc: 1 }); });
+    });
+    if (e.can_nho.length) out.push({ html: `<h2>🔑 Cần nhớ</h2><ul class="tc-can">${e.can_nho.map(x => `<li>${x}</li>`).join('')}</ul>` });
+    const n = e.tn.length + e.ds.length + e.tln.length;
+    if (n) out.push({ loai: 'bia', luyen: true, html: `<p class="tc-kicker">${ten}</p><h1>✍️ Luyện tập</h1><p class="tc-sub">${[e.tn.length && `${e.tn.length} câu trắc nghiệm`, e.ds.length && `${e.ds.length} câu đúng – sai`, e.tln.length && `${e.tln.length} câu trả lời ngắn`].filter(Boolean).join(' · ')}</p>` });
+    e.tn.forEach((q, i) => {
+      const opts = shuffle(q.a), good = opts.indexOf(q.a[0]);
+      out.push({ loai: 'tn', good, html: `<h2 class="tc-qh">Câu ${i + 1} <span>· Trắc nghiệm</span></h2><div class="tc-body">${q.q}</div>
+        <div class="tc-opts">${opts.map((o, j) => `<button type="button" class="tc-opt" data-j="${j}"><b>${ABCD[j]}</b><span>${o}</span></button>`).join('')}</div>
+        <div class="tc-an tc-why" data-b="1"><b>Đáp án ${ABCD[good]}.</b> ${BaiHoc.doiChu(q, opts)}</div>`, buoc: 1 });
+    });
+    e.ds.forEach((q, i) => out.push({ loai: 'ds', html: `<h2 class="tc-qh">Câu ${i + 1} <span>· Đúng – Sai</span></h2><div class="tc-body">${q.q}</div>
+      <ol class="tc-dsl">${q.y.map((y, j) => `<li data-j="${j}"><span><b>${YL[j]})</b> ${y[0]}</span><em class="tc-an ${y[1] ? 'dung' : 'sai'}" data-b="${j + 1}">${y[1] ? 'Đúng' : 'Sai'}</em></li>`).join('')}</ol>
+      ${q.why ? `<div class="tc-an tc-why" data-b="5">${q.why}</div>` : ''}`, buoc: q.why ? 5 : 4 }));
+    e.tln.forEach((q, i) => out.push({ html: `<h2 class="tc-qh">Câu ${i + 1} <span>· Trả lời ngắn</span></h2><div class="tc-body">${q.q}</div>
+      <div class="tc-an tc-why" data-b="1"><p class="tc-ds"><b>Đáp số: ${esc(q.ans)}</b></p>${q.why || ''}</div>`, buoc: 1 }));
+    out.push({ loai: 'bia', html: `<h1>🎉 Hết bài</h1><p class="tc-sub">${ten}</p>` });
+    return out;
+  }
+
+  /* ---------- Cỡ chữ lấp đầy màn hình ---------- */
+  function fit() {
+    const sl = root && $('.tc-slide', root), inn = sl && $('.tc-in', sl); if (!inn) return;
+    const cs = getComputedStyle(sl), H = sl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom), W = sl.clientWidth;
+    const bia = sl.classList.contains('bia');
+    let lo = 12, hi = Math.max(16, Math.min(H * (bia ? 0.11 : 0.085), W * (bia ? 0.06 : 0.045)));
+    const vua = f => { inn.style.fontSize = f + 'px'; return inn.scrollHeight <= H + 1 && inn.scrollWidth <= inn.clientWidth + 1; };
+    if (vua(hi)) return;
+    for (let t = 0; t < 9; t++) { const m = (lo + hi) / 2; if (vua(m)) lo = m; else hi = m; }
+    vua(lo);
+  }
+
+  /* ---------- Hiện trang, từng bước ---------- */
+  function ve(i) {
+    cur = Math.max(0, Math.min(deck.length - 1, i));
+    const d = deck[cur], sl = $('.tc-slide', root);
+    d.da = d.da || 0;
+    sl.className = 'tc-slide' + (d.loai === 'bia' ? ' bia' : '');
+    sl.innerHTML = `<div class="tc-in">${d.html}</div>`;
+    $('.tc-so', root).textContent = `${cur + 1} / ${deck.length}`;
+    $('.tc-prog i', root).style.width = ((cur + 1) / deck.length * 100) + '%';
+    if (d.loai === 'tn') $$('.tc-opt', sl).forEach(b => b.addEventListener('click', () => chon(+b.dataset.j)));
+    if (d.loai === 'ds') $$('.tc-dsl li', sl).forEach(li => li.addEventListener('click', () => { const j = +li.dataset.j + 1; d.da = Math.max(d.da, j); hien(); }));
+    hien();
+    fit();
+    if (window.MathTS) Promise.resolve(MathTS.done(sl)).then(fit);
+  }
+  function hien() {
+    const d = deck[cur], sl = $('.tc-slide', root);
+    $$('[data-b]', sl).forEach(x => x.classList.toggle('on', +x.dataset.b <= d.da));
+    if (d.loai === 'tn' && d.da >= 1) $$('.tc-opt', sl).forEach(b => { if (+b.dataset.j === d.good) b.classList.add('good'); if (+b.dataset.j === d.chon && d.chon !== d.good) b.classList.add('bad'); });
+  }
+  function chon(j) { const d = deck[cur]; if (d.loai !== 'tn' || d.da) return; d.chon = j; d.da = 1; hien(); }
+  function toi() { const d = deck[cur]; if (d.buoc && (d.da || 0) < d.buoc) { d.da = (d.da || 0) + 1; hien(); } else if (cur < deck.length - 1) ve(cur + 1); }
+  function lui() { if (cur > 0) ve(cur - 1); }
+
+  /* ---------- Mở, đóng ---------- */
+  const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+  function toanManHinh() {
+    const go = root.requestFullscreen || root.webkitRequestFullscreen;
+    if (fsEl()) { tatTay = true; (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
+    else if (go) Promise.resolve(go.call(root)).catch(() => {});
+  }
+  function mo(e, phan) {
+    dong();
+    deck = dung(e);
+    root = document.createElement('div');
+    root.className = 'tc-root is-full';
+    root.setAttribute('role', 'dialog'); root.setAttribute('aria-label', 'Trình chiếu bài học'); root.tabIndex = -1;
+    root.innerHTML = `<div class="tc-main cc-main"><div class="tc-prog"><i></i></div><section class="tc-slide" aria-live="polite"></section>
+      <nav class="tc-bar" aria-label="Điều khiển trình chiếu"><button type="button" data-k="lui" aria-label="Trang trước">‹</button><span class="tc-so"></span>
+      <button type="button" data-k="toi" aria-label="Tiếp">›</button><button type="button" data-k="fs" aria-label="Toàn màn hình">⛶</button><button type="button" data-k="x" aria-label="Thoát trình chiếu">✕</button></nav></div>`;
+    document.body.appendChild(root); document.body.classList.add('bh-noscroll');
+    BaiHoc.congCu(root, () => root.focus());
+    $('.tc-bar', root).addEventListener('click', ev => {
+      const k = ev.target.closest('button') && ev.target.closest('button').dataset.k;
+      if (k === 'lui') lui(); else if (k === 'toi') toi(); else if (k === 'fs') toanManHinh(); else if (k === 'x') dong();
+    });
+    // vuốt trên điện thoại, iPad
+    let x0 = null;
+    $('.tc-slide', root).addEventListener('pointerdown', ev => { x0 = ev.clientX; });
+    $('.tc-slide', root).addEventListener('pointerup', ev => { if (x0 === null) return; const dx = ev.clientX - x0; x0 = null; if (Math.abs(dx) > 60) (dx < 0 ? toi : lui)(); });
+    keyFn = ev => {
+      if (!root || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+      const k = ev.key;
+      if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { if (k === 'Enter' && ev.target.closest && ev.target.closest('.bh-cc')) return; ev.preventDefault(); toi(); }
+      else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { ev.preventDefault(); lui(); }
+      else if (k === 'Home') ve(0); else if (k === 'End') ve(deck.length - 1);
+      else if (k === 'Escape') dong();
+      else if (k === 'f' || k === 'F') toanManHinh();
+      else if (/^[a-dA-D]$/.test(k)) chon(ABCD.indexOf(k.toUpperCase()));
+    };
+    document.addEventListener('keydown', keyFn);
+    ro = new ResizeObserver(() => fit()); ro.observe($('.tc-slide', root));
+    const i = phan === 'luyen' ? deck.findIndex(d => d.luyen) : 0;
+    ve(i < 0 ? 0 : i);
+    toanManHinh();
+    root.focus();
+  }
+  // Thoát toàn màn hình (Esc của trình duyệt) hoặc chuyển trang thì đóng trình chiếu luôn.
+  let daFs = false, tatTay = false;   // tatTay: thầy tự tắt toàn màn hình (⛶ / F) thì vẫn chiếu trong cửa sổ
+  const fsDoi = () => { if (!root) return; if (fsEl() === root) daFs = true; else if (daFs) { daFs = false; if (tatTay) tatTay = false; else dong(); } };
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    document.addEventListener('fullscreenchange', fsDoi); document.addEventListener('webkitfullscreenchange', fsDoi);
+    window.addEventListener('hashchange', () => dong());
+  }
+  function dong() {
+    if (!root) return;
+    if (fsEl() === root) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    if (ro) ro.disconnect();
+    document.removeEventListener('keydown', keyFn);
+    root.remove(); root = null; daFs = false; document.body.classList.remove('bh-noscroll');
+  }
+  return { mo, dong, dung, fit };
 })();
 
 </script>
@@ -4531,7 +4726,8 @@ const NhapDL = (() => {
       giang: (j.bai_giang || []).map(m => ({ t: norm(m.tieu_de), b: normBlock(m.noi_dung), luu_y: norm(m.luu_y),
         vd: (m.vi_du || []).map(v => ({ de: normBlock(v.de), lg: lg(v.loi_giai), ds: norm(v.dap_so) })) })),
       tn: (j.trac_nghiem || []).map(q => { const pa = q.phuong_an.map(x => String(x).replace(/^\s*[A-D][.)]\s+/, '')), k = dapIdx(q, pa);
-        return { q: normBlock(q.cau), a: [pa[k], ...pa.filter((_, i) => i !== k)].map(x => norm(x)), why: norm(q.giai_thich), muc: q.muc || '' }; }),
+        return { q: normBlock(q.cau), a: [pa[k], ...pa.filter((_, i) => i !== k)].map(x => norm(x)), goc: [k, ...[0, 1, 2, 3].filter(i => i !== k)],
+          why: norm(q.giai_thich), muc: q.muc || '' }; }),
       ds: (j.dung_sai || []).map(q => ({ q: normBlock(q.cau), y: q.y.map(x => [norm(x.noi_dung).replace(/^[a-d]\)\s*/, ''), boolOf(x.dung)]), why: normBlock(q.giai_thich) })),
       tln: (j.tra_loi_ngan || []).map(q => ({ q: normBlock(q.cau), ans: String(q.dap_an).trim(), why: normBlock(q.giai_thich) })) };
   }
