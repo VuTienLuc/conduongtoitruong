@@ -138,7 +138,11 @@ const BaiHoc = (() => {
     pane.insertAdjacentHTML('afterbegin', ts.map((t, i) => `<article class="card bh-tt"><h3>🎬 ${esc(t.ten)}</h3>${t.mo_ta ? `<p class="muted small">${esc(t.mo_ta)}</p>` : ''}
       <div class="bh-frame" data-tt="${i}"><iframe class="cc-main" src="${esc(srcOf(t.file))}" title="${esc(t.ten)}" allow="fullscreen; autoplay; clipboard-write" allowfullscreen loading="lazy"></iframe></div>
       <div class="row"><button class="btn primary" type="button" data-fs="${i}">⛶ Toàn màn hình</button><a class="btn ghost" href="${esc(srcOf(t.file))}" target="_blank" rel="noopener">↗ Mở trong tab mới</a>${t.nguon ? `<span class="muted small">${esc(t.nguon)}</span>` : ''}</div></article>`).join(''));
-    $$('.bh-frame[data-tt]', pane).forEach(congCu);
+    $$('.bh-frame[data-tt]', pane).forEach(fr => {
+      congCu(fr);
+      const f = $(':scope > iframe', fr);   // focus thường nằm trong trang bài giảng (cùng nguồn) → nghe phím O ở đó
+      f.addEventListener('load', () => { try { f.contentWindow.document.addEventListener('keydown', ev => { if (fr.classList.contains('is-full')) phimO(ev, fr); }); } catch (e) { /* khác nguồn */ } });
+    });
     $$('[data-fs]', pane).forEach(btn => btn.addEventListener('click', () => {
       const fr = $(`.bh-frame[data-tt="${btn.dataset.fs}"]`, pane), go = fr.requestFullscreen || fr.webkitRequestFullscreen;
       const gia = () => { fr.classList.add('gia', 'is-full'); document.body.classList.add('bh-noscroll'); ttFocus(fr); };   // máy không cho toàn màn hình (iPhone): phủ kín cửa sổ
@@ -154,7 +158,10 @@ const BaiHoc = (() => {
   }
   if (typeof document !== 'undefined' && document.addEventListener) {
     document.addEventListener('fullscreenchange', ttSync); document.addEventListener('webkitfullscreenchange', ttSync);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.bh-frame.gia').forEach(ttThoat); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') $$('.bh-frame.gia').forEach(ttThoat);
+      const fr = $('.bh-frame.is-full'); if (fr) phimO(e, fr);
+    });
   }
 
   // Bộ công cụ mở nhanh (CONFIG.congCuTrinhChieu): biểu tượng mờ góc dưới phải → các biểu tượng công cụ (không ghi tên web)
@@ -171,16 +178,16 @@ const BaiHoc = (() => {
     $('.bh-cc-exit', fr).addEventListener('click', () => ttThoat(fr));
     const cc = $('.bh-cc', fr); if (!cc) return;
     const pane = $('.bh-cc-pane', cc), fab = $('.bh-cc-fab', cc);
-    let cur = -1;
+    let cur = -1, moCuoi = 'half';   // moCuoi: chế độ mở gần nhất (nửa / cả màn hình) để phím O mở lại đúng như cũ
     const mode = m => {
+      if (m === 'half' || m === 'full') moCuoi = m;
       cc.dataset.mode = m; fr.classList.toggle('cc-half', m === 'half');
       cc.classList.toggle('dang', m === 'min');
       if (m === '' || m === 'min') ve();
     };
     const menu = on => { cc.classList.toggle('open', on); fab.setAttribute('aria-expanded', on ? 'true' : 'false'); };
     fab.addEventListener('click', () => menu(!cc.classList.contains('open')));
-    $$('.bh-cc-ic', cc).forEach(b => b.addEventListener('click', () => {
-      const i = +b.dataset.i;
+    const moCC = (i, giuFocus) => {
       let f = $(`iframe[data-i="${i}"]`, pane);
       if (!f) {   // tạo khi bấm lần đầu, giữ lại để mở lại không phải tải lại
         pane.insertAdjacentHTML('beforeend', `<iframe data-i="${i}" src="${esc(ds[i].url)}" title="Công cụ ${i + 1}" allow="fullscreen; autoplay; clipboard-read; clipboard-write; camera; microphone" allowfullscreen referrerpolicy="no-referrer"></iframe>`);
@@ -188,10 +195,24 @@ const BaiHoc = (() => {
       }
       $$('iframe', pane).forEach(x => { x.hidden = x !== f; });
       const giu = cc.dataset.mode === 'full' && cur === i;
-      cur = i; menu(false); mode(giu ? 'full' : cc.dataset.mode === 'full' ? 'full' : 'half');
-      try { f.focus(); } catch (e) { /* bỏ qua */ }
-    }));
+      cur = i; menu(false); mode(giu ? 'full' : cc.dataset.mode === 'full' ? 'full' : giuFocus ? moCuoi : 'half');
+      if (!giuFocus) try { f.focus(); } catch (e) { /* bỏ qua */ }
+    };
+    $$('.bh-cc-ic', cc).forEach(b => b.addEventListener('click', () => moCC(+b.dataset.i)));
     $$('.bh-cc-bar [data-m]', cc).forEach(b => b.addEventListener('click', () => mode(b.dataset.m === 'off' ? '' : b.dataset.m)));
+    // Phím O: công cụ i đang hiện → thu gọn (giữ nguyên trang công cụ); đang ẩn → mở lại như lần trước. Không chuyển focus sang công cụ để bấm O lần nữa vẫn tắt được.
+    fr.ccToggle = (i = 0) => {
+      if (!ds[i]) return;
+      const m = cc.dataset.mode;
+      if ((m === 'half' || m === 'full') && cur === i) mode('min');
+      else moCC(i, true);
+    };
+  }
+  // phím tắt O (bật/tắt công cụ đầu tiên ⭐) – bỏ qua khi đang gõ chữ vào ô nhập
+  const dangGo = t => !!t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName || '') || t.isContentEditable);
+  function phimO(ev, fr) {
+    if (ev.altKey || ev.ctrlKey || ev.metaKey || (ev.key !== 'o' && ev.key !== 'O') || dangGo(ev.target) || !fr.ccToggle) return false;
+    ev.preventDefault(); fr.ccToggle(0); return true;
   }
   function paneTrong(lop, b, pane) {
     if (tnOf(lop, b.so).length) {

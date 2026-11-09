@@ -214,8 +214,13 @@ async def main():
         await pg.frame_locator('.tc-root .bh-cc-pane iframe').first.locator('#fs').click(); await pg.wait_for_timeout(300); a1 = await pg.evaluate(st)
         await pg.evaluate("document.fullscreenElement && document.exitFullscreen()"); await pg.wait_for_timeout(300); a2 = await pg.evaluate(st)
         await pg.evaluate("TrinhChieu.dong()"); await pg.click('#bhTC'); await pg.wait_for_timeout(300); a3 = await pg.evaluate(st)
+        # Phím O: mở nhanh ⭐ (nửa màn hình), O lần nữa thu gọn, O lần ba mở lại; trang trình chiếu không đổi
+        mo = "(() => document.querySelector('.tc-root .bh-cc').dataset.mode)()"
+        await pg.keyboard.press('o'); o1 = await pg.evaluate(mo); await pg.keyboard.press('O'); o2 = await pg.evaluate(mo)
+        await pg.keyboard.press('o'); o3 = await pg.evaluate(mo); o4 = await pg.evaluate(st)
         await pg.evaluate("TrinhChieu.dong()")
         if not (a0 == a1 == a2 == a3 and a0[0] == 1): fails.append(f'trình chiếu + công cụ toàn màn hình: {a0, a1, a2, a3}')
+        if (o1, o2, o3, o4) != ('full', 'min', 'full', a3) and (o1, o2, o3) != ('half', 'min', 'half'): fails.append(f'phím O trong trình chiếu: {o1, o2, o3, o4}')
         # Trình chiếu gắn vào bài (tuong-tac/): khung 16:9 nạp được trang, có các slide, không lỗi JS bên trong.
         for (l, bb) in await pg.evaluate("Object.keys(BaiHoc.TN).map(k => k.split('-').map(Number))"):
             await pg.goto(base + f'#/bai-hoc/{l}/{bb}'); await pg.wait_for_timeout(1500)
@@ -237,6 +242,10 @@ async def main():
             await pg.locator('.bh-cc-ic').first.click(); await pg.wait_for_timeout(300); r2 = await pg.evaluate(st)
             await pg.click('.bh-cc-bar [data-m="full"]'); r3 = await pg.evaluate(st)
             await pg.click('.bh-cc-bar [data-m="min"]'); r4 = await pg.evaluate(st)
+            # phím O khi focus nằm trong trang bài giảng HTML: thu gọn ↔ mở lại (chế độ lần trước: cả màn hình)
+            await pg.frame_locator('.bh-frame > iframe').first.locator('body').press('o'); r5 = await pg.evaluate(st)
+            await pg.frame_locator('.bh-frame > iframe').first.locator('body').press('o'); r6 = await pg.evaluate(st)
+            if r5[1] != 'full' or r6[1] != 'min': fails.append(f'phím O trong bài giảng HTML: {r5, r6}')
             await pg.evaluate("document.exitFullscreen && document.fullscreenElement && document.exitFullscreen()"); await pg.wait_for_timeout(300)
             want_ic = await pg.evaluate("CONFIG.congCuTrinhChieu.length")
             if r0 or not vis or r1[:2] != [True, ''] or n_ic != want_ic or 'vercel' in txt.lower() or r2[1:] != ['half', 50, 50] or r3[1:3] != ['full', 100] or r4[1] != 'min':

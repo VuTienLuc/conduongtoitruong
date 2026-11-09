@@ -3,7 +3,7 @@
    - Toàn màn hình (máy không cho thì phủ kín cửa sổ). Mỗi trang một ý: bìa, mục tiêu, từng mục kiến thức, từng ví dụ,
      cần nhớ, rồi từng câu luyện tập. Cỡ chữ tự tính cho nội dung lấp đầy màn hình, chừa lề.
    - Bấm → / phím cách / Enter: hiện bước tiếp (lời giải, đáp án, từng ý đúng – sai) rồi mới sang trang.
-     ← lùi · Home / End · A–D chọn phương án · - / + chữ nhỏ / to (0: về 100%) · F bật/tắt toàn màn hình · Esc thoát. Điện thoại, iPad: vuốt trái / phải.
+     ← lùi · Home / End · A–D chọn phương án · - / + chữ nhỏ / to (0: về 100%) · F bật/tắt toàn màn hình · O bật/tắt nhanh công cụ ⭐ · Esc thoát. Điện thoại, iPad: vuốt trái / phải.
    - Biểu tượng ✦ mờ góc dưới phải: công cụ CONFIG.congCuTrinhChieu (⭐, 🖼️) mở ngay trong lúc chiếu (BaiHoc.congCu).
    ===================================================================== */
 const TrinhChieu = (() => {
@@ -132,6 +132,7 @@ const TrinhChieu = (() => {
       else if (k === 'Home') ve(0); else if (k === 'End') ve(deck.length - 1);
       else if (k === 'Escape') dong();
       else if (k === 'f' || k === 'F') toanManHinh();
+      else if (k === 'o' || k === 'O') { ev.preventDefault(); if (root.ccToggle) root.ccToggle(0); }
       else if (/^[a-dA-D]$/.test(k)) chon(ABCD.indexOf(k.toUpperCase()));
     };
     document.addEventListener('keydown', keyFn);

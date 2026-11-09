@@ -13,6 +13,7 @@
 - Trình chiếu: trang nội dung chữ bám mép trên, chỉ dùng tối đa 80% chiều cao để chừa chỗ vẽ hình (thầy yêu cầu 09/11/2026); trang bìa vẫn canh giữa.
 - 🖨️ Tab "Phiếu làm bài" (`#/bai-hoc/<lớp>/<bài>/phieu`): phiếu A4 in phát trên lớp – Cần nhớ (tuỳ chọn), Phần I trắc nghiệm (phương án đảo theo mã đề <lớp><bài 2 số><1–4>, cố định theo mã), Phần II bảng Đúng/Sai, Phần III ô đáp số + dòng kẻ, tự đánh giá; trang đáp án riêng (kèm lời giải thích, chữ cái đã đổi theo mã). In bằng `OnTap.printHTML` → Lưu PDF.
 - Trình chiếu: - / + (nút A− A+) đổi cỡ chữ, 0 về 100%, nhớ cho lần sau; nhớ trang đang chiếu của từng bài 3 giờ (đóng nhầm mở lại chiếu tiếp). Công cụ ⭐/🖼️ tự bật toàn màn hình bên trong thì vẫn tính là đang chiếu (trước đây làm đóng trình chiếu, về trang đầu – thầy báo 09/11/2026).
+- Phím O (thầy yêu cầu 09/11/2026): bật/tắt nhanh công cụ đầu tiên ⭐ (`CONFIG.congCuTrinhChieu[0]`) – trong 📽️ Trình chiếu và khung HTML toàn màn hình. O lần 1 mở (nửa hoặc cả màn hình như lần mở trước), O lần 2 thu gọn (giữ nguyên trang công cụ). Mở bằng O thì không chuyển focus sang công cụ; bấm chuột vào trang công cụ rồi thì phải bấm lại vào bài giảng thì O mới tắt được (trang khác nguồn, không nghe được phím). Bỏ qua khi đang gõ vào ô nhập (ô chữ trong HTML). `BaiHoc.congCu` gắn `fr.ccToggle(i)`.
 - Lời giải thích trắc nghiệm AI viết theo thứ tự phương án gốc: `nhap.js` giữ `goc`, `BaiHoc.doiChu` đổi "Phương án D…" theo thứ tự đã đảo (lỗi thầy chụp màn hình 09/11/2026).
 
 ## Trình chiếu, trò chơi HTML của thầy gắn vào bài (thầy yêu cầu 09/11/2026)
