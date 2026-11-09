@@ -149,7 +149,8 @@ const BaiHoc = (() => {
   function ttThoat(fr) { fr.classList.remove('gia', 'is-full'); document.body.classList.remove('bh-noscroll'); }
   function ttSync() {
     const fe = document.fullscreenElement || document.webkitFullscreenElement;
-    $$('.bh-frame[data-tt]').forEach(fr => fr.classList.toggle('is-full', fe === fr || fr.classList.contains('gia')));
+    // công cụ bên trong khung tự bật toàn màn hình thì khung vẫn đang chiếu (không ẩn bộ công cụ, không thu khung)
+    $$('.bh-frame[data-tt]').forEach(fr => fr.classList.toggle('is-full', (!!fe && (fe === fr || fr.contains(fe))) || fr.classList.contains('gia')));
   }
   if (typeof document !== 'undefined' && document.addEventListener) {
     document.addEventListener('fullscreenchange', ttSync); document.addEventListener('webkitfullscreenchange', ttSync);

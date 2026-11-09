@@ -11,3 +11,4 @@
 - Antigravity vừa để JSON trong `nhap/` vừa viết tay `ld*.js` cùng nội dung → lệnh đăng web sẽ nhập lặp; quy tắc `.agents/rules/soan-de-luyen-va-du-lieu.md`.
 - Đề trùng trong một bộ luyện đề (JSON trong `nhap/` + viết tay `ld*.js`) → `kiem-tra.js` báo TRÙNG, lệnh đăng web dừng (09/11/2026).
 - Lời giải thích trắc nghiệm ghi "Phương án D sai…" nhưng web đảo phương án → chữ cái lệch. Sửa: giữ thứ tự gốc (`goc`) và đổi chữ cái khi hiển thị (`BaiHoc.doiChu`) (09/11/2026).
+- Công cụ trong iframe tự bật toàn màn hình → document.fullscreenElement là iframe con → trình chiếu tưởng đã thoát nên đóng, mở lại về trang đầu. Sửa: coi phần tử con của khung là vẫn đang chiếu; nhớ trang đang chiếu (09/11/2026).

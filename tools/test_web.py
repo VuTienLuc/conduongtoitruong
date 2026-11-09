@@ -202,6 +202,20 @@ async def main():
                 dung: d1.every(x => x.opts[x.good] === x.q.a[0]), khac: d1.some((x, i) => x.opts.join() !== d2[i].opts.join()), on: d1.every((x, i) => x.opts.join() === BaiHoc.phieuData(e, 1)[i].opts.join()),
                 loi: p.querySelectorAll('mjx-merror').length }; })""", [l, bb])
             if r['trang'] != 2 or r['cau'] != r['n'] or not r['dung'] or not r['khac'] or not r['on'] or r['loi']: fails.append(f'phiếu làm bài Toán {l} bài {bb}: {r}')
+        # Công cụ ⭐/🖼️ tự bật toàn màn hình trong lúc trình chiếu: không được đóng trình chiếu, không về trang đầu; mở lại chiếu tiếp đúng trang
+        async def fs_page(route): await route.fulfill(status=200, content_type='text/html; charset=utf-8', body='<html><body style="margin:0;height:100vh;display:grid;place-items:center"><button id="fs" onclick="document.documentElement.requestFullscreen()">FS</button></body></html>')
+        await pg.route(await pg.evaluate("new URL(CONFIG.congCuTrinhChieu[0].url).origin") + '/**', fs_page)
+        st = "(() => [document.querySelectorAll('.tc-root').length, document.querySelector('.tc-so') && document.querySelector('.tc-so').textContent])()"
+        await pg.goto(base + '#/bai-hoc/10/1'); await pg.wait_for_timeout(300); await pg.evaluate("localStorage.removeItem((CONFIG.storeKey || 'vao10') + ':tc:vitri')")
+        await pg.click('#bhTC'); await pg.wait_for_timeout(300)
+        for _ in range(4): await pg.keyboard.press('ArrowRight')
+        a0 = await pg.evaluate(st)
+        await pg.click('.tc-root .bh-cc-fab'); await pg.click('.tc-root .bh-cc-ic[data-i="0"]'); await pg.wait_for_timeout(400); await pg.click('.tc-root .bh-cc-bar [data-m="full"]')
+        await pg.frame_locator('.tc-root .bh-cc-pane iframe').first.locator('#fs').click(); await pg.wait_for_timeout(300); a1 = await pg.evaluate(st)
+        await pg.evaluate("document.fullscreenElement && document.exitFullscreen()"); await pg.wait_for_timeout(300); a2 = await pg.evaluate(st)
+        await pg.evaluate("TrinhChieu.dong()"); await pg.click('#bhTC'); await pg.wait_for_timeout(300); a3 = await pg.evaluate(st)
+        await pg.evaluate("TrinhChieu.dong()")
+        if not (a0 == a1 == a2 == a3 and a0[0] == 1): fails.append(f'trình chiếu + công cụ toàn màn hình: {a0, a1, a2, a3}')
         # Trình chiếu gắn vào bài (tuong-tac/): khung 16:9 nạp được trang, có các slide, không lỗi JS bên trong.
         for (l, bb) in await pg.evaluate("Object.keys(BaiHoc.TN).map(k => k.split('-').map(Number))"):
             await pg.goto(base + f'#/bai-hoc/{l}/{bb}'); await pg.wait_for_timeout(1500)

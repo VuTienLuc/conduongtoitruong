@@ -69,6 +69,7 @@ const TrinhChieu = (() => {
   /* ---------- Hiện trang, từng bước ---------- */
   function ve(i) {
     cur = Math.max(0, Math.min(deck.length - 1, i));
+    if (viTri) { const m = get(VT, {}); m[viTri] = { i: cur, t: Date.now() }; set(VT, m); }
     const d = deck[cur], sl = $('.tc-slide', root);
     d.da = d.da || 0;
     sl.className = 'tc-slide' + (d.loai === 'bia' ? ' bia' : '');
@@ -97,6 +98,9 @@ const TrinhChieu = (() => {
     if (fsEl()) { tatTay = true; (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
     else if (go) Promise.resolve(go.call(root)).catch(() => {});
   }
+  // Nhớ trang đang chiếu của từng bài: lỡ đóng (thoát toàn màn hình, chuyển trang) thì mở lại chiếu tiếp đúng chỗ.
+  let viTri = null;
+  const VT = 'tc:vitri', CON_HAN = 3 * 3600 * 1000;
   function mo(e, phan) {
     dong();
     deck = dung(e);
@@ -132,14 +136,17 @@ const TrinhChieu = (() => {
     };
     document.addEventListener('keydown', keyFn);
     ro = new ResizeObserver(() => fit()); ro.observe($('.tc-slide', root));
-    const i = phan === 'luyen' ? deck.findIndex(d => d.luyen) : 0;
-    ve(i < 0 ? 0 : i);
+    viTri = `${e.lop}-${e.bai}`;
+    const cu = get(VT, {})[viTri], dau = phan === 'luyen' ? Math.max(0, deck.findIndex(d => d.luyen)) : 0;
+    ve(cu && Date.now() - cu.t < CON_HAN && cu.i < deck.length && cu.i >= dau ? cu.i : dau);
     toanManHinh();
     root.focus();
   }
   // Thoát toàn màn hình (Esc của trình duyệt) hoặc chuyển trang thì đóng trình chiếu luôn.
   let daFs = false, tatTay = false;   // tatTay: thầy tự tắt toàn màn hình (⛶ / F) thì vẫn chiếu trong cửa sổ
-  const fsDoi = () => { if (!root) return; if (fsEl() === root) daFs = true; else if (daFs) { daFs = false; if (tatTay) tatTay = false; else dong(); } };
+  // Trang công cụ (⭐, 🖼️) tự bật toàn màn hình bên trong trình chiếu: vẫn là đang chiếu, không đóng (lỗi thầy báo 09/11/2026).
+  const cuaTa = el => !!el && (el === root || root.contains(el));
+  const fsDoi = () => { if (!root) return; if (cuaTa(fsEl())) daFs = true; else if (daFs) { daFs = false; if (tatTay) tatTay = false; else dong(); } };
   if (typeof document !== 'undefined' && document.addEventListener) {
     document.addEventListener('fullscreenchange', fsDoi); document.addEventListener('webkitfullscreenchange', fsDoi);
     window.addEventListener('hashchange', () => dong());
