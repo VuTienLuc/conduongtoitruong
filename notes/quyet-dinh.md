@@ -20,3 +20,4 @@
 | 09/11/2026 | Phím O bật/tắt nhanh công cụ ⭐ khi trình chiếu (thu gọn giữ trang, mở lại như lần trước); không chiếm phím khi đang gõ vào ô nhập | Thầy yêu cầu |
 | 09/11/2026 | Trang công cụ ⭐/🖼️ trong khung không được tự bật toàn màn hình (bỏ allowfullscreen); thanh ◧ ⛶ ▁ ✕ rõ hơn khi cả màn hình; focus luôn trả về bài giảng | Thầy báo: công cụ full màn hình không có nút về nửa màn hình / thu gọn, phím O không chạy |
 | 09/11/2026 | Nhập bài giảng trùng lớp + bài đã có: giữ bài giảng bản đầu, câu luyện tập thành Bộ 2, 3… (bỏ câu trùng); luyện tập có 🎲 ngẫu nhiên 12 TN + 2 ĐS + 4 TLN ưu tiên câu sai/chưa làm, chọn từng bộ hoặc tất cả; phiếu in rút theo mã đề | Thầy chọn "Lưu thành bộ đề mới" + "Rút ngẫu nhiên mỗi lượt" |
+| 09/11/2026 | Phiếu làm bài bài giảng: mã đề in 3 chữ số (mặc định 001–004) + nút Xuất Excel đáp án dạng UNT (Câu liên tục, mỗi mã một cột, ĐS ghép 4 chữ, TLN dấu chấm) | Thầy gửi mẫu Excel UNT |

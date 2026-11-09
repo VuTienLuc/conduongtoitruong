@@ -3977,6 +3977,85 @@ const OnTap = (() => {
 })();
 
 </script>
+<script>/* assets/js/xlsx.js */
+/* =====================================================================
+   XLSX – tạo tệp Excel (.xlsx) ngay trên trình duyệt, không cần thư viện ngoài.
+   Dùng cho: xuất đáp án theo mã đề dạng UNT (Phiếu làm bài – Bài giảng lớp 9–12).
+   Xlsx.tao(sheet, rows, { cot })  → Uint8Array của tệp .xlsx
+     rows: mảng các dòng; dòng đầu là tiêu đề (tô vàng, in đậm). Ô số → kiểu số; ô chữ → giữ nguyên chữ (cả "001", "1234").
+     cot:  độ rộng từng cột (đơn vị kí tự).
+   Xlsx.taiVe(tenTep, sheet, rows, opt) → tải tệp về máy.
+   Tệp .xlsx là gói zip các tệp XML; ở đây đóng gói kiểu "store" (không nén) – Excel, Google Sheets, LibreOffice đều mở được.
+   ===================================================================== */
+const Xlsx = (() => {
+  const enc = s => new TextEncoder().encode(s);
+  const xe = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  // CRC-32 cho zip
+  const T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = T[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+  function zip(files) {             // files: [[tên, Uint8Array]]
+    const parts = [], cen = []; let off = 0;
+    const u16 = v => [v & 0xFF, (v >>> 8) & 0xFF], u32 = v => [v & 0xFF, (v >>> 8) & 0xFF, (v >>> 16) & 0xFF, (v >>> 24) & 0xFF];
+    files.forEach(([name, data]) => {
+      const nb = enc(name), c = crc32(data);
+      const head = [...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(c), ...u32(data.length), ...u32(data.length), ...u16(nb.length), ...u16(0)];
+      parts.push(new Uint8Array(head), nb, data);
+      cen.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(c), ...u32(data.length), ...u32(data.length),
+        ...u16(nb.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off)]), nb);
+      off += head.length + nb.length + data.length;
+    });
+    const cenLen = cen.reduce((t, x) => t + x.length, 0);
+    const end = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(files.length), ...u16(files.length), ...u32(cenLen), ...u32(off), ...u16(0)]);
+    const all = [...parts, ...cen, end], out = new Uint8Array(all.reduce((t, x) => t + x.length, 0));
+    let p = 0; all.forEach(x => { out.set(x, p); p += x.length; });
+    return out;
+  }
+  const colName = i => { let s = ''; i++; while (i) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
+  function sheetXML(rows, cot) {
+    const cols = cot && cot.length ? `<cols>${cot.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('')}</cols>` : '';
+    const body = rows.map((r, ri) => `<row r="${ri + 1}">${r.map((v, ci) => {
+      const ref = colName(ci) + (ri + 1), s = ri === 0 ? 1 : 2;
+      if (v === null || v === undefined || v === '') return `<c r="${ref}" s="${s}"/>`;
+      if (typeof v === 'number' && isFinite(v)) return `<c r="${ref}" s="${s}"><v>${v}</v></c>`;
+      return `<c r="${ref}" s="${s}" t="inlineStr"><is><t xml:space="preserve">${xe(v)}</t></is></c>`;
+    }).join('')}</row>`).join('');
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="18"/>${cols}<sheetData>${body}</sheetData></worksheet>`;
+  }
+  const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<fonts count="2"><font><sz val="13"/><name val="Times New Roman"/></font><font><b/><sz val="13"/><name val="Times New Roman"/></font></fonts>
+<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF2CC"/><bgColor indexed="64"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color auto="1"/></left><right style="thin"><color auto="1"/></right><top style="thin"><color auto="1"/></top><bottom style="thin"><color auto="1"/></bottom><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+<xf numFmtId="49" fontId="1" fillId="2" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf></cellXfs>
+<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  function tao(sheet, rows, opt = {}) {
+    const ten = xe(String(sheet || 'Sheet1').replace(/[\\/?*[\]:]/g, ' ').slice(0, 31));
+    return zip([
+      ['[Content_Types].xml', enc(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`)],
+      ['_rels/.rels', enc(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`)],
+      ['xl/workbook.xml', enc(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${ten}" sheetId="1" r:id="rId1"/></sheets></workbook>`)],
+      ['xl/_rels/workbook.xml.rels', enc(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`)],
+      ['xl/worksheets/sheet1.xml', enc(sheetXML(rows, opt.cot))],
+      ['xl/styles.xml', enc(STYLES)]]);
+  }
+  function taiVe(tenTep, sheet, rows, opt) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([tao(sheet, rows, opt)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    a.download = tenTep; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+  }
+  return { tao, taiVe, crc32 };
+})();
+
+</script>
 <script>/* assets/js/baihoc.js */
 /* =====================================================================
    BÀI GIẢNG – LUYỆN TẬP ONLINE (lớp 9, 10, 11, 12) – bài học xếp theo mục lục SGK Toán "Kết nối tri thức với cuộc sống"
@@ -4386,9 +4465,21 @@ const BaiHoc = (() => {
     const r = rngOf(e.lop * 100000 + e.bai * 100 + ma);
     return phieuBo(e, ma, chon).tn.map(q => { const opts = daoTheoMa(q.a, r); return { q, opts, good: opts.indexOf(q.a[0]) }; });
   }
+  // Mã đề in trên phiếu: 3 chữ số (máy chấm / tệp đáp án UNT cần đúng 3 chữ số). Thầy chọn mã đầu (mặc định 001) → mã 1–4 = 001…004.
+  const maBa = (o, m) => String(Math.min(999, Math.max(0, (o && Number.isInteger(o.maDau) ? o.maDau : 1) + m - 1))).padStart(3, '0');
+  /* Đáp án dạng UNT (bảng Excel): cột A "Câu" đánh số liên tục cả ba phần, mỗi mã đề một cột (tiêu đề 3 chữ số).
+     Phần I: A/B/C/D · Phần II: mỗi câu một ô 4 chữ Đ/S theo ý a–d (ví dụ ĐSĐS) · Phần III: đáp số tối đa 4 kí tự, dấu chấm thập phân (-1.5). */
+  const soUNT = a => { let t = String(a).trim().replace(/−/g, '-').replace(/\s+/g, '').replace(/,/g, '.');
+    if (t.includes('/')) { const v = numOf(t); if (!isNaN(v)) t = String(+v.toFixed(4)); } return t; };
+  function dapAnUNT(e, o, soMa = 4) {
+    const ms = Array.from({ length: soMa }, (_, k) => k + 1);
+    const cot = ms.map(m => { const x = phieuBo(e, m, o.bo); return [...phieuData(e, m, o.bo).map(t => 'ABCD'[t.good]), ...x.ds.map(q => q.y.map(y => (y[1] ? 'Đ' : 'S')).join('')), ...x.tln.map(q => soUNT(q.ans))]; });
+    const n = Math.max(0, ...cot.map(c => c.length));
+    return [['Câu', ...ms.map(m => maBa(o, m))], ...Array.from({ length: n }, (_, i) => [i + 1, ...cot.map(c => c[i] ?? '')])];
+  }
   function phieuHTML(e0, o) {
     const e = phieuBo(e0, o.ma, o.bo);
-    const b = baiOf(e.lop, e.bai), ten = `Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}`, ma = `${e.lop}${String(e.bai).padStart(2, '0')}${o.ma}`;
+    const b = baiOf(e.lop, e.bai), ten = `Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}`, ma = maBa(o, o.ma);
     const tn = phieuData(e0, o.ma, o.bo);
     const head = r => `<div class="sh-head"><span>${U.tenPhieu()} · PHIẾU LÀM BÀI TRÊN LỚP</span><span>${r}</span></div>`;
     const cot = opts => { const m = Math.max(...opts.map(chuThuong)); return m <= 22 ? 'c4' : m <= 48 ? 'c2' : 'c1'; };
@@ -4415,24 +4506,31 @@ const BaiHoc = (() => {
     return `<div class="sheet math">${s1}${s2}</div>`;
   }
   function panePhieu(e, pane) {
-    const st = Object.assign({ ma: 1, canNho: true, dapAn: false, giai: true, dong: 3 }, get('bh:phieu', {}));
+    const st = Object.assign({ ma: 1, canNho: true, dapAn: false, giai: true, dong: 3, maDau: 1, soMa: 4 }, get('bh:phieu', {}));
     let bo = vuot(e) ? 'ngau' : 'tat';
     const moTa = () => { const x = phieuBo(e, +($('#pMa') ? $('#pMa').value : st.ma), bo); return `${x.tn.length} câu trắc nghiệm${x.ds.length ? `, ${x.ds.length} câu đúng – sai` : ''}${x.tln.length ? `, ${x.tln.length} câu trả lời ngắn` : ''}`; };
     pane.innerHTML = `<section class="card sheet-tools"><h3>🖨️ Phiếu làm bài trên lớp</h3>
       ${coChon(e) ? `<p><b>Câu hỏi in:</b></p>${chonHTML(e, bo, 'pbo')}<p class="muted small">🎲 Ngẫu nhiên: mỗi mã đề rút một bộ câu khác nhau từ ${nCau(e)} câu của bài (in lại cùng mã ra đúng các câu đó).</p>` : ''}
       <p class="muted">In phát cho học sinh làm tại lớp: <span id="pMoTa">${moTa()}</span>. Mỗi <b>mã đề</b> đảo thứ tự phương án khác nhau – in 2 mã cho 2 dãy bàn.</p>
-      <div class="opts-row"><label class="tog">Mã đề <select id="pMa">${[1, 2, 3, 4].map(m => `<option value="${m}" ${st.ma === m ? 'selected' : ''}>${e.lop}${String(e.bai).padStart(2, '0')}${m}</option>`).join('')}</select></label>
+      <div class="opts-row"><label class="tog">Mã đề đầu (3 chữ số) <input id="pMaDau" type="text" inputmode="numeric" maxlength="3" size="3" value="${maBa(st, 1)}" aria-label="Mã đề đầu tiên, 3 chữ số"></label>
+        <label class="tog">In mã <select id="pMa">${[1, 2, 3, 4].map(m => `<option value="${m}" ${st.ma === m ? 'selected' : ''}>${maBa(st, m)}</option>`).join('')}</select></label>
         <label class="tog"><input type="checkbox" id="pCan" ${st.canNho ? 'checked' : ''}> In phần Cần nhớ</label>
         ${e.tln.length ? `<label class="tog">Dòng kẻ mỗi câu trả lời ngắn <select id="pDong">${[0, 2, 3, 5].map(n => `<option ${st.dong === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
         <label class="tog"><input type="checkbox" id="pDa" ${st.dapAn ? 'checked' : ''}> Kèm trang đáp án (cho thầy cô)</label>
         <label class="tog"><input type="checkbox" id="pGiai" ${st.giai ? 'checked' : ''}> Đáp án kèm lời giải thích</label></div>
-      <div class="row"><button class="btn primary" type="button" id="pIn">🖨️ In / Lưu PDF</button></div>
-      <p class="muted small">Lưu PDF: trong hộp thoại in chọn “Lưu dưới dạng PDF” (Save as PDF), khổ A4.</p></section>
+      <div class="row"><button class="btn primary" type="button" id="pIn">🖨️ In / Lưu PDF</button>${typeof Xlsx !== 'undefined' ? `<button class="btn" type="button" id="pXls">📊 Xuất Excel đáp án (UNT)</button>
+        <label class="tog">gồm <select id="pSoMa">${[1, 2, 3, 4].map(n => `<option value="${n}" ${st.soMa === n ? 'selected' : ''}>${n}</option>`).join('')}</select> mã đề</label>` : ''}</div>
+      <p class="muted small">Lưu PDF: trong hộp thoại in chọn “Lưu dưới dạng PDF” (Save as PDF), khổ A4. Excel đáp án: mỗi mã đề một cột, câu đánh số liên tục (Phần I: A–D · Phần II: ĐSĐS · Phần III: đáp số, dấu chấm) – nạp vào phần mềm chấm.</p></section>
       <div class="paper-wrap" id="paper"></div>`;
-    const opt = () => ({ ma: +$('#pMa').value, canNho: $('#pCan').checked, dapAn: $('#pDa').checked, giai: $('#pGiai').checked, dong: $('#pDong') ? +$('#pDong').value : 0, bo });
+    const maDau = () => { const v = parseInt($('#pMaDau').value, 10); return Number.isInteger(v) && v >= 0 && v <= 996 ? v : 1; };
+    const opt = () => ({ ma: +$('#pMa').value, canNho: $('#pCan').checked, dapAn: $('#pDa').checked, giai: $('#pGiai').checked, dong: $('#pDong') ? +$('#pDong').value : 0, maDau: maDau(), soMa: $('#pSoMa') ? +$('#pSoMa').value : 4, bo });
     const draw = () => { const o = opt(); const { bo: _, ...luu } = o; set('bh:phieu', luu); $('#pMoTa').textContent = moTa(); $('#paper').innerHTML = phieuHTML(e, o); };
     $$('[data-pbo]', pane).forEach(b => b.addEventListener('click', () => { bo = b.dataset.pbo; $$('[data-pbo]', pane).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); draw(); }));
-    $$('#pMa, #pCan, #pDa, #pGiai, #pDong', pane).forEach(x => x.addEventListener('change', draw));
+    $$('#pMa, #pCan, #pDa, #pGiai, #pDong, #pSoMa', pane).forEach(x => x.addEventListener('change', draw));
+    $('#pMaDau').addEventListener('change', () => { const o = opt(); $('#pMaDau').value = maBa(o, 1); $$('#pMa option', pane).forEach(x => { x.textContent = maBa(o, +x.value); }); draw(); });
+    if ($('#pXls')) $('#pXls').addEventListener('click', () => { const o = opt(), b = baiOf(e.lop, e.bai);
+      Xlsx.taiVe(`dap-an-UNT-toan${e.lop}-bai${String(e.bai).padStart(2, '0')}-ma${maBa(o, 1)}-${maBa(o, o.soMa)}.xlsx`, 'Đáp án', dapAnUNT(e, o, o.soMa), { cot: [8, ...Array(o.soMa).fill(12)] });
+      U.toast(`Đã xuất đáp án ${o.soMa} mã đề (${maBa(o, 1)}–${maBa(o, o.soMa)}) – Toán ${e.lop} Bài ${e.bai}${b ? '. ' + b.ten : ''}`); });
     $('#pIn').addEventListener('click', ev => OnTap.printHTML(phieuHTML(e, opt()), ev.currentTarget));
     draw();
   }
@@ -4452,7 +4550,7 @@ const BaiHoc = (() => {
     if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, ['luyen', 'phieu'].includes(parts[3]) ? parts[3] : '');
     return true;
   }
-  return { LOP, LIEN_9, DUNG_9, HAN, own, thuGhep, boList, chonCau, coChon, fpQ, tuVao10, doiChu, congCu, phieuHTML, phieuData, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
+  return { LOP, LIEN_9, DUNG_9, HAN, dapAnUNT, maBa, own, thuGhep, boList, chonCau, coChon, fpQ, tuVao10, doiChu, congCu, phieuHTML, phieuData, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
 })();
 
 </script>

@@ -29,6 +29,7 @@
 - Tên tệp bộ mới: `bai-hoc-l<lớp>-b<bài>-bo<N>.json` (Xưởng "Tải tệp chuẩn" tự đặt; `nhap-du-lieu.py` xếp tệp gốc trước tệp -bo). Không bao giờ đè tệp cũ.
 - Xưởng → Nhập dữ liệu báo trước: "sẽ thành Bộ N: thêm x câu mới, bỏ y câu trùng" hoặc "mọi câu đều đã có". Lưu trên máy (localStorage) cũng ghép thành bộ, không còn bị bỏ qua khi hệ thống đã có bài.
 - Luyện tập online: có chọn 🎲 Ngẫu nhiên (khi ngân hàng vượt 12 TN / 2 ĐS / 4 TLN – `BaiHoc.HAN`) · Bộ 1, Bộ 2… · Tất cả. Ngẫu nhiên ưu tiên câu em làm sai, rồi chưa làm, rồi đã đúng (`bh:cau:<lớp>-<bài>`); nút "🎲 Làm lượt mới". Lựa chọn nhớ ở `bh:bo:<lớp>-<bài>`. Điểm cao nhất giữ lượt có tỉ lệ đúng cao nhất.
+- 📊 Xuất Excel đáp án dạng UNT (tab Phiếu làm bài, thầy yêu cầu 09/11/2026, mẫu thầy chụp): sheet "Đáp án", cột A "Câu" đánh số liên tục cả 3 phần, mỗi mã đề một cột tiêu đề 3 chữ số (chữ, giữ số 0 đầu); Phần I A–D, Phần II một ô 4 chữ Đ/S theo ý a–d (ĐSĐS), Phần III đáp số dấu chấm (-1.5), phân số đổi ra thập phân. Mã đề in trên phiếu đổi thành 3 chữ số: "Mã đề đầu" (mặc định 001) → mã 1–4 = 001–004; chọn xuất 1–4 mã. Tạo .xlsx bằng `assets/js/xlsx.js` (không thư viện ngoài), `BaiHoc.dapAnUNT(e, o, soMa)`. Chưa có ô LĐ/LS (luôn đúng/luôn sai) – thầy sửa tay trong Excel khi cần.
 - Phiếu làm bài: chọn bộ như trên; 🎲 rút theo mã đề (cùng mã in lại ra cùng câu). Trình chiếu dùng đúng lượt đang hiện ở tab Luyện tập.
 - `nhap-du-lieu.py`: tệp lỗi thì giữ bản cũ đang có trên web (trước đây bị gỡ).
 

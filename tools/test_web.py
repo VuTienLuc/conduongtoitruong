@@ -202,6 +202,18 @@ async def main():
                 dung: d1.every(x => x.opts[x.good] === x.q.a[0]), khac: d1.some((x, i) => x.opts.join() !== d2[i].opts.join()), on: d1.every((x, i) => x.opts.join() === BaiHoc.phieuData(e, 1)[i].opts.join()),
                 loi: p.querySelectorAll('mjx-merror').length }; })""", [l, bb])
             if r['trang'] != 2 or r['cau'] != r['n'] or not r['dung'] or not r['khac'] or not r['on'] or r['loi']: fails.append(f'phiếu làm bài Toán {l} bài {bb}: {r}')
+            # 📊 Excel đáp án dạng UNT: cột Câu + mỗi mã đề (3 chữ số) một cột; khớp đúng trang đáp án in của mã đó
+            await pg.fill('#pMaDau', '7'); await pg.dispatch_event('#pMaDau', 'change'); await pg.select_option('#pMa', '2'); await pg.wait_for_timeout(200)
+            async with pg.expect_download() as dl: await pg.click('#pXls')
+            fx = os.path.join(ROOT, '.tmp-unt.xlsx'); await (await dl.value).save_as(fx)
+            import openpyxl; ws = openpyxl.load_workbook(fx).active; os.remove(fx)
+            rows = [list(x) for x in ws.iter_rows(values_only=True)]
+            key = await pg.evaluate("(() => { const t = document.querySelectorAll('#paper .bh-key'); const a = []; t.forEach((x, i) => { const r = x.querySelectorAll('tr'), ds = [...r[0].querySelectorAll('th')].some(th => th.textContent.trim() === 'a'); if (!ds) a.push(...[...r[1].querySelectorAll('td')].map(td => td.textContent.trim())); else [...r].slice(1).forEach(tr => a.push([...tr.querySelectorAll('td')].map(td => td.textContent.trim()).join(''))); }); return [a, document.querySelector('#paper .bh-tt-ma').textContent]; })()")
+            col = [x[2] for x in rows[1:]]
+            want = [str(v).replace(',', '.') for v in key[0]]
+            if rows[0] != ['Câu', '007', '008', '009', '010'] or [x[0] for x in rows[1:]] != list(range(1, len(rows))) or col != want or 'Mã 008' not in key[1] or ws.title != 'Đáp án':
+                fails.append(f'Excel đáp án UNT Toán {l} bài {bb}: {rows[:2]}, {col} ≠ {want}, {key[1]}')
+            await pg.evaluate("localStorage.removeItem((CONFIG.storeKey || 'vao10') + ':bh:phieu')")
         # Công cụ ⭐/🖼️ tự bật toàn màn hình trong lúc trình chiếu: không được đóng trình chiếu, không về trang đầu; mở lại chiếu tiếp đúng trang
         async def fs_page(route): await route.fulfill(status=200, content_type='text/html; charset=utf-8', body='<html><body style="margin:0;height:100vh;display:grid;place-items:center"><button id="fs" onclick="document.documentElement.requestFullscreen().catch(() => document.title = `bi-chan`)">FS</button></body></html>')
         await pg.route(await pg.evaluate("new URL(CONFIG.congCuTrinhChieu[0].url).origin") + '/**', fs_page)

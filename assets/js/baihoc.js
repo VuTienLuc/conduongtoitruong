@@ -406,9 +406,21 @@ const BaiHoc = (() => {
     const r = rngOf(e.lop * 100000 + e.bai * 100 + ma);
     return phieuBo(e, ma, chon).tn.map(q => { const opts = daoTheoMa(q.a, r); return { q, opts, good: opts.indexOf(q.a[0]) }; });
   }
+  // Mã đề in trên phiếu: 3 chữ số (máy chấm / tệp đáp án UNT cần đúng 3 chữ số). Thầy chọn mã đầu (mặc định 001) → mã 1–4 = 001…004.
+  const maBa = (o, m) => String(Math.min(999, Math.max(0, (o && Number.isInteger(o.maDau) ? o.maDau : 1) + m - 1))).padStart(3, '0');
+  /* Đáp án dạng UNT (bảng Excel): cột A "Câu" đánh số liên tục cả ba phần, mỗi mã đề một cột (tiêu đề 3 chữ số).
+     Phần I: A/B/C/D · Phần II: mỗi câu một ô 4 chữ Đ/S theo ý a–d (ví dụ ĐSĐS) · Phần III: đáp số tối đa 4 kí tự, dấu chấm thập phân (-1.5). */
+  const soUNT = a => { let t = String(a).trim().replace(/−/g, '-').replace(/\s+/g, '').replace(/,/g, '.');
+    if (t.includes('/')) { const v = numOf(t); if (!isNaN(v)) t = String(+v.toFixed(4)); } return t; };
+  function dapAnUNT(e, o, soMa = 4) {
+    const ms = Array.from({ length: soMa }, (_, k) => k + 1);
+    const cot = ms.map(m => { const x = phieuBo(e, m, o.bo); return [...phieuData(e, m, o.bo).map(t => 'ABCD'[t.good]), ...x.ds.map(q => q.y.map(y => (y[1] ? 'Đ' : 'S')).join('')), ...x.tln.map(q => soUNT(q.ans))]; });
+    const n = Math.max(0, ...cot.map(c => c.length));
+    return [['Câu', ...ms.map(m => maBa(o, m))], ...Array.from({ length: n }, (_, i) => [i + 1, ...cot.map(c => c[i] ?? '')])];
+  }
   function phieuHTML(e0, o) {
     const e = phieuBo(e0, o.ma, o.bo);
-    const b = baiOf(e.lop, e.bai), ten = `Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}`, ma = `${e.lop}${String(e.bai).padStart(2, '0')}${o.ma}`;
+    const b = baiOf(e.lop, e.bai), ten = `Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}`, ma = maBa(o, o.ma);
     const tn = phieuData(e0, o.ma, o.bo);
     const head = r => `<div class="sh-head"><span>${U.tenPhieu()} · PHIẾU LÀM BÀI TRÊN LỚP</span><span>${r}</span></div>`;
     const cot = opts => { const m = Math.max(...opts.map(chuThuong)); return m <= 22 ? 'c4' : m <= 48 ? 'c2' : 'c1'; };
@@ -435,24 +447,31 @@ const BaiHoc = (() => {
     return `<div class="sheet math">${s1}${s2}</div>`;
   }
   function panePhieu(e, pane) {
-    const st = Object.assign({ ma: 1, canNho: true, dapAn: false, giai: true, dong: 3 }, get('bh:phieu', {}));
+    const st = Object.assign({ ma: 1, canNho: true, dapAn: false, giai: true, dong: 3, maDau: 1, soMa: 4 }, get('bh:phieu', {}));
     let bo = vuot(e) ? 'ngau' : 'tat';
     const moTa = () => { const x = phieuBo(e, +($('#pMa') ? $('#pMa').value : st.ma), bo); return `${x.tn.length} câu trắc nghiệm${x.ds.length ? `, ${x.ds.length} câu đúng – sai` : ''}${x.tln.length ? `, ${x.tln.length} câu trả lời ngắn` : ''}`; };
     pane.innerHTML = `<section class="card sheet-tools"><h3>🖨️ Phiếu làm bài trên lớp</h3>
       ${coChon(e) ? `<p><b>Câu hỏi in:</b></p>${chonHTML(e, bo, 'pbo')}<p class="muted small">🎲 Ngẫu nhiên: mỗi mã đề rút một bộ câu khác nhau từ ${nCau(e)} câu của bài (in lại cùng mã ra đúng các câu đó).</p>` : ''}
       <p class="muted">In phát cho học sinh làm tại lớp: <span id="pMoTa">${moTa()}</span>. Mỗi <b>mã đề</b> đảo thứ tự phương án khác nhau – in 2 mã cho 2 dãy bàn.</p>
-      <div class="opts-row"><label class="tog">Mã đề <select id="pMa">${[1, 2, 3, 4].map(m => `<option value="${m}" ${st.ma === m ? 'selected' : ''}>${e.lop}${String(e.bai).padStart(2, '0')}${m}</option>`).join('')}</select></label>
+      <div class="opts-row"><label class="tog">Mã đề đầu (3 chữ số) <input id="pMaDau" type="text" inputmode="numeric" maxlength="3" size="3" value="${maBa(st, 1)}" aria-label="Mã đề đầu tiên, 3 chữ số"></label>
+        <label class="tog">In mã <select id="pMa">${[1, 2, 3, 4].map(m => `<option value="${m}" ${st.ma === m ? 'selected' : ''}>${maBa(st, m)}</option>`).join('')}</select></label>
         <label class="tog"><input type="checkbox" id="pCan" ${st.canNho ? 'checked' : ''}> In phần Cần nhớ</label>
         ${e.tln.length ? `<label class="tog">Dòng kẻ mỗi câu trả lời ngắn <select id="pDong">${[0, 2, 3, 5].map(n => `<option ${st.dong === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
         <label class="tog"><input type="checkbox" id="pDa" ${st.dapAn ? 'checked' : ''}> Kèm trang đáp án (cho thầy cô)</label>
         <label class="tog"><input type="checkbox" id="pGiai" ${st.giai ? 'checked' : ''}> Đáp án kèm lời giải thích</label></div>
-      <div class="row"><button class="btn primary" type="button" id="pIn">🖨️ In / Lưu PDF</button></div>
-      <p class="muted small">Lưu PDF: trong hộp thoại in chọn “Lưu dưới dạng PDF” (Save as PDF), khổ A4.</p></section>
+      <div class="row"><button class="btn primary" type="button" id="pIn">🖨️ In / Lưu PDF</button>${typeof Xlsx !== 'undefined' ? `<button class="btn" type="button" id="pXls">📊 Xuất Excel đáp án (UNT)</button>
+        <label class="tog">gồm <select id="pSoMa">${[1, 2, 3, 4].map(n => `<option value="${n}" ${st.soMa === n ? 'selected' : ''}>${n}</option>`).join('')}</select> mã đề</label>` : ''}</div>
+      <p class="muted small">Lưu PDF: trong hộp thoại in chọn “Lưu dưới dạng PDF” (Save as PDF), khổ A4. Excel đáp án: mỗi mã đề một cột, câu đánh số liên tục (Phần I: A–D · Phần II: ĐSĐS · Phần III: đáp số, dấu chấm) – nạp vào phần mềm chấm.</p></section>
       <div class="paper-wrap" id="paper"></div>`;
-    const opt = () => ({ ma: +$('#pMa').value, canNho: $('#pCan').checked, dapAn: $('#pDa').checked, giai: $('#pGiai').checked, dong: $('#pDong') ? +$('#pDong').value : 0, bo });
+    const maDau = () => { const v = parseInt($('#pMaDau').value, 10); return Number.isInteger(v) && v >= 0 && v <= 996 ? v : 1; };
+    const opt = () => ({ ma: +$('#pMa').value, canNho: $('#pCan').checked, dapAn: $('#pDa').checked, giai: $('#pGiai').checked, dong: $('#pDong') ? +$('#pDong').value : 0, maDau: maDau(), soMa: $('#pSoMa') ? +$('#pSoMa').value : 4, bo });
     const draw = () => { const o = opt(); const { bo: _, ...luu } = o; set('bh:phieu', luu); $('#pMoTa').textContent = moTa(); $('#paper').innerHTML = phieuHTML(e, o); };
     $$('[data-pbo]', pane).forEach(b => b.addEventListener('click', () => { bo = b.dataset.pbo; $$('[data-pbo]', pane).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); draw(); }));
-    $$('#pMa, #pCan, #pDa, #pGiai, #pDong', pane).forEach(x => x.addEventListener('change', draw));
+    $$('#pMa, #pCan, #pDa, #pGiai, #pDong, #pSoMa', pane).forEach(x => x.addEventListener('change', draw));
+    $('#pMaDau').addEventListener('change', () => { const o = opt(); $('#pMaDau').value = maBa(o, 1); $$('#pMa option', pane).forEach(x => { x.textContent = maBa(o, +x.value); }); draw(); });
+    if ($('#pXls')) $('#pXls').addEventListener('click', () => { const o = opt(), b = baiOf(e.lop, e.bai);
+      Xlsx.taiVe(`dap-an-UNT-toan${e.lop}-bai${String(e.bai).padStart(2, '0')}-ma${maBa(o, 1)}-${maBa(o, o.soMa)}.xlsx`, 'Đáp án', dapAnUNT(e, o, o.soMa), { cot: [8, ...Array(o.soMa).fill(12)] });
+      U.toast(`Đã xuất đáp án ${o.soMa} mã đề (${maBa(o, 1)}–${maBa(o, o.soMa)}) – Toán ${e.lop} Bài ${e.bai}${b ? '. ' + b.ten : ''}`); });
     $('#pIn').addEventListener('click', ev => OnTap.printHTML(phieuHTML(e, opt()), ev.currentTarget));
     draw();
   }
@@ -472,5 +491,5 @@ const BaiHoc = (() => {
     if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, ['luyen', 'phieu'].includes(parts[3]) ? parts[3] : '');
     return true;
   }
-  return { LOP, LIEN_9, DUNG_9, HAN, own, thuGhep, boList, chonCau, coChon, fpQ, tuVao10, doiChu, congCu, phieuHTML, phieuData, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
+  return { LOP, LIEN_9, DUNG_9, HAN, dapAnUNT, maBa, own, thuGhep, boList, chonCau, coChon, fpQ, tuVao10, doiChu, congCu, phieuHTML, phieuData, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
 })();
