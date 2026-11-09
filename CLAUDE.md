@@ -19,6 +19,7 @@
 - Sau mỗi thay đổi: `node tools/kiem-tra.js` → `python3 tools/kiem-dap-so.py` → `python3 tools/xuat-de-pdf.py [mã…]` → `python3 tools/test_web.py` → `python3 tools/build.py` → commit, push, `git pull` trên máy thầy.
 - Dữ liệu mới từ AI: chép tệp vào `nhap/` → `python3 tools/nhap-du-lieu.py`.
 - Đẩy lên web: `python3 tools/day-len.py` (Desktop máy thầy: `Đăng Con đường tới trường lên web.command`). Gắn trang HTML vào bài: `python3 tools/gan-html.py` – quy tắc (cả cho Antigravity): `.agents/rules/dua-html-len-web.md`.
+- Antigravity: lệnh `/dang-web`, `/kiem-tra-web`, `/gan-html`, `/nhap-du-lieu`, `/soan-noi-dung` (`.agents/skills/`, hướng dẫn `docs/huong-dan-antigravity.md`).
 
 ## Bản đồ bộ nhớ
 - Cấp 2 — notes/ (kiến thức, quyết định theo chủ đề):

@@ -68,7 +68,9 @@ def nhan_html(inbox, khong_hoi):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--inbox', default=INBOX); ap.add_argument('--msg', default='')
-    ap.add_argument('--khong-hoi', action='store_true'); ap.add_argument('--khong-day', action='store_true', help='làm hết, chỉ không push (để thử)')
+    ap.add_argument('--khong-hoi', action='store_true', help='không hỏi gì (Antigravity, Claude dùng); thiếu sympy thì dừng')
+    ap.add_argument('--khong-day', action='store_true', help='làm hết, chỉ không push (để thử)')
+    ap.add_argument('--chi-kiem', action='store_true', help='chỉ nhập nhap/, kiểm tra, gộp dist – không đụng git, không gắn HTML')
     a = ap.parse_args()
     print('ĐẨY WEB "CON ĐƯỜNG TỚI TRƯỜNG" LÊN HỆ THỐNG')
     for tool in ('git', 'python3'):
@@ -77,12 +79,14 @@ def main():
     if run(['git', 'config', 'user.name'], show=False).returncode: run(['git', 'config', 'user.name', 'Vu Tien Luc'], show=False)
     if run(['git', 'config', 'user.email'], show=False).returncode: run(['git', 'config', 'user.email', 'vutluc@gmail.com'], show=False)
     buoc(1, 'Lấy bản mới nhất từ GitHub')
-    if not a.khong_day:
+    if a.chi_kiem: print('   (chỉ kiểm – bỏ qua)')
+    elif not a.khong_day:
         r = run(['git', 'pull', '--rebase', '--autostash', 'origin', 'main'])
         if r.returncode: raise SystemExit('✗ Không lấy được bản mới (mạng, hoặc hai nơi cùng sửa một chỗ). Chưa đẩy gì. Nhờ Claude: "git pull bị lỗi".')
 
     buoc(2, 'Gắn các trang HTML mới vào bài học')
-    nhan_html(a.inbox, a.khong_hoi)
+    if a.chi_kiem: print('   (chỉ kiểm – bỏ qua)')
+    else: nhan_html(a.inbox, a.khong_hoi)
 
     buoc(3, 'Nhập dữ liệu AI trong nhap/')
     if glob.glob('nhap/*.json') or glob.glob('nhap/*.md') or glob.glob('nhap/*.txt'):
@@ -93,11 +97,14 @@ def main():
     if shutil.which('node'): run(['node', 'tools/kiem-tra.js'], check=True)
     else: print('   ! máy chưa có Node – bỏ qua kiểm tra tự động (cài tại https://nodejs.org để lệnh kiểm được)')
     if run(['python3', '-c', 'import sympy'], show=False).returncode == 0: run(['python3', 'tools/kiem-dap-so.py'], show=False, check=True); print('   kiểm đáp số: ĐẠT ✓')
+    elif a.khong_hoi or a.chi_kiem: raise SystemExit('✗ Máy chưa có sympy nên chưa kiểm được đáp số – chưa đẩy. Cài: python3 -m pip install --user sympy  rồi chạy lại.')
     else: print('   ! máy chưa có sympy – bỏ qua kiểm đáp số (cài: python3 -m pip install --user sympy)')
 
     buoc(5, 'Gộp bản một tệp dist/')
     run(['python3', 'tools/build.py'], check=True)
 
+    if a.chi_kiem:
+        print('\n✓ KIỂM XONG: nội dung đạt. Chưa lưu, chưa đẩy (chế độ --chi-kiem).'); return 0
     buoc(6, 'Lưu và đẩy lên GitHub')
     run(['git', 'add', '-A'], show=False)
     ds = run(['git', 'diff', '--cached', '--name-status'], show=False).stdout.strip().split('\n')
