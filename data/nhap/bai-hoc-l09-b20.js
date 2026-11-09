@@ -1,0 +1,216 @@
+/* Nhập từ AI qua Xưởng dữ liệu: nhap/bai-hoc-l09-b20.json – Bài giảng – luyện tập Toán 9 – Bài 20. Định lí Viète và ứng dụng (11 câu). Sửa nội dung thì sửa tệp trong nhap/ rồi chạy lại tools/nhap-du-lieu.py. */
+NhapDL.add({
+ "loai": "bai_hoc",
+ "lop": 9,
+ "bai": 20,
+ "ten_bai": "Định lí Viète và ứng dụng",
+ "mau": true,
+ "nguon": "Soạn theo SGK Toán 9 Kết nối tri thức, tập 2 – Bài 20; ví dụ và câu hỏi tự soạn",
+ "muc_tieu": [
+  "Viết được tổng và tích hai nghiệm của phương trình bậc hai theo hệ số",
+  "Nhẩm được nghiệm khi $a + b + c = 0$ hoặc $a - b + c = 0$",
+  "Tìm được hai số khi biết tổng và tích",
+  "Tính được biểu thức đối xứng của hai nghiệm mà không cần giải phương trình"
+ ],
+ "bai_giang": [
+  {
+   "tieu_de": "1. Định lí Viète",
+   "noi_dung": "Nếu $x_1, x_2$ là hai nghiệm của phương trình $ax^2 + bx + c = 0$ $(a \\ne 0)$ thì\n- Tổng hai nghiệm: $S = x_1 + x_2 = -\\dfrac{b}{a}$\n- Tích hai nghiệm: $P = x_1 x_2 = \\dfrac{c}{a}$\nMột số biểu thức đối xứng hay dùng: $x_1^2 + x_2^2 = S^2 - 2P$; $\\dfrac{1}{x_1} + \\dfrac{1}{x_2} = \\dfrac{S}{P}$ (khi $P \\ne 0$).",
+   "vi_du": [
+    {
+     "de": "Không giải phương trình $x^2 - 5x + 3 = 0$, tính $x_1 + x_2$, $x_1 x_2$ và $x_1^2 + x_2^2$.",
+     "loi_giai": [
+      "$\\Delta = (-5)^2 - 4 \\cdot 1 \\cdot 3 = 13 \\gt 0$ nên phương trình có hai nghiệm phân biệt.",
+      "Theo định lí Viète: $S = x_1 + x_2 = 5$, $P = x_1 x_2 = 3$.",
+      "$x_1^2 + x_2^2 = S^2 - 2P = 25 - 6 = 19$."
+     ],
+     "dap_so": "$S = 5$, $P = 3$, $x_1^2 + x_2^2 = 19$"
+    }
+   ],
+   "luu_y": "Phải kiểm tra phương trình có nghiệm ($\\Delta \\ge 0$) trước khi dùng định lí Viète. Hay nhầm dấu: tổng là $-\\dfrac{b}{a}$, không phải $\\dfrac{b}{a}$."
+  },
+  {
+   "tieu_de": "2. Áp dụng định lí Viète để tính nhẩm nghiệm",
+   "noi_dung": "- Nếu $a + b + c = 0$ thì phương trình có hai nghiệm $x_1 = 1$, $x_2 = \\dfrac{c}{a}$.\n- Nếu $a - b + c = 0$ thì phương trình có hai nghiệm $x_1 = -1$, $x_2 = -\\dfrac{c}{a}$.",
+   "vi_du": [
+    {
+     "de": "Tính nhẩm nghiệm của phương trình $3x^2 - 7x + 4 = 0$.",
+     "loi_giai": [
+      "Ta có $a + b + c = 3 - 7 + 4 = 0$.",
+      "Vậy phương trình có hai nghiệm $x_1 = 1$, $x_2 = \\dfrac{c}{a} = \\dfrac{4}{3}$."
+     ],
+     "dap_so": "$x_1 = 1$, $x_2 = \\dfrac{4}{3}$"
+    },
+    {
+     "de": "Tính nhẩm nghiệm của phương trình $2x^2 + 5x + 3 = 0$.",
+     "loi_giai": [
+      "Ta có $a - b + c = 2 - 5 + 3 = 0$.",
+      "Vậy phương trình có hai nghiệm $x_1 = -1$, $x_2 = -\\dfrac{c}{a} = -\\dfrac{3}{2}$."
+     ],
+     "dap_so": "$x_1 = -1$, $x_2 = -\\dfrac{3}{2}$"
+    }
+   ],
+   "luu_y": "Với $a - b + c = 0$, nghiệm thứ hai là $-\\dfrac{c}{a}$ (có dấu trừ)."
+  },
+  {
+   "tieu_de": "3. Tìm hai số biết tổng và tích của chúng",
+   "noi_dung": "Nếu hai số có tổng bằng $S$ và tích bằng $P$ thì hai số đó là hai nghiệm của phương trình $x^2 - Sx + P = 0$.\nĐiều kiện để có hai số đó: $S^2 - 4P \\ge 0$.",
+   "vi_du": [
+    {
+     "de": "Tìm hai số $u$, $v$ biết $u + v = 7$ và $uv = 12$.",
+     "loi_giai": [
+      "$S^2 - 4P = 49 - 48 = 1 \\ge 0$ nên tồn tại hai số cần tìm.",
+      "$u$, $v$ là hai nghiệm của $x^2 - 7x + 12 = 0$; $\\Delta = 1$, $x_1 = 4$, $x_2 = 3$.",
+      "Vậy $u = 4, v = 3$ hoặc $u = 3, v = 4$."
+     ],
+     "dap_so": "$\\{u; v\\} = \\{3; 4\\}$"
+    }
+   ],
+   "luu_y": "Phương trình cần lập là $x^2 - Sx + P = 0$ (dấu trừ trước $S$)."
+  }
+ ],
+ "can_nho": [
+  "Định lí Viète: $x_1 + x_2 = -\\dfrac{b}{a}$, $x_1 x_2 = \\dfrac{c}{a}$ – chỉ dùng khi $\\Delta \\ge 0$",
+  "$x_1^2 + x_2^2 = S^2 - 2P$; $(x_1 - x_2)^2 = S^2 - 4P$; $\\dfrac{1}{x_1} + \\dfrac{1}{x_2} = \\dfrac{S}{P}$",
+  "$a + b + c = 0$: nghiệm $1$ và $\\dfrac{c}{a}$; $a - b + c = 0$: nghiệm $-1$ và $-\\dfrac{c}{a}$",
+  "Hai số có tổng $S$, tích $P$ là nghiệm của $x^2 - Sx + P = 0$, điều kiện $S^2 - 4P \\ge 0$",
+  "Bài có tham số: tìm điều kiện có nghiệm trước, dùng Viète sau, cuối cùng đối chiếu điều kiện"
+ ],
+ "trac_nghiem": [
+  {
+   "cau": "Phương trình $x^2 - 6x + 5 = 0$ có hai nghiệm $x_1, x_2$. Tổng $x_1 + x_2$ bằng",
+   "phuong_an": [
+    "$-6$",
+    "$6$",
+    "$5$",
+    "$-5$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$S = -\\dfrac{b}{a} = -\\dfrac{-6}{1} = 6$. Phương án $-6$ là nhầm dấu.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Phương trình $2x^2 + 3x - 7 = 0$ có hai nghiệm $x_1, x_2$. Tích $x_1 x_2$ bằng",
+   "phuong_an": [
+    "$\\dfrac{7}{2}$",
+    "$-\\dfrac{3}{2}$",
+    "$-\\dfrac{7}{2}$",
+    "$\\dfrac{3}{2}$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$\\Delta = 9 + 56 = 65 \\gt 0$; $P = \\dfrac{c}{a} = -\\dfrac{7}{2}$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Phương trình $5x^2 - 8x + 3 = 0$ có hai nghiệm là",
+   "phuong_an": [
+    "$x = 1$ và $x = \\dfrac{3}{5}$",
+    "$x = -1$ và $x = -\\dfrac{3}{5}$",
+    "$x = 1$ và $x = -\\dfrac{3}{5}$",
+    "$x = 1$ và $x = \\dfrac{5}{3}$"
+   ],
+   "dap_an": "A",
+   "giai_thich": "$a + b + c = 5 - 8 + 3 = 0$ nên $x_1 = 1$, $x_2 = \\dfrac{c}{a} = \\dfrac{3}{5}$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Hai số có tổng bằng $9$ và tích bằng $20$ là hai nghiệm của phương trình",
+   "phuong_an": [
+    "$x^2 + 9x + 20 = 0$",
+    "$x^2 - 20x + 9 = 0$",
+    "$x^2 + 9x - 20 = 0$",
+    "$x^2 - 9x + 20 = 0$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "Phương trình cần lập là $x^2 - Sx + P = 0$ với $S = 9$, $P = 20$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Cho phương trình $x^2 - 3x - 1 = 0$ có hai nghiệm $x_1, x_2$. Giá trị của $x_1^2 + x_2^2$ là",
+   "phuong_an": [
+    "$7$",
+    "$11$",
+    "$10$",
+    "$9$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$S = 3$, $P = -1$ nên $x_1^2 + x_2^2 = S^2 - 2P = 9 + 2 = 11$. Phương án $7$ là nhầm dấu của $P$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Phương trình $x^2 - 4x + m = 0$ có hai nghiệm $x_1, x_2$ thỏa mãn $x_1 = 3x_2$. Giá trị của $m$ là",
+   "phuong_an": [
+    "$m = 4$",
+    "$m = -3$",
+    "$m = 3$",
+    "$m = 1$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$x_1 + x_2 = 4x_2 = 4$ nên $x_2 = 1$, $x_1 = 3$; $m = x_1 x_2 = 3$. Kiểm tra $\\Delta' = 4 - 3 = 1 \\gt 0$.",
+   "muc": "VD"
+  }
+ ],
+ "dung_sai": [
+  {
+   "cau": "Cho phương trình $x^2 - 2x - 15 = 0$ có hai nghiệm $x_1, x_2$.",
+   "y": [
+    {
+     "noi_dung": "$\\Delta' \\gt 0$ nên phương trình có hai nghiệm phân biệt.",
+     "dung": true
+    },
+    {
+     "noi_dung": "$x_1 + x_2 = -2$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "$x_1 x_2 = -15$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "$\\dfrac{1}{x_1} + \\dfrac{1}{x_2} = \\dfrac{2}{15}$.",
+     "dung": false
+    }
+   ],
+   "giai_thich": "a) $\\Delta' = 1 + 15 = 16 \\gt 0$: đúng. b) $S = 2$: sai. c) $P = -15$: đúng. d) $\\dfrac{S}{P} = -\\dfrac{2}{15}$: sai."
+  },
+  {
+   "cau": "Cho phương trình $x^2 - (m + 1)x + m = 0$ ($m$ là tham số).",
+   "y": [
+    {
+     "noi_dung": "Phương trình luôn có một nghiệm $x = 1$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Nghiệm còn lại là $x = -m$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Với $m = 4$, tổng hai nghiệm bằng $5$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Với $m = 6$, hai nghiệm thỏa mãn $x_1^2 + x_2^2 = 37$.",
+     "dung": true
+    }
+   ],
+   "giai_thich": "a) $a + b + c = 1 - (m + 1) + m = 0$: đúng. b) Nghiệm còn lại là $\\dfrac{c}{a} = m$: sai. c) $S = m + 1 = 5$: đúng. d) Hai nghiệm là $1$ và $6$, $1 + 36 = 37$: đúng."
+  }
+ ],
+ "tra_loi_ngan": [
+  {
+   "cau": "Phương trình $x^2 - 7x + 2 = 0$ có hai nghiệm $x_1, x_2$. Tính $x_1^2 + x_2^2$.",
+   "dap_an": "45",
+   "giai_thich": "$\\Delta = 41 \\gt 0$; $S = 7$, $P = 2$; $x_1^2 + x_2^2 = 49 - 4 = 45$."
+  },
+  {
+   "cau": "Tìm $m$ để phương trình $x^2 - 6x + m = 0$ có hai nghiệm $x_1, x_2$ thỏa mãn $x_1 - x_2 = 2$.",
+   "dap_an": "8",
+   "giai_thich": "$x_1 + x_2 = 6$ và $x_1 - x_2 = 2$ nên $x_1 = 4$, $x_2 = 2$; $m = x_1 x_2 = 8$. Kiểm tra $\\Delta' = 9 - 8 = 1 \\gt 0$."
+  },
+  {
+   "cau": "Một mảnh vườn hình chữ nhật có chu vi $34$ m và diện tích $60$ m². Chiều dài mảnh vườn là bao nhiêu mét?",
+   "dap_an": "12",
+   "giai_thich": "Chiều dài và chiều rộng có tổng $17$, tích $60$ nên là nghiệm của $x^2 - 17x + 60 = 0$: $x = 12$ hoặc $x = 5$. Chiều dài là $12$ m."
+  }
+ ]
+}, 'nhap/bai-hoc-l09-b20.json');

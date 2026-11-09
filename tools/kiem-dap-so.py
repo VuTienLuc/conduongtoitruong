@@ -609,5 +609,76 @@ A20, B20 = (-5, 0), (5, 0); C20 = [p_ for p_ in _cut(A20, (A20[0] + 8 * 0.8, 8 *
 chk('B7 cấu hình 20: AC = 8', _d(A20, C20), 8, 1e-9); chk('B7 cấu hình 20b: OD // BC', D20[0] * (C20[1] - B20[1]) - D20[1] * (C20[0] - B20[0]), 0, 1e-9)
 chk('B7 cấu hình 20c: BC, CF, OD, S(OADC)', tuple(round(v_, 9) for v_ in (_d(B20, C20), _d(C20, F20), _hy(*D20), _ar(O_, A20, D20, C20))), tuple(round(v_, 9) for v_ in (6, 4.8, 25 / 3, 100 / 3)))
 
+# ---------- Bài giảng – luyện tập online (nhap/bai-hoc-*.json): tính lại đáp số trả lời ngắn, ý đúng – sai, câu trắc nghiệm có số ----------
+import json as _json, os as _os
+_R = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+def _bh(f):
+    p = _os.path.join(_R, 'nhap', f)
+    return _json.load(open(p, encoding='utf-8')) if _os.path.exists(p) else None
+def _tl(j, k): return float(j['tra_loi_ngan'][k]['dap_an'].replace(',', '.'))
+def _ds(j, k): return [y['dung'] for y in j['dung_sai'][k]['y']]
+def _tnd(j, k): return j['trac_nghiem'][k]['dap_an']
+def _vs(a, b, c):
+    r = sp.solve(a * x**2 + b * x + c, x); return sp.nsimplify(sum(r)), sp.nsimplify(sp.prod(r))
+j = _bh('bai-hoc-l09-b20.json')
+if j:
+    S_, P_ = _vs(1, -5, 3); chk('BH 9.20 VD1: x1²+x2²', sp.simplify(S_**2 - 2 * P_), 19)
+    chk('BH 9.20 VD nhẩm nghiệm', (set(roots(3 * x**2 - 7 * x + 4)), set(roots(2 * x**2 + 5 * x + 3))), ({1, sp.Rational(4, 3)}, {-1, sp.Rational(-3, 2)}))
+    chk('BH 9.20 TN', (_tnd(j, 0), _tnd(j, 1), _tnd(j, 2), _tnd(j, 3), _tnd(j, 4), _tnd(j, 5)),
+        ('B' if _vs(1, -6, 5)[0] == 6 else '?', 'C' if _vs(2, 3, -7)[1] == sp.Rational(-7, 2) else '?', 'A' if set(roots(5 * x**2 - 8 * x + 3)) == {1, sp.Rational(3, 5)} else '?',
+         'D', 'B' if sp.simplify(_vs(1, -3, -1)[0]**2 - 2 * _vs(1, -3, -1)[1]) == 11 else '?', 'C' if sp.solve([x + 3 * x - 4], x)[x] * 3 * sp.solve([x + 3 * x - 4], x)[x] == 3 else '?'))
+    r = roots(x**2 - 2 * x - 15); chk('BH 9.20 ĐS1', _ds(j, 0), [16 > 0, sum(r) == -2, sp.prod(r) == -15, sp.simplify(1 / r[0] + 1 / r[1]) == sp.Rational(2, 15)])
+    mm = sp.symbols('mm'); e2 = x**2 - (mm + 1) * x + mm
+    chk('BH 9.20 ĐS2', _ds(j, 1), [sp.simplify(e2.subs(x, 1)) == 0, set(sp.solve(e2.subs(mm, 5), x)) == {1, -5}, sum(sp.solve(e2.subs(mm, 4), x)) == 5, sum(v**2 for v in sp.solve(e2.subs(mm, 6), x)) == 37])
+    S_, P_ = _vs(1, -7, 2); chk('BH 9.20 TLN1', _tl(j, 0), S_**2 - 2 * P_)
+    chk('BH 9.20 TLN2', _tl(j, 1), [mv for mv in range(-20, 10) if (lambda rr: len(rr) == 2 and abs(rr[0] - rr[1]) == 2)(roots(x**2 - 6 * x + mv))][0])
+    chk('BH 9.20 TLN3', _tl(j, 2), max(roots(x**2 - 17 * x + 60)))
+j = _bh('bai-hoc-l10-b01.json')
+if j:
+    P = lambda v: v**2 - 3 * v + 2 == 0
+    chk('BH 10.1 ĐS1', _ds(j, 0), [P(1), P(3), any(P(v) for v in range(-5, 6)), all(P(v) for v in range(-5, 6))])
+    chk('BH 10.1 TLN2: n² < 20', _tl(j, 1), len([n for n in range(0, 100) if n * n < 20]))
+    chk('BH 10.1 TLN3: x² > 9 trên [−10; 10]', _tl(j, 2), len([v for v in range(-10, 11) if not v * v <= 9]))
+    chk('BH 10.1 TLN1: đếm mệnh đề (1),(2),(4)', _tl(j, 0), 3)
+    chk('BH 10.1 TN4: ∀x, x²+1 > 0 đúng; ∀n, n² > n sai; ∀x, x > −x sai', (all(v * v + 1 > 0 for v in range(-50, 51)), all(n * n > n for n in range(0, 50)), all(v > -v for v in range(-5, 6))), (True, False, False))
+j = _bh('bai-hoc-l11-b04.json')
+if j:
+    k = sp.symbols('k', integer=True)
+    chk('BH 11.4 TLN1: cos x = 0 trên [0; 10π]', _tl(j, 0), len([kk for kk in range(-5, 30) if 0 <= math.pi / 2 + kk * math.pi <= 10 * math.pi]))
+    sols = sorted(v for v in range(1, 721) if abs(math.sin(math.radians(v - 30)) - math.sin(math.radians(50))) < 1e-12)
+    chk('BH 11.4 TLN2: nghiệm dương nhỏ nhất (độ)', _tl(j, 1), sols[0])
+    chk('BH 11.4 TLN3: tổng nghiệm tan x = 1 trên [0°; 360°]', _tl(j, 2), sum(v for v in range(0, 361) if v % 180 != 90 and abs(math.tan(math.radians(v)) - 1) < 1e-9))
+    chk('BH 11.4 TN5: sin x = 1/2 trên [0; 2π]', len([t for t in (math.pi / 6, 5 * math.pi / 6) if 0 <= t <= 2 * math.pi]), 2)
+    f1 = lambda t: abs(2 * math.sin(t) - 1) < 1e-12
+    chk('BH 11.4 ĐS1', _ds(j, 0), [True, f1(math.pi / 6), not f1(5 * math.pi / 6), len([t for t in (math.pi / 6, 5 * math.pi / 6) if 0 < t < math.pi and f1(t)]) == 2])
+    f2 = lambda t: abs(math.cos(2 * t - math.pi / 3) - 1) < 1e-12
+    neg = max(math.pi / 6 + kk * math.pi for kk in range(-5, 0))
+    chk('BH 11.4 ĐS2', _ds(j, 1), [f2(math.pi / 6), not f2(math.pi / 6 + math.pi) or False, len([kk for kk in range(-5, 5) if 0 <= math.pi / 6 + kk * math.pi <= math.pi]) == 1, abs(neg + math.pi / 6) < 1e-12])
+j = _bh('bai-hoc-l12-b01.json')
+if j:
+    def ext(f):
+        d = sp.diff(f, x); out = []
+        for r in sorted([r_ for r_ in sp.solve(d, x) if r_.is_real], key=float):
+            l, rr = d.subs(x, r - sp.Rational(1, 1000)), d.subs(x, r + sp.Rational(1, 1000))
+            if l > 0 > rr: out.append(('CĐ', r, f.subs(x, r)))
+            if l < 0 < rr: out.append(('CT', r, f.subs(x, r)))
+        return out
+    chk('BH 12.1 VD: y = x³ − 3x² + 2', ext(x**3 - 3 * x**2 + 2), [('CĐ', 0, 2), ('CT', 2, -2)])
+    chk('BH 12.1 VD: y = x⁴ − 2x²', ext(x**4 - 2 * x**2), [('CT', -1, -1), ('CĐ', 0, 0), ('CT', 1, -1)])
+    chk('BH 12.1 TN3: điểm CĐ', [e[1] for e in ext(x**3 - 6 * x**2 + 9 * x + 1) if e[0] == 'CĐ'], [1])
+    chk('BH 12.1 TN4: giá trị CT', sorted({e[2] for e in ext(x**4 - 2 * x**2 + 3) if e[0] == 'CT'}), [2])
+    fp_ = x * (x - 1)**2 * (x + 2); chk('BH 12.1 TN5: số điểm cực trị', len([r for r in sp.solve(fp_, x) if (fp_.subs(x, r - sp.Rational(1, 100)) * fp_.subs(x, r + sp.Rational(1, 100))) < 0]), 2)
+    chk('BH 12.1 TN6: y\' của (2x+1)/(x−1)', sp.simplify(sp.diff((2 * x + 1) / (x - 1), x) * (x - 1)**2), -3)
+    f = -x**3 + 3 * x**2 + 1; e = ext(f)
+    chk('BH 12.1 ĐS1', _ds(j, 0), [sp.expand(sp.diff(f, x)) == -3 * x**2 + 6 * x, all(sp.diff(f, x).subs(x, sp.Rational(t, 10)) > 0 for t in range(1, 20)), ('CĐ', 0, 1) in e, any(q[0] == 'CĐ' and q[2] == 5 for q in e)])
+    g = lambda mv: x**3 - 3 * mv * x + 1
+    e1 = ext(g(1)); diff1 = [q[2] for q in e1 if q[0] == 'CĐ'][0] - [q[2] for q in e1 if q[0] == 'CT'][0]
+    chk('BH 12.1 ĐS2', _ds(j, 1), [ext(g(0)) == [] and all(sp.diff(g(0), x).subs(x, t) >= 0 for t in range(-5, 6)), len(ext(g(-1))) == 2, all((len(ext(g(mv))) == 2) == (mv > 0) for mv in (-2, -1, 0, 1, 2, 3)), diff1 == 4])
+    chk('BH 12.1 TLN1: giá trị CĐ', _tl(j, 0), [q[2] for q in ext(x**3 - 3 * x**2 - 9 * x + 5) if q[0] == 'CĐ'][0])
+    chk('BH 12.1 TLN2: số m nguyên đồng biến', _tl(j, 1), len([mv for mv in range(-10, 11) if sp.discriminant(3 * x**2 - 6 * x + mv, x) <= 0]))
+    pts_ = [(q[1], q[2]) for q in ext(x**4 - 8 * x**2 + 3)]
+    (a1, b1), (a2, b2), (a3, b3) = pts_
+    chk('BH 12.1 TLN3: diện tích tam giác cực trị', _tl(j, 2), abs((a2 - a1) * (b3 - b1) - (a3 - a1) * (b2 - b1)) / 2)
+
 print('\nKẾT QUẢ:', 'ĐẠT ✓ – mọi đáp số khớp phép tính độc lập' if ok_all else 'CHƯA ĐẠT ✗')
 raise SystemExit(0 if ok_all else 1)

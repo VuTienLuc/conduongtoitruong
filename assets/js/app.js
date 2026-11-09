@@ -3,6 +3,7 @@
    #/                 trang chủ (cấu trúc đề, các chủ đề, tiến độ)
    #/cd/<mã>/<tab>    một chủ đề; tab: lt · meo · hieu · mau · phieu · de (luyện đề, #/cd/<mã>/de/<k>) · ai
    #/lo-trinh         lộ trình 26 tuần
+   #/bai-hoc…         Bài giảng – luyện tập online lớp 9–12 theo mục lục SGK KNTT (baihoc.js)
    #/van-10…          Ngữ văn vào 10 (van.js) · #/xuong… Xưởng dữ liệu: prompt cho AI, nhập JSON (xuong.js, nhap.js)
    Nội dung lấy từ Topics (data/cdNN-*.js). Không sửa tệp này khi chỉ thêm nội dung.
    ===================================================================== */
@@ -108,6 +109,9 @@ const App = (() => {
       n(g) ? `<span class="chip ok">${n(g)} chủ đề</span>` : '<span class="chip">Đang soạn</span>', !n(g))).join('');
     view().innerHTML = `${topBar()}<main class="wrap">
       <section class="card hero"><h2>Em đang học lớp mấy?</h2><p>Chọn đúng phần dành cho em. Mỗi chủ đề có kiến thức trọng tâm, ví dụ mẫu, bài luyện tập, phiếu in để làm trên giấy và lời giải.</p></section>
+      ${typeof BaiHoc !== 'undefined' ? `<a class="card grade-card bh-hero" href="#/bai-hoc"><span class="g-big">📚</span><span class="g-body"><b>Bài giảng – Luyện tập online</b>
+        <span>Lớp 9 · 10 · 11 · 12 · học theo mục lục SGK Toán Kết nối tri thức: bài giảng ngắn, ví dụ có lời giải, luyện trắc nghiệm – đúng sai – trả lời ngắn chấm ngay</span>
+        <span class="chips">${BaiHoc.LOP.map(l => `<span class="chip">Toán ${l}: ${BaiHoc.all(l).length} bài</span>`).join('')}${BaiHoc.list().length ? `<span class="chip ok">${BaiHoc.list().length} bài có bài giảng</span>` : ''}</span></span></a>` : ''}
       <div class="grade-grid">${card('#/vao-10', 9, 'Ôn thi vào lớp 10', 'Lớp 9 · TP.HCM 2026 – 2027 · 10 chủ đề theo cấu trúc 7 bài', `<span class="chip ok">${Topics.list.length} chủ đề</span>`)}${vdc}
         ${typeof Van !== 'undefined' ? card('#/van-10', '📖', 'Ngữ văn vào lớp 10', 'Lớp 9 · Đọc hiểu 6 điểm + Viết 4 điểm · học sinh lực học trung bình', Van.list().length ? `<span class="chip ok">${Van.list().length} đề</span>` : '<span class="chip">Đang soạn</span>') : ''}</div>
       <p class="xw-foot"><a href="#/xuong">🧰 Xưởng dữ liệu (thầy cô): tạo prompt cho AI, nhập đề mới</a></p></main>`;
@@ -376,6 +380,7 @@ THẦY HÃY
     else if (typeof Vdc !== 'undefined' && Vdc.route(parts)) { /* lớp 10, 11, 12 */ }
     else if (typeof Van !== 'undefined' && Van.route(parts)) { /* Ngữ văn vào 10 */ }
     else if (typeof OnTap !== 'undefined' && OnTap.route(parts)) { /* phiếu ôn tập 90 phút */ }
+    else if (typeof BaiHoc !== 'undefined' && BaiHoc.route(parts)) { /* bài giảng – luyện tập online lớp 9–12 */ }
     else if (typeof Xuong !== 'undefined' && Xuong.route(parts)) { /* Xưởng dữ liệu */ }
     else picker();
     window.scrollTo(0, 0);

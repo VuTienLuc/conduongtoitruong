@@ -1,0 +1,238 @@
+{
+ "loai": "bai_hoc",
+ "lop": 10,
+ "bai": 1,
+ "ten_bai": "Mệnh đề",
+ "mau": true,
+ "nguon": "Soạn theo SGK Toán 10 Kết nối tri thức, tập 1 – Bài 1; ví dụ và câu hỏi tự soạn",
+ "muc_tieu": [
+  "Nhận biết được mệnh đề, mệnh đề chứa biến",
+  "Lập được mệnh đề phủ định, mệnh đề kéo theo, mệnh đề đảo, mệnh đề tương đương",
+  "Phát biểu được định lí dưới dạng điều kiện cần, điều kiện đủ",
+  "Dùng đúng kí hiệu $\\forall$, $\\exists$ và phủ định của chúng"
+ ],
+ "bai_giang": [
+  {
+   "tieu_de": "1. Mệnh đề. Mệnh đề chứa biến",
+   "noi_dung": "Mệnh đề là một câu khẳng định đúng hoặc sai; một mệnh đề không thể vừa đúng vừa sai.\n- Câu hỏi, câu cảm thán, câu mệnh lệnh không phải là mệnh đề.\nMệnh đề chứa biến là câu chứa biến, chưa khẳng định được đúng hay sai; khi thay biến bằng một giá trị cụ thể thì được một mệnh đề. Ví dụ: $P(n)$: \"$n$ chia hết cho $3$\".",
+   "vi_du": [
+    {
+     "de": "Trong các câu sau, câu nào là mệnh đề, câu nào là mệnh đề chứa biến?\n(1) \"$15$ là số nguyên tố.\" (2) \"Hôm nay trời đẹp quá!\" (3) \"$2 + 3 = 5$.\" (4) \"$x + 1 \\gt 3$.\"",
+     "loi_giai": [
+      "(1) là mệnh đề (sai vì $15 = 3 \\cdot 5$).",
+      "(2) là câu cảm thán, không phải mệnh đề.",
+      "(3) là mệnh đề đúng.",
+      "(4) là mệnh đề chứa biến: đúng với $x = 5$, sai với $x = 0$."
+     ],
+     "dap_so": "Mệnh đề: (1), (3); mệnh đề chứa biến: (4)"
+    }
+   ],
+   "luu_y": "Mệnh đề sai vẫn là mệnh đề. Câu có biến (như $x + 1 \\gt 3$) chưa phải mệnh đề."
+  },
+  {
+   "tieu_de": "2. Mệnh đề phủ định",
+   "noi_dung": "Phủ định của mệnh đề $P$ kí hiệu là $\\overline{P}$: $\\overline{P}$ đúng khi $P$ sai và $\\overline{P}$ sai khi $P$ đúng.\n- Thường lập bằng cách thêm (hoặc bớt) từ \"không\", \"không phải\" trước vị ngữ.\n- Phủ định của \"$a \\gt b$\" là \"$a \\le b$\"; phủ định của \"$a = b$\" là \"$a \\ne b$\".",
+   "vi_du": [
+    {
+     "de": "Lập mệnh đề phủ định của $P$: \"$\\sqrt{2}$ là số hữu tỉ\" và cho biết tính đúng sai của nó.",
+     "loi_giai": [
+      "$\\overline{P}$: \"$\\sqrt{2}$ không phải là số hữu tỉ\".",
+      "$\\sqrt{2}$ là số vô tỉ nên $P$ sai, $\\overline{P}$ đúng."
+     ],
+     "dap_so": "$\\overline{P}$ đúng"
+    }
+   ],
+   "luu_y": "Phủ định của \"$x \\gt 2$\" là \"$x \\le 2$\", không phải \"$x \\lt 2$\"."
+  },
+  {
+   "tieu_de": "3. Mệnh đề kéo theo",
+   "noi_dung": "Mệnh đề \"Nếu $P$ thì $Q$\" kí hiệu $P \\Rightarrow Q$; nó chỉ sai khi $P$ đúng và $Q$ sai.\nĐịnh lí toán học thường có dạng $P \\Rightarrow Q$: $P$ là giả thiết, $Q$ là kết luận. Khi đó:\n- $P$ là điều kiện đủ để có $Q$;\n- $Q$ là điều kiện cần để có $P$.",
+   "vi_du": [
+    {
+     "de": "Phát biểu định lí \"Nếu tam giác $ABC$ đều thì tam giác $ABC$ cân\" bằng điều kiện cần, điều kiện đủ.",
+     "loi_giai": [
+      "Giả thiết $P$: \"tam giác $ABC$ đều\"; kết luận $Q$: \"tam giác $ABC$ cân\".",
+      "Tam giác $ABC$ đều là điều kiện đủ để tam giác $ABC$ cân.",
+      "Tam giác $ABC$ cân là điều kiện cần để tam giác $ABC$ đều."
+     ],
+     "dap_so": ""
+    }
+   ],
+   "luu_y": "Không đảo vị trí: điều kiện ĐỦ là giả thiết, điều kiện CẦN là kết luận."
+  },
+  {
+   "tieu_de": "4. Mệnh đề đảo. Hai mệnh đề tương đương",
+   "noi_dung": "Mệnh đề $Q \\Rightarrow P$ là mệnh đề đảo của $P \\Rightarrow Q$. Mệnh đề đảo của một mệnh đề đúng chưa chắc đúng.\nNếu cả $P \\Rightarrow Q$ và $Q \\Rightarrow P$ đều đúng thì $P$ và $Q$ tương đương, kí hiệu $P \\Leftrightarrow Q$; đọc là \"$P$ khi và chỉ khi $Q$\" hoặc \"$P$ là điều kiện cần và đủ để có $Q$\".",
+   "vi_du": [
+    {
+     "de": "Xét mệnh đề đảo của \"Nếu tam giác $ABC$ đều thì tam giác $ABC$ cân\". Hai mệnh đề \"tam giác $ABC$ đều\" và \"tam giác $ABC$ cân\" có tương đương không?",
+     "loi_giai": [
+      "Mệnh đề đảo: \"Nếu tam giác $ABC$ cân thì tam giác $ABC$ đều\".",
+      "Mệnh đề đảo sai: tam giác cân có góc ở đỉnh $40^\\circ$ không phải tam giác đều.",
+      "Vậy hai mệnh đề không tương đương."
+     ],
+     "dap_so": "Không tương đương"
+    }
+   ]
+  },
+  {
+   "tieu_de": "5. Mệnh đề chứa kí hiệu ∀, ∃",
+   "noi_dung": "- \"$\\forall x \\in X, P(x)$\": với mọi $x$ thuộc $X$, $P(x)$ đúng.\n- \"$\\exists x \\in X, P(x)$\": có (ít nhất) một $x$ thuộc $X$ để $P(x)$ đúng.\nPhủ định: $\\overline{\\forall x \\in X, P(x)}$ là \"$\\exists x \\in X, \\overline{P(x)}$\"; $\\overline{\\exists x \\in X, P(x)}$ là \"$\\forall x \\in X, \\overline{P(x)}$\".",
+   "vi_du": [
+    {
+     "de": "Xét tính đúng sai và lập mệnh đề phủ định của \"$\\forall x \\in \\mathbb{R}, x^2 \\ge 0$\".",
+     "loi_giai": [
+      "Bình phương mọi số thực đều không âm nên mệnh đề đúng.",
+      "Phủ định: \"$\\exists x \\in \\mathbb{R}, x^2 \\lt 0$\" (mệnh đề sai)."
+     ],
+     "dap_so": "Đúng; phủ định: $\\exists x \\in \\mathbb{R}, x^2 \\lt 0$"
+    }
+   ],
+   "luu_y": "Khi phủ định phải đổi cả kí hiệu ($\\forall$ thành $\\exists$ và ngược lại) lẫn phủ định tính chất $P(x)$."
+  }
+ ],
+ "can_nho": [
+  "Mệnh đề: câu khẳng định đúng hoặc sai, không vừa đúng vừa sai",
+  "$\\overline{P}$ đúng khi $P$ sai; phủ định của $a \\gt b$ là $a \\le b$",
+  "$P \\Rightarrow Q$ chỉ sai khi $P$ đúng, $Q$ sai; $P$ là điều kiện đủ, $Q$ là điều kiện cần",
+  "$P \\Leftrightarrow Q$ khi cả $P \\Rightarrow Q$ và $Q \\Rightarrow P$ đều đúng (điều kiện cần và đủ)",
+  "Phủ định của $\\forall x, P(x)$ là $\\exists x, \\overline{P(x)}$; phủ định của $\\exists x, P(x)$ là $\\forall x, \\overline{P(x)}$"
+ ],
+ "trac_nghiem": [
+  {
+   "cau": "Câu nào sau đây là mệnh đề?",
+   "phuong_an": [
+    "Bạn đã làm bài tập chưa?",
+    "Số $7$ là số nguyên tố.",
+    "Hãy đóng cửa lại!",
+    "$x + 2 = 5$."
+   ],
+   "dap_an": "B",
+   "giai_thich": "Chỉ câu \"Số $7$ là số nguyên tố\" khẳng định đúng (hoặc sai) được; \"$x + 2 = 5$\" là mệnh đề chứa biến.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Phủ định của mệnh đề \"$\\pi \\lt 4$\" là",
+   "phuong_an": [
+    "$\\pi \\gt 4$",
+    "$\\pi \\le 4$",
+    "$\\pi = 4$",
+    "$\\pi \\ge 4$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "Phủ định của \"$a \\lt b$\" là \"$a \\ge b$\".",
+   "muc": "NB"
+  },
+  {
+   "cau": "Mệnh đề $P \\Rightarrow Q$ sai khi",
+   "phuong_an": [
+    "$P$ đúng và $Q$ sai",
+    "$P$ sai và $Q$ đúng",
+    "$P$ sai và $Q$ sai",
+    "$P$ đúng và $Q$ đúng"
+   ],
+   "dap_an": "A",
+   "giai_thich": "Mệnh đề kéo theo chỉ sai trong trường hợp giả thiết đúng, kết luận sai.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Mệnh đề nào sau đây đúng?",
+   "phuong_an": [
+    "$\\exists x \\in \\mathbb{R}, x^2 = -1$",
+    "$\\forall n \\in \\mathbb{N}, n^2 \\gt n$",
+    "$\\forall x \\in \\mathbb{R}, x^2 + 1 \\gt 0$",
+    "$\\forall x \\in \\mathbb{R}, x \\gt -x$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$x^2 + 1 \\ge 1 \\gt 0$ với mọi $x$. Các mệnh đề khác sai: $x^2 \\ge 0$; $n = 1$ có $n^2 = n$; $x = 0$ có $x = -x$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Phủ định của mệnh đề \"$\\exists x \\in \\mathbb{R}, x^2 - 2x + 3 = 0$\" là",
+   "phuong_an": [
+    "$\\exists x \\in \\mathbb{R}, x^2 - 2x + 3 \\ne 0$",
+    "$\\forall x \\in \\mathbb{R}, x^2 - 2x + 3 \\ne 0$",
+    "$\\forall x \\in \\mathbb{R}, x^2 - 2x + 3 = 0$",
+    "$\\exists x \\in \\mathbb{R}, x^2 - 2x + 3 \\gt 0$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "Đổi $\\exists$ thành $\\forall$ và phủ định \"$= 0$\" thành \"$\\ne 0$\".",
+   "muc": "TH"
+  },
+  {
+   "cau": "Cho định lí \"Nếu một số tự nhiên chia hết cho $6$ thì nó chia hết cho $3$\". Phát biểu nào sau đây đúng?",
+   "phuong_an": [
+    "Chia hết cho $6$ là điều kiện cần để chia hết cho $3$",
+    "Chia hết cho $3$ là điều kiện đủ để chia hết cho $6$",
+    "Chia hết cho $3$ là điều kiện cần và đủ để chia hết cho $6$",
+    "Chia hết cho $6$ là điều kiện đủ để chia hết cho $3$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "Giả thiết (chia hết cho $6$) là điều kiện đủ; kết luận (chia hết cho $3$) là điều kiện cần. Mệnh đề đảo sai (ví dụ số $9$) nên không có \"cần và đủ\".",
+   "muc": "TH"
+  }
+ ],
+ "dung_sai": [
+  {
+   "cau": "Cho mệnh đề chứa biến $P(x)$: \"$x^2 - 3x + 2 = 0$\" với $x \\in \\mathbb{R}$.",
+   "y": [
+    {
+     "noi_dung": "$P(1)$ là mệnh đề đúng.",
+     "dung": true
+    },
+    {
+     "noi_dung": "$P(3)$ là mệnh đề đúng.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Mệnh đề \"$\\exists x \\in \\mathbb{R}, P(x)$\" đúng.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Mệnh đề \"$\\forall x \\in \\mathbb{R}, P(x)$\" đúng.",
+     "dung": false
+    }
+   ],
+   "giai_thich": "a) $1 - 3 + 2 = 0$: đúng. b) $9 - 9 + 2 = 2 \\ne 0$: sai. c) Có $x = 1$ thỏa mãn: đúng. d) $x = 3$ không thỏa mãn: sai."
+  },
+  {
+   "cau": "Cho hai mệnh đề $P$: \"Tứ giác $ABCD$ là hình vuông\" và $Q$: \"Tứ giác $ABCD$ có hai đường chéo bằng nhau\".",
+   "y": [
+    {
+     "noi_dung": "Mệnh đề $P \\Rightarrow Q$ đúng.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Mệnh đề đảo $Q \\Rightarrow P$ đúng.",
+     "dung": false
+    },
+    {
+     "noi_dung": "$P$ là điều kiện đủ để có $Q$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Mệnh đề $P \\Leftrightarrow Q$ đúng.",
+     "dung": false
+    }
+   ],
+   "giai_thich": "a) Hình vuông có hai đường chéo bằng nhau: đúng. b) Hình chữ nhật không vuông có hai đường chéo bằng nhau: sai. c) Vì $P \\Rightarrow Q$ đúng: đúng. d) Vì $Q \\Rightarrow P$ sai: sai."
+  }
+ ],
+ "tra_loi_ngan": [
+  {
+   "cau": "Có bao nhiêu câu là mệnh đề trong các câu sau?\n(1) \"Hà Nội là thủ đô của Việt Nam.\" (2) \"$\\sqrt{9} = 4$.\" (3) \"Mấy giờ rồi?\" (4) \"Số $2$ là số chẵn.\" (5) \"$x \\gt 5$.\"",
+   "dap_an": "3",
+   "giai_thich": "Các câu (1), (2), (4) là mệnh đề ((2) là mệnh đề sai); (3) là câu hỏi; (5) là mệnh đề chứa biến."
+  },
+  {
+   "cau": "Cho mệnh đề chứa biến $P(n)$: \"$n^2 \\lt 20$\" với $n \\in \\mathbb{N}$. Có bao nhiêu số tự nhiên $n$ để $P(n)$ là mệnh đề đúng?",
+   "dap_an": "5",
+   "giai_thich": "$n^2 \\lt 20$ khi $n \\in \\{0; 1; 2; 3; 4\\}$ (vì $4^2 = 16$, $5^2 = 25$)."
+  },
+  {
+   "cau": "Cho mệnh đề chứa biến $P(x)$: \"$x^2 \\le 9$\". Có bao nhiêu số nguyên $x$ thuộc đoạn $[-10; 10]$ để mệnh đề $\\overline{P(x)}$ đúng?",
+   "dap_an": "14",
+   "giai_thich": "$\\overline{P(x)}$: \"$x^2 \\gt 9$\" $\\Leftrightarrow |x| \\ge 4$ với $x$ nguyên. Trong $[-10; 10]$ có $7$ số từ $-10$ đến $-4$ và $7$ số từ $4$ đến $10$."
+  }
+ ]
+}

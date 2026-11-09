@@ -14,7 +14,10 @@ SRC, OUT = os.path.join(ROOT, 'nhap'), os.path.join(ROOT, 'data', 'nhap')
 
 NODE = r"""
 const fs = require('fs'), vm = require('vm');
-const ctx = { console }; vm.createContext(ctx);
+const ctx = { console, window: {} }; vm.createContext(ctx);
+// cùng thứ tự với index.html: core (U) → baihoc + mục lục SGK (để kiểm số bài) → nhap
+const R = process.argv[1].replace(/assets\/js\/nhap\.js$/, '');
+['assets/js/core.js', 'assets/js/baihoc.js', 'data/bai-hoc/muc-luc-kntt.js'].forEach(f => vm.runInContext(fs.readFileSync(R + f, 'utf8'), ctx));
 vm.runInContext(fs.readFileSync(process.argv[1], 'utf8') + '\n;globalThis.NhapDL = NhapDL;', ctx);
 const out = JSON.parse(fs.readFileSync(0, 'utf8')).map(([name, text]) => {
   try { const { data, notes } = ctx.NhapDL.parse(text); const r = ctx.NhapDL.check(data);

@@ -9,6 +9,8 @@
      "loai":"luyen_de_toan" → thêm đề vào bộ Luyện đề của bài tương ứng (LuyenDe)
      "loai":"de_van"        → đề Ngữ văn vào 10 (Van)
      "loai":"on_tap_toan"   → phiếu ôn tập 90 phút theo chủ đề, cơ bản → nâng cao (OnTap); đọc được cả Markdown chuẩn
+     "loai":"bai_hoc"       → bài giảng – luyện tập online một bài SGK Toán 9–12 KNTT (BaiHoc): bài giảng, cần nhớ,
+                              trắc nghiệm, đúng – sai, trả lời ngắn
    - Dữ liệu của hệ thống: data/nhap/*.js gọi NhapDL.add(<json>) (tạo bằng tools/nhap-du-lieu.py).
      Dữ liệu chỉ trên máy này: lưu trong trình duyệt (U.get('nhap:may')), nạp ở App.start().
    ===================================================================== */
@@ -120,8 +122,24 @@ const NhapDL = (() => {
     return s;
   }
   const normArr = a => (Array.isArray(a) ? a : (a ? [a] : [])).map(x => norm(x)).filter(Boolean);
+  // Đoạn nhiều dòng: dòng bắt đầu bằng "- " gom thành danh sách, các dòng khác cách nhau bằng <br>.
+  function normBlock(s) {
+    const out = []; let ul = [];
+    const flush = () => { if (ul.length) out.push(`<ul>${ul.map(x => `<li>${x}</li>`).join('')}</ul>`); ul = []; };
+    String(s ?? '').split(/\n/).forEach(l => { const m = l.match(/^\s*[-•*]\s+(.*)/); if (m) ul.push(norm(m[1])); else { flush(); if (l.trim()) out.push(norm(l)); } });
+    flush();
+    return out.reduce((a, x, i) => a + (i && !x.startsWith('<ul>') && !out[i - 1].startsWith('<ul>') ? '<br>' : '') + x, '');
+  }
 
   /* ---------- 3. Kiểm ---------- */
+  const numVN = s => { const t = String(s).trim().replace(/\s+/g, '').replace(/,/g, '.').replace(/−/g, '-'); const m = t.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+    return m ? (+m[2] ? +m[1] / +m[2] : NaN) : (/^-?\d*\.?\d+$/.test(t) ? +t : NaN); };
+  const boolOf = v => v === true || /^(true|đúng|dung|đ|1)$/i.test(String(v).trim()) ? true : v === false || /^(false|sai|s|0)$/i.test(String(v).trim()) ? false : null;
+  function dapIdx(q, pa) {
+    const d = String(q.dap_an ?? '').trim(), m = d.match(/^([A-D])(?:[.)]|$)/i);
+    if (m) return 'ABCD'.indexOf(m[1].toUpperCase());
+    return pa.findIndex(x => x.trim() === d.replace(/^\s*[A-D][.)]\s+/, ''));
+  }
   function stepsOf(arr) { return (Array.isArray(arr) ? arr : []).map(b => ({ s: b.buoc ?? b.y ?? b.noi_dung ?? '', p: num(b.diem) })); }
   function checkSteps(errs, where, steps, total) {
     if (!steps.length) { errs.push(`${where}: thiếu các bước chấm điểm`); return; }
@@ -202,7 +220,47 @@ const NhapDL = (() => {
       if (!near(tong, 10)) errs.push(`Tổng điểm cả đề = ${tong}, cần 10`);
       return { loai, errs, warns, n: 1, ten: `Ngữ văn – đề ${j.ma_de || '?'}`, id: j.ma_de };
     }
-    errs.push('Không nhận ra loại dữ liệu: cần "loai":"de_van" (Ngữ văn), "luyen_de_toan" (đề luyện Toán) hoặc "on_tap_toan" (phiếu ôn tập 90 phút).');
+    if (loai === 'bai_hoc') {
+      const lop = +j.lop, bai = +j.bai, ML = typeof BaiHoc !== 'undefined' ? BaiHoc : null;
+      if (![9, 10, 11, 12].includes(lop)) errs.push(`"lop" phải là 9, 10, 11 hoặc 12 (đang là ${JSON.stringify(j.lop)})`);
+      if (!(bai >= 1) || bai !== Math.floor(bai)) errs.push(`"bai" phải là số thứ tự bài trong SGK (đang là ${JSON.stringify(j.bai)})`);
+      const sgk = ML && ML.ML[lop] ? ML.baiOf(lop, bai) : null;
+      if (ML && ML.ML[lop] && bai >= 1 && !sgk) errs.push(`Toán ${lop} không có Bài ${bai} trong mục lục SGK Kết nối tri thức (có ${ML.all(lop).length} bài)`);
+      const fold = x => fp(x).replace(/^bai\d+/, '');
+      if (sgk && j.ten_bai && fold(j.ten_bai) !== fold(sgk.ten)) warns.push(`"ten_bai" là "${j.ten_bai}", mục lục SGK ghi "${sgk.ten}" – web dùng tên trong mục lục`);
+      if (!j.nguon) warns.push('Chưa ghi "nguon" (tài liệu trong notebook đã dùng: SGK, sách bài tập…)');
+      const bg = Array.isArray(j.bai_giang) ? j.bai_giang : [];
+      if (bg.length < 2) errs.push('"bai_giang" cần ít nhất 2 mục kiến thức');
+      bg.forEach((m, i) => { if (!m.tieu_de || !m.noi_dung) errs.push(`Bài giảng mục ${i + 1}: thiếu "tieu_de" hoặc "noi_dung"`);
+        (m.vi_du || []).forEach((v, k) => { if (!v.de || !(Array.isArray(v.loi_giai) ? v.loi_giai.length : v.loi_giai)) errs.push(`Bài giảng mục ${i + 1} ví dụ ${k + 1}: thiếu "de" hoặc "loi_giai"`); }); });
+      if (!bg.some(m => (m.vi_du || []).length)) errs.push('Bài giảng chưa có ví dụ nào ("vi_du" kèm lời giải)');
+      if ((Array.isArray(j.can_nho) ? j.can_nho.filter(Boolean).length : 0) < 3) errs.push('Thiếu "can_nho": cần ít nhất 3 kiến thức cần nhớ của bài');
+      if (!(j.muc_tieu || []).length) warns.push('Chưa có "muc_tieu"');
+      const tn = Array.isArray(j.trac_nghiem) ? j.trac_nghiem : [], ds = Array.isArray(j.dung_sai) ? j.dung_sai : [], tl = Array.isArray(j.tra_loi_ngan) ? j.tra_loi_ngan : [];
+      if (tn.length < 4) errs.push(`Phần I cần ít nhất 4 câu trắc nghiệm (đang có ${tn.length})`);
+      if (ds.length < 1) errs.push('Phần II cần ít nhất 1 câu đúng – sai'); if (tl.length < 1) errs.push('Phần III cần ít nhất 1 câu trả lời ngắn');
+      const fps = [];
+      tn.forEach((q, i) => { const w = `Trắc nghiệm câu ${i + 1}`, pa = (q.phuong_an || []).map(x => String(x).replace(/^\s*[A-D][.)]\s+/, ''));
+        if (!q.cau) errs.push(`${w}: thiếu "cau"`);
+        if (pa.length !== 4 || new Set(pa).size !== 4) errs.push(`${w}: cần đúng 4 phương án khác nhau`);
+        if (dapIdx(q, pa) < 0) errs.push(`${w}: "dap_an" phải là A, B, C hoặc D`);
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+      ds.forEach((q, i) => { const w = `Đúng – sai câu ${i + 1}`, y = Array.isArray(q.y) ? q.y : [];
+        if (!q.cau) errs.push(`${w}: thiếu "cau" (lời dẫn)`);
+        if (y.length !== 4) errs.push(`${w}: cần đúng 4 ý a, b, c, d (đang có ${y.length})`);
+        y.forEach((x, k) => { if (!x.noi_dung) errs.push(`${w} ý ${'abcd'[k]}: thiếu "noi_dung"`); if (boolOf(x.dung) === null) errs.push(`${w} ý ${'abcd'[k]}: "dung" phải là true hoặc false`); });
+        if (y.length === 4 && y.every(x => boolOf(x.dung) === boolOf(y[0].dung))) warns.push(`${w}: cả 4 ý cùng ${boolOf(y[0].dung) ? 'Đúng' : 'Sai'} – nên có cả ý đúng và ý sai`);
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+      tl.forEach((q, i) => { const w = `Trả lời ngắn câu ${i + 1}`, a = String(q.dap_an ?? '').trim();
+        if (!q.cau) errs.push(`${w}: thiếu "cau"`);
+        if (!a || isNaN(numVN(a))) errs.push(`${w}: "dap_an" phải là MỘT số (ví dụ "2,5", "-3", "0,25"), đang là ${JSON.stringify(q.dap_an)}`);
+        else if (a.replace(/^-/, '').length > 4) warns.push(`${w}: đáp số "${a}" dài hơn 4 kí tự – đề thi THPT chỉ ghi được 4 kí tự, nên yêu cầu làm tròn`);
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+      fps.forEach(([w, f], i) => { if (f && fps.findIndex(x => x[1] === f) < i) errs.push(`${w}: trùng với một câu khác`); });
+      const n = tn.length + ds.length + tl.length;
+      return { loai, errs, warns, n, ten: `Bài giảng – luyện tập Toán ${lop} – Bài ${bai}${sgk ? '. ' + sgk.ten : ''} (${n} câu)`, id: `${lop}-${bai}`, lop, bai };
+    }
+    errs.push('Không nhận ra loại dữ liệu: cần "loai":"de_van" (Ngữ văn), "luyen_de_toan" (đề luyện Toán), "on_tap_toan" (phiếu ôn tập 90 phút) hoặc "bai_hoc" (bài giảng – luyện tập lớp 9–12).');
     return { loai: '?', errs, warns };
   }
 
@@ -246,6 +304,18 @@ const NhapDL = (() => {
       phan: (j.phan || []).map(p => ({ muc: norm(p.muc), phut: +p.phut, bai: (p.bai || []).map(b => ({ so: ++so, de: norm(b.de), f: fp(b.de),
         nguon: norm(b.nguon), can: norm(b.can_nho), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
   }
+  function bhEntry(j, src) {
+    const lg = x => (Array.isArray(x) ? x : String(x || '').split(/\n+/)).map(y => norm(typeof y === 'object' ? (y.buoc ?? y.noi_dung ?? '') : y)).filter(Boolean);
+    const sgk = typeof BaiHoc !== 'undefined' ? BaiHoc.baiOf(+j.lop, +j.bai) : null;
+    return { lop: +j.lop, bai: +j.bai, ten: sgk ? sgk.ten : norm(j.ten_bai), nguon: norm(j.nguon), mau: !!j.mau, src,
+      muc_tieu: normArr(j.muc_tieu), can_nho: normArr(j.can_nho),
+      giang: (j.bai_giang || []).map(m => ({ t: norm(m.tieu_de), b: normBlock(m.noi_dung), luu_y: norm(m.luu_y),
+        vd: (m.vi_du || []).map(v => ({ de: normBlock(v.de), lg: lg(v.loi_giai), ds: norm(v.dap_so) })) })),
+      tn: (j.trac_nghiem || []).map(q => { const pa = q.phuong_an.map(x => String(x).replace(/^\s*[A-D][.)]\s+/, '')), k = dapIdx(q, pa);
+        return { q: normBlock(q.cau), a: [pa[k], ...pa.filter((_, i) => i !== k)].map(x => norm(x)), why: norm(q.giai_thich), muc: q.muc || '' }; }),
+      ds: (j.dung_sai || []).map(q => ({ q: normBlock(q.cau), y: q.y.map(x => [norm(x.noi_dung).replace(/^[a-d]\)\s*/, ''), boolOf(x.dung)]), why: normBlock(q.giai_thich) })),
+      tln: (j.tra_loi_ngan || []).map(q => ({ q: normBlock(q.cau), ans: String(q.dap_an).trim(), why: normBlock(q.giai_thich) })) };
+  }
   function apply(j, src) {
     const r = check(j);
     if (r.errs.length) return r;
@@ -255,6 +325,7 @@ const NhapDL = (() => {
     }
     if (r.loai === 'de_van' && typeof Van !== 'undefined') Van.add(vanEntry(j, src));
     if (r.loai === 'on_tap_toan' && typeof OnTap !== 'undefined') OnTap.add(onTapEntry(j, src));
+    if (r.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined') BaiHoc.add(bhEntry(j, src));
     return r;
   }
 
@@ -267,11 +338,12 @@ const NhapDL = (() => {
     local().forEach(x => {
       if (x.json.loai === 'de_van' && typeof Van !== 'undefined' && Van.get(String(x.json.ma_de))) return;   // hệ thống đã có mã đề này
       if (x.json.loai === 'on_tap_toan' && typeof OnTap !== 'undefined' && OnTap.get(String(x.json.ma))) return;
+      if (x.json.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined' && BaiHoc.get(+x.json.lop, +x.json.bai)) return;
       items.push({ json: x.json, src: 'may-nay', key: x.key, r: apply(x.json, 'may-nay') });
     });
   }
   function saveLocal(j) {
-    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
+    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : r.loai === 'bai_hoc' ? `bh-${+j.lop}-${+j.bai}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
     const a = local().filter(x => x.key !== key); a.push({ key, json: j, luc: new Date().toISOString() }); U.set(LKEY, a);
     return key;
   }
@@ -280,8 +352,8 @@ const NhapDL = (() => {
   function fileName(j) {
     const r = check(j), d = new Date(), ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
     const safe = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase();
-    return r.loai === 'de_van' ? `van-${safe(j.ma_de)}.json` : r.loai === 'on_tap_toan' ? `on-tap-${safe(j.ma)}.json` : `toan-bai${safe(j.bai)}-${ymd}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
+    return r.loai === 'bai_hoc' ? `bai-hoc-l${+j.lop}-b${String(+j.bai).padStart(2, '0')}.json` : r.loai === 'de_van' ? `van-${safe(j.ma_de)}.json` : r.loai === 'on_tap_toan' ? `on-tap-${safe(j.ma)}.json` : `toan-bai${safe(j.bai)}-${ymd}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
   }
 
-  return { BAI, DANG_VAN, extract, parse, repair, norm, check, toanItems, vanEntry, onTapEntry, mdToJson, fp, add, items, loadLocal, saveLocal, removeLocal, local, fileName };
+  return { BAI, DANG_VAN, extract, parse, repair, norm, check, toanItems, vanEntry, onTapEntry, bhEntry, normBlock, numVN, mdToJson, fp, add, items, loadLocal, saveLocal, removeLocal, local, fileName };
 })();

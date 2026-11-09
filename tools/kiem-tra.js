@@ -21,7 +21,7 @@ const load = f => {
   if (/\bTODO\b|\bFIXME\b|phần còn lại giữ nguyên/.test(code)) err(f, 'còn chỗ làm tắt (TODO/FIXME/phần còn lại)');
   // Công thức trong chuỗi nháy đơn bị mất dấu \ khi chạy: phải viết bằng S`…`.
   if (f.startsWith('data/')) code.split('\n').forEach((l, i) => { if (/(^|[\s,(:\[])'[^'`]*\\[(\[][^'`]*'/.test(l)) err(`${f}:${i + 1}`, 'công thức \\( \\) trong chuỗi thường – dùng S`…`'); });
-  try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.LuyenDe = typeof LuyenDe !== 'undefined' ? LuyenDe : globalThis.LuyenDe; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc; globalThis.NhapDL = typeof NhapDL !== 'undefined' ? NhapDL : globalThis.NhapDL; globalThis.Van = typeof Van !== 'undefined' ? Van : globalThis.Van; globalThis.OnTap = typeof OnTap !== 'undefined' ? OnTap : globalThis.OnTap;`, ctx, { filename: f }); }
+  try { vm.runInContext(code + `\n;globalThis.Topics = typeof Topics !== 'undefined' ? Topics : globalThis.Topics; globalThis.LuyenDe = typeof LuyenDe !== 'undefined' ? LuyenDe : globalThis.LuyenDe; globalThis.Vdc = typeof Vdc !== 'undefined' ? Vdc : globalThis.Vdc; globalThis.NhapDL = typeof NhapDL !== 'undefined' ? NhapDL : globalThis.NhapDL; globalThis.Van = typeof Van !== 'undefined' ? Van : globalThis.Van; globalThis.OnTap = typeof OnTap !== 'undefined' ? OnTap : globalThis.OnTap; globalThis.BaiHoc = typeof BaiHoc !== 'undefined' ? BaiHoc : globalThis.BaiHoc;`, ctx, { filename: f }); }
   catch (e) { err(f, 'lỗi khi chạy – ' + e.message); }
 };
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -166,6 +166,27 @@ const walkStr = (w, v) => { if (typeof v === 'string') checkStr(w, v); else if (
 if (ctx.Van) ctx.Van.list().forEach(e => walkStr(`Ngữ văn đề ${e.ma}`, e));
 if (ctx.OnTap) ctx.OnTap.list().forEach(e => walkStr(`Phiếu ôn tập ${e.ma}`, e));
 
+// 2d) Bài giảng – luyện tập online: mục lục SGK KNTT đủ bài, đánh số liên tục; mỗi bài học trỏ đúng bài trong mục lục.
+const BH = ctx.BaiHoc, SO_BAI = { 9: 32, 10: 27, 11: 33, 12: 19 };
+if (!BH) err('baihoc.js', 'không nạp được BaiHoc');
+else {
+  BH.LOP.forEach(l => {
+    const a = BH.all(l);
+    if (a.length !== SO_BAI[l]) err(`Mục lục Toán ${l}`, `có ${a.length} bài, SGK KNTT có ${SO_BAI[l]} bài`);
+    a.forEach((b, i) => { if (b.so !== i + 1) err(`Mục lục Toán ${l}`, `bài thứ ${i + 1} đánh số ${b.so}`); if (!b.ten) err(`Mục lục Toán ${l}`, `Bài ${b.so} thiếu tên`); });
+  });
+  BH.list().forEach(e => {
+    const W = `Bài giảng Toán ${e.lop} – Bài ${e.bai}`;
+    if (!BH.baiOf(e.lop, e.bai)) err(W, 'không có trong mục lục');
+    if (e.giang.length < 2 || e.can_nho.length < 3 || e.tn.length < 4 || !e.ds.length || !e.tln.length) err(W, 'thiếu bài giảng, cần nhớ hoặc câu luyện tập');
+    e.tn.forEach((q, i) => { if (q.a.length !== 4 || new Set(q.a).size !== 4) err(W, `trắc nghiệm ${i + 1}: cần 4 phương án khác nhau`); });
+    e.ds.forEach((q, i) => { if (q.y.length !== 4 || q.y.some(y => typeof y[1] !== 'boolean')) err(W, `đúng – sai ${i + 1}: cần 4 ý có kết luận Đúng/Sai`); });
+    e.tln.forEach((q, i) => { if (isNaN(BH.numOf(q.ans))) err(W, `trả lời ngắn ${i + 1}: đáp số "${q.ans}" không phải số`); });
+    walkStr(W, e);
+  });
+  Object.values(BH.LIEN_9).forEach(id => { if (!ids.has(id)) err('baihoc.js LIEN_9', `liên kết tới chủ đề vào 10 không có: ${id}`); });
+}
+
 // 3) Liên kết trong app.js trỏ tới chủ đề có thật.
 const app = fs.readFileSync(path.join(ROOT, 'assets/js/app.js'), 'utf8');
 const used = new Set([...app.matchAll(/\[('[a-z0-9-]+'(?:,\s*'[a-z0-9-]+')*)\]\]/g)].flatMap(m => m[1].split(',').map(s => s.trim().replace(/'/g, ''))));
@@ -174,6 +195,7 @@ used.forEach(id => { if (id && !/^lop\d+$/.test(id) && !ids.has(id)) err('app.js
 
 console.log(`Ôn thi vào 10: ${T.length} chủ đề, ${sum(T.map(t => t.quiz.length))} câu trắc nghiệm, ${sum(T.map(t => t.models.length))} bài mẫu, ${sum(T.map(t => t.practice.length))} bài tự luyện, ${nLD} đề luyện (${ctx.LuyenDe ? ctx.LuyenDe.ids().length : 0} chủ đề).`);
 console.log(`Ngữ văn vào 10: ${ctx.Van ? ctx.Van.list().length : 0} đề · phiếu ôn tập 90 phút: ${ctx.OnTap ? ctx.OnTap.list().length : 0} · dữ liệu nhập từ AI: ${nNhap} tệp.`);
+if (BH) console.log(`Bài giảng – luyện tập online: mục lục ${BH.LOP.map(l => `Toán ${l} ${BH.all(l).length} bài`).join(', ')}; ${BH.list().length} bài có nội dung, ${sum(BH.list().map(e => e.tn.length + e.ds.length + e.tln.length))} câu luyện tập.`);
 console.log(`Lớp 10–12 (VD–VDC): ${V.length} chủ đề, ${sum(V.map(t => t.dang.length))} dạng, ${sum(V.map(t => sum(t.dang.map(d => d.bt.length))))} bài tương tự.`);
 warns.forEach(w => console.log('! ' + w));
 if (errs.length) { errs.forEach(e => console.log(e)); console.log(`KẾT QUẢ: CHƯA ĐẠT ✗ (${errs.length} lỗi)`); process.exit(1); }

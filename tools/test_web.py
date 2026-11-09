@@ -50,6 +50,7 @@ async def main():
             routes += ['#/on-tap'] + [f'#/on-tap/{m}' for m in await pg.evaluate("OnTap.list().map(e => e.ma)")]
             routes += ['#/van-10', '#/van-10/phuong-phap', '#/xuong', '#/xuong/prompt', '#/xuong/nhap'] + [f'#/van-10/de/{m}' for m in await pg.evaluate("Van.list().map(e => e.ma)")]
             routes += [r for g, i, nb in vdc for r in [f'#/{g}/{i}', f'#/{g}/{i}/phieu'] + [f'#/{g}/{i}/lg/{k}' for k in range(1, nb + 1)]]
+            routes += ['#/bai-hoc', '#/bai-hoc/9', '#/bai-hoc/10', '#/bai-hoc/11', '#/bai-hoc/12', '#/bai-hoc/10/2'] + [r for l, b in await pg.evaluate("BaiHoc.list().map(e => [e.lop, e.bai])") for r in (f'#/bai-hoc/{l}/{b}', f'#/bai-hoc/{l}/{b}/luyen')]
             for r in routes:
                 await pg.goto(base + r)
                 await pg.wait_for_timeout(350)
@@ -129,6 +130,50 @@ async def main():
         rt = await pg.evaluate("(() => { const e = OnTap.get('OT-B3-01'); const b = NhapDL.parse(OnTap.toMd(e)); const r = NhapDL.check(b.data); return [r.errs.length, r.n]; })()")
         if rt != [0, 10]: fails.append(f'Markdown phiếu ôn tập đọc lại sai: {rt}')
         await pg.evaluate("localStorage.removeItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':nhap:may')")
+        # Bài giảng – luyện tập online: mục lục đủ bài, tìm bài; làm bài luyện tập → chấm đúng, lưu điểm; prompt và nhập loại bai_hoc.
+        await pg.goto(base + '#/bai-hoc'); await pg.wait_for_timeout(200)
+        if await pg.locator('.grade-card').count() != 4: fails.append('bài giảng: trang chọn lớp không đủ 4 lớp')
+        for l, n in ((9, 32), (10, 27), (11, 33), (12, 19)):
+            await pg.goto(base + f'#/bai-hoc/{l}'); await pg.wait_for_timeout(150)
+            if await pg.locator('.bh-row').count() != n: fails.append(f'mục lục Toán {l}: {await pg.locator(".bh-row").count()} bài, cần {n}')
+        await pg.fill('#bhFind', 'cuc tri'); await pg.wait_for_timeout(100)
+        vis = await pg.evaluate("[...document.querySelectorAll('.bh-row')].filter(r => !r.hidden && r.closest('details') && !r.closest('details').hidden).map(r => r.querySelector('.bh-ten').textContent)")
+        if not vis or not all('cực trị' in v for v in vis) or not any(v.startswith('Bài 1.') for v in vis): fails.append(f'mục lục Toán 12: tìm "cuc tri" ra {vis}')
+        for l, bb in await pg.evaluate("BaiHoc.list().map(e => [e.lop, e.bai])"):
+            await pg.evaluate(f"localStorage.removeItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':bh:{l}-{bb}')")
+            await pg.goto(base + f'#/bai-hoc/{l}/{bb}/luyen'); await pg.wait_for_timeout(250)
+            cards = pg.locator('.bh-q'); k = await cards.count()
+            for q in range(k): await cards.nth(q).locator('.opt').first.click()
+            tn_ok = await pg.locator('.bh-q .opt.good.bad').count()   # không thể vừa đúng vừa sai
+            tn_right = await pg.evaluate("[...document.querySelectorAll('.bh-q')].filter(c => c.querySelector('.opt[data-j=\"0\"]').classList.contains('good')).length")
+            dsv = await pg.evaluate(f"BaiHoc.get({l}, {bb}).ds.map(q => q.y.map(y => y[1]))")
+            for q, ys in enumerate(dsv):
+                card = pg.locator('.bh-dsq').nth(q)
+                for jj, v in enumerate(ys): await card.locator(f'li[data-j="{jj}"] button[data-v="{1 if v else 0}"]').click()
+                await card.locator('[data-chk]').click()
+            ans = await pg.evaluate(f"BaiHoc.get({l}, {bb}).tln.map(q => q.ans)")
+            for q, a_ in enumerate(ans):
+                card = pg.locator('.bh-tl').nth(q)
+                await card.locator('.bh-in').fill(a_.replace(',', '.') if q == 1 else ('-999' if q == len(ans) - 1 and len(ans) > 2 else a_))
+                await card.locator('.bh-in').press('Enter')
+            want = tn_right + 4 * len(dsv) + len(ans) - (1 if len(ans) > 2 else 0)
+            got = await pg.locator('#bhScore .big-score').inner_text() if await pg.locator('#bhScore .big-score').count() else 'chưa xong'
+            total = k + 4 * len(dsv) + len(ans)
+            if tn_ok or got != f'{want}/{total}': fails.append(f'luyện tập Toán {l} bài {bb}: điểm {got}, cần {want}/{total}')
+            saved = await pg.evaluate(f"JSON.parse(localStorage.getItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':bh:{l}-{bb}') || 'null')")
+            if not saved or saved['best'] != want: fails.append(f'luyện tập Toán {l} bài {bb}: không lưu điểm ({saved})')
+        await pg.goto(base + '#/xuong/prompt'); await pg.wait_for_timeout(200)
+        await pg.locator('[name=xLoai][value=baihoc]').check(); await pg.select_option('#bLop', '10'); await pg.wait_for_timeout(100); await pg.select_option('#bBai', '1'); await pg.wait_for_timeout(150)
+        ok = await pg.evaluate("document.querySelector('#xHd').value.includes('bai_hoc') && document.querySelector('#xHd').value.includes('can_nho') && document.querySelector('#xL0').value.includes('Bài 1. Mệnh đề') && document.querySelector('#xL0').value.includes('đã có trên web')")
+        if not ok: fails.append('menu prompt bài giảng: thiếu hướng dẫn hoặc lệnh')
+        mau = open(os.path.join(ROOT, 'nhap/bai-hoc-l10-b01.json'), encoding='utf-8').read()
+        await pg.goto(base + '#/xuong/nhap'); await pg.wait_for_timeout(200)
+        await pg.fill('#nIn', mau.replace('"bai": 1,', '"bai": 2,')); await pg.click('#nGo'); await pg.wait_for_timeout(400)
+        await pg.evaluate("MathTS.done(document.getElementById('nOut'))")
+        r = await pg.evaluate("({ ok: document.querySelectorAll('.xw-res.ok').length, merr: document.querySelectorAll('#nOut mjx-merror').length, warn: [...document.querySelectorAll('.xw-warn li')].some(li => li.textContent.includes('ten_bai')) })")
+        if r != {'ok': 1, 'merr': 0, 'warn': True}: fails.append(f'nhập bài giảng mẫu: {r}')
+        await pg.fill('#nIn', mau.replace('"bai": 1,', '"bai": 40,')); await pg.click('#nGo'); await pg.wait_for_timeout(300)
+        if not await pg.locator('.xw-err li', has_text='không có Bài 40').count(): fails.append('nhập bài giảng: không báo lỗi số bài ngoài mục lục')
         for i in ids:
             # Trắc nghiệm: chọn phương án A mọi câu, điểm phải bằng số câu chọn đúng.
             await pg.goto(base + f'#/cd/{i}/hieu'); await pg.wait_for_timeout(200)

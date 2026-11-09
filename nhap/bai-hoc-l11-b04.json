@@ -1,0 +1,234 @@
+{
+ "loai": "bai_hoc",
+ "lop": 11,
+ "bai": 4,
+ "ten_bai": "Phương trình lượng giác cơ bản",
+ "mau": true,
+ "nguon": "Soạn theo SGK Toán 11 Kết nối tri thức, tập 1 – Bài 4; ví dụ và câu hỏi tự soạn",
+ "muc_tieu": [
+  "Nhận biết được hai phương trình tương đương",
+  "Giải được các phương trình $\\sin x = m$, $\\cos x = m$, $\\tan x = m$, $\\cot x = m$",
+  "Tìm được nghiệm của phương trình trên một khoảng, một đoạn cho trước"
+ ],
+ "bai_giang": [
+  {
+   "tieu_de": "1. Phương trình tương đương",
+   "noi_dung": "Hai phương trình gọi là tương đương nếu chúng có cùng tập nghiệm.\n- Cộng hoặc trừ hai vế với cùng một số (hoặc một biểu thức xác định với mọi $x$) được phương trình tương đương.\n- Nhân hoặc chia hai vế với cùng một số khác $0$ được phương trình tương đương.",
+   "vi_du": [
+    {
+     "de": "Hai phương trình $x - 1 = 0$ và $x^2 = 1$ có tương đương không?",
+     "loi_giai": [
+      "Tập nghiệm của $x - 1 = 0$ là $\\{1\\}$.",
+      "Tập nghiệm của $x^2 = 1$ là $\\{-1; 1\\}$.",
+      "Hai tập nghiệm khác nhau nên hai phương trình không tương đương."
+     ],
+     "dap_so": "Không tương đương"
+    }
+   ]
+  },
+  {
+   "tieu_de": "2. Phương trình sin x = m",
+   "noi_dung": "- $|m| \\gt 1$: phương trình vô nghiệm.\n- $|m| \\le 1$: chọn góc $\\alpha$ có $\\sin \\alpha = m$, khi đó $\\sin x = m \\Leftrightarrow x = \\alpha + k2\\pi$ hoặc $x = \\pi - \\alpha + k2\\pi$ $(k \\in \\mathbb{Z})$.\nTổng quát: $\\sin u = \\sin v \\Leftrightarrow u = v + k2\\pi$ hoặc $u = \\pi - v + k2\\pi$.\nTrường hợp đặc biệt: $\\sin x = 0 \\Leftrightarrow x = k\\pi$; $\\sin x = 1 \\Leftrightarrow x = \\dfrac{\\pi}{2} + k2\\pi$; $\\sin x = -1 \\Leftrightarrow x = -\\dfrac{\\pi}{2} + k2\\pi$.",
+   "vi_du": [
+    {
+     "de": "Giải phương trình $\\sin x = \\dfrac{1}{2}$.",
+     "loi_giai": [
+      "$\\sin x = \\sin \\dfrac{\\pi}{6}$.",
+      "$\\Leftrightarrow x = \\dfrac{\\pi}{6} + k2\\pi$ hoặc $x = \\pi - \\dfrac{\\pi}{6} + k2\\pi = \\dfrac{5\\pi}{6} + k2\\pi$ $(k \\in \\mathbb{Z})$."
+     ],
+     "dap_so": "$x = \\dfrac{\\pi}{6} + k2\\pi$, $x = \\dfrac{5\\pi}{6} + k2\\pi$"
+    }
+   ],
+   "luu_y": "Luôn ghi $k \\in \\mathbb{Z}$; không viết lẫn độ và radian trong cùng một công thức nghiệm."
+  },
+  {
+   "tieu_de": "3. Phương trình cos x = m",
+   "noi_dung": "- $|m| \\gt 1$: vô nghiệm.\n- $|m| \\le 1$: chọn $\\alpha$ có $\\cos \\alpha = m$, khi đó $\\cos x = m \\Leftrightarrow x = \\pm \\alpha + k2\\pi$ $(k \\in \\mathbb{Z})$.\nTrường hợp đặc biệt: $\\cos x = 0 \\Leftrightarrow x = \\dfrac{\\pi}{2} + k\\pi$; $\\cos x = 1 \\Leftrightarrow x = k2\\pi$; $\\cos x = -1 \\Leftrightarrow x = \\pi + k2\\pi$.",
+   "vi_du": [
+    {
+     "de": "Giải phương trình $\\cos 2x = -\\dfrac{\\sqrt{2}}{2}$.",
+     "loi_giai": [
+      "$\\cos 2x = \\cos \\dfrac{3\\pi}{4}$.",
+      "$\\Leftrightarrow 2x = \\pm \\dfrac{3\\pi}{4} + k2\\pi$.",
+      "$\\Leftrightarrow x = \\pm \\dfrac{3\\pi}{8} + k\\pi$ $(k \\in \\mathbb{Z})$."
+     ],
+     "dap_so": "$x = \\pm \\dfrac{3\\pi}{8} + k\\pi$"
+    }
+   ],
+   "luu_y": "Khi chia cho hệ số của $x$ phải chia cả chu kì: $2x = \\ldots + k2\\pi$ cho $x = \\ldots + k\\pi$."
+  },
+  {
+   "tieu_de": "4. Phương trình tan x = m",
+   "noi_dung": "Điều kiện: $x \\ne \\dfrac{\\pi}{2} + k\\pi$. Phương trình luôn có nghiệm với mọi $m$.\nChọn $\\alpha$ có $\\tan \\alpha = m$: $\\tan x = m \\Leftrightarrow x = \\alpha + k\\pi$ $(k \\in \\mathbb{Z})$.",
+   "vi_du": [
+    {
+     "de": "Giải phương trình $\\tan x = \\sqrt{3}$.",
+     "loi_giai": [
+      "$\\tan x = \\tan \\dfrac{\\pi}{3}$.",
+      "$\\Leftrightarrow x = \\dfrac{\\pi}{3} + k\\pi$ $(k \\in \\mathbb{Z})$."
+     ],
+     "dap_so": "$x = \\dfrac{\\pi}{3} + k\\pi$"
+    }
+   ],
+   "luu_y": "Chu kì của $\\tan$ là $\\pi$ (không phải $2\\pi$)."
+  },
+  {
+   "tieu_de": "5. Phương trình cot x = m",
+   "noi_dung": "Điều kiện: $x \\ne k\\pi$. Phương trình luôn có nghiệm.\nChọn $\\alpha$ có $\\cot \\alpha = m$: $\\cot x = m \\Leftrightarrow x = \\alpha + k\\pi$ $(k \\in \\mathbb{Z})$.",
+   "vi_du": [
+    {
+     "de": "Giải phương trình $\\cot\\left(x - \\dfrac{\\pi}{4}\\right) = 1$.",
+     "loi_giai": [
+      "$\\cot\\left(x - \\dfrac{\\pi}{4}\\right) = \\cot \\dfrac{\\pi}{4}$.",
+      "$\\Leftrightarrow x - \\dfrac{\\pi}{4} = \\dfrac{\\pi}{4} + k\\pi \\Leftrightarrow x = \\dfrac{\\pi}{2} + k\\pi$ $(k \\in \\mathbb{Z})$."
+     ],
+     "dap_so": "$x = \\dfrac{\\pi}{2} + k\\pi$"
+    }
+   ]
+  }
+ ],
+ "can_nho": [
+  "$\\sin x = \\sin \\alpha \\Leftrightarrow x = \\alpha + k2\\pi$ hoặc $x = \\pi - \\alpha + k2\\pi$; vô nghiệm khi $|m| \\gt 1$",
+  "$\\cos x = \\cos \\alpha \\Leftrightarrow x = \\pm \\alpha + k2\\pi$; vô nghiệm khi $|m| \\gt 1$",
+  "$\\tan x = \\tan \\alpha \\Leftrightarrow x = \\alpha + k\\pi$ (điều kiện $x \\ne \\dfrac{\\pi}{2} + k\\pi$); $\\cot x = \\cot \\alpha \\Leftrightarrow x = \\alpha + k\\pi$ (điều kiện $x \\ne k\\pi$)",
+  "Đặc biệt: $\\sin x = 0 \\Leftrightarrow x = k\\pi$; $\\cos x = 0 \\Leftrightarrow x = \\dfrac{\\pi}{2} + k\\pi$",
+  "Tìm nghiệm trên một đoạn: viết điều kiện cho $x$ theo $k$, giải bất phương trình tìm các số nguyên $k$"
+ ],
+ "trac_nghiem": [
+  {
+   "cau": "Nghiệm của phương trình $\\sin x = 0$ là",
+   "phuong_an": [
+    "$x = k2\\pi$",
+    "$x = \\dfrac{\\pi}{2} + k\\pi$",
+    "$x = k\\pi$",
+    "$x = \\dfrac{\\pi}{2} + k2\\pi$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$\\sin x = 0$ tại các điểm $0, \\pi, 2\\pi, \\ldots$ cách nhau $\\pi$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Phương trình nào sau đây vô nghiệm?",
+   "phuong_an": [
+    "$\\sin x = \\sqrt{3}$",
+    "$\\tan x = 2024$",
+    "$\\cos x = -1$",
+    "$\\sin x = -0{,}5$"
+   ],
+   "dap_an": "A",
+   "giai_thich": "$\\sqrt{3} \\approx 1{,}73 \\gt 1$ nên $\\sin x = \\sqrt{3}$ vô nghiệm; $\\tan x = m$ luôn có nghiệm.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Nghiệm của phương trình $\\cos x = \\dfrac{1}{2}$ là",
+   "phuong_an": [
+    "$x = \\pm \\dfrac{\\pi}{6} + k2\\pi$",
+    "$x = \\pm \\dfrac{\\pi}{3} + k2\\pi$",
+    "$x = \\dfrac{\\pi}{3} + k\\pi$",
+    "$x = \\pm \\dfrac{\\pi}{3} + k\\pi$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$\\cos x = \\cos \\dfrac{\\pi}{3} \\Leftrightarrow x = \\pm \\dfrac{\\pi}{3} + k2\\pi$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Nghiệm của phương trình $\\tan x = -1$ là",
+   "phuong_an": [
+    "$x = \\dfrac{\\pi}{4} + k\\pi$",
+    "$x = -\\dfrac{\\pi}{4} + k2\\pi$",
+    "$x = \\pm \\dfrac{\\pi}{4} + k\\pi$",
+    "$x = -\\dfrac{\\pi}{4} + k\\pi$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "$\\tan x = \\tan\\left(-\\dfrac{\\pi}{4}\\right) \\Leftrightarrow x = -\\dfrac{\\pi}{4} + k\\pi$; chu kì của $\\tan$ là $\\pi$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Số nghiệm của phương trình $\\sin x = \\dfrac{1}{2}$ trên đoạn $[0; 2\\pi]$ là",
+   "phuong_an": [
+    "$2$",
+    "$1$",
+    "$3$",
+    "$4$"
+   ],
+   "dap_an": "A",
+   "giai_thich": "Trên $[0; 2\\pi]$ chỉ có $x = \\dfrac{\\pi}{6}$ và $x = \\dfrac{5\\pi}{6}$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Điều kiện xác định của phương trình $\\tan 2x = 3$ là",
+   "phuong_an": [
+    "$x \\ne \\dfrac{\\pi}{2} + k\\pi$",
+    "$x \\ne \\dfrac{\\pi}{4} + k\\dfrac{\\pi}{2}$",
+    "$x \\ne \\dfrac{\\pi}{4} + k\\pi$",
+    "$x \\ne k\\dfrac{\\pi}{2}$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$2x \\ne \\dfrac{\\pi}{2} + k\\pi \\Leftrightarrow x \\ne \\dfrac{\\pi}{4} + k\\dfrac{\\pi}{2}$.",
+   "muc": "TH"
+  }
+ ],
+ "dung_sai": [
+  {
+   "cau": "Cho phương trình $2\\sin x - 1 = 0$.",
+   "y": [
+    {
+     "noi_dung": "Phương trình tương đương với $\\sin x = \\dfrac{1}{2}$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "$x = \\dfrac{\\pi}{6}$ là một nghiệm của phương trình.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Tập nghiệm của phương trình là $\\left\\{\\dfrac{\\pi}{6} + k2\\pi \\mid k \\in \\mathbb{Z}\\right\\}$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Trên khoảng $(0; \\pi)$ phương trình có đúng hai nghiệm.",
+     "dung": true
+    }
+   ],
+   "giai_thich": "a) Cộng $1$ rồi chia $2$ hai vế: đúng. b) $\\sin \\dfrac{\\pi}{6} = \\dfrac{1}{2}$: đúng. c) Thiếu họ nghiệm $\\dfrac{5\\pi}{6} + k2\\pi$: sai. d) Hai nghiệm $\\dfrac{\\pi}{6}$ và $\\dfrac{5\\pi}{6}$ đều thuộc $(0; \\pi)$: đúng."
+  },
+  {
+   "cau": "Cho phương trình $\\cos\\left(2x - \\dfrac{\\pi}{3}\\right) = 1$.",
+   "y": [
+    {
+     "noi_dung": "$x = \\dfrac{\\pi}{6}$ là một nghiệm của phương trình.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Nghiệm của phương trình là $x = \\dfrac{\\pi}{6} + k2\\pi$ $(k \\in \\mathbb{Z})$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Trên đoạn $[0; \\pi]$ phương trình có đúng một nghiệm.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Nghiệm âm lớn nhất của phương trình là $-\\dfrac{\\pi}{6}$.",
+     "dung": false
+    }
+   ],
+   "giai_thich": "$2x - \\dfrac{\\pi}{3} = k2\\pi \\Leftrightarrow x = \\dfrac{\\pi}{6} + k\\pi$. a) Đúng ($k = 0$). b) Sai (chu kì nghiệm là $\\pi$). c) $0 \\le \\dfrac{\\pi}{6} + k\\pi \\le \\pi$ chỉ có $k = 0$: đúng. d) Nghiệm âm lớn nhất ứng với $k = -1$: $x = -\\dfrac{5\\pi}{6}$: sai."
+  }
+ ],
+ "tra_loi_ngan": [
+  {
+   "cau": "Phương trình $\\cos x = 0$ có bao nhiêu nghiệm thuộc đoạn $[0; 10\\pi]$?",
+   "dap_an": "10",
+   "giai_thich": "$x = \\dfrac{\\pi}{2} + k\\pi$; $0 \\le \\dfrac{\\pi}{2} + k\\pi \\le 10\\pi \\Leftrightarrow -\\dfrac{1}{2} \\le k \\le 9{,}5$, nên $k \\in \\{0; 1; \\ldots; 9\\}$: có $10$ nghiệm."
+  },
+  {
+   "cau": "Tìm nghiệm dương nhỏ nhất (tính bằng độ) của phương trình $\\sin(x - 30^\\circ) = \\sin 50^\\circ$.",
+   "dap_an": "80",
+   "giai_thich": "$x - 30^\\circ = 50^\\circ + k360^\\circ$ hoặc $x - 30^\\circ = 130^\\circ + k360^\\circ$, tức $x = 80^\\circ + k360^\\circ$ hoặc $x = 160^\\circ + k360^\\circ$. Nghiệm dương nhỏ nhất là $80^\\circ$."
+  },
+  {
+   "cau": "Tính tổng các nghiệm (tính bằng độ) thuộc đoạn $[0^\\circ; 360^\\circ]$ của phương trình $\\tan x = 1$.",
+   "dap_an": "270",
+   "giai_thich": "$x = 45^\\circ + k180^\\circ$; trên $[0^\\circ; 360^\\circ]$ có $45^\\circ$ và $225^\\circ$, tổng $270^\\circ$."
+  }
+ ]
+}

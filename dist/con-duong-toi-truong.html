@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Con đường tới trường · Tự học Toán 9 – 12</title>
-<meta name="description" content="Tự học Toán: ôn thi vào lớp 10 TP.HCM và luyện vận dụng – vận dụng cao lớp 10, 11, 12 với kiến thức trọng tâm, ví dụ mẫu, phiếu in có mã QR lời giải.">
+<meta name="description" content="Tự học Toán: ôn thi vào lớp 10 TP.HCM và bài giảng – luyện tập online theo SGK Toán Kết nối tri thức lớp 9–12, luyện vận dụng – vận dụng cao lớp 10, 11, 12 với kiến thức trọng tâm, ví dụ mẫu, phiếu in có mã QR lời giải.">
 <meta name="theme-color" content="#2f6fe4">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f6fe4'/%3E%3Ctext x='32' y='44' font-size='30' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3E10%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -424,6 +424,55 @@ table.ld-the.full{font-size:10.5pt}
 .ot-goi p{margin:1px 0}
 .ld-ot{margin:6px 0;font-weight:600}
 .ot-can{font-size:10pt;font-style:italic;margin:1px 0 2px;color:#333}
+
+/* ---------- Bài giảng – Luyện tập online (lớp 9–12, mục lục SGK KNTT) ---------- */
+.bh-hero{margin:0 0 18px;background:color-mix(in srgb,var(--s-blue) 32%,var(--surface))}
+.bh-hero .g-big{background:var(--ink);font-size:32px}
+.bh-find{display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:700}
+.bh-find input{flex:1;min-width:0;min-height:48px;padding:8px 14px;border-radius:var(--r-pill);border:2.5px solid var(--line);background:var(--surface);color:var(--ink);font:500 17px var(--f-body)}
+.bh-ch{padding:0;overflow:hidden}
+.bh-ch > summary{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;font:700 19px/1.35 var(--f-head);list-style:none}
+.bh-ch > summary::-webkit-details-marker{display:none}
+.bh-ch > summary::before{content:"▸";flex:none;transition:transform .15s}
+.bh-ch[open] > summary::before{transform:rotate(90deg)}
+.bh-ch > summary > span:first-of-type{flex:1;min-width:0}
+.bh-rows{border-top:2px solid var(--grid)}
+.bh-row{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:12px 18px;text-decoration:none;color:var(--ink);border-bottom:1.5px solid var(--grid)}
+.bh-row:last-child{border-bottom:0}
+.bh-row:hover,.bh-row:focus-visible{background:var(--primary-soft)}
+.bh-row.trong .bh-ten{color:var(--muted)}
+.bh-no{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:var(--primary-soft);font:800 16px/1 var(--f-head)}
+.bh-row.trong .bh-no{background:var(--grid)}
+.bh-ten{flex:1 1 220px;min-width:0;font-weight:600}
+.bh-row .chips{display:flex;flex-wrap:wrap;gap:6px}
+.bh-vd{background:var(--primary-soft);border-radius:14px;padding:12px 16px;margin:12px 0 0}
+.bh-vd p{margin:0}
+.bh-vd details{margin-top:8px}
+.bh-vd summary{cursor:pointer;font-weight:700;color:var(--primary)}
+.bh-can{border-style:dashed}
+.bh-lien{margin-top:18px}
+.bh-lien p{margin:8px 0 0}
+.bh-ds{list-style:none;padding:0;margin:4px 0 12px;display:grid;gap:8px}
+.bh-ds li{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px;border:2px solid var(--grid);border-radius:14px}
+.bh-ds li.good{border-color:var(--ok);background:var(--ok-soft)}
+.bh-ds li.bad{border-color:var(--bad);background:var(--bad-soft)}
+.bh-y{flex:1 1 240px;min-width:0}
+.bh-dsb{display:flex;gap:6px;flex:none}
+.bh-dsb .tog{min-height:44px;padding:6px 14px;font-weight:700}
+.bh-dsb .tog.on{background:var(--ink);color:var(--bg)}
+.bh-mark{flex:none;font-weight:800}
+.bh-tlrow{align-items:center}
+.bh-tlrow label{display:flex;align-items:center;gap:8px;font-weight:700}
+.bh-in{width:9em;min-height:48px;padding:6px 12px;border-radius:12px;border:2.5px solid var(--line);background:var(--surface);color:var(--ink);font:700 18px var(--f-body)}
+.bh-in.good{border-color:var(--ok);background:var(--ok-soft)}
+.bh-in.bad{border-color:var(--bad);background:var(--bad-soft)}
+.bh-score{position:sticky;bottom:8px;z-index:2;padding:8px 14px;margin-top:18px}
+.bh-score > p{margin:4px 0}
+.bh-pre{background:var(--surface);color:var(--ink);padding:12px}
+.bh-pre ol{padding-left:22px}
+.bh-pre li{margin:6px 0}
+.xw-wide2{grid-column:span 2}
+@media (max-width:620px){.xw-wide2{grid-column:auto}}
 
 </style>
 </head>
@@ -3817,6 +3866,218 @@ const OnTap = (() => {
 })();
 
 </script>
+<script>/* assets/js/baihoc.js */
+/* =====================================================================
+   BÀI GIẢNG – LUYỆN TẬP ONLINE (lớp 9, 10, 11, 12) – bài học xếp theo mục lục SGK Toán "Kết nối tri thức với cuộc sống"
+   #/bai-hoc                    chọn lớp
+   #/bai-hoc/<lớp>              mục lục: Tập 1, Tập 2 → chương → bài (tìm nhanh theo tên)
+   #/bai-hoc/<lớp>/<bài>        📘 Bài giảng: mục tiêu, kiến thức từng mục, ví dụ có lời giải, lưu ý hay sai, cần nhớ
+   #/bai-hoc/<lớp>/<bài>/luyen  ✍️ Luyện tập online: Phần I trắc nghiệm, Phần II đúng – sai, Phần III trả lời ngắn; chấm ngay, lưu điểm cao nhất
+   Mục lục: data/bai-hoc/muc-luc-kntt.js (BaiHoc.mucLuc). Nội dung từng bài: JSON "loai":"bai_hoc" tạo bằng Xưởng dữ liệu
+   (NotebookLM / Gem) → NhapDL (assets/js/nhap.js) → BaiHoc.add. Bài chưa có nội dung vẫn hiện trong mục lục.
+   ===================================================================== */
+const BaiHoc = (() => {
+  const { esc, $, $$, get, set, shuffle } = U;
+  const LOP = [9, 10, 11, 12];
+  const ML = {};                       // lớp → { lop, ten, chuong: [{ tap, so, ten, bai: [{ so, ten }] }] }
+  const LS = {};                       // 'lớp-bài' → bài học
+  const key = (l, b) => `${l}-${b}`;
+  // Bài lớp 9 gắn với chủ đề ôn thi vào 10; lớp 10–12 tự tìm chủ đề vận dụng – VDC có cùng số bài.
+  const LIEN_9 = { 1: 'he-phuong-trinh-thuc-te', 2: 'he-phuong-trinh-thuc-te', 3: 'he-phuong-trinh-thuc-te', 11: 'kien-thuc-thong-nhat', 12: 'kien-thuc-thong-nhat',
+    15: 'thuc-te-dai-so-hinh-hoc', 18: 'ham-so-parabol', 19: 'pt-bac-hai-viete', 20: 'pt-bac-hai-viete', 21: 'thuc-te-dai-so-hinh-hoc',
+    25: 'xac-suat', 26: 'xac-suat', 27: 'hinh-7a', 28: 'hinh-7a', 29: 'hinh-7a', 31: 'hinh-khong-gian', 32: 'hinh-khong-gian' };
+
+  /* ---------- Dữ liệu ---------- */
+  function mucLuc(lop, ten, chuong) {
+    ML[lop] = { lop, ten, chuong: chuong.map(([tap, so, t, bai]) => ({ tap, so, ten: t, bai: bai.map(([s, n]) => ({ so: s, ten: n })) })) };
+  }
+  const all = lop => (ML[lop] ? ML[lop].chuong.flatMap(c => c.bai.map(b => ({ ...b, chuong: c }))) : []);
+  const baiOf = (lop, so) => all(lop).find(b => b.so === +so) || null;
+  function add(e) { LS[key(e.lop, e.bai)] = e; }
+  const get_ = (lop, bai) => LS[key(lop, bai)];
+  const list = () => Object.values(LS);
+  const prog = (lop, bai) => get('bh:' + key(lop, bai), null);
+
+  /* ---------- Khung trang ---------- */
+  const view = () => $('#view');
+  const shell = (back, label, body) => `${App.topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="${back}">← ${label}</a></div>${body}</main>`;
+  const fold = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+
+  function pickLop() {
+    const cards = LOP.map(l => {
+      const n = all(l).length, k = all(l).filter(b => get_(l, b.so)).length;
+      return `<a class="card grade-card" href="#/bai-hoc/${l}"><span class="g-big">${l}</span><span class="g-body"><b>Toán ${l}</b>
+        <span>${ML[l] ? esc(ML[l].ten) : 'Kết nối tri thức với cuộc sống'} · ${ML[l] ? ML[l].chuong.length : 0} chương</span>
+        <span class="chips"><span class="chip">${n} bài</span>${k ? `<span class="chip ok">${k} bài có bài giảng</span>` : ''}</span></span></a>`;
+    }).join('');
+    view().innerHTML = shell('#/', 'Chọn lớp', `<section class="card hero"><p class="pill">📚 Học theo SGK</p><h2>Bài giảng – Luyện tập online</h2>
+      <p>Học đúng thứ tự mục lục SGK Toán <b>Kết nối tri thức với cuộc sống</b>. Mỗi bài có bài giảng ngắn (kiến thức, ví dụ có lời giải, lưu ý hay sai) và bài luyện tập làm ngay trên máy theo ba dạng của đề thi: trắc nghiệm, đúng – sai, trả lời ngắn.</p></section>
+      <div class="grade-grid">${cards}</div>`);
+  }
+
+  function mucLucPage(lop) {
+    const M = ML[lop]; if (!M) return pickLop();
+    const row = b => {
+      const e = get_(lop, b.so), p = prog(lop, b.so);
+      return `<a class="bh-row${e ? '' : ' trong'}" href="#/bai-hoc/${lop}/${b.so}" data-s="${esc(fold(`bai ${b.so} ${b.ten} ${b.chuong.ten}`))}">
+        <span class="bh-no">${b.so}</span><span class="bh-ten">Bài ${b.so}. ${esc(b.ten)}</span>
+        <span class="chips">${e ? `<span class="chip ok">📘 ✍️ ${e.tn.length + e.ds.length + e.tln.length} câu</span>` : '<span class="chip">Đang soạn</span>'}${p ? `<span class="chip">✓ ${p.best}/${p.total}</span>` : ''}</span></a>`;
+    };
+    const taps = [...new Set(M.chuong.map(c => c.tap))];
+    view().innerHTML = shell('#/bai-hoc', 'Chọn lớp', `<section class="card hero"><p class="pill soft">Lớp ${lop}</p><h2>${esc(M.ten)}</h2>
+      <p>${all(lop).length} bài trong ${M.chuong.length} chương. Bấm vào bài để xem bài giảng và luyện tập.</p>
+      <label class="bh-find">🔎 <input id="bhFind" type="search" placeholder="Tìm bài: ví dụ “cực trị”, “Bài 12”…" autocomplete="off"></label></section>
+      ${taps.map(t => `<h2 class="sec bh-tap" data-tap="${t}">Tập ${t}</h2>${M.chuong.filter(c => c.tap === t).map(c => `<details class="card bh-ch" data-tap="${t}" open>
+        <summary><span>Chương ${c.so}. ${esc(c.ten)}</span><span class="chip">${c.bai.length} bài</span></summary>
+        <div class="bh-rows">${c.bai.map(b => row({ ...b, chuong: c })).join('')}</div></details>`).join('')}`).join('')}
+      <p class="empty" id="bhNone" hidden>Không thấy bài nào khớp.</p>`);
+    $('#bhFind').addEventListener('input', e => {
+      const q = fold(e.target.value.trim()); let any = false;
+      $$('.bh-ch').forEach(d => { let n = 0; $$('.bh-row', d).forEach(r => { const ok = !q || r.dataset.s.includes(q); r.hidden = !ok; if (ok) n++; }); d.hidden = !n; if (n) any = true; if (q) d.open = true; });
+      $$('.bh-tap').forEach(h => { h.hidden = !$$('.bh-ch').some(d => !d.hidden && d.dataset.tap === h.dataset.tap); });
+      $('#bhNone').hidden = any;
+    });
+  }
+
+  /* ---------- Trang một bài ---------- */
+  function lienQuan(lop, so) {
+    const out = [];
+    if (lop === 9 && LIEN_9[so] && typeof Topics !== 'undefined' && Topics.get(LIEN_9[so])) {
+      const t = Topics.get(LIEN_9[so]); out.push(`<a href="#/cd/${t.id}/lt">🎯 Ôn thi vào 10 – Chủ đề ${t.no}: ${t.title}</a>`);
+    }
+    if (lop >= 10 && typeof Vdc !== 'undefined') Vdc.ofGrade('lop' + lop)
+      .filter(t => [...String(t.bai || '').matchAll(/Bài (\d+)\./g)].some(m => +m[1] === so))
+      .forEach(t => out.push(`<a href="#/lop${lop}/${t.id}">🚀 Vận dụng – vận dụng cao: ${t.title}</a>`));
+    return out.length ? `<div class="card bh-lien"><b>Học tiếp sau bài này</b>${out.map(x => `<p>${x}</p>`).join('')}</div>` : '';
+  }
+  function lesson(lop, so, tab) {
+    const b = baiOf(lop, so); if (!b) return mucLucPage(lop);
+    const e = get_(lop, so), ds = all(lop), i = ds.findIndex(x => x.so === b.so), prev = ds[i - 1], next = ds[i + 1];
+    const tabs = [['', '📘', 'Bài giảng'], ['luyen', '✍️', 'Luyện tập online']].map(([k, ic, n]) =>
+      `<a class="tab${k === tab ? ' on' : ''}" href="#/bai-hoc/${lop}/${so}${k ? '/' + k : ''}" ${k === tab ? 'aria-current="page"' : ''}><span aria-hidden="true">${ic}</span> ${n}</a>`).join('');
+    view().innerHTML = `${App.topBar()}<main class="wrap">
+      <div class="toolbar"><a class="back" href="#/bai-hoc/${lop}">← Mục lục Toán ${lop}</a>
+        <span class="nav-mini">${prev ? `<a href="#/bai-hoc/${lop}/${prev.so}">‹ Bài ${prev.so}</a>` : ''}${next ? `<a href="#/bai-hoc/${lop}/${next.so}">Bài ${next.so} ›</a>` : ''}</span></div>
+      <section class="thead card"><span class="tno big">${b.so}</span><div><p class="tbai">Toán ${lop} · Tập ${b.chuong.tap} · Chương ${b.chuong.so}. ${esc(b.chuong.ten)}</p>
+        <h2>Bài ${b.so}. ${esc(b.ten)}</h2>${e ? `<p class="tdesc">${e.mau ? '<span class="chip warnc">Mẫu minh họa</span> ' : ''}${e.nguon ? `Nguồn: ${e.nguon}` : ''}</p>` : ''}</div></section>
+      ${e ? `<nav class="tabs" aria-label="Bài học">${tabs}</nav><section id="pane" class="pane"></section>` : `<section id="pane" class="pane"></section>`}
+      ${lienQuan(lop, b.so)}
+      <div class="pane-foot">${e && !tab ? `<a class="btn primary" href="#/bai-hoc/${lop}/${so}/luyen">Luyện tập ngay ✍️ →</a>` : next ? `<a class="btn primary" href="#/bai-hoc/${lop}/${next.so}">Sang Bài ${next.so} →</a>` : `<a class="btn primary" href="#/bai-hoc/${lop}">Về mục lục</a>`}</div></main>`;
+    const pane = $('#pane');
+    if (!e) return paneTrong(lop, b, pane);
+    if (tab === 'luyen') paneLuyen(e, pane); else paneGiang(e, pane);
+  }
+  function paneTrong(lop, b, pane) {
+    pane.innerHTML = `<div class="card"><h3>📭 Bài này đang được soạn</h3><p>Em vẫn học được: đọc SGK Toán ${lop} – Bài ${b.so}, làm các ví dụ và bài tập trong sách, rồi quay lại đây khi bài giảng online có trên web.</p>
+      <p class="muted small">Thầy cô: tạo nội dung bài này bằng Xưởng dữ liệu (NotebookLM / Gem có gắn SGK, sách bài tập).</p>
+      <button class="btn" type="button" id="bhMake">🧰 Tạo prompt cho bài này</button></div>`;
+    $('#bhMake').addEventListener('click', () => { set('xuong:prompt', Object.assign(get('xuong:prompt', {}), { loai: 'baihoc', bhLop: String(lop), bhBai: String(b.so) })); location.hash = '#/xuong/prompt'; });
+  }
+
+  /* ---------- 📘 Bài giảng ---------- */
+  const vdHTML = (v, k) => `<div class="bh-vd"><p><b>Ví dụ ${k}.</b> ${v.de}</p><details><summary>Xem lời giải</summary><ol class="lg-steps">${v.lg.map(x => `<li>${x}</li>`).join('')}</ol>
+    ${v.ds ? `<p class="ds-box"><b>Đáp số:</b> ${v.ds}</p>` : ''}</details></div>`;
+  function giangHTML(e) {
+    let k = 0;
+    return (e.muc_tieu.length ? `<div class="card remind"><h3>🎯 Học xong bài này, em</h3><ul>${e.muc_tieu.map(x => `<li>${x}</li>`).join('')}</ul></div>` : '')
+      + e.giang.map((m, i) => `<article class="card kt"><h3>${/^\d+\./.test(m.t) ? '' : `<span class="kno">${i + 1}</span>`}${m.t}</h3><div class="kb">${m.b}</div>
+        ${m.vd.map(v => vdHTML(v, ++k)).join('')}${m.luu_y ? `<p class="warn">⚠️ ${m.luu_y}</p>` : ''}</article>`).join('')
+      + (e.can_nho.length ? `<article class="card remind bh-can"><h3>🔑 Cần nhớ</h3><ul>${e.can_nho.map(x => `<li>${x}</li>`).join('')}</ul></article>` : '');
+  }
+  function paneGiang(e, pane) { pane.innerHTML = giangHTML(e); set('bh:doc:' + key(e.lop, e.bai), 1); }
+
+  /* ---------- ✍️ Luyện tập online ---------- */
+  const numOf = s => {
+    const t = String(s).trim().replace(/\s+/g, '').replace(/,/g, '.').replace(/−/g, '-');
+    let m = t.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/); if (m) return +m[2] ? +m[1] / +m[2] : NaN;
+    return /^-?\d*\.?\d+$/.test(t) ? +t : NaN;
+  };
+  const sameAns = (x, ans) => { const a = numOf(x), b = numOf(ans); return !isNaN(a) && !isNaN(b) ? Math.abs(a - b) < 1e-9 : fold(x).replace(/\s+/g, '') === fold(ans).replace(/\s+/g, ''); };
+  const YL = 'abcd';
+  function paneLuyen(e, pane) {
+    const tn = e.tn.map(q => ({ ...q, good: q.a[0], opts: shuffle(q.a) }));
+    const total = tn.length + 4 * e.ds.length + e.tln.length, nQ = tn.length + e.ds.length + e.tln.length;
+    let done = 0, right = 0;
+    pane.innerHTML = `<p class="lead">Làm lần lượt ba phần như đề thi. Mỗi câu bấm <b>Kiểm tra</b> là biết đúng sai ngay và đọc lời giải thích. Câu đúng – sai: mỗi ý đúng được 1 điểm.</p>
+      ${tn.length ? `<h3 class="sub">Phần I. Trắc nghiệm nhiều phương án (${tn.length} câu)</h3><div class="quiz">${tn.map((q, k) => `<article class="card qcard bh-q" data-k="${k}">
+        <p class="qtext"><b>Câu ${k + 1}.</b> ${q.q}</p><div class="opts">${q.opts.map((o, j) => `<button type="button" class="opt" data-j="${j}"><span class="ol">${'ABCD'[j]}</span><span>${o}</span></button>`).join('')}</div>
+        <div class="why" hidden></div></article>`).join('')}</div>` : ''}
+      ${e.ds.length ? `<h3 class="sub">Phần II. Đúng – Sai (${e.ds.length} câu)</h3>${e.ds.map((q, k) => `<article class="card bh-dsq" data-k="${k}"><p class="qtext"><b>Câu ${k + 1}.</b> ${q.q}</p>
+        <ol class="bh-ds">${q.y.map((y, j) => `<li data-j="${j}"><span class="bh-y"><b>${YL[j]})</b> ${y[0]}</span><span class="bh-dsb"><button type="button" class="tog" data-v="1">Đúng</button><button type="button" class="tog" data-v="0">Sai</button></span></li>`).join('')}</ol>
+        <div class="row"><button class="btn primary" type="button" data-chk disabled>Kiểm tra</button></div><div class="why" hidden></div></article>`).join('')}` : ''}
+      ${e.tln.length ? `<h3 class="sub">Phần III. Trả lời ngắn (${e.tln.length} câu)</h3>${e.tln.map((q, k) => `<article class="card bh-tl" data-k="${k}"><p class="qtext"><b>Câu ${k + 1}.</b> ${q.q}</p>
+        <div class="row bh-tlrow"><label>Đáp số: <input class="bh-in" type="text" inputmode="decimal" autocomplete="off" aria-label="Đáp số câu ${k + 1}"></label><button class="btn primary" type="button" data-chk>Kiểm tra</button></div>
+        <div class="why" hidden></div></article>`).join('')}<p class="muted small">Trả lời ngắn: ghi số, dùng dấu phẩy hoặc dấu chấm cho số thập phân (2,5 hoặc 2.5); được ghi phân số dạng 3/4.</p>` : ''}
+      <div class="card score bh-score" id="bhScore"><p>Đã làm <b id="bhDone">0</b>/${nQ} câu · đúng <b id="bhRight">0</b>/${total} ý</p></div>`;
+    const tick = (ok, pts = ok ? 1 : 0) => { done++; right += pts; $('#bhDone').textContent = done; $('#bhRight').textContent = right; if (done === nQ) finish(); };
+    const why = (card, ok, txt) => { const w = $('.why', card); w.hidden = false; w.innerHTML = `${ok ? '<b class="okc">Đúng rồi!</b>' : '<b class="badc">Chưa đúng.</b>'} ${txt || ''}`; };
+    $$('.bh-q', pane).forEach(card => {
+      const q = tn[+card.dataset.k];
+      $$('.opt', card).forEach(btn => btn.addEventListener('click', () => {
+        if (card.classList.contains('locked')) return; card.classList.add('locked');
+        const ok = q.opts[+btn.dataset.j] === q.good;
+        $$('.opt', card).forEach(x => { x.disabled = true; if (q.opts[+x.dataset.j] === q.good) x.classList.add('good'); });
+        if (!ok) btn.classList.add('bad');
+        why(card, ok, q.why); tick(ok);
+      }));
+    });
+    $$('.bh-dsq', pane).forEach(card => {
+      const q = e.ds[+card.dataset.k], pick = [null, null, null, null], chk = $('[data-chk]', card);
+      $$('.bh-ds li', card).forEach(li => $$('button', li).forEach(btn => btn.addEventListener('click', () => {
+        if (card.classList.contains('locked')) return;
+        pick[+li.dataset.j] = btn.dataset.v === '1'; $$('button', li).forEach(x => x.classList.toggle('on', x === btn));
+        chk.disabled = pick.some(x => x === null);
+      })));
+      chk.addEventListener('click', () => {
+        if (card.classList.contains('locked')) return; card.classList.add('locked'); chk.disabled = true;
+        let n = 0;
+        $$('.bh-ds li', card).forEach(li => { const j = +li.dataset.j, ok = pick[j] === q.y[j][1]; if (ok) n++;
+          li.classList.add(ok ? 'good' : 'bad'); li.insertAdjacentHTML('beforeend', `<span class="bh-mark">${ok ? '✓' : '✗'} ${q.y[j][1] ? 'Đúng' : 'Sai'}</span>`);
+          $$('button', li).forEach(x => { x.disabled = true; }); });
+        const w = $('.why', card); w.hidden = false;
+        w.innerHTML = `<b class="${n === 4 ? 'okc' : 'badc'}">Đúng ${n}/4 ý.</b> ${q.why || ''}`; tick(n === 4, n);
+      });
+    });
+    $$('.bh-tl', pane).forEach(card => {
+      const q = e.tln[+card.dataset.k], inp = $('.bh-in', card), chk = $('[data-chk]', card);
+      const go = () => {
+        if (card.classList.contains('locked') || !inp.value.trim()) { if (!inp.value.trim()) inp.focus(); return; }
+        card.classList.add('locked'); chk.disabled = true; inp.readOnly = true;
+        const ok = sameAns(inp.value, q.ans); inp.classList.add(ok ? 'good' : 'bad');
+        why(card, ok, `${ok ? '' : `Đáp số đúng: <b>${esc(q.ans)}</b>. `}${q.why || ''}`); tick(ok);
+      };
+      chk.addEventListener('click', go); inp.addEventListener('keydown', ev => { if (ev.key === 'Enter') go(); });
+    });
+    function finish() {
+      const old = prog(e.lop, e.bai), best = Math.max(right, old ? old.best : 0);
+      set('bh:' + key(e.lop, e.bai), { best, total, luc: Date.now() });
+      const s = $('#bhScore'), r = right / total;
+      s.innerHTML = `<p class="big-score">${right}/${total}</p><p>${r === 1 ? 'Xuất sắc! Em đã nắm chắc bài này.' : r >= 0.8 ? 'Tốt lắm. Đọc lại lời giải thích các câu sai rồi làm lại để đạt điểm tối đa.' : r >= 0.5 ? 'Em hiểu được phần lớn bài. Mở lại Bài giảng, xem mục Cần nhớ và các ví dụ rồi làm lại.' : 'Em nên học lại Bài giảng (đọc kĩ ví dụ) trước khi làm lại.'}</p>
+        <p class="muted">Điểm cao nhất của em: ${best}/${total}</p><div class="row" style="justify-content:center"><button class="btn" type="button" id="bhRedo">↻ Làm lại (đảo phương án)</button><a class="btn ghost" href="#/bai-hoc/${e.lop}/${e.bai}">📘 Xem lại bài giảng</a></div>`;
+      $('#bhRedo').addEventListener('click', () => { paneLuyen(e, pane); pane.scrollIntoView({ block: 'start' }); });
+      s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  /* ---------- Xem trước khi nhập (Xưởng dữ liệu): bài giảng + mọi câu kèm đáp án ---------- */
+  function previewHTML(e) {
+    const b = baiOf(e.lop, e.bai);
+    return `<div class="bh-pre math"><h2>Toán ${e.lop} – Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}</h2>${giangHTML(e)}
+      <h3 class="sub">Luyện tập – đáp án</h3><ol>${e.tn.map(q => `<li>${q.q}<br><b>Đúng:</b> ${q.a[0]} · <span class="muted">sai: ${q.a.slice(1).join(' | ')}</span>${q.why ? `<br><i>${q.why}</i>` : ''}</li>`).join('')}</ol>
+      <ol>${e.ds.map(q => `<li>${q.q}<ul>${q.y.map((y, j) => `<li>${YL[j]}) ${y[0]} → <b>${y[1] ? 'Đúng' : 'Sai'}</b></li>`).join('')}</ul>${q.why ? `<i>${q.why}</i>` : ''}</li>`).join('')}</ol>
+      <ol>${e.tln.map(q => `<li>${q.q} → <b>${esc(q.ans)}</b>${q.why ? `<br><i>${q.why}</i>` : ''}</li>`).join('')}</ol></div>`;
+  }
+
+  function route(parts) {
+    if (parts[0] !== 'bai-hoc') return false;
+    const lop = +parts[1], so = +parts[2];
+    if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, parts[3] === 'luyen' ? 'luyen' : '');
+    return true;
+  }
+  return { LOP, LIEN_9, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML };
+})();
+
+</script>
 <script>/* assets/js/nhap.js */
 /* =====================================================================
    NHẬP DỮ LIỆU TỪ AI (NotebookLM / Gem Gemini) – một chỗ dùng chung cho web, kiem-tra.js và nhap-du-lieu.py
@@ -3829,6 +4090,8 @@ const OnTap = (() => {
      "loai":"luyen_de_toan" → thêm đề vào bộ Luyện đề của bài tương ứng (LuyenDe)
      "loai":"de_van"        → đề Ngữ văn vào 10 (Van)
      "loai":"on_tap_toan"   → phiếu ôn tập 90 phút theo chủ đề, cơ bản → nâng cao (OnTap); đọc được cả Markdown chuẩn
+     "loai":"bai_hoc"       → bài giảng – luyện tập online một bài SGK Toán 9–12 KNTT (BaiHoc): bài giảng, cần nhớ,
+                              trắc nghiệm, đúng – sai, trả lời ngắn
    - Dữ liệu của hệ thống: data/nhap/*.js gọi NhapDL.add(<json>) (tạo bằng tools/nhap-du-lieu.py).
      Dữ liệu chỉ trên máy này: lưu trong trình duyệt (U.get('nhap:may')), nạp ở App.start().
    ===================================================================== */
@@ -3940,8 +4203,24 @@ const NhapDL = (() => {
     return s;
   }
   const normArr = a => (Array.isArray(a) ? a : (a ? [a] : [])).map(x => norm(x)).filter(Boolean);
+  // Đoạn nhiều dòng: dòng bắt đầu bằng "- " gom thành danh sách, các dòng khác cách nhau bằng <br>.
+  function normBlock(s) {
+    const out = []; let ul = [];
+    const flush = () => { if (ul.length) out.push(`<ul>${ul.map(x => `<li>${x}</li>`).join('')}</ul>`); ul = []; };
+    String(s ?? '').split(/\n/).forEach(l => { const m = l.match(/^\s*[-•*]\s+(.*)/); if (m) ul.push(norm(m[1])); else { flush(); if (l.trim()) out.push(norm(l)); } });
+    flush();
+    return out.reduce((a, x, i) => a + (i && !x.startsWith('<ul>') && !out[i - 1].startsWith('<ul>') ? '<br>' : '') + x, '');
+  }
 
   /* ---------- 3. Kiểm ---------- */
+  const numVN = s => { const t = String(s).trim().replace(/\s+/g, '').replace(/,/g, '.').replace(/−/g, '-'); const m = t.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+    return m ? (+m[2] ? +m[1] / +m[2] : NaN) : (/^-?\d*\.?\d+$/.test(t) ? +t : NaN); };
+  const boolOf = v => v === true || /^(true|đúng|dung|đ|1)$/i.test(String(v).trim()) ? true : v === false || /^(false|sai|s|0)$/i.test(String(v).trim()) ? false : null;
+  function dapIdx(q, pa) {
+    const d = String(q.dap_an ?? '').trim(), m = d.match(/^([A-D])(?:[.)]|$)/i);
+    if (m) return 'ABCD'.indexOf(m[1].toUpperCase());
+    return pa.findIndex(x => x.trim() === d.replace(/^\s*[A-D][.)]\s+/, ''));
+  }
   function stepsOf(arr) { return (Array.isArray(arr) ? arr : []).map(b => ({ s: b.buoc ?? b.y ?? b.noi_dung ?? '', p: num(b.diem) })); }
   function checkSteps(errs, where, steps, total) {
     if (!steps.length) { errs.push(`${where}: thiếu các bước chấm điểm`); return; }
@@ -4022,7 +4301,47 @@ const NhapDL = (() => {
       if (!near(tong, 10)) errs.push(`Tổng điểm cả đề = ${tong}, cần 10`);
       return { loai, errs, warns, n: 1, ten: `Ngữ văn – đề ${j.ma_de || '?'}`, id: j.ma_de };
     }
-    errs.push('Không nhận ra loại dữ liệu: cần "loai":"de_van" (Ngữ văn), "luyen_de_toan" (đề luyện Toán) hoặc "on_tap_toan" (phiếu ôn tập 90 phút).');
+    if (loai === 'bai_hoc') {
+      const lop = +j.lop, bai = +j.bai, ML = typeof BaiHoc !== 'undefined' ? BaiHoc : null;
+      if (![9, 10, 11, 12].includes(lop)) errs.push(`"lop" phải là 9, 10, 11 hoặc 12 (đang là ${JSON.stringify(j.lop)})`);
+      if (!(bai >= 1) || bai !== Math.floor(bai)) errs.push(`"bai" phải là số thứ tự bài trong SGK (đang là ${JSON.stringify(j.bai)})`);
+      const sgk = ML && ML.ML[lop] ? ML.baiOf(lop, bai) : null;
+      if (ML && ML.ML[lop] && bai >= 1 && !sgk) errs.push(`Toán ${lop} không có Bài ${bai} trong mục lục SGK Kết nối tri thức (có ${ML.all(lop).length} bài)`);
+      const fold = x => fp(x).replace(/^bai\d+/, '');
+      if (sgk && j.ten_bai && fold(j.ten_bai) !== fold(sgk.ten)) warns.push(`"ten_bai" là "${j.ten_bai}", mục lục SGK ghi "${sgk.ten}" – web dùng tên trong mục lục`);
+      if (!j.nguon) warns.push('Chưa ghi "nguon" (tài liệu trong notebook đã dùng: SGK, sách bài tập…)');
+      const bg = Array.isArray(j.bai_giang) ? j.bai_giang : [];
+      if (bg.length < 2) errs.push('"bai_giang" cần ít nhất 2 mục kiến thức');
+      bg.forEach((m, i) => { if (!m.tieu_de || !m.noi_dung) errs.push(`Bài giảng mục ${i + 1}: thiếu "tieu_de" hoặc "noi_dung"`);
+        (m.vi_du || []).forEach((v, k) => { if (!v.de || !(Array.isArray(v.loi_giai) ? v.loi_giai.length : v.loi_giai)) errs.push(`Bài giảng mục ${i + 1} ví dụ ${k + 1}: thiếu "de" hoặc "loi_giai"`); }); });
+      if (!bg.some(m => (m.vi_du || []).length)) errs.push('Bài giảng chưa có ví dụ nào ("vi_du" kèm lời giải)');
+      if ((Array.isArray(j.can_nho) ? j.can_nho.filter(Boolean).length : 0) < 3) errs.push('Thiếu "can_nho": cần ít nhất 3 kiến thức cần nhớ của bài');
+      if (!(j.muc_tieu || []).length) warns.push('Chưa có "muc_tieu"');
+      const tn = Array.isArray(j.trac_nghiem) ? j.trac_nghiem : [], ds = Array.isArray(j.dung_sai) ? j.dung_sai : [], tl = Array.isArray(j.tra_loi_ngan) ? j.tra_loi_ngan : [];
+      if (tn.length < 4) errs.push(`Phần I cần ít nhất 4 câu trắc nghiệm (đang có ${tn.length})`);
+      if (ds.length < 1) errs.push('Phần II cần ít nhất 1 câu đúng – sai'); if (tl.length < 1) errs.push('Phần III cần ít nhất 1 câu trả lời ngắn');
+      const fps = [];
+      tn.forEach((q, i) => { const w = `Trắc nghiệm câu ${i + 1}`, pa = (q.phuong_an || []).map(x => String(x).replace(/^\s*[A-D][.)]\s+/, ''));
+        if (!q.cau) errs.push(`${w}: thiếu "cau"`);
+        if (pa.length !== 4 || new Set(pa).size !== 4) errs.push(`${w}: cần đúng 4 phương án khác nhau`);
+        if (dapIdx(q, pa) < 0) errs.push(`${w}: "dap_an" phải là A, B, C hoặc D`);
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+      ds.forEach((q, i) => { const w = `Đúng – sai câu ${i + 1}`, y = Array.isArray(q.y) ? q.y : [];
+        if (!q.cau) errs.push(`${w}: thiếu "cau" (lời dẫn)`);
+        if (y.length !== 4) errs.push(`${w}: cần đúng 4 ý a, b, c, d (đang có ${y.length})`);
+        y.forEach((x, k) => { if (!x.noi_dung) errs.push(`${w} ý ${'abcd'[k]}: thiếu "noi_dung"`); if (boolOf(x.dung) === null) errs.push(`${w} ý ${'abcd'[k]}: "dung" phải là true hoặc false`); });
+        if (y.length === 4 && y.every(x => boolOf(x.dung) === boolOf(y[0].dung))) warns.push(`${w}: cả 4 ý cùng ${boolOf(y[0].dung) ? 'Đúng' : 'Sai'} – nên có cả ý đúng và ý sai`);
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+      tl.forEach((q, i) => { const w = `Trả lời ngắn câu ${i + 1}`, a = String(q.dap_an ?? '').trim();
+        if (!q.cau) errs.push(`${w}: thiếu "cau"`);
+        if (!a || isNaN(numVN(a))) errs.push(`${w}: "dap_an" phải là MỘT số (ví dụ "2,5", "-3", "0,25"), đang là ${JSON.stringify(q.dap_an)}`);
+        else if (a.replace(/^-/, '').length > 4) warns.push(`${w}: đáp số "${a}" dài hơn 4 kí tự – đề thi THPT chỉ ghi được 4 kí tự, nên yêu cầu làm tròn`);
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+      fps.forEach(([w, f], i) => { if (f && fps.findIndex(x => x[1] === f) < i) errs.push(`${w}: trùng với một câu khác`); });
+      const n = tn.length + ds.length + tl.length;
+      return { loai, errs, warns, n, ten: `Bài giảng – luyện tập Toán ${lop} – Bài ${bai}${sgk ? '. ' + sgk.ten : ''} (${n} câu)`, id: `${lop}-${bai}`, lop, bai };
+    }
+    errs.push('Không nhận ra loại dữ liệu: cần "loai":"de_van" (Ngữ văn), "luyen_de_toan" (đề luyện Toán), "on_tap_toan" (phiếu ôn tập 90 phút) hoặc "bai_hoc" (bài giảng – luyện tập lớp 9–12).');
     return { loai: '?', errs, warns };
   }
 
@@ -4066,6 +4385,18 @@ const NhapDL = (() => {
       phan: (j.phan || []).map(p => ({ muc: norm(p.muc), phut: +p.phut, bai: (p.bai || []).map(b => ({ so: ++so, de: norm(b.de), f: fp(b.de),
         nguon: norm(b.nguon), can: norm(b.can_nho), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
   }
+  function bhEntry(j, src) {
+    const lg = x => (Array.isArray(x) ? x : String(x || '').split(/\n+/)).map(y => norm(typeof y === 'object' ? (y.buoc ?? y.noi_dung ?? '') : y)).filter(Boolean);
+    const sgk = typeof BaiHoc !== 'undefined' ? BaiHoc.baiOf(+j.lop, +j.bai) : null;
+    return { lop: +j.lop, bai: +j.bai, ten: sgk ? sgk.ten : norm(j.ten_bai), nguon: norm(j.nguon), mau: !!j.mau, src,
+      muc_tieu: normArr(j.muc_tieu), can_nho: normArr(j.can_nho),
+      giang: (j.bai_giang || []).map(m => ({ t: norm(m.tieu_de), b: normBlock(m.noi_dung), luu_y: norm(m.luu_y),
+        vd: (m.vi_du || []).map(v => ({ de: normBlock(v.de), lg: lg(v.loi_giai), ds: norm(v.dap_so) })) })),
+      tn: (j.trac_nghiem || []).map(q => { const pa = q.phuong_an.map(x => String(x).replace(/^\s*[A-D][.)]\s+/, '')), k = dapIdx(q, pa);
+        return { q: normBlock(q.cau), a: [pa[k], ...pa.filter((_, i) => i !== k)].map(x => norm(x)), why: norm(q.giai_thich), muc: q.muc || '' }; }),
+      ds: (j.dung_sai || []).map(q => ({ q: normBlock(q.cau), y: q.y.map(x => [norm(x.noi_dung).replace(/^[a-d]\)\s*/, ''), boolOf(x.dung)]), why: normBlock(q.giai_thich) })),
+      tln: (j.tra_loi_ngan || []).map(q => ({ q: normBlock(q.cau), ans: String(q.dap_an).trim(), why: normBlock(q.giai_thich) })) };
+  }
   function apply(j, src) {
     const r = check(j);
     if (r.errs.length) return r;
@@ -4075,6 +4406,7 @@ const NhapDL = (() => {
     }
     if (r.loai === 'de_van' && typeof Van !== 'undefined') Van.add(vanEntry(j, src));
     if (r.loai === 'on_tap_toan' && typeof OnTap !== 'undefined') OnTap.add(onTapEntry(j, src));
+    if (r.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined') BaiHoc.add(bhEntry(j, src));
     return r;
   }
 
@@ -4087,11 +4419,12 @@ const NhapDL = (() => {
     local().forEach(x => {
       if (x.json.loai === 'de_van' && typeof Van !== 'undefined' && Van.get(String(x.json.ma_de))) return;   // hệ thống đã có mã đề này
       if (x.json.loai === 'on_tap_toan' && typeof OnTap !== 'undefined' && OnTap.get(String(x.json.ma))) return;
+      if (x.json.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined' && BaiHoc.get(+x.json.lop, +x.json.bai)) return;
       items.push({ json: x.json, src: 'may-nay', key: x.key, r: apply(x.json, 'may-nay') });
     });
   }
   function saveLocal(j) {
-    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
+    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : r.loai === 'bai_hoc' ? `bh-${+j.lop}-${+j.bai}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
     const a = local().filter(x => x.key !== key); a.push({ key, json: j, luc: new Date().toISOString() }); U.set(LKEY, a);
     return key;
   }
@@ -4100,10 +4433,10 @@ const NhapDL = (() => {
   function fileName(j) {
     const r = check(j), d = new Date(), ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
     const safe = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase();
-    return r.loai === 'de_van' ? `van-${safe(j.ma_de)}.json` : r.loai === 'on_tap_toan' ? `on-tap-${safe(j.ma)}.json` : `toan-bai${safe(j.bai)}-${ymd}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
+    return r.loai === 'bai_hoc' ? `bai-hoc-l${+j.lop}-b${String(+j.bai).padStart(2, '0')}.json` : r.loai === 'de_van' ? `van-${safe(j.ma_de)}.json` : r.loai === 'on_tap_toan' ? `on-tap-${safe(j.ma)}.json` : `toan-bai${safe(j.bai)}-${ymd}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
   }
 
-  return { BAI, DANG_VAN, extract, parse, repair, norm, check, toanItems, vanEntry, onTapEntry, mdToJson, fp, add, items, loadLocal, saveLocal, removeLocal, local, fileName };
+  return { BAI, DANG_VAN, extract, parse, repair, norm, check, toanItems, vanEntry, onTapEntry, bhEntry, normBlock, numVN, mdToJson, fp, add, items, loadLocal, saveLocal, removeLocal, local, fileName };
 })();
 
 </script>
@@ -4113,6 +4446,7 @@ const NhapDL = (() => {
    #/xuong          quy trình 4 bước + dữ liệu đã lưu trên máy này
    #/xuong/prompt   menu prompt: hướng dẫn Gem (dán một lần), lệnh từng đề, lệnh sửa JSON
                     – Ngữ văn đề luyện · Toán đề luyện theo bài · Toán phiếu ôn tập 90 phút (JSON hoặc Markdown, đợt sau tránh bài đợt trước)
+                    – Bài giảng – luyện tập online lớp 9–12 theo mục lục SGK KNTT (BaiHoc)
    #/xuong/nhap     nhập dữ liệu: dán câu trả lời AI hoặc kéo tệp .json → kiểm → xem trước, in → lưu máy này / tải tệp chuẩn
    Mẫu JSON ở đây phải khớp với NhapDL.check (assets/js/nhap.js). Sửa mẫu thì sửa cả hai.
    ===================================================================== */
@@ -4293,12 +4627,63 @@ TỰ KIỂM trước khi xuất
 4. Mục kiến thức cần nhớ đủ để làm mọi bài; mỗi bài có "can_nho".
 Sai ở đâu thì sửa rồi mới xuất.`;
 
+  const MAU_BAIHOC = S`{"loai":"bai_hoc","lop":10,"bai":16,"ten_bai":"Hàm số bậc hai","nguon":"SGK Toán 10 KNTT tập 2 – Bài 16; SBT Toán 10 KNTT – Bài 16",
+ "muc_tieu":["2–4 điều học sinh làm được sau bài"],
+ "bai_giang":[{"tieu_de":"1. Tên mục như SGK","noi_dung":"Định nghĩa, công thức của mục: hàm số $y = ax^2 + bx + c$ với $a \\ne 0$.\n- ý liệt kê 1\n- ý liệt kê 2",
+   "vi_du":[{"de":"đề ví dụ","loi_giai":["bước 1 …","bước 2 …"],"dap_so":"đáp số ngắn"}],"luu_y":"lỗi học sinh hay sai ở mục này"}],
+ "can_nho":["Tên kiến thức – công thức hoặc phát biểu – lưu ý hay sai","(4–8 mục)"],
+ "trac_nghiem":[{"cau":"câu hỏi","phuong_an":["…","…","…","…"],"dap_an":"B","giai_thich":"vì sao B đúng, các phương án kia sai ở đâu","muc":"NB"}],
+ "dung_sai":[{"cau":"lời dẫn chung","y":[{"noi_dung":"ý a","dung":true},{"noi_dung":"ý b","dung":false},{"noi_dung":"ý c","dung":true},{"noi_dung":"ý d","dung":false}],"giai_thich":"a) … b) … c) … d) …"}],
+ "tra_loi_ngan":[{"cau":"câu hỏi có đáp số là một số (ghi rõ làm tròn nếu cần)","dap_an":"2,5","giai_thich":"lời giải ngắn"}]}`;
+  const HD_BAIHOC = S`VAI TRÒ
+Em là giáo viên Toán giỏi, dạy đúng SGK Toán bộ "Kết nối tri thức với cuộc sống" (chương trình GDPT 2018). Việc của em: dựa vào tài liệu trong notebook NotebookLM đã gắn (SGK Toán 9, 10, 11, 12 Kết nối tri thức, sách bài tập, sách giáo viên, tài liệu của thầy cô) để soạn BÀI GIẢNG và BÀI LUYỆN TẬP ONLINE cho đúng MỘT bài SGK theo lệnh, cho học sinh tự học trên web, trả về dạng JSON.
+
+BÀI GIẢNG (bám SGK)
+1. Tìm đúng bài trong SGK theo lớp, số bài, tên bài của lệnh. Đi đúng thứ tự các mục của bài trong SGK; mỗi mục là một phần tử "bai_giang", tiêu đề đánh số như SGK ("1. …", "2. …").
+2. "noi_dung": định nghĩa, định lí, tính chất, công thức, quy tắc của mục; đúng thuật ngữ và kí hiệu SGK. Viết lại ngắn gọn bằng lời của em, KHÔNG chép nguyên văn đoạn dài của sách. Ý liệt kê đặt đầu dòng "- ".
+3. Mỗi mục 1–2 "vi_du" do em soạn (hoặc đổi số liệu ví dụ của SGK); "loi_giai" chia bước như học sinh trình bày; có "dap_so". "luu_y": lỗi học sinh hay sai ở mục đó.
+4. "muc_tieu": 2–4 điều học sinh làm được sau bài, theo yêu cầu cần đạt của chương trình.
+5. "can_nho" (bắt buộc): nhắc lại 4–8 kiến thức cần nhớ để làm được bài luyện tập; mỗi mục: tên – công thức hoặc phát biểu – lưu ý hay sai.
+6. Chỉ dùng kiến thức đến hết bài này (không dùng kiến thức của bài sau). Không ghi số trang, số bài tập nếu không đọc được chắc chắn trong nguồn.
+
+LUYỆN TẬP ONLINE (ba dạng câu hỏi của đề thi tốt nghiệp THPT)
+- "trac_nghiem": 4 phương án, chỉ 1 phương án đúng; phương án nhiễu lấy từ lỗi học sinh hay mắc; "dap_an" là chữ A, B, C hoặc D ứng với vị trí trong "phuong_an" (không ghi "A." trong phương án); rải đều đáp án A, B, C, D. "muc": NB (nhận biết), TH (thông hiểu) hoặc VD (vận dụng).
+- "dung_sai": mỗi câu một lời dẫn chung và đúng 4 ý a, b, c, d (không ghi "a)" trong nội dung), khó dần từ a đến d; "dung" là true hoặc false; mỗi câu có cả ý đúng và ý sai; "giai_thich" giải thích từng ý.
+- "tra_loi_ngan": đáp số là MỘT số, tối đa 4 kí tự kể cả dấu phẩy và dấu trừ, dùng dấu phẩy thập phân ("2,5", "-3", "0,25"); đáp số không nguyên thì đề ghi rõ "làm tròn đến hàng …".
+- Số câu, mức độ theo lệnh; xếp từ dễ đến khó. Câu hỏi do em soạn hoặc đổi số liệu từ bài tập trong nguồn, không chép nguyên câu. Lớp 9 cũng dùng ba dạng này, độ khó theo SGK Toán 9.
+
+ĐẦU RA BẮT BUỘC
+- Chỉ trả lời bằng MỘT khối code ${BT}json duy nhất chứa toàn bộ JSON. Không viết chữ nào trước hay sau khối code. Không dùng Canvas. Không chèn số trích dẫn [1].
+- Giữ nguyên tên trường như MẪU, không thêm, không đổi tên trường. "lop", "bai" là số; "dung" là true hoặc false (không có dấu nháy).
+- Mọi công thức đặt trong $...$, trong chuỗi JSON viết HAI dấu gạch: "$\\dfrac{3}{8}$", "$x \\neq 3$", "$\\sqrt{2}$". Không viết dấu < > trần trong công thức: dùng "$\\lt$", "$\\gt$", "$\\le$", "$\\ge$". Xuống dòng bằng \n.
+MẪU:
+${MAU_BAIHOC}
+
+TỰ KIỂM trước khi xuất
+1. Giải lại mọi ví dụ, mọi câu hỏi; thay đáp số vào đề. Trắc nghiệm chỉ một phương án đúng và "dap_an" chỉ đúng vị trí đó; từng ý đúng – sai kết luận đúng.
+2. Đáp số trả lời ngắn là một số, tối đa 4 kí tự.
+3. Đúng tên bài và thứ tự các mục như SGK; "can_nho" đủ để làm mọi câu luyện tập.
+4. Không chép nguyên văn đoạn dài của SGK hay nguyên câu hỏi trong nguồn.
+Sai ở đâu thì sửa rồi mới xuất.`;
+  function lenhBaiHoc(o, k) {
+    const ds = BaiHoc.all(+o.lop), i0 = ds.findIndex(b => b.so === +o.bai), b = ds[i0 + k];
+    if (!b) return '';
+    const co = BaiHoc.get(+o.lop, b.so), cu = co ? [...co.tn, ...co.ds, ...co.tln].map(q => String(q.q).replace(/\\\(|\\\)|\\\[|\\\]/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 70)) : [];
+    return [`Bài giảng – luyện tập online | Toán ${o.lop} – Kết nối tri thức với cuộc sống | Bài ${b.so}. ${b.ten} (Chương ${b.chuong.so}. ${b.chuong.ten}, Tập ${b.chuong.tap})`,
+      `Học sinh: ${{ TB: 'lực học trung bình – câu hỏi rõ, nhiều câu nhận biết, thông hiểu', KHA: 'lực học khá', GIOI: 'lực học khá, giỏi – tăng câu vận dụng' }[o.muc] || o.muc}`,
+      '- Bài giảng: đủ các mục của bài theo SGK; mỗi mục có kiến thức, ví dụ kèm lời giải, lưu ý hay sai; nhắc lại 4–8 kiến thức cần nhớ.',
+      `- Phần I trắc nghiệm: ${o.n1} câu (khoảng 40% NB, 40% TH, 20% VD)`, `- Phần II đúng – sai: ${o.n2} câu, mỗi câu 4 ý`, `- Phần III trả lời ngắn: ${o.n3} câu`,
+      o.rieng ? `Yêu cầu riêng: ${o.rieng}` : '',
+      cu.length ? `Bài này đã có trên web – soạn câu hỏi MỚI, khác các câu đã có:\n${cu.map(x => '- ' + x).join('\n')}` : '',
+      `Trả về đúng một khối ${BT}json theo mẫu trong hướng dẫn ("loai":"bai_hoc", "lop":${o.lop}, "bai":${b.so}, "ten_bai":"${b.ten}").`].filter(Boolean).join('\n');
+  }
+
   const SUA = (loai, loi) => S`Câu trả lời vừa rồi chưa đúng mẫu hoặc còn lỗi. Giữ nguyên nội dung vừa soạn (không đổi văn bản, số liệu), sửa các lỗi sau rồi viết lại TOÀN BỘ thành MỘT khối ${BT}json đúng mẫu:
 ${loi && loi.length ? loi.map(x => '- ' + x).join('\n') : '- Sai tên trường, thiếu phần chấm điểm hoặc thiếu dấu \\\\ của công thức.'}
 
 ${DAU_RA}
 MẪU:
-${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
+${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'bai_hoc' ? MAU_BAIHOC : MAU_TOAN}`;
 
   function lenhVan(o, k) {
     const ma = o.tien + String(o.so + k).padStart(2, '0');
@@ -4359,7 +4744,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
         <li><b>Gửi lệnh</b> trong Gem, bấm nút sao chép của khối ${BT}json.</li>
         <li><b>Nhập dữ liệu:</b> dán vào đây → web tự sửa lỗi hay gặp, kiểm điểm, cho xem trước và in PDF → <i>Lưu trên máy này</i>.</li>
         <li><b>Đưa lên hệ thống cho mọi học sinh:</b> bấm <i>Tải tệp chuẩn</i>, chép tệp vào thư mục <code>nhap/</code> của dự án rồi chạy <code>python3 tools/nhap-du-lieu.py</code> (hoặc nhắn Claude "nhập dữ liệu mới"), đẩy lên GitHub.</li></ol></section>
-      <div class="two"><a class="card link-card" href="#/xuong/prompt"><span class="big">🧾</span><b>Menu prompt</b><span>Ngữ văn vào 10 · Toán luyện đề theo bài · Phiếu ôn tập 90 phút</span></a>
+      <div class="two"><a class="card link-card" href="#/xuong/prompt"><span class="big">🧾</span><b>Menu prompt</b><span>Ngữ văn vào 10 · Toán luyện đề theo bài · Phiếu ôn tập 90 phút · Bài giảng lớp 9–12</span></a>
         <a class="card link-card" href="#/xuong/nhap"><span class="big">📥</span><b>Nhập dữ liệu</b><span>Dán câu trả lời AI hoặc kéo tệp .json</span></a></div>
       <h2 class="sec">Đã lưu trên máy này (${loc.length})</h2>
       ${loc.length ? `<div class="card"><ul class="xw-list">${loc.map(x => { const r = NhapDL.check(x.json); return `<li><b>${esc(r.ten || x.key)}</b> <span class="muted">${new Date(x.luc).toLocaleString('vi-VN')}</span>
@@ -4377,7 +4762,8 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
       <div class="card xw-form">
         <div class="opts-row"><label class="tog"><input type="radio" name="xLoai" value="van" ${st.loai === 'van' ? 'checked' : ''}> 📖 Ngữ văn vào 10 – đề luyện</label>
           <label class="tog"><input type="radio" name="xLoai" value="toan" ${st.loai === 'toan' ? 'checked' : ''}> 📐 Toán vào 10 – đề luyện theo bài</label>
-          <label class="tog"><input type="radio" name="xLoai" value="ontap" ${st.loai === 'ontap' ? 'checked' : ''}> 🗂️ Toán vào 10 – phiếu ôn tập 90 phút theo chủ đề</label></div>
+          <label class="tog"><input type="radio" name="xLoai" value="ontap" ${st.loai === 'ontap' ? 'checked' : ''}> 🗂️ Toán vào 10 – phiếu ôn tập 90 phút theo chủ đề</label>
+          <label class="tog"><input type="radio" name="xLoai" value="baihoc" ${st.loai === 'baihoc' ? 'checked' : ''}> 📚 Bài giảng – luyện tập online lớp 9–12 (SGK KNTT)</label></div>
         <div class="opts-row"><label class="tog"><input type="radio" name="xNoi" value="gem" ${st.noi === 'gem' ? 'checked' : ''}> Gem có gắn notebook (lệnh ngắn)</label>
           <label class="tog"><input type="radio" name="xNoi" value="nb" ${st.noi === 'nb' ? 'checked' : ''}> Dán thẳng vào NotebookLM (lệnh đầy đủ)</label></div>
         <div class="xw-grid" id="xVan">
@@ -4405,33 +4791,55 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
           <label class="xw-wide">Bài đã dùng thêm (ngoài các phiếu đã nhập vào web – mỗi dòng một bài: nguồn – tóm tắt) <textarea id="oThem" rows="3" class="xw-ta"></textarea></label>
           <label class="xw-wide">Tài liệu trong notebook để xoay vòng (tuỳ chọn, mỗi dòng một tên; mỗi đợt ưu tiên một nhóm khác) <textarea id="oTl" rows="3" class="xw-ta">${esc(U.get('xuong:tailieu', ''))}</textarea></label>
           <p class="muted" id="oDung"></p></div>
+        <div id="xBaiHoc">
+          <div class="xw-grid">
+            <label>Lớp <select id="bLop">${BaiHoc.LOP.map(l => `<option value="${l}" ${String(st.bhLop || 10) === String(l) ? 'selected' : ''}>Toán ${l}</option>`).join('')}</select></label>
+            <label class="xw-wide2">Bài (theo mục lục SGK) <select id="bBai"></select></label>
+            <label>Số bài liên tiếp (mỗi bài một lệnh) <input id="bN" type="number" min="1" max="10" value="${st.bN || 1}"></label>
+            <label>Học sinh <select id="bMuc"><option value="TB" ${st.bMuc === 'TB' ? 'selected' : ''}>Trung bình</option><option value="KHA" ${!st.bMuc || st.bMuc === 'KHA' ? 'selected' : ''}>Khá</option><option value="GIOI" ${st.bMuc === 'GIOI' ? 'selected' : ''}>Khá, giỏi</option></select></label></div>
+          <div class="xw-grid xw-3">
+            <label>Trắc nghiệm: số câu <input id="bN1" type="number" min="4" max="20" value="${st.bN1 || 8}"></label>
+            <label>Đúng – sai: số câu <input id="bN2" type="number" min="1" max="6" value="${st.bN2 || 2}"></label>
+            <label>Trả lời ngắn: số câu <input id="bN3" type="number" min="1" max="10" value="${st.bN3 || 4}"></label></div>
+          <p class="muted" id="bCo"></p></div>
         <label class="xw-wide">Cấu trúc theo (tên đề trong notebook, bỏ trống nếu theo cấu trúc chung) <input id="xTheo" value="${esc(st.theo)}"></label>
         <label class="xw-wide">Yêu cầu riêng (lỗi học sinh hay mắc, chủ đề muốn có…) <input id="xRieng" value="${esc(st.rieng)}"></label>
       </div><div id="xOut"></div>`);
     const draw = () => {
       const loai = document.querySelector('[name=xLoai]:checked').value, noi = document.querySelector('[name=xNoi]:checked').value;
-      $i('xVan').hidden = loai !== 'van'; $i('xToan').hidden = loai !== 'toan'; $i('xOnTap').hidden = loai !== 'ontap';
-      $i('xTheo').parentElement.hidden = loai === 'ontap';
+      $i('xVan').hidden = loai !== 'van'; $i('xToan').hidden = loai !== 'toan'; $i('xOnTap').hidden = loai !== 'ontap'; $i('xBaiHoc').hidden = loai !== 'baihoc';
+      $i('xTheo').parentElement.hidden = loai === 'ontap' || loai === 'baihoc';
+      const bLop = $i('bLop').value;
+      if ($i('bLop').dataset.last !== bLop) {
+        const want = $i('bLop').dataset.last ? '' : String(st.bhBai || '');
+        $i('bBai').innerHTML = BaiHoc.all(+bLop).map(b => `<option value="${b.so}" ${String(b.so) === want ? 'selected' : ''}>Bài ${b.so}. ${esc(b.ten)}${BaiHoc.get(+bLop, b.so) ? ' ✓' : ''}</option>`).join('');
+        $i('bLop').dataset.last = bLop;
+      }
       const oBai = $i('oBai').value; if ($i('oBai').dataset.last !== oBai) { $i('oDot').value = OnTap.nextDot(oBai); $i('oThem').value = U.get('xuong:them:' + oBai, ''); $i('oBai').dataset.last = oBai; }
       const o = { loai, noi, tien: $i('xTien').value.trim() || 'V', so: loai === 'van' ? +$i('xSo').value || 0 : +$i('xSoT').value || 1, n: Math.min(+$i('xN').value || 1, 20), muc: $i('xMuc').value,
         viet: $i('xViet').value, ngl: $i('xNgl').value, theo: $i('xTheo').value.trim(), rieng: $i('xRieng').value.trim(),
         bai: $i('xBai').value, moi: Math.min(+$i('xMoi').value || 5, 10), lan: Math.min(+$i('xLan').value || 1, 10), mucT: $i('xMucT').value,
         oBai, oN: Math.min(+$i('oN').value || 1, 5), oDd: $i('oDd').value, oGoc: $i('oGoc').value,
+        bhLop: bLop, bhBai: $i('bBai').value, bN: Math.min(+$i('bN').value || 1, 10), bMuc: $i('bMuc').value,
+        bN1: Math.min(Math.max(+$i('bN1').value || 8, 4), 20), bN2: Math.min(+$i('bN2').value || 2, 6), bN3: Math.min(+$i('bN3').value || 4, 10),
         n1: +$i('oN1').value || 4, n2: +$i('oN2').value || 4, n3: +$i('oN3').value || 2, p1: +$i('oP1').value || 25, p2: +$i('oP2').value || 35, p3: +$i('oP3').value || 25 };
       U.set('xuong:prompt', o); U.set('xuong:tailieu', $i('oTl').value); U.set('xuong:them:' + oBai, $i('oThem').value);
       const soat = 90 - o.p1 - o.p2 - o.p3;
       $i('oTong').textContent = `Tổng: ${o.n1 + o.n2 + o.n3} bài · ${o.p1 + o.p2 + o.p3} phút làm + ${soat} phút soát = 90 phút${soat < 0 || soat > 15 ? ' ⚠️ chỉnh lại để thời gian soát từ 0 đến 15 phút' : ''}.`;
       $i('oDung').textContent = `Đã dùng ở các phiếu ${OnTap.TEN[oBai] ? 'của chủ đề này' : ''} trong web: ${OnTap.daDung(oBai).length} bài – lệnh tự đưa vào danh sách "Đã dùng" để đợt mới không lặp.`;
-      const hd = loai === 'van' ? HD_VAN : loai === 'ontap' ? HD_ONTAP(o.oDd === 'md') : HD_TOAN;
+      const coBH = BaiHoc.all(+bLop).filter(b => BaiHoc.get(+bLop, b.so));
+      $i('bCo').textContent = `Toán ${bLop}: ${coBH.length}/${BaiHoc.all(+bLop).length} bài đã có bài giảng trên web (đánh dấu ✓). Bài đã có thì lệnh tự liệt kê câu cũ để AI soạn câu mới; nhập bản mới sẽ thay bản cũ.`;
+      const hd = loai === 'van' ? HD_VAN : loai === 'ontap' ? HD_ONTAP(o.oDd === 'md') : loai === 'baihoc' ? HD_BAIHOC : HD_TOAN;
       const ls = loai === 'van' ? Array.from({ length: o.n }, (_, k) => lenhVan(o, k))
         : loai === 'ontap' ? Array.from({ length: o.oN }, (_, k) => lenhOnTap({ bai: oBai, dot: +$i('oDot').value || 1, dd: o.oDd, goc: o.oGoc, n1: o.n1, n2: o.n2, n3: o.n3, p1: o.p1, p2: o.p2, p3: o.p3, rieng: o.rieng, them: $i('oThem').value, tl: $i('oTl').value }, k))
+        : loai === 'baihoc' ? Array.from({ length: o.bN }, (_, k) => lenhBaiHoc({ lop: bLop, bai: o.bhBai, muc: o.bMuc, n1: o.bN1, n2: o.bN2, n3: o.bN3, rieng: o.rieng }, k)).filter(Boolean)
         : Array.from({ length: o.lan }, (_, k) => lenhToan({ ...o, muc: o.mucT }, k));
       const full = l => noi === 'nb' ? `${hd}\n\n=== LỆNH ===\n${l}` : l;
       $i('xOut').innerHTML = (noi === 'gem' ? box('xHd', '① Hướng dẫn Gem (dán một lần vào mục Hướng dẫn của Gem)', hd, 'Mục Kiến thức của Gem: thêm notebook NotebookLM chứa tài liệu.') : '')
-        + `<div class="card xw-box"><div class="xw-h"><b>${noi === 'gem' ? '②' : '①'} Lệnh ${loai === 'ontap' ? 'từng phiếu' : 'từng đề'} (${ls.length})</b><button class="btn" type="button" id="xAll">⬇️ Tải tất cả lệnh (.txt)</button></div>
+        + `<div class="card xw-box"><div class="xw-h"><b>${noi === 'gem' ? '②' : '①'} Lệnh ${loai === 'ontap' ? 'từng phiếu' : loai === 'baihoc' ? 'từng bài' : 'từng đề'} (${ls.length})</b><button class="btn" type="button" id="xAll">⬇️ Tải tất cả lệnh (.txt)</button></div>
           <p class="muted">${noi === 'gem' ? 'Mỗi lệnh gửi trong một cuộc trò chuyện mới của Gem.' : 'NotebookLM có thể cắt câu trả lời dài: nếu JSON bị cụt, dùng Gem hoặc giảm số đề mỗi lệnh.'}</p>
           ${ls.map((l, i) => `<div class="xw-h"><span>Lệnh ${i + 1}</span><button class="btn ghost" type="button" data-copy="xL${i}">📋 Chép lệnh ${i + 1}</button></div><textarea id="xL${i}" class="xw-ta" readonly rows="${noi === 'nb' ? 6 : 5}">${esc(full(l))}</textarea>`).join('')}</div>`
-        + box('xSua', `${noi === 'gem' ? '③' : '②'} Lệnh sửa (khi AI trả về sai mẫu, thiếu chấm điểm)`, SUA(loai === 'van' ? 'de_van' : loai === 'ontap' ? 'on_tap_toan' : 'luyen_de_toan'), 'Trang Nhập dữ liệu tự tạo lệnh sửa kèm danh sách lỗi cụ thể (cả bài bị trùng đợt trước).');
+        + box('xSua', `${noi === 'gem' ? '③' : '②'} Lệnh sửa (khi AI trả về sai mẫu, thiếu chấm điểm)`, SUA(loai === 'van' ? 'de_van' : loai === 'ontap' ? 'on_tap_toan' : loai === 'baihoc' ? 'bai_hoc' : 'luyen_de_toan'), 'Trang Nhập dữ liệu tự tạo lệnh sửa kèm danh sách lỗi cụ thể (cả bài bị trùng đợt trước).');
       bindCopy($i('xOut'));
       $i('xAll').addEventListener('click', () => download(`lenh-${loai}-${new Date().toISOString().slice(0, 10)}.txt`, ls.map(full).join('\n=====\n'), 'text/plain'));
     };
@@ -4443,6 +4851,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
   function previewHTML(j, r) {
     if (r.loai === 'de_van') return Van.sheetHTML(NhapDL.vanEntry(j, 'xem'), { muc: 'day' });
     if (r.loai === 'on_tap_toan') return OnTap.sheetHTML(NhapDL.onTapEntry(j, 'xem'), { key: true });
+    if (r.loai === 'bai_hoc') return BaiHoc.previewHTML(NhapDL.bhEntry(j, 'xem'));
     const t = Topics.get(r.id) || { id: r.id, bai: 'Bài', title: '' };
     return LuyenDe.sheetHTML(t, { key: true }, null, { phut: 12, de: NhapDL.toanItems(j, 'xem') });
   }
@@ -4460,21 +4869,21 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
         return `<div class="card xw-res ${r.errs.length ? 'bad' : 'ok'}"><h3>${esc(s.name)} · ${esc(r.ten || 'không rõ loại')}</h3>
           <p class="chips"><span class="chip ${r.errs.length ? 'warnc' : 'ok'}">${r.errs.length ? `${r.errs.length} lỗi` : 'Đúng mẫu ✓'}</span>${r.warns.length ? `<span class="chip">${r.warns.length} lưu ý</span>` : ''}${res.notes.map(n => `<span class="chip">${esc(n)}</span>`).join('')}</p>
           ${r.errs.length ? `<ul class="xw-err">${r.errs.map(x => `<li>✗ ${esc(x)}</li>`).join('')}</ul>` : ''}${r.warns.length ? `<ul class="xw-warn">${r.warns.map(x => `<li>! ${esc(x)}</li>`).join('')}</ul>` : ''}
-          <div class="row">${r.errs.length ? '' : `<button class="btn primary" type="button" data-save="${i}">💾 Lưu trên máy này</button><button class="btn" type="button" data-dl="${i}">⬇️ Tải tệp chuẩn (.json)</button><button class="btn" type="button" data-print="${i}">🖨️ In / Lưu PDF</button>${r.loai === 'on_tap_toan' ? `<button class="btn" type="button" data-md="${i}">⬇️ Tải Markdown (.md)</button>` : ''}`}
+          <div class="row">${r.errs.length ? '' : `<button class="btn primary" type="button" data-save="${i}">💾 Lưu trên máy này</button><button class="btn" type="button" data-dl="${i}">⬇️ Tải tệp chuẩn (.json)</button>${r.loai === 'bai_hoc' ? '' : `<button class="btn" type="button" data-print="${i}">🖨️ In / Lưu PDF</button>`}${r.loai === 'on_tap_toan' ? `<button class="btn" type="button" data-md="${i}">⬇️ Tải Markdown (.md)</button>` : ''}`}
             ${r.errs.length || r.warns.length ? `<button class="btn" type="button" data-fix="${i}">📋 Chép lệnh sửa</button>` : ''}</div>
           ${r.errs.length ? '' : `<details class="xw-pre" open><summary>Xem trước</summary><div class="paper-wrap" id="nPre${i}"></div></details>`}</div>`;
       }).join('');
       srcs.forEach((s, i) => { if (s.r && !s.r.errs.length) $i(`nPre${i}`).innerHTML = previewHTML(s.res.data, s.r); });
       const S_ = i => srcs[+i];
       $i('nOut').querySelectorAll('[data-fix]').forEach(b => b.addEventListener('click', async () => {
-        const s = S_(b.dataset.fix), loai = s.r ? s.r.loai : (/doc_hieu|de_van/.test(s.text) ? 'de_van' : /on_tap_toan/.test(s.text) ? 'on_tap_toan' : 'luyen_de_toan');
+        const s = S_(b.dataset.fix), loai = s.r ? s.r.loai : (/doc_hieu|de_van/.test(s.text) ? 'de_van' : /on_tap_toan/.test(s.text) ? 'on_tap_toan' : /bai_hoc/.test(s.text) ? 'bai_hoc' : 'luyen_de_toan');
         const ok = await U.copy(SUA(loai, s.r ? [...s.r.errs, ...s.r.warns] : ['JSON sai cú pháp, không đọc được']));
         U.toast(ok ? 'Đã chép lệnh sửa. Dán vào đúng cuộc trò chuyện với AI vừa rồi.' : 'Không chép được.');
       }));
       $i('nOut').querySelectorAll('[data-save]').forEach(b => b.addEventListener('click', () => {
         const s = S_(b.dataset.save); NhapDL.saveLocal(s.res.data);
         U.toast('Đã lưu trên máy này. Đang mở…');
-        setTimeout(() => { location.hash = s.r.loai === 'de_van' ? `#/van-10/de/${encodeURIComponent(s.res.data.ma_de)}` : s.r.loai === 'on_tap_toan' ? `#/on-tap/${encodeURIComponent(s.res.data.ma)}` : `#/cd/${s.r.id}/de`; location.reload(); }, 600);
+        setTimeout(() => { location.hash = s.r.loai === 'bai_hoc' ? `#/bai-hoc/${s.r.lop}/${s.r.bai}` : s.r.loai === 'de_van' ? `#/van-10/de/${encodeURIComponent(s.res.data.ma_de)}` : s.r.loai === 'on_tap_toan' ? `#/on-tap/${encodeURIComponent(s.res.data.ma)}` : `#/cd/${s.r.id}/de`; location.reload(); }, 600);
       }));
       $i('nOut').querySelectorAll('[data-md]').forEach(b => b.addEventListener('click', () => { const s = S_(b.dataset.md); download(`${s.res.data.ma}.md`, OnTap.toMd(NhapDL.onTapEntry(s.res.data, 'xem')), 'text/markdown'); }));
       $i('nOut').querySelectorAll('[data-dl]').forEach(b => b.addEventListener('click', () => { const s = S_(b.dataset.dl); download(NhapDL.fileName(s.res.data), JSON.stringify(s.res.data, null, 1)); }));
@@ -4499,7 +4908,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : MAU_TOAN}`;
     if (parts[1] === 'prompt') promptPage(); else if (parts[1] === 'nhap') nhapPage(); else home();
     return true;
   }
-  return { route, HD_VAN, HD_TOAN, HD_ONTAP, MAU_VAN, MAU_TOAN, MAU_ONTAP, MAU_MD_ONTAP, SUA, lenhVan, lenhToan, lenhOnTap };
+  return { route, HD_VAN, HD_TOAN, HD_ONTAP, HD_BAIHOC, MAU_VAN, MAU_TOAN, MAU_ONTAP, MAU_MD_ONTAP, MAU_BAIHOC, SUA, lenhVan, lenhToan, lenhOnTap, lenhBaiHoc };
 })();
 
 </script>
@@ -6911,8 +7320,1079 @@ LuyenDe.add('he-phuong-trinh-thuc-te', {
 })();
 
 </script>
+<!-- BÀI GIẢNG – LUYỆN TẬP ONLINE lớp 9–12: mục lục SGK Toán Kết nối tri thức (nội dung từng bài nhập qua Xưởng dữ liệu). -->
+<script>/* data/bai-hoc/muc-luc-kntt.js */
+/* =====================================================================
+   MỤC LỤC SGK TOÁN – BỘ "KẾT NỐI TRI THỨC VỚI CUỘC SỐNG" (NXB Giáo dục Việt Nam, chương trình GDPT 2018)
+   Dùng cho menu Bài giảng – Luyện tập online (assets/js/baihoc.js). Chỉ ghi tên chương, tên bài – không ghi số trang.
+   Đối chiếu (09/11/2026): mục lục Toán 9 trên loigiaihay.com (Tự luyện trắc nghiệm Toán 9 KNTT); tên chương Toán 10, Toán 12
+   trên 2048.vn; tên bài Toán 11 qua các trang lý thuyết từng bài. Sửa tên bài thì sửa ở đây, mọi trang tự đổi theo.
+   Cấu trúc: BaiHoc.mucLuc(lớp, tên sách, [[tập, số chương, tên chương, [[số bài, tên bài], …]], …])
+   ===================================================================== */
+BaiHoc.mucLuc(9, 'Toán 9 – Kết nối tri thức với cuộc sống', [
+  [1, 'I', 'Phương trình và hệ hai phương trình bậc nhất hai ẩn', [
+    [1, 'Khái niệm phương trình và hệ hai phương trình bậc nhất hai ẩn'],
+    [2, 'Giải hệ hai phương trình bậc nhất hai ẩn'],
+    [3, 'Giải bài toán bằng cách lập hệ phương trình']]],
+  [1, 'II', 'Phương trình và bất phương trình bậc nhất một ẩn', [
+    [4, 'Phương trình quy về phương trình bậc nhất một ẩn'],
+    [5, 'Bất đẳng thức và tính chất'],
+    [6, 'Bất phương trình bậc nhất một ẩn']]],
+  [1, 'III', 'Căn bậc hai và căn bậc ba', [
+    [7, 'Căn bậc hai và căn thức bậc hai'],
+    [8, 'Khai căn bậc hai với phép nhân và phép chia'],
+    [9, 'Biến đổi đơn giản và rút gọn biểu thức chứa căn thức bậc hai'],
+    [10, 'Căn bậc ba và căn thức bậc ba']]],
+  [1, 'IV', 'Hệ thức lượng trong tam giác vuông', [
+    [11, 'Tỉ số lượng giác của góc nhọn'],
+    [12, 'Một số hệ thức giữa cạnh, góc trong tam giác vuông và ứng dụng']]],
+  [1, 'V', 'Đường tròn', [
+    [13, 'Mở đầu về đường tròn'],
+    [14, 'Cung và dây của một đường tròn'],
+    [15, 'Độ dài của cung tròn. Diện tích hình quạt tròn và hình vành khuyên'],
+    [16, 'Vị trí tương đối của đường thẳng và đường tròn'],
+    [17, 'Vị trí tương đối của hai đường tròn']]],
+  [2, 'VI', 'Hàm số y = ax² (a ≠ 0). Phương trình bậc hai một ẩn', [
+    [18, 'Hàm số y = ax² (a ≠ 0)'],
+    [19, 'Phương trình bậc hai một ẩn'],
+    [20, 'Định lí Viète và ứng dụng'],
+    [21, 'Giải bài toán bằng cách lập phương trình']]],
+  [2, 'VII', 'Tần số và tần số tương đối', [
+    [22, 'Bảng tần số và biểu đồ tần số'],
+    [23, 'Bảng tần số tương đối và biểu đồ tần số tương đối'],
+    [24, 'Bảng tần số, tần số tương đối ghép nhóm và biểu đồ']]],
+  [2, 'VIII', 'Xác suất của biến cố trong một số mô hình xác suất đơn giản', [
+    [25, 'Phép thử ngẫu nhiên và không gian mẫu'],
+    [26, 'Xác suất của biến cố liên quan tới phép thử']]],
+  [2, 'IX', 'Đường tròn ngoại tiếp và đường tròn nội tiếp', [
+    [27, 'Góc nội tiếp'],
+    [28, 'Đường tròn ngoại tiếp và đường tròn nội tiếp của một tam giác'],
+    [29, 'Tứ giác nội tiếp'],
+    [30, 'Đa giác đều']]],
+  [2, 'X', 'Một số hình khối trong thực tiễn', [
+    [31, 'Hình trụ và hình nón'],
+    [32, 'Hình cầu']]],
+]);
+
+BaiHoc.mucLuc(10, 'Toán 10 – Kết nối tri thức với cuộc sống', [
+  [1, 'I', 'Mệnh đề và tập hợp', [
+    [1, 'Mệnh đề'],
+    [2, 'Tập hợp và các phép toán trên tập hợp']]],
+  [1, 'II', 'Bất phương trình và hệ bất phương trình bậc nhất hai ẩn', [
+    [3, 'Bất phương trình bậc nhất hai ẩn'],
+    [4, 'Hệ bất phương trình bậc nhất hai ẩn']]],
+  [1, 'III', 'Hệ thức lượng trong tam giác', [
+    [5, 'Giá trị lượng giác của một góc từ 0° đến 180°'],
+    [6, 'Hệ thức lượng trong tam giác']]],
+  [1, 'IV', 'Vectơ', [
+    [7, 'Các khái niệm mở đầu'],
+    [8, 'Tổng và hiệu của hai vectơ'],
+    [9, 'Tích của một vectơ với một số'],
+    [10, 'Vectơ trong mặt phẳng toạ độ'],
+    [11, 'Tích vô hướng của hai vectơ']]],
+  [1, 'V', 'Các số đặc trưng của mẫu số liệu không ghép nhóm', [
+    [12, 'Số gần đúng và sai số'],
+    [13, 'Các số đặc trưng đo xu thế trung tâm'],
+    [14, 'Các số đặc trưng đo độ phân tán']]],
+  [2, 'VI', 'Hàm số, đồ thị và ứng dụng', [
+    [15, 'Hàm số'],
+    [16, 'Hàm số bậc hai'],
+    [17, 'Dấu của tam thức bậc hai'],
+    [18, 'Phương trình quy về phương trình bậc hai']]],
+  [2, 'VII', 'Phương pháp toạ độ trong mặt phẳng', [
+    [19, 'Phương trình đường thẳng'],
+    [20, 'Vị trí tương đối giữa hai đường thẳng. Góc và khoảng cách'],
+    [21, 'Đường tròn trong mặt phẳng toạ độ'],
+    [22, 'Ba đường conic']]],
+  [2, 'VIII', 'Đại số tổ hợp', [
+    [23, 'Quy tắc đếm'],
+    [24, 'Hoán vị, chỉnh hợp và tổ hợp'],
+    [25, 'Nhị thức Newton']]],
+  [2, 'IX', 'Tính xác suất theo định nghĩa cổ điển', [
+    [26, 'Biến cố và định nghĩa cổ điển của xác suất'],
+    [27, 'Thực hành tính xác suất theo định nghĩa cổ điển']]],
+]);
+
+BaiHoc.mucLuc(11, 'Toán 11 – Kết nối tri thức với cuộc sống', [
+  [1, 'I', 'Hàm số lượng giác và phương trình lượng giác', [
+    [1, 'Giá trị lượng giác của góc lượng giác'],
+    [2, 'Công thức lượng giác'],
+    [3, 'Hàm số lượng giác'],
+    [4, 'Phương trình lượng giác cơ bản']]],
+  [1, 'II', 'Dãy số. Cấp số cộng và cấp số nhân', [
+    [5, 'Dãy số'],
+    [6, 'Cấp số cộng'],
+    [7, 'Cấp số nhân']]],
+  [1, 'III', 'Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm', [
+    [8, 'Mẫu số liệu ghép nhóm'],
+    [9, 'Các số đặc trưng đo xu thế trung tâm']]],
+  [1, 'IV', 'Quan hệ song song trong không gian', [
+    [10, 'Đường thẳng và mặt phẳng trong không gian'],
+    [11, 'Hai đường thẳng song song'],
+    [12, 'Đường thẳng và mặt phẳng song song'],
+    [13, 'Hai mặt phẳng song song'],
+    [14, 'Phép chiếu song song']]],
+  [1, 'V', 'Giới hạn. Hàm số liên tục', [
+    [15, 'Giới hạn của dãy số'],
+    [16, 'Giới hạn của hàm số'],
+    [17, 'Hàm số liên tục']]],
+  [2, 'VI', 'Hàm số mũ và hàm số lôgarit', [
+    [18, 'Luỹ thừa với số mũ thực'],
+    [19, 'Lôgarit'],
+    [20, 'Hàm số mũ và hàm số lôgarit'],
+    [21, 'Phương trình, bất phương trình mũ và lôgarit']]],
+  [2, 'VII', 'Quan hệ vuông góc trong không gian', [
+    [22, 'Hai đường thẳng vuông góc'],
+    [23, 'Đường thẳng vuông góc với mặt phẳng'],
+    [24, 'Phép chiếu vuông góc. Góc giữa đường thẳng và mặt phẳng'],
+    [25, 'Hai mặt phẳng vuông góc'],
+    [26, 'Khoảng cách'],
+    [27, 'Thể tích']]],
+  [2, 'VIII', 'Các quy tắc tính xác suất', [
+    [28, 'Biến cố hợp, biến cố giao, biến cố độc lập'],
+    [29, 'Công thức cộng xác suất'],
+    [30, 'Công thức nhân xác suất cho hai biến cố độc lập']]],
+  [2, 'IX', 'Đạo hàm', [
+    [31, 'Định nghĩa và ý nghĩa của đạo hàm'],
+    [32, 'Các quy tắc tính đạo hàm'],
+    [33, 'Đạo hàm cấp hai']]],
+]);
+
+BaiHoc.mucLuc(12, 'Toán 12 – Kết nối tri thức với cuộc sống', [
+  [1, 'I', 'Ứng dụng đạo hàm để khảo sát và vẽ đồ thị của hàm số', [
+    [1, 'Tính đơn điệu và cực trị của hàm số'],
+    [2, 'Giá trị lớn nhất và giá trị nhỏ nhất của hàm số'],
+    [3, 'Đường tiệm cận của đồ thị hàm số'],
+    [4, 'Khảo sát sự biến thiên và vẽ đồ thị của hàm số'],
+    [5, 'Ứng dụng đạo hàm để giải quyết một số vấn đề liên quan đến thực tiễn']]],
+  [1, 'II', 'Vectơ và hệ trục toạ độ trong không gian', [
+    [6, 'Vectơ trong không gian'],
+    [7, 'Hệ trục toạ độ trong không gian'],
+    [8, 'Biểu thức toạ độ của các phép toán vectơ']]],
+  [1, 'III', 'Các số đặc trưng đo mức độ phân tán của mẫu số liệu ghép nhóm', [
+    [9, 'Khoảng biến thiên và khoảng tứ phân vị'],
+    [10, 'Phương sai và độ lệch chuẩn']]],
+  [2, 'IV', 'Nguyên hàm và tích phân', [
+    [11, 'Nguyên hàm'],
+    [12, 'Tích phân'],
+    [13, 'Ứng dụng hình học của tích phân']]],
+  [2, 'V', 'Phương pháp toạ độ trong không gian', [
+    [14, 'Phương trình mặt phẳng'],
+    [15, 'Phương trình đường thẳng trong không gian'],
+    [16, 'Công thức tính góc trong không gian'],
+    [17, 'Phương trình mặt cầu']]],
+  [2, 'VI', 'Xác suất có điều kiện', [
+    [18, 'Xác suất có điều kiện'],
+    [19, 'Công thức xác suất toàn phần và công thức Bayes']]],
+]);
+
+</script>
 <!-- DỮ LIỆU NHẬP TỪ AI (Xưởng dữ liệu): tools/nhap-du-lieu.py tự thêm dòng vào giữa hai dấu mốc. -->
 <!-- nhap:dau -->
+<script>/* data/nhap/bai-hoc-l09-b20.js */
+/* Nhập từ AI qua Xưởng dữ liệu: nhap/bai-hoc-l09-b20.json – Bài giảng – luyện tập Toán 9 – Bài 20. Định lí Viète và ứng dụng (11 câu). Sửa nội dung thì sửa tệp trong nhap/ rồi chạy lại tools/nhap-du-lieu.py. */
+NhapDL.add({
+ "loai": "bai_hoc",
+ "lop": 9,
+ "bai": 20,
+ "ten_bai": "Định lí Viète và ứng dụng",
+ "mau": true,
+ "nguon": "Soạn theo SGK Toán 9 Kết nối tri thức, tập 2 – Bài 20; ví dụ và câu hỏi tự soạn",
+ "muc_tieu": [
+  "Viết được tổng và tích hai nghiệm của phương trình bậc hai theo hệ số",
+  "Nhẩm được nghiệm khi $a + b + c = 0$ hoặc $a - b + c = 0$",
+  "Tìm được hai số khi biết tổng và tích",
+  "Tính được biểu thức đối xứng của hai nghiệm mà không cần giải phương trình"
+ ],
+ "bai_giang": [
+  {
+   "tieu_de": "1. Định lí Viète",
+   "noi_dung": "Nếu $x_1, x_2$ là hai nghiệm của phương trình $ax^2 + bx + c = 0$ $(a \\ne 0)$ thì\n- Tổng hai nghiệm: $S = x_1 + x_2 = -\\dfrac{b}{a}$\n- Tích hai nghiệm: $P = x_1 x_2 = \\dfrac{c}{a}$\nMột số biểu thức đối xứng hay dùng: $x_1^2 + x_2^2 = S^2 - 2P$; $\\dfrac{1}{x_1} + \\dfrac{1}{x_2} = \\dfrac{S}{P}$ (khi $P \\ne 0$).",
+   "vi_du": [
+    {
+     "de": "Không giải phương trình $x^2 - 5x + 3 = 0$, tính $x_1 + x_2$, $x_1 x_2$ và $x_1^2 + x_2^2$.",
+     "loi_giai": [
+      "$\\Delta = (-5)^2 - 4 \\cdot 1 \\cdot 3 = 13 \\gt 0$ nên phương trình có hai nghiệm phân biệt.",
+      "Theo định lí Viète: $S = x_1 + x_2 = 5$, $P = x_1 x_2 = 3$.",
+      "$x_1^2 + x_2^2 = S^2 - 2P = 25 - 6 = 19$."
+     ],
+     "dap_so": "$S = 5$, $P = 3$, $x_1^2 + x_2^2 = 19$"
+    }
+   ],
+   "luu_y": "Phải kiểm tra phương trình có nghiệm ($\\Delta \\ge 0$) trước khi dùng định lí Viète. Hay nhầm dấu: tổng là $-\\dfrac{b}{a}$, không phải $\\dfrac{b}{a}$."
+  },
+  {
+   "tieu_de": "2. Áp dụng định lí Viète để tính nhẩm nghiệm",
+   "noi_dung": "- Nếu $a + b + c = 0$ thì phương trình có hai nghiệm $x_1 = 1$, $x_2 = \\dfrac{c}{a}$.\n- Nếu $a - b + c = 0$ thì phương trình có hai nghiệm $x_1 = -1$, $x_2 = -\\dfrac{c}{a}$.",
+   "vi_du": [
+    {
+     "de": "Tính nhẩm nghiệm của phương trình $3x^2 - 7x + 4 = 0$.",
+     "loi_giai": [
+      "Ta có $a + b + c = 3 - 7 + 4 = 0$.",
+      "Vậy phương trình có hai nghiệm $x_1 = 1$, $x_2 = \\dfrac{c}{a} = \\dfrac{4}{3}$."
+     ],
+     "dap_so": "$x_1 = 1$, $x_2 = \\dfrac{4}{3}$"
+    },
+    {
+     "de": "Tính nhẩm nghiệm của phương trình $2x^2 + 5x + 3 = 0$.",
+     "loi_giai": [
+      "Ta có $a - b + c = 2 - 5 + 3 = 0$.",
+      "Vậy phương trình có hai nghiệm $x_1 = -1$, $x_2 = -\\dfrac{c}{a} = -\\dfrac{3}{2}$."
+     ],
+     "dap_so": "$x_1 = -1$, $x_2 = -\\dfrac{3}{2}$"
+    }
+   ],
+   "luu_y": "Với $a - b + c = 0$, nghiệm thứ hai là $-\\dfrac{c}{a}$ (có dấu trừ)."
+  },
+  {
+   "tieu_de": "3. Tìm hai số biết tổng và tích của chúng",
+   "noi_dung": "Nếu hai số có tổng bằng $S$ và tích bằng $P$ thì hai số đó là hai nghiệm của phương trình $x^2 - Sx + P = 0$.\nĐiều kiện để có hai số đó: $S^2 - 4P \\ge 0$.",
+   "vi_du": [
+    {
+     "de": "Tìm hai số $u$, $v$ biết $u + v = 7$ và $uv = 12$.",
+     "loi_giai": [
+      "$S^2 - 4P = 49 - 48 = 1 \\ge 0$ nên tồn tại hai số cần tìm.",
+      "$u$, $v$ là hai nghiệm của $x^2 - 7x + 12 = 0$; $\\Delta = 1$, $x_1 = 4$, $x_2 = 3$.",
+      "Vậy $u = 4, v = 3$ hoặc $u = 3, v = 4$."
+     ],
+     "dap_so": "$\\{u; v\\} = \\{3; 4\\}$"
+    }
+   ],
+   "luu_y": "Phương trình cần lập là $x^2 - Sx + P = 0$ (dấu trừ trước $S$)."
+  }
+ ],
+ "can_nho": [
+  "Định lí Viète: $x_1 + x_2 = -\\dfrac{b}{a}$, $x_1 x_2 = \\dfrac{c}{a}$ – chỉ dùng khi $\\Delta \\ge 0$",
+  "$x_1^2 + x_2^2 = S^2 - 2P$; $(x_1 - x_2)^2 = S^2 - 4P$; $\\dfrac{1}{x_1} + \\dfrac{1}{x_2} = \\dfrac{S}{P}$",
+  "$a + b + c = 0$: nghiệm $1$ và $\\dfrac{c}{a}$; $a - b + c = 0$: nghiệm $-1$ và $-\\dfrac{c}{a}$",
+  "Hai số có tổng $S$, tích $P$ là nghiệm của $x^2 - Sx + P = 0$, điều kiện $S^2 - 4P \\ge 0$",
+  "Bài có tham số: tìm điều kiện có nghiệm trước, dùng Viète sau, cuối cùng đối chiếu điều kiện"
+ ],
+ "trac_nghiem": [
+  {
+   "cau": "Phương trình $x^2 - 6x + 5 = 0$ có hai nghiệm $x_1, x_2$. Tổng $x_1 + x_2$ bằng",
+   "phuong_an": [
+    "$-6$",
+    "$6$",
+    "$5$",
+    "$-5$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$S = -\\dfrac{b}{a} = -\\dfrac{-6}{1} = 6$. Phương án $-6$ là nhầm dấu.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Phương trình $2x^2 + 3x - 7 = 0$ có hai nghiệm $x_1, x_2$. Tích $x_1 x_2$ bằng",
+   "phuong_an": [
+    "$\\dfrac{7}{2}$",
+    "$-\\dfrac{3}{2}$",
+    "$-\\dfrac{7}{2}$",
+    "$\\dfrac{3}{2}$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$\\Delta = 9 + 56 = 65 \\gt 0$; $P = \\dfrac{c}{a} = -\\dfrac{7}{2}$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Phương trình $5x^2 - 8x + 3 = 0$ có hai nghiệm là",
+   "phuong_an": [
+    "$x = 1$ và $x = \\dfrac{3}{5}$",
+    "$x = -1$ và $x = -\\dfrac{3}{5}$",
+    "$x = 1$ và $x = -\\dfrac{3}{5}$",
+    "$x = 1$ và $x = \\dfrac{5}{3}$"
+   ],
+   "dap_an": "A",
+   "giai_thich": "$a + b + c = 5 - 8 + 3 = 0$ nên $x_1 = 1$, $x_2 = \\dfrac{c}{a} = \\dfrac{3}{5}$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Hai số có tổng bằng $9$ và tích bằng $20$ là hai nghiệm của phương trình",
+   "phuong_an": [
+    "$x^2 + 9x + 20 = 0$",
+    "$x^2 - 20x + 9 = 0$",
+    "$x^2 + 9x - 20 = 0$",
+    "$x^2 - 9x + 20 = 0$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "Phương trình cần lập là $x^2 - Sx + P = 0$ với $S = 9$, $P = 20$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Cho phương trình $x^2 - 3x - 1 = 0$ có hai nghiệm $x_1, x_2$. Giá trị của $x_1^2 + x_2^2$ là",
+   "phuong_an": [
+    "$7$",
+    "$11$",
+    "$10$",
+    "$9$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$S = 3$, $P = -1$ nên $x_1^2 + x_2^2 = S^2 - 2P = 9 + 2 = 11$. Phương án $7$ là nhầm dấu của $P$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Phương trình $x^2 - 4x + m = 0$ có hai nghiệm $x_1, x_2$ thỏa mãn $x_1 = 3x_2$. Giá trị của $m$ là",
+   "phuong_an": [
+    "$m = 4$",
+    "$m = -3$",
+    "$m = 3$",
+    "$m = 1$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$x_1 + x_2 = 4x_2 = 4$ nên $x_2 = 1$, $x_1 = 3$; $m = x_1 x_2 = 3$. Kiểm tra $\\Delta' = 4 - 3 = 1 \\gt 0$.",
+   "muc": "VD"
+  }
+ ],
+ "dung_sai": [
+  {
+   "cau": "Cho phương trình $x^2 - 2x - 15 = 0$ có hai nghiệm $x_1, x_2$.",
+   "y": [
+    {
+     "noi_dung": "$\\Delta' \\gt 0$ nên phương trình có hai nghiệm phân biệt.",
+     "dung": true
+    },
+    {
+     "noi_dung": "$x_1 + x_2 = -2$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "$x_1 x_2 = -15$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "$\\dfrac{1}{x_1} + \\dfrac{1}{x_2} = \\dfrac{2}{15}$.",
+     "dung": false
+    }
+   ],
+   "giai_thich": "a) $\\Delta' = 1 + 15 = 16 \\gt 0$: đúng. b) $S = 2$: sai. c) $P = -15$: đúng. d) $\\dfrac{S}{P} = -\\dfrac{2}{15}$: sai."
+  },
+  {
+   "cau": "Cho phương trình $x^2 - (m + 1)x + m = 0$ ($m$ là tham số).",
+   "y": [
+    {
+     "noi_dung": "Phương trình luôn có một nghiệm $x = 1$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Nghiệm còn lại là $x = -m$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Với $m = 4$, tổng hai nghiệm bằng $5$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Với $m = 6$, hai nghiệm thỏa mãn $x_1^2 + x_2^2 = 37$.",
+     "dung": true
+    }
+   ],
+   "giai_thich": "a) $a + b + c = 1 - (m + 1) + m = 0$: đúng. b) Nghiệm còn lại là $\\dfrac{c}{a} = m$: sai. c) $S = m + 1 = 5$: đúng. d) Hai nghiệm là $1$ và $6$, $1 + 36 = 37$: đúng."
+  }
+ ],
+ "tra_loi_ngan": [
+  {
+   "cau": "Phương trình $x^2 - 7x + 2 = 0$ có hai nghiệm $x_1, x_2$. Tính $x_1^2 + x_2^2$.",
+   "dap_an": "45",
+   "giai_thich": "$\\Delta = 41 \\gt 0$; $S = 7$, $P = 2$; $x_1^2 + x_2^2 = 49 - 4 = 45$."
+  },
+  {
+   "cau": "Tìm $m$ để phương trình $x^2 - 6x + m = 0$ có hai nghiệm $x_1, x_2$ thỏa mãn $x_1 - x_2 = 2$.",
+   "dap_an": "8",
+   "giai_thich": "$x_1 + x_2 = 6$ và $x_1 - x_2 = 2$ nên $x_1 = 4$, $x_2 = 2$; $m = x_1 x_2 = 8$. Kiểm tra $\\Delta' = 9 - 8 = 1 \\gt 0$."
+  },
+  {
+   "cau": "Một mảnh vườn hình chữ nhật có chu vi $34$ m và diện tích $60$ m². Chiều dài mảnh vườn là bao nhiêu mét?",
+   "dap_an": "12",
+   "giai_thich": "Chiều dài và chiều rộng có tổng $17$, tích $60$ nên là nghiệm của $x^2 - 17x + 60 = 0$: $x = 12$ hoặc $x = 5$. Chiều dài là $12$ m."
+  }
+ ]
+}, 'nhap/bai-hoc-l09-b20.json');
+
+</script>
+<script>/* data/nhap/bai-hoc-l10-b01.js */
+/* Nhập từ AI qua Xưởng dữ liệu: nhap/bai-hoc-l10-b01.json – Bài giảng – luyện tập Toán 10 – Bài 1. Mệnh đề (11 câu). Sửa nội dung thì sửa tệp trong nhap/ rồi chạy lại tools/nhap-du-lieu.py. */
+NhapDL.add({
+ "loai": "bai_hoc",
+ "lop": 10,
+ "bai": 1,
+ "ten_bai": "Mệnh đề",
+ "mau": true,
+ "nguon": "Soạn theo SGK Toán 10 Kết nối tri thức, tập 1 – Bài 1; ví dụ và câu hỏi tự soạn",
+ "muc_tieu": [
+  "Nhận biết được mệnh đề, mệnh đề chứa biến",
+  "Lập được mệnh đề phủ định, mệnh đề kéo theo, mệnh đề đảo, mệnh đề tương đương",
+  "Phát biểu được định lí dưới dạng điều kiện cần, điều kiện đủ",
+  "Dùng đúng kí hiệu $\\forall$, $\\exists$ và phủ định của chúng"
+ ],
+ "bai_giang": [
+  {
+   "tieu_de": "1. Mệnh đề. Mệnh đề chứa biến",
+   "noi_dung": "Mệnh đề là một câu khẳng định đúng hoặc sai; một mệnh đề không thể vừa đúng vừa sai.\n- Câu hỏi, câu cảm thán, câu mệnh lệnh không phải là mệnh đề.\nMệnh đề chứa biến là câu chứa biến, chưa khẳng định được đúng hay sai; khi thay biến bằng một giá trị cụ thể thì được một mệnh đề. Ví dụ: $P(n)$: \"$n$ chia hết cho $3$\".",
+   "vi_du": [
+    {
+     "de": "Trong các câu sau, câu nào là mệnh đề, câu nào là mệnh đề chứa biến?\n(1) \"$15$ là số nguyên tố.\" (2) \"Hôm nay trời đẹp quá!\" (3) \"$2 + 3 = 5$.\" (4) \"$x + 1 \\gt 3$.\"",
+     "loi_giai": [
+      "(1) là mệnh đề (sai vì $15 = 3 \\cdot 5$).",
+      "(2) là câu cảm thán, không phải mệnh đề.",
+      "(3) là mệnh đề đúng.",
+      "(4) là mệnh đề chứa biến: đúng với $x = 5$, sai với $x = 0$."
+     ],
+     "dap_so": "Mệnh đề: (1), (3); mệnh đề chứa biến: (4)"
+    }
+   ],
+   "luu_y": "Mệnh đề sai vẫn là mệnh đề. Câu có biến (như $x + 1 \\gt 3$) chưa phải mệnh đề."
+  },
+  {
+   "tieu_de": "2. Mệnh đề phủ định",
+   "noi_dung": "Phủ định của mệnh đề $P$ kí hiệu là $\\overline{P}$: $\\overline{P}$ đúng khi $P$ sai và $\\overline{P}$ sai khi $P$ đúng.\n- Thường lập bằng cách thêm (hoặc bớt) từ \"không\", \"không phải\" trước vị ngữ.\n- Phủ định của \"$a \\gt b$\" là \"$a \\le b$\"; phủ định của \"$a = b$\" là \"$a \\ne b$\".",
+   "vi_du": [
+    {
+     "de": "Lập mệnh đề phủ định của $P$: \"$\\sqrt{2}$ là số hữu tỉ\" và cho biết tính đúng sai của nó.",
+     "loi_giai": [
+      "$\\overline{P}$: \"$\\sqrt{2}$ không phải là số hữu tỉ\".",
+      "$\\sqrt{2}$ là số vô tỉ nên $P$ sai, $\\overline{P}$ đúng."
+     ],
+     "dap_so": "$\\overline{P}$ đúng"
+    }
+   ],
+   "luu_y": "Phủ định của \"$x \\gt 2$\" là \"$x \\le 2$\", không phải \"$x \\lt 2$\"."
+  },
+  {
+   "tieu_de": "3. Mệnh đề kéo theo",
+   "noi_dung": "Mệnh đề \"Nếu $P$ thì $Q$\" kí hiệu $P \\Rightarrow Q$; nó chỉ sai khi $P$ đúng và $Q$ sai.\nĐịnh lí toán học thường có dạng $P \\Rightarrow Q$: $P$ là giả thiết, $Q$ là kết luận. Khi đó:\n- $P$ là điều kiện đủ để có $Q$;\n- $Q$ là điều kiện cần để có $P$.",
+   "vi_du": [
+    {
+     "de": "Phát biểu định lí \"Nếu tam giác $ABC$ đều thì tam giác $ABC$ cân\" bằng điều kiện cần, điều kiện đủ.",
+     "loi_giai": [
+      "Giả thiết $P$: \"tam giác $ABC$ đều\"; kết luận $Q$: \"tam giác $ABC$ cân\".",
+      "Tam giác $ABC$ đều là điều kiện đủ để tam giác $ABC$ cân.",
+      "Tam giác $ABC$ cân là điều kiện cần để tam giác $ABC$ đều."
+     ],
+     "dap_so": ""
+    }
+   ],
+   "luu_y": "Không đảo vị trí: điều kiện ĐỦ là giả thiết, điều kiện CẦN là kết luận."
+  },
+  {
+   "tieu_de": "4. Mệnh đề đảo. Hai mệnh đề tương đương",
+   "noi_dung": "Mệnh đề $Q \\Rightarrow P$ là mệnh đề đảo của $P \\Rightarrow Q$. Mệnh đề đảo của một mệnh đề đúng chưa chắc đúng.\nNếu cả $P \\Rightarrow Q$ và $Q \\Rightarrow P$ đều đúng thì $P$ và $Q$ tương đương, kí hiệu $P \\Leftrightarrow Q$; đọc là \"$P$ khi và chỉ khi $Q$\" hoặc \"$P$ là điều kiện cần và đủ để có $Q$\".",
+   "vi_du": [
+    {
+     "de": "Xét mệnh đề đảo của \"Nếu tam giác $ABC$ đều thì tam giác $ABC$ cân\". Hai mệnh đề \"tam giác $ABC$ đều\" và \"tam giác $ABC$ cân\" có tương đương không?",
+     "loi_giai": [
+      "Mệnh đề đảo: \"Nếu tam giác $ABC$ cân thì tam giác $ABC$ đều\".",
+      "Mệnh đề đảo sai: tam giác cân có góc ở đỉnh $40^\\circ$ không phải tam giác đều.",
+      "Vậy hai mệnh đề không tương đương."
+     ],
+     "dap_so": "Không tương đương"
+    }
+   ]
+  },
+  {
+   "tieu_de": "5. Mệnh đề chứa kí hiệu ∀, ∃",
+   "noi_dung": "- \"$\\forall x \\in X, P(x)$\": với mọi $x$ thuộc $X$, $P(x)$ đúng.\n- \"$\\exists x \\in X, P(x)$\": có (ít nhất) một $x$ thuộc $X$ để $P(x)$ đúng.\nPhủ định: $\\overline{\\forall x \\in X, P(x)}$ là \"$\\exists x \\in X, \\overline{P(x)}$\"; $\\overline{\\exists x \\in X, P(x)}$ là \"$\\forall x \\in X, \\overline{P(x)}$\".",
+   "vi_du": [
+    {
+     "de": "Xét tính đúng sai và lập mệnh đề phủ định của \"$\\forall x \\in \\mathbb{R}, x^2 \\ge 0$\".",
+     "loi_giai": [
+      "Bình phương mọi số thực đều không âm nên mệnh đề đúng.",
+      "Phủ định: \"$\\exists x \\in \\mathbb{R}, x^2 \\lt 0$\" (mệnh đề sai)."
+     ],
+     "dap_so": "Đúng; phủ định: $\\exists x \\in \\mathbb{R}, x^2 \\lt 0$"
+    }
+   ],
+   "luu_y": "Khi phủ định phải đổi cả kí hiệu ($\\forall$ thành $\\exists$ và ngược lại) lẫn phủ định tính chất $P(x)$."
+  }
+ ],
+ "can_nho": [
+  "Mệnh đề: câu khẳng định đúng hoặc sai, không vừa đúng vừa sai",
+  "$\\overline{P}$ đúng khi $P$ sai; phủ định của $a \\gt b$ là $a \\le b$",
+  "$P \\Rightarrow Q$ chỉ sai khi $P$ đúng, $Q$ sai; $P$ là điều kiện đủ, $Q$ là điều kiện cần",
+  "$P \\Leftrightarrow Q$ khi cả $P \\Rightarrow Q$ và $Q \\Rightarrow P$ đều đúng (điều kiện cần và đủ)",
+  "Phủ định của $\\forall x, P(x)$ là $\\exists x, \\overline{P(x)}$; phủ định của $\\exists x, P(x)$ là $\\forall x, \\overline{P(x)}$"
+ ],
+ "trac_nghiem": [
+  {
+   "cau": "Câu nào sau đây là mệnh đề?",
+   "phuong_an": [
+    "Bạn đã làm bài tập chưa?",
+    "Số $7$ là số nguyên tố.",
+    "Hãy đóng cửa lại!",
+    "$x + 2 = 5$."
+   ],
+   "dap_an": "B",
+   "giai_thich": "Chỉ câu \"Số $7$ là số nguyên tố\" khẳng định đúng (hoặc sai) được; \"$x + 2 = 5$\" là mệnh đề chứa biến.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Phủ định của mệnh đề \"$\\pi \\lt 4$\" là",
+   "phuong_an": [
+    "$\\pi \\gt 4$",
+    "$\\pi \\le 4$",
+    "$\\pi = 4$",
+    "$\\pi \\ge 4$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "Phủ định của \"$a \\lt b$\" là \"$a \\ge b$\".",
+   "muc": "NB"
+  },
+  {
+   "cau": "Mệnh đề $P \\Rightarrow Q$ sai khi",
+   "phuong_an": [
+    "$P$ đúng và $Q$ sai",
+    "$P$ sai và $Q$ đúng",
+    "$P$ sai và $Q$ sai",
+    "$P$ đúng và $Q$ đúng"
+   ],
+   "dap_an": "A",
+   "giai_thich": "Mệnh đề kéo theo chỉ sai trong trường hợp giả thiết đúng, kết luận sai.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Mệnh đề nào sau đây đúng?",
+   "phuong_an": [
+    "$\\exists x \\in \\mathbb{R}, x^2 = -1$",
+    "$\\forall n \\in \\mathbb{N}, n^2 \\gt n$",
+    "$\\forall x \\in \\mathbb{R}, x^2 + 1 \\gt 0$",
+    "$\\forall x \\in \\mathbb{R}, x \\gt -x$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$x^2 + 1 \\ge 1 \\gt 0$ với mọi $x$. Các mệnh đề khác sai: $x^2 \\ge 0$; $n = 1$ có $n^2 = n$; $x = 0$ có $x = -x$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Phủ định của mệnh đề \"$\\exists x \\in \\mathbb{R}, x^2 - 2x + 3 = 0$\" là",
+   "phuong_an": [
+    "$\\exists x \\in \\mathbb{R}, x^2 - 2x + 3 \\ne 0$",
+    "$\\forall x \\in \\mathbb{R}, x^2 - 2x + 3 \\ne 0$",
+    "$\\forall x \\in \\mathbb{R}, x^2 - 2x + 3 = 0$",
+    "$\\exists x \\in \\mathbb{R}, x^2 - 2x + 3 \\gt 0$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "Đổi $\\exists$ thành $\\forall$ và phủ định \"$= 0$\" thành \"$\\ne 0$\".",
+   "muc": "TH"
+  },
+  {
+   "cau": "Cho định lí \"Nếu một số tự nhiên chia hết cho $6$ thì nó chia hết cho $3$\". Phát biểu nào sau đây đúng?",
+   "phuong_an": [
+    "Chia hết cho $6$ là điều kiện cần để chia hết cho $3$",
+    "Chia hết cho $3$ là điều kiện đủ để chia hết cho $6$",
+    "Chia hết cho $3$ là điều kiện cần và đủ để chia hết cho $6$",
+    "Chia hết cho $6$ là điều kiện đủ để chia hết cho $3$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "Giả thiết (chia hết cho $6$) là điều kiện đủ; kết luận (chia hết cho $3$) là điều kiện cần. Mệnh đề đảo sai (ví dụ số $9$) nên không có \"cần và đủ\".",
+   "muc": "TH"
+  }
+ ],
+ "dung_sai": [
+  {
+   "cau": "Cho mệnh đề chứa biến $P(x)$: \"$x^2 - 3x + 2 = 0$\" với $x \\in \\mathbb{R}$.",
+   "y": [
+    {
+     "noi_dung": "$P(1)$ là mệnh đề đúng.",
+     "dung": true
+    },
+    {
+     "noi_dung": "$P(3)$ là mệnh đề đúng.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Mệnh đề \"$\\exists x \\in \\mathbb{R}, P(x)$\" đúng.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Mệnh đề \"$\\forall x \\in \\mathbb{R}, P(x)$\" đúng.",
+     "dung": false
+    }
+   ],
+   "giai_thich": "a) $1 - 3 + 2 = 0$: đúng. b) $9 - 9 + 2 = 2 \\ne 0$: sai. c) Có $x = 1$ thỏa mãn: đúng. d) $x = 3$ không thỏa mãn: sai."
+  },
+  {
+   "cau": "Cho hai mệnh đề $P$: \"Tứ giác $ABCD$ là hình vuông\" và $Q$: \"Tứ giác $ABCD$ có hai đường chéo bằng nhau\".",
+   "y": [
+    {
+     "noi_dung": "Mệnh đề $P \\Rightarrow Q$ đúng.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Mệnh đề đảo $Q \\Rightarrow P$ đúng.",
+     "dung": false
+    },
+    {
+     "noi_dung": "$P$ là điều kiện đủ để có $Q$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Mệnh đề $P \\Leftrightarrow Q$ đúng.",
+     "dung": false
+    }
+   ],
+   "giai_thich": "a) Hình vuông có hai đường chéo bằng nhau: đúng. b) Hình chữ nhật không vuông có hai đường chéo bằng nhau: sai. c) Vì $P \\Rightarrow Q$ đúng: đúng. d) Vì $Q \\Rightarrow P$ sai: sai."
+  }
+ ],
+ "tra_loi_ngan": [
+  {
+   "cau": "Có bao nhiêu câu là mệnh đề trong các câu sau?\n(1) \"Hà Nội là thủ đô của Việt Nam.\" (2) \"$\\sqrt{9} = 4$.\" (3) \"Mấy giờ rồi?\" (4) \"Số $2$ là số chẵn.\" (5) \"$x \\gt 5$.\"",
+   "dap_an": "3",
+   "giai_thich": "Các câu (1), (2), (4) là mệnh đề ((2) là mệnh đề sai); (3) là câu hỏi; (5) là mệnh đề chứa biến."
+  },
+  {
+   "cau": "Cho mệnh đề chứa biến $P(n)$: \"$n^2 \\lt 20$\" với $n \\in \\mathbb{N}$. Có bao nhiêu số tự nhiên $n$ để $P(n)$ là mệnh đề đúng?",
+   "dap_an": "5",
+   "giai_thich": "$n^2 \\lt 20$ khi $n \\in \\{0; 1; 2; 3; 4\\}$ (vì $4^2 = 16$, $5^2 = 25$)."
+  },
+  {
+   "cau": "Cho mệnh đề chứa biến $P(x)$: \"$x^2 \\le 9$\". Có bao nhiêu số nguyên $x$ thuộc đoạn $[-10; 10]$ để mệnh đề $\\overline{P(x)}$ đúng?",
+   "dap_an": "14",
+   "giai_thich": "$\\overline{P(x)}$: \"$x^2 \\gt 9$\" $\\Leftrightarrow |x| \\ge 4$ với $x$ nguyên. Trong $[-10; 10]$ có $7$ số từ $-10$ đến $-4$ và $7$ số từ $4$ đến $10$."
+  }
+ ]
+}, 'nhap/bai-hoc-l10-b01.json');
+
+</script>
+<script>/* data/nhap/bai-hoc-l11-b04.js */
+/* Nhập từ AI qua Xưởng dữ liệu: nhap/bai-hoc-l11-b04.json – Bài giảng – luyện tập Toán 11 – Bài 4. Phương trình lượng giác cơ bản (11 câu). Sửa nội dung thì sửa tệp trong nhap/ rồi chạy lại tools/nhap-du-lieu.py. */
+NhapDL.add({
+ "loai": "bai_hoc",
+ "lop": 11,
+ "bai": 4,
+ "ten_bai": "Phương trình lượng giác cơ bản",
+ "mau": true,
+ "nguon": "Soạn theo SGK Toán 11 Kết nối tri thức, tập 1 – Bài 4; ví dụ và câu hỏi tự soạn",
+ "muc_tieu": [
+  "Nhận biết được hai phương trình tương đương",
+  "Giải được các phương trình $\\sin x = m$, $\\cos x = m$, $\\tan x = m$, $\\cot x = m$",
+  "Tìm được nghiệm của phương trình trên một khoảng, một đoạn cho trước"
+ ],
+ "bai_giang": [
+  {
+   "tieu_de": "1. Phương trình tương đương",
+   "noi_dung": "Hai phương trình gọi là tương đương nếu chúng có cùng tập nghiệm.\n- Cộng hoặc trừ hai vế với cùng một số (hoặc một biểu thức xác định với mọi $x$) được phương trình tương đương.\n- Nhân hoặc chia hai vế với cùng một số khác $0$ được phương trình tương đương.",
+   "vi_du": [
+    {
+     "de": "Hai phương trình $x - 1 = 0$ và $x^2 = 1$ có tương đương không?",
+     "loi_giai": [
+      "Tập nghiệm của $x - 1 = 0$ là $\\{1\\}$.",
+      "Tập nghiệm của $x^2 = 1$ là $\\{-1; 1\\}$.",
+      "Hai tập nghiệm khác nhau nên hai phương trình không tương đương."
+     ],
+     "dap_so": "Không tương đương"
+    }
+   ]
+  },
+  {
+   "tieu_de": "2. Phương trình sin x = m",
+   "noi_dung": "- $|m| \\gt 1$: phương trình vô nghiệm.\n- $|m| \\le 1$: chọn góc $\\alpha$ có $\\sin \\alpha = m$, khi đó $\\sin x = m \\Leftrightarrow x = \\alpha + k2\\pi$ hoặc $x = \\pi - \\alpha + k2\\pi$ $(k \\in \\mathbb{Z})$.\nTổng quát: $\\sin u = \\sin v \\Leftrightarrow u = v + k2\\pi$ hoặc $u = \\pi - v + k2\\pi$.\nTrường hợp đặc biệt: $\\sin x = 0 \\Leftrightarrow x = k\\pi$; $\\sin x = 1 \\Leftrightarrow x = \\dfrac{\\pi}{2} + k2\\pi$; $\\sin x = -1 \\Leftrightarrow x = -\\dfrac{\\pi}{2} + k2\\pi$.",
+   "vi_du": [
+    {
+     "de": "Giải phương trình $\\sin x = \\dfrac{1}{2}$.",
+     "loi_giai": [
+      "$\\sin x = \\sin \\dfrac{\\pi}{6}$.",
+      "$\\Leftrightarrow x = \\dfrac{\\pi}{6} + k2\\pi$ hoặc $x = \\pi - \\dfrac{\\pi}{6} + k2\\pi = \\dfrac{5\\pi}{6} + k2\\pi$ $(k \\in \\mathbb{Z})$."
+     ],
+     "dap_so": "$x = \\dfrac{\\pi}{6} + k2\\pi$, $x = \\dfrac{5\\pi}{6} + k2\\pi$"
+    }
+   ],
+   "luu_y": "Luôn ghi $k \\in \\mathbb{Z}$; không viết lẫn độ và radian trong cùng một công thức nghiệm."
+  },
+  {
+   "tieu_de": "3. Phương trình cos x = m",
+   "noi_dung": "- $|m| \\gt 1$: vô nghiệm.\n- $|m| \\le 1$: chọn $\\alpha$ có $\\cos \\alpha = m$, khi đó $\\cos x = m \\Leftrightarrow x = \\pm \\alpha + k2\\pi$ $(k \\in \\mathbb{Z})$.\nTrường hợp đặc biệt: $\\cos x = 0 \\Leftrightarrow x = \\dfrac{\\pi}{2} + k\\pi$; $\\cos x = 1 \\Leftrightarrow x = k2\\pi$; $\\cos x = -1 \\Leftrightarrow x = \\pi + k2\\pi$.",
+   "vi_du": [
+    {
+     "de": "Giải phương trình $\\cos 2x = -\\dfrac{\\sqrt{2}}{2}$.",
+     "loi_giai": [
+      "$\\cos 2x = \\cos \\dfrac{3\\pi}{4}$.",
+      "$\\Leftrightarrow 2x = \\pm \\dfrac{3\\pi}{4} + k2\\pi$.",
+      "$\\Leftrightarrow x = \\pm \\dfrac{3\\pi}{8} + k\\pi$ $(k \\in \\mathbb{Z})$."
+     ],
+     "dap_so": "$x = \\pm \\dfrac{3\\pi}{8} + k\\pi$"
+    }
+   ],
+   "luu_y": "Khi chia cho hệ số của $x$ phải chia cả chu kì: $2x = \\ldots + k2\\pi$ cho $x = \\ldots + k\\pi$."
+  },
+  {
+   "tieu_de": "4. Phương trình tan x = m",
+   "noi_dung": "Điều kiện: $x \\ne \\dfrac{\\pi}{2} + k\\pi$. Phương trình luôn có nghiệm với mọi $m$.\nChọn $\\alpha$ có $\\tan \\alpha = m$: $\\tan x = m \\Leftrightarrow x = \\alpha + k\\pi$ $(k \\in \\mathbb{Z})$.",
+   "vi_du": [
+    {
+     "de": "Giải phương trình $\\tan x = \\sqrt{3}$.",
+     "loi_giai": [
+      "$\\tan x = \\tan \\dfrac{\\pi}{3}$.",
+      "$\\Leftrightarrow x = \\dfrac{\\pi}{3} + k\\pi$ $(k \\in \\mathbb{Z})$."
+     ],
+     "dap_so": "$x = \\dfrac{\\pi}{3} + k\\pi$"
+    }
+   ],
+   "luu_y": "Chu kì của $\\tan$ là $\\pi$ (không phải $2\\pi$)."
+  },
+  {
+   "tieu_de": "5. Phương trình cot x = m",
+   "noi_dung": "Điều kiện: $x \\ne k\\pi$. Phương trình luôn có nghiệm.\nChọn $\\alpha$ có $\\cot \\alpha = m$: $\\cot x = m \\Leftrightarrow x = \\alpha + k\\pi$ $(k \\in \\mathbb{Z})$.",
+   "vi_du": [
+    {
+     "de": "Giải phương trình $\\cot\\left(x - \\dfrac{\\pi}{4}\\right) = 1$.",
+     "loi_giai": [
+      "$\\cot\\left(x - \\dfrac{\\pi}{4}\\right) = \\cot \\dfrac{\\pi}{4}$.",
+      "$\\Leftrightarrow x - \\dfrac{\\pi}{4} = \\dfrac{\\pi}{4} + k\\pi \\Leftrightarrow x = \\dfrac{\\pi}{2} + k\\pi$ $(k \\in \\mathbb{Z})$."
+     ],
+     "dap_so": "$x = \\dfrac{\\pi}{2} + k\\pi$"
+    }
+   ]
+  }
+ ],
+ "can_nho": [
+  "$\\sin x = \\sin \\alpha \\Leftrightarrow x = \\alpha + k2\\pi$ hoặc $x = \\pi - \\alpha + k2\\pi$; vô nghiệm khi $|m| \\gt 1$",
+  "$\\cos x = \\cos \\alpha \\Leftrightarrow x = \\pm \\alpha + k2\\pi$; vô nghiệm khi $|m| \\gt 1$",
+  "$\\tan x = \\tan \\alpha \\Leftrightarrow x = \\alpha + k\\pi$ (điều kiện $x \\ne \\dfrac{\\pi}{2} + k\\pi$); $\\cot x = \\cot \\alpha \\Leftrightarrow x = \\alpha + k\\pi$ (điều kiện $x \\ne k\\pi$)",
+  "Đặc biệt: $\\sin x = 0 \\Leftrightarrow x = k\\pi$; $\\cos x = 0 \\Leftrightarrow x = \\dfrac{\\pi}{2} + k\\pi$",
+  "Tìm nghiệm trên một đoạn: viết điều kiện cho $x$ theo $k$, giải bất phương trình tìm các số nguyên $k$"
+ ],
+ "trac_nghiem": [
+  {
+   "cau": "Nghiệm của phương trình $\\sin x = 0$ là",
+   "phuong_an": [
+    "$x = k2\\pi$",
+    "$x = \\dfrac{\\pi}{2} + k\\pi$",
+    "$x = k\\pi$",
+    "$x = \\dfrac{\\pi}{2} + k2\\pi$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$\\sin x = 0$ tại các điểm $0, \\pi, 2\\pi, \\ldots$ cách nhau $\\pi$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Phương trình nào sau đây vô nghiệm?",
+   "phuong_an": [
+    "$\\sin x = \\sqrt{3}$",
+    "$\\tan x = 2024$",
+    "$\\cos x = -1$",
+    "$\\sin x = -0{,}5$"
+   ],
+   "dap_an": "A",
+   "giai_thich": "$\\sqrt{3} \\approx 1{,}73 \\gt 1$ nên $\\sin x = \\sqrt{3}$ vô nghiệm; $\\tan x = m$ luôn có nghiệm.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Nghiệm của phương trình $\\cos x = \\dfrac{1}{2}$ là",
+   "phuong_an": [
+    "$x = \\pm \\dfrac{\\pi}{6} + k2\\pi$",
+    "$x = \\pm \\dfrac{\\pi}{3} + k2\\pi$",
+    "$x = \\dfrac{\\pi}{3} + k\\pi$",
+    "$x = \\pm \\dfrac{\\pi}{3} + k\\pi$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$\\cos x = \\cos \\dfrac{\\pi}{3} \\Leftrightarrow x = \\pm \\dfrac{\\pi}{3} + k2\\pi$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Nghiệm của phương trình $\\tan x = -1$ là",
+   "phuong_an": [
+    "$x = \\dfrac{\\pi}{4} + k\\pi$",
+    "$x = -\\dfrac{\\pi}{4} + k2\\pi$",
+    "$x = \\pm \\dfrac{\\pi}{4} + k\\pi$",
+    "$x = -\\dfrac{\\pi}{4} + k\\pi$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "$\\tan x = \\tan\\left(-\\dfrac{\\pi}{4}\\right) \\Leftrightarrow x = -\\dfrac{\\pi}{4} + k\\pi$; chu kì của $\\tan$ là $\\pi$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Số nghiệm của phương trình $\\sin x = \\dfrac{1}{2}$ trên đoạn $[0; 2\\pi]$ là",
+   "phuong_an": [
+    "$2$",
+    "$1$",
+    "$3$",
+    "$4$"
+   ],
+   "dap_an": "A",
+   "giai_thich": "Trên $[0; 2\\pi]$ chỉ có $x = \\dfrac{\\pi}{6}$ và $x = \\dfrac{5\\pi}{6}$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Điều kiện xác định của phương trình $\\tan 2x = 3$ là",
+   "phuong_an": [
+    "$x \\ne \\dfrac{\\pi}{2} + k\\pi$",
+    "$x \\ne \\dfrac{\\pi}{4} + k\\dfrac{\\pi}{2}$",
+    "$x \\ne \\dfrac{\\pi}{4} + k\\pi$",
+    "$x \\ne k\\dfrac{\\pi}{2}$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$2x \\ne \\dfrac{\\pi}{2} + k\\pi \\Leftrightarrow x \\ne \\dfrac{\\pi}{4} + k\\dfrac{\\pi}{2}$.",
+   "muc": "TH"
+  }
+ ],
+ "dung_sai": [
+  {
+   "cau": "Cho phương trình $2\\sin x - 1 = 0$.",
+   "y": [
+    {
+     "noi_dung": "Phương trình tương đương với $\\sin x = \\dfrac{1}{2}$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "$x = \\dfrac{\\pi}{6}$ là một nghiệm của phương trình.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Tập nghiệm của phương trình là $\\left\\{\\dfrac{\\pi}{6} + k2\\pi \\mid k \\in \\mathbb{Z}\\right\\}$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Trên khoảng $(0; \\pi)$ phương trình có đúng hai nghiệm.",
+     "dung": true
+    }
+   ],
+   "giai_thich": "a) Cộng $1$ rồi chia $2$ hai vế: đúng. b) $\\sin \\dfrac{\\pi}{6} = \\dfrac{1}{2}$: đúng. c) Thiếu họ nghiệm $\\dfrac{5\\pi}{6} + k2\\pi$: sai. d) Hai nghiệm $\\dfrac{\\pi}{6}$ và $\\dfrac{5\\pi}{6}$ đều thuộc $(0; \\pi)$: đúng."
+  },
+  {
+   "cau": "Cho phương trình $\\cos\\left(2x - \\dfrac{\\pi}{3}\\right) = 1$.",
+   "y": [
+    {
+     "noi_dung": "$x = \\dfrac{\\pi}{6}$ là một nghiệm của phương trình.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Nghiệm của phương trình là $x = \\dfrac{\\pi}{6} + k2\\pi$ $(k \\in \\mathbb{Z})$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Trên đoạn $[0; \\pi]$ phương trình có đúng một nghiệm.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Nghiệm âm lớn nhất của phương trình là $-\\dfrac{\\pi}{6}$.",
+     "dung": false
+    }
+   ],
+   "giai_thich": "$2x - \\dfrac{\\pi}{3} = k2\\pi \\Leftrightarrow x = \\dfrac{\\pi}{6} + k\\pi$. a) Đúng ($k = 0$). b) Sai (chu kì nghiệm là $\\pi$). c) $0 \\le \\dfrac{\\pi}{6} + k\\pi \\le \\pi$ chỉ có $k = 0$: đúng. d) Nghiệm âm lớn nhất ứng với $k = -1$: $x = -\\dfrac{5\\pi}{6}$: sai."
+  }
+ ],
+ "tra_loi_ngan": [
+  {
+   "cau": "Phương trình $\\cos x = 0$ có bao nhiêu nghiệm thuộc đoạn $[0; 10\\pi]$?",
+   "dap_an": "10",
+   "giai_thich": "$x = \\dfrac{\\pi}{2} + k\\pi$; $0 \\le \\dfrac{\\pi}{2} + k\\pi \\le 10\\pi \\Leftrightarrow -\\dfrac{1}{2} \\le k \\le 9{,}5$, nên $k \\in \\{0; 1; \\ldots; 9\\}$: có $10$ nghiệm."
+  },
+  {
+   "cau": "Tìm nghiệm dương nhỏ nhất (tính bằng độ) của phương trình $\\sin(x - 30^\\circ) = \\sin 50^\\circ$.",
+   "dap_an": "80",
+   "giai_thich": "$x - 30^\\circ = 50^\\circ + k360^\\circ$ hoặc $x - 30^\\circ = 130^\\circ + k360^\\circ$, tức $x = 80^\\circ + k360^\\circ$ hoặc $x = 160^\\circ + k360^\\circ$. Nghiệm dương nhỏ nhất là $80^\\circ$."
+  },
+  {
+   "cau": "Tính tổng các nghiệm (tính bằng độ) thuộc đoạn $[0^\\circ; 360^\\circ]$ của phương trình $\\tan x = 1$.",
+   "dap_an": "270",
+   "giai_thich": "$x = 45^\\circ + k180^\\circ$; trên $[0^\\circ; 360^\\circ]$ có $45^\\circ$ và $225^\\circ$, tổng $270^\\circ$."
+  }
+ ]
+}, 'nhap/bai-hoc-l11-b04.json');
+
+</script>
+<script>/* data/nhap/bai-hoc-l12-b01.js */
+/* Nhập từ AI qua Xưởng dữ liệu: nhap/bai-hoc-l12-b01.json – Bài giảng – luyện tập Toán 12 – Bài 1. Tính đơn điệu và cực trị của hàm số (11 câu). Sửa nội dung thì sửa tệp trong nhap/ rồi chạy lại tools/nhap-du-lieu.py. */
+NhapDL.add({
+ "loai": "bai_hoc",
+ "lop": 12,
+ "bai": 1,
+ "ten_bai": "Tính đơn điệu và cực trị của hàm số",
+ "mau": true,
+ "nguon": "Soạn theo SGK Toán 12 Kết nối tri thức, tập 1 – Bài 1; ví dụ và câu hỏi tự soạn",
+ "muc_tieu": [
+  "Xét được tính đồng biến, nghịch biến của hàm số bằng dấu của đạo hàm",
+  "Lập được bảng biến thiên",
+  "Tìm được điểm cực trị, giá trị cực trị của hàm số"
+ ],
+ "bai_giang": [
+  {
+   "tieu_de": "1. Tính đơn điệu của hàm số",
+   "noi_dung": "Cho hàm số $y = f(x)$ có đạo hàm trên khoảng $K$.\n- Nếu $f'(x) \\gt 0$ với mọi $x \\in K$ thì $f$ đồng biến trên $K$.\n- Nếu $f'(x) \\lt 0$ với mọi $x \\in K$ thì $f$ nghịch biến trên $K$.\nNếu $f'(x) \\ge 0$ (hoặc $f'(x) \\le 0$) trên $K$ và $f'(x) = 0$ chỉ tại hữu hạn điểm thì $f$ vẫn đồng biến (nghịch biến) trên $K$.\nCác bước: tìm tập xác định → tính $f'(x)$, tìm các điểm $f'(x) = 0$ hoặc không xác định → lập bảng biến thiên → kết luận.",
+   "vi_du": [
+    {
+     "de": "Xét tính đơn điệu của hàm số $y = x^3 - 3x^2 + 2$.",
+     "loi_giai": [
+      "Tập xác định $D = \\mathbb{R}$.",
+      "$y' = 3x^2 - 6x = 3x(x - 2)$; $y' = 0 \\Leftrightarrow x = 0$ hoặc $x = 2$.",
+      "$y' \\gt 0$ trên $(-\\infty; 0)$ và $(2; +\\infty)$; $y' \\lt 0$ trên $(0; 2)$.",
+      "Hàm số đồng biến trên $(-\\infty; 0)$ và $(2; +\\infty)$, nghịch biến trên $(0; 2)$."
+     ],
+     "dap_so": "Đồng biến trên $(-\\infty; 0)$, $(2; +\\infty)$; nghịch biến trên $(0; 2)$"
+    }
+   ],
+   "luu_y": "Kết luận theo từng khoảng; không viết \"đồng biến trên $(-\\infty; 0) \\cup (2; +\\infty)$\"."
+  },
+  {
+   "tieu_de": "2. Cực trị của hàm số",
+   "noi_dung": "Cho hàm số $y = f(x)$ xác định trên khoảng chứa $x_0$.\n- $x_0$ là điểm cực đại nếu có một khoảng $(a; b)$ chứa $x_0$ sao cho $f(x) \\lt f(x_0)$ với mọi $x \\in (a; b)$, $x \\ne x_0$; $f(x_0)$ là giá trị cực đại.\n- Điểm cực tiểu, giá trị cực tiểu định nghĩa tương tự với $f(x) \\gt f(x_0)$.\nDấu hiệu: nếu $f'(x)$ đổi dấu từ $+$ sang $-$ khi $x$ đi qua $x_0$ thì $x_0$ là điểm cực đại; đổi dấu từ $-$ sang $+$ thì $x_0$ là điểm cực tiểu.",
+   "vi_du": [
+    {
+     "de": "Tìm cực trị của hàm số $y = x^3 - 3x^2 + 2$.",
+     "loi_giai": [
+      "Từ bảng biến thiên ở mục 1: $y'$ đổi dấu từ $+$ sang $-$ qua $x = 0$, từ $-$ sang $+$ qua $x = 2$.",
+      "Hàm số đạt cực đại tại $x = 0$, $y_{\\text{CĐ}} = 2$.",
+      "Hàm số đạt cực tiểu tại $x = 2$, $y_{\\text{CT}} = 8 - 12 + 2 = -2$."
+     ],
+     "dap_so": "$y_{\\text{CĐ}} = 2$ tại $x = 0$; $y_{\\text{CT}} = -2$ tại $x = 2$"
+    },
+    {
+     "de": "Tìm cực trị của hàm số $y = x^4 - 2x^2$.",
+     "loi_giai": [
+      "$y' = 4x^3 - 4x = 4x(x^2 - 1)$; $y' = 0 \\Leftrightarrow x = 0$ hoặc $x = \\pm 1$.",
+      "$y'$ đổi dấu: $-$ trên $(-\\infty; -1)$, $+$ trên $(-1; 0)$, $-$ trên $(0; 1)$, $+$ trên $(1; +\\infty)$.",
+      "Cực tiểu tại $x = \\pm 1$, $y_{\\text{CT}} = -1$; cực đại tại $x = 0$, $y_{\\text{CĐ}} = 0$."
+     ],
+     "dap_so": "$y_{\\text{CT}} = -1$ tại $x = \\pm 1$; $y_{\\text{CĐ}} = 0$ tại $x = 0$"
+    }
+   ],
+   "luu_y": "$f'(x_0) = 0$ chưa chắc $x_0$ là điểm cực trị: $y = x^3$ có $y'(0) = 0$ nhưng $y'$ không đổi dấu. Phân biệt điểm cực trị ($x_0$), giá trị cực trị ($f(x_0)$) và điểm cực trị của đồ thị $(x_0; f(x_0))$."
+  }
+ ],
+ "can_nho": [
+  "$f'(x) \\gt 0$ trên $K$ thì $f$ đồng biến trên $K$; $f'(x) \\lt 0$ trên $K$ thì $f$ nghịch biến trên $K$",
+  "Các bước: tập xác định → $f'(x)$ → nghiệm của $f'(x)$ → bảng biến thiên → kết luận theo từng khoảng",
+  "$f'$ đổi dấu $+ \\to -$ qua $x_0$: cực đại; $- \\to +$: cực tiểu",
+  "Nghiệm bội chẵn của $f'(x)$ không làm $f'$ đổi dấu, không phải điểm cực trị",
+  "$y = x^3 + bx^2 + cx + d$ đồng biến trên $\\mathbb{R}$ khi $y' \\ge 0$ với mọi $x$, tức $\\Delta' \\le 0$"
+ ],
+ "trac_nghiem": [
+  {
+   "cau": "Hàm số $y = x^3 - 3x$ đồng biến trên khoảng nào sau đây?",
+   "phuong_an": [
+    "$(-1; 1)$",
+    "$(-\\infty; 1)$",
+    "$(0; 2)$",
+    "$(1; +\\infty)$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "$y' = 3x^2 - 3 \\gt 0 \\Leftrightarrow |x| \\gt 1$. Các khoảng khác đều chứa đoạn mà $y' \\lt 0$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Hàm số nào sau đây nghịch biến trên $\\mathbb{R}$?",
+   "phuong_an": [
+    "$y = x^3 + x$",
+    "$y = -x^3 - x + 1$",
+    "$y = -x^2 + 1$",
+    "$y = 2x - 3$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$y' = -3x^2 - 1 \\lt 0$ với mọi $x$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Điểm cực đại của hàm số $y = x^3 - 6x^2 + 9x + 1$ là",
+   "phuong_an": [
+    "$x = 1$",
+    "$x = 3$",
+    "$x = 5$",
+    "$x = -1$"
+   ],
+   "dap_an": "A",
+   "giai_thich": "$y' = 3(x - 1)(x - 3)$ đổi dấu từ $+$ sang $-$ qua $x = 1$. Lưu ý $5$ là giá trị cực đại, không phải điểm cực đại.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Giá trị cực tiểu của hàm số $y = x^4 - 2x^2 + 3$ là",
+   "phuong_an": [
+    "$3$",
+    "$1$",
+    "$2$",
+    "$-1$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$y' = 4x(x^2 - 1)$; cực tiểu tại $x = \\pm 1$, $y_{\\text{CT}} = 1 - 2 + 3 = 2$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Hàm số $y = f(x)$ có $f'(x) = x(x - 1)^2(x + 2)$. Số điểm cực trị của hàm số là",
+   "phuong_an": [
+    "$3$",
+    "$2$",
+    "$1$",
+    "$4$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$f'$ đổi dấu qua $x = 0$ và $x = -2$; qua $x = 1$ (nghiệm kép) $f'$ không đổi dấu.",
+   "muc": "VD"
+  },
+  {
+   "cau": "Hàm số $y = \\dfrac{2x + 1}{x - 1}$",
+   "phuong_an": [
+    "đồng biến trên $\\mathbb{R} \\setminus \\{1\\}$",
+    "nghịch biến trên $\\mathbb{R}$",
+    "đồng biến trên từng khoảng $(-\\infty; 1)$ và $(1; +\\infty)$",
+    "nghịch biến trên từng khoảng $(-\\infty; 1)$ và $(1; +\\infty)$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "$y' = \\dfrac{-3}{(x - 1)^2} \\lt 0$ với mọi $x \\ne 1$; kết luận theo từng khoảng xác định.",
+   "muc": "TH"
+  }
+ ],
+ "dung_sai": [
+  {
+   "cau": "Cho hàm số $y = -x^3 + 3x^2 + 1$.",
+   "y": [
+    {
+     "noi_dung": "$y' = -3x^2 + 6x$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Hàm số đồng biến trên khoảng $(0; 2)$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Hàm số đạt cực đại tại $x = 0$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Giá trị cực đại của hàm số bằng $5$.",
+     "dung": true
+    }
+   ],
+   "giai_thich": "a) Đúng. b) $y' = -3x(x - 2) \\gt 0$ trên $(0; 2)$: đúng. c) $y'$ đổi dấu từ $-$ sang $+$ qua $x = 0$ nên đó là điểm cực tiểu: sai. d) Cực đại tại $x = 2$, $y = -8 + 12 + 1 = 5$: đúng."
+  },
+  {
+   "cau": "Cho hàm số $y = x^3 - 3mx + 1$ ($m$ là tham số).",
+   "y": [
+    {
+     "noi_dung": "Khi $m = 0$, hàm số đồng biến trên $\\mathbb{R}$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Khi $m = -1$, hàm số có hai điểm cực trị.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Hàm số có hai điểm cực trị khi và chỉ khi $m \\gt 0$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Khi $m = 1$, hiệu giữa giá trị cực đại và giá trị cực tiểu bằng $4$.",
+     "dung": true
+    }
+   ],
+   "giai_thich": "$y' = 3x^2 - 3m$. a) $y' = 3x^2 \\ge 0$, chỉ bằng $0$ tại $x = 0$: đúng. b) $y' = 3x^2 + 3 \\gt 0$, không có cực trị: sai. c) $y' = 0$ có hai nghiệm phân biệt $\\Leftrightarrow m \\gt 0$: đúng. d) $y_{\\text{CĐ}} = y(-1) = 3$, $y_{\\text{CT}} = y(1) = -1$, hiệu bằng $4$: đúng."
+  }
+ ],
+ "tra_loi_ngan": [
+  {
+   "cau": "Tìm giá trị cực đại của hàm số $y = x^3 - 3x^2 - 9x + 5$.",
+   "dap_an": "10",
+   "giai_thich": "$y' = 3(x + 1)(x - 3)$; cực đại tại $x = -1$: $y = -1 - 3 + 9 + 5 = 10$."
+  },
+  {
+   "cau": "Có bao nhiêu giá trị nguyên của $m$ thuộc đoạn $[-10; 10]$ để hàm số $y = x^3 - 3x^2 + mx + 1$ đồng biến trên $\\mathbb{R}$?",
+   "dap_an": "8",
+   "giai_thich": "$y' = 3x^2 - 6x + m \\ge 0$ với mọi $x \\Leftrightarrow \\Delta' = 9 - 3m \\le 0 \\Leftrightarrow m \\ge 3$; $m \\in \\{3; 4; \\ldots; 10\\}$: $8$ giá trị."
+  },
+  {
+   "cau": "Đồ thị hàm số $y = x^4 - 8x^2 + 3$ có ba điểm cực trị. Tính diện tích tam giác có ba đỉnh là ba điểm cực trị đó.",
+   "dap_an": "32",
+   "giai_thich": "$y' = 4x(x^2 - 4)$; ba điểm cực trị $(0; 3)$, $(-2; -13)$, $(2; -13)$. Đáy $4$, chiều cao $16$, diện tích $\\dfrac{1}{2} \\cdot 4 \\cdot 16 = 32$."
+  }
+ ]
+}, 'nhap/bai-hoc-l12-b01.json');
+
+</script>
 <script>/* data/nhap/van-v00.js */
 /* Nhập từ AI qua Xưởng dữ liệu: nhap/van-v00.json – Ngữ văn – đề V00. Sửa nội dung thì sửa tệp trong nhap/ rồi chạy lại tools/nhap-du-lieu.py. */
 NhapDL.add({
@@ -8324,6 +9804,7 @@ NhapDL.add({
    #/                 trang chủ (cấu trúc đề, các chủ đề, tiến độ)
    #/cd/<mã>/<tab>    một chủ đề; tab: lt · meo · hieu · mau · phieu · de (luyện đề, #/cd/<mã>/de/<k>) · ai
    #/lo-trinh         lộ trình 26 tuần
+   #/bai-hoc…         Bài giảng – luyện tập online lớp 9–12 theo mục lục SGK KNTT (baihoc.js)
    #/van-10…          Ngữ văn vào 10 (van.js) · #/xuong… Xưởng dữ liệu: prompt cho AI, nhập JSON (xuong.js, nhap.js)
    Nội dung lấy từ Topics (data/cdNN-*.js). Không sửa tệp này khi chỉ thêm nội dung.
    ===================================================================== */
@@ -8429,6 +9910,9 @@ const App = (() => {
       n(g) ? `<span class="chip ok">${n(g)} chủ đề</span>` : '<span class="chip">Đang soạn</span>', !n(g))).join('');
     view().innerHTML = `${topBar()}<main class="wrap">
       <section class="card hero"><h2>Em đang học lớp mấy?</h2><p>Chọn đúng phần dành cho em. Mỗi chủ đề có kiến thức trọng tâm, ví dụ mẫu, bài luyện tập, phiếu in để làm trên giấy và lời giải.</p></section>
+      ${typeof BaiHoc !== 'undefined' ? `<a class="card grade-card bh-hero" href="#/bai-hoc"><span class="g-big">📚</span><span class="g-body"><b>Bài giảng – Luyện tập online</b>
+        <span>Lớp 9 · 10 · 11 · 12 · học theo mục lục SGK Toán Kết nối tri thức: bài giảng ngắn, ví dụ có lời giải, luyện trắc nghiệm – đúng sai – trả lời ngắn chấm ngay</span>
+        <span class="chips">${BaiHoc.LOP.map(l => `<span class="chip">Toán ${l}: ${BaiHoc.all(l).length} bài</span>`).join('')}${BaiHoc.list().length ? `<span class="chip ok">${BaiHoc.list().length} bài có bài giảng</span>` : ''}</span></span></a>` : ''}
       <div class="grade-grid">${card('#/vao-10', 9, 'Ôn thi vào lớp 10', 'Lớp 9 · TP.HCM 2026 – 2027 · 10 chủ đề theo cấu trúc 7 bài', `<span class="chip ok">${Topics.list.length} chủ đề</span>`)}${vdc}
         ${typeof Van !== 'undefined' ? card('#/van-10', '📖', 'Ngữ văn vào lớp 10', 'Lớp 9 · Đọc hiểu 6 điểm + Viết 4 điểm · học sinh lực học trung bình', Van.list().length ? `<span class="chip ok">${Van.list().length} đề</span>` : '<span class="chip">Đang soạn</span>') : ''}</div>
       <p class="xw-foot"><a href="#/xuong">🧰 Xưởng dữ liệu (thầy cô): tạo prompt cho AI, nhập đề mới</a></p></main>`;
@@ -8697,6 +10181,7 @@ THẦY HÃY
     else if (typeof Vdc !== 'undefined' && Vdc.route(parts)) { /* lớp 10, 11, 12 */ }
     else if (typeof Van !== 'undefined' && Van.route(parts)) { /* Ngữ văn vào 10 */ }
     else if (typeof OnTap !== 'undefined' && OnTap.route(parts)) { /* phiếu ôn tập 90 phút */ }
+    else if (typeof BaiHoc !== 'undefined' && BaiHoc.route(parts)) { /* bài giảng – luyện tập online lớp 9–12 */ }
     else if (typeof Xuong !== 'undefined' && Xuong.route(parts)) { /* Xưởng dữ liệu */ }
     else picker();
     window.scrollTo(0, 0);

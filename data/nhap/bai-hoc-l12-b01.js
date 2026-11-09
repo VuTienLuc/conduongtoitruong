@@ -1,0 +1,202 @@
+/* Nhập từ AI qua Xưởng dữ liệu: nhap/bai-hoc-l12-b01.json – Bài giảng – luyện tập Toán 12 – Bài 1. Tính đơn điệu và cực trị của hàm số (11 câu). Sửa nội dung thì sửa tệp trong nhap/ rồi chạy lại tools/nhap-du-lieu.py. */
+NhapDL.add({
+ "loai": "bai_hoc",
+ "lop": 12,
+ "bai": 1,
+ "ten_bai": "Tính đơn điệu và cực trị của hàm số",
+ "mau": true,
+ "nguon": "Soạn theo SGK Toán 12 Kết nối tri thức, tập 1 – Bài 1; ví dụ và câu hỏi tự soạn",
+ "muc_tieu": [
+  "Xét được tính đồng biến, nghịch biến của hàm số bằng dấu của đạo hàm",
+  "Lập được bảng biến thiên",
+  "Tìm được điểm cực trị, giá trị cực trị của hàm số"
+ ],
+ "bai_giang": [
+  {
+   "tieu_de": "1. Tính đơn điệu của hàm số",
+   "noi_dung": "Cho hàm số $y = f(x)$ có đạo hàm trên khoảng $K$.\n- Nếu $f'(x) \\gt 0$ với mọi $x \\in K$ thì $f$ đồng biến trên $K$.\n- Nếu $f'(x) \\lt 0$ với mọi $x \\in K$ thì $f$ nghịch biến trên $K$.\nNếu $f'(x) \\ge 0$ (hoặc $f'(x) \\le 0$) trên $K$ và $f'(x) = 0$ chỉ tại hữu hạn điểm thì $f$ vẫn đồng biến (nghịch biến) trên $K$.\nCác bước: tìm tập xác định → tính $f'(x)$, tìm các điểm $f'(x) = 0$ hoặc không xác định → lập bảng biến thiên → kết luận.",
+   "vi_du": [
+    {
+     "de": "Xét tính đơn điệu của hàm số $y = x^3 - 3x^2 + 2$.",
+     "loi_giai": [
+      "Tập xác định $D = \\mathbb{R}$.",
+      "$y' = 3x^2 - 6x = 3x(x - 2)$; $y' = 0 \\Leftrightarrow x = 0$ hoặc $x = 2$.",
+      "$y' \\gt 0$ trên $(-\\infty; 0)$ và $(2; +\\infty)$; $y' \\lt 0$ trên $(0; 2)$.",
+      "Hàm số đồng biến trên $(-\\infty; 0)$ và $(2; +\\infty)$, nghịch biến trên $(0; 2)$."
+     ],
+     "dap_so": "Đồng biến trên $(-\\infty; 0)$, $(2; +\\infty)$; nghịch biến trên $(0; 2)$"
+    }
+   ],
+   "luu_y": "Kết luận theo từng khoảng; không viết \"đồng biến trên $(-\\infty; 0) \\cup (2; +\\infty)$\"."
+  },
+  {
+   "tieu_de": "2. Cực trị của hàm số",
+   "noi_dung": "Cho hàm số $y = f(x)$ xác định trên khoảng chứa $x_0$.\n- $x_0$ là điểm cực đại nếu có một khoảng $(a; b)$ chứa $x_0$ sao cho $f(x) \\lt f(x_0)$ với mọi $x \\in (a; b)$, $x \\ne x_0$; $f(x_0)$ là giá trị cực đại.\n- Điểm cực tiểu, giá trị cực tiểu định nghĩa tương tự với $f(x) \\gt f(x_0)$.\nDấu hiệu: nếu $f'(x)$ đổi dấu từ $+$ sang $-$ khi $x$ đi qua $x_0$ thì $x_0$ là điểm cực đại; đổi dấu từ $-$ sang $+$ thì $x_0$ là điểm cực tiểu.",
+   "vi_du": [
+    {
+     "de": "Tìm cực trị của hàm số $y = x^3 - 3x^2 + 2$.",
+     "loi_giai": [
+      "Từ bảng biến thiên ở mục 1: $y'$ đổi dấu từ $+$ sang $-$ qua $x = 0$, từ $-$ sang $+$ qua $x = 2$.",
+      "Hàm số đạt cực đại tại $x = 0$, $y_{\\text{CĐ}} = 2$.",
+      "Hàm số đạt cực tiểu tại $x = 2$, $y_{\\text{CT}} = 8 - 12 + 2 = -2$."
+     ],
+     "dap_so": "$y_{\\text{CĐ}} = 2$ tại $x = 0$; $y_{\\text{CT}} = -2$ tại $x = 2$"
+    },
+    {
+     "de": "Tìm cực trị của hàm số $y = x^4 - 2x^2$.",
+     "loi_giai": [
+      "$y' = 4x^3 - 4x = 4x(x^2 - 1)$; $y' = 0 \\Leftrightarrow x = 0$ hoặc $x = \\pm 1$.",
+      "$y'$ đổi dấu: $-$ trên $(-\\infty; -1)$, $+$ trên $(-1; 0)$, $-$ trên $(0; 1)$, $+$ trên $(1; +\\infty)$.",
+      "Cực tiểu tại $x = \\pm 1$, $y_{\\text{CT}} = -1$; cực đại tại $x = 0$, $y_{\\text{CĐ}} = 0$."
+     ],
+     "dap_so": "$y_{\\text{CT}} = -1$ tại $x = \\pm 1$; $y_{\\text{CĐ}} = 0$ tại $x = 0$"
+    }
+   ],
+   "luu_y": "$f'(x_0) = 0$ chưa chắc $x_0$ là điểm cực trị: $y = x^3$ có $y'(0) = 0$ nhưng $y'$ không đổi dấu. Phân biệt điểm cực trị ($x_0$), giá trị cực trị ($f(x_0)$) và điểm cực trị của đồ thị $(x_0; f(x_0))$."
+  }
+ ],
+ "can_nho": [
+  "$f'(x) \\gt 0$ trên $K$ thì $f$ đồng biến trên $K$; $f'(x) \\lt 0$ trên $K$ thì $f$ nghịch biến trên $K$",
+  "Các bước: tập xác định → $f'(x)$ → nghiệm của $f'(x)$ → bảng biến thiên → kết luận theo từng khoảng",
+  "$f'$ đổi dấu $+ \\to -$ qua $x_0$: cực đại; $- \\to +$: cực tiểu",
+  "Nghiệm bội chẵn của $f'(x)$ không làm $f'$ đổi dấu, không phải điểm cực trị",
+  "$y = x^3 + bx^2 + cx + d$ đồng biến trên $\\mathbb{R}$ khi $y' \\ge 0$ với mọi $x$, tức $\\Delta' \\le 0$"
+ ],
+ "trac_nghiem": [
+  {
+   "cau": "Hàm số $y = x^3 - 3x$ đồng biến trên khoảng nào sau đây?",
+   "phuong_an": [
+    "$(-1; 1)$",
+    "$(-\\infty; 1)$",
+    "$(0; 2)$",
+    "$(1; +\\infty)$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "$y' = 3x^2 - 3 \\gt 0 \\Leftrightarrow |x| \\gt 1$. Các khoảng khác đều chứa đoạn mà $y' \\lt 0$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Hàm số nào sau đây nghịch biến trên $\\mathbb{R}$?",
+   "phuong_an": [
+    "$y = x^3 + x$",
+    "$y = -x^3 - x + 1$",
+    "$y = -x^2 + 1$",
+    "$y = 2x - 3$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$y' = -3x^2 - 1 \\lt 0$ với mọi $x$.",
+   "muc": "NB"
+  },
+  {
+   "cau": "Điểm cực đại của hàm số $y = x^3 - 6x^2 + 9x + 1$ là",
+   "phuong_an": [
+    "$x = 1$",
+    "$x = 3$",
+    "$x = 5$",
+    "$x = -1$"
+   ],
+   "dap_an": "A",
+   "giai_thich": "$y' = 3(x - 1)(x - 3)$ đổi dấu từ $+$ sang $-$ qua $x = 1$. Lưu ý $5$ là giá trị cực đại, không phải điểm cực đại.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Giá trị cực tiểu của hàm số $y = x^4 - 2x^2 + 3$ là",
+   "phuong_an": [
+    "$3$",
+    "$1$",
+    "$2$",
+    "$-1$"
+   ],
+   "dap_an": "C",
+   "giai_thich": "$y' = 4x(x^2 - 1)$; cực tiểu tại $x = \\pm 1$, $y_{\\text{CT}} = 1 - 2 + 3 = 2$.",
+   "muc": "TH"
+  },
+  {
+   "cau": "Hàm số $y = f(x)$ có $f'(x) = x(x - 1)^2(x + 2)$. Số điểm cực trị của hàm số là",
+   "phuong_an": [
+    "$3$",
+    "$2$",
+    "$1$",
+    "$4$"
+   ],
+   "dap_an": "B",
+   "giai_thich": "$f'$ đổi dấu qua $x = 0$ và $x = -2$; qua $x = 1$ (nghiệm kép) $f'$ không đổi dấu.",
+   "muc": "VD"
+  },
+  {
+   "cau": "Hàm số $y = \\dfrac{2x + 1}{x - 1}$",
+   "phuong_an": [
+    "đồng biến trên $\\mathbb{R} \\setminus \\{1\\}$",
+    "nghịch biến trên $\\mathbb{R}$",
+    "đồng biến trên từng khoảng $(-\\infty; 1)$ và $(1; +\\infty)$",
+    "nghịch biến trên từng khoảng $(-\\infty; 1)$ và $(1; +\\infty)$"
+   ],
+   "dap_an": "D",
+   "giai_thich": "$y' = \\dfrac{-3}{(x - 1)^2} \\lt 0$ với mọi $x \\ne 1$; kết luận theo từng khoảng xác định.",
+   "muc": "TH"
+  }
+ ],
+ "dung_sai": [
+  {
+   "cau": "Cho hàm số $y = -x^3 + 3x^2 + 1$.",
+   "y": [
+    {
+     "noi_dung": "$y' = -3x^2 + 6x$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Hàm số đồng biến trên khoảng $(0; 2)$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Hàm số đạt cực đại tại $x = 0$.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Giá trị cực đại của hàm số bằng $5$.",
+     "dung": true
+    }
+   ],
+   "giai_thich": "a) Đúng. b) $y' = -3x(x - 2) \\gt 0$ trên $(0; 2)$: đúng. c) $y'$ đổi dấu từ $-$ sang $+$ qua $x = 0$ nên đó là điểm cực tiểu: sai. d) Cực đại tại $x = 2$, $y = -8 + 12 + 1 = 5$: đúng."
+  },
+  {
+   "cau": "Cho hàm số $y = x^3 - 3mx + 1$ ($m$ là tham số).",
+   "y": [
+    {
+     "noi_dung": "Khi $m = 0$, hàm số đồng biến trên $\\mathbb{R}$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Khi $m = -1$, hàm số có hai điểm cực trị.",
+     "dung": false
+    },
+    {
+     "noi_dung": "Hàm số có hai điểm cực trị khi và chỉ khi $m \\gt 0$.",
+     "dung": true
+    },
+    {
+     "noi_dung": "Khi $m = 1$, hiệu giữa giá trị cực đại và giá trị cực tiểu bằng $4$.",
+     "dung": true
+    }
+   ],
+   "giai_thich": "$y' = 3x^2 - 3m$. a) $y' = 3x^2 \\ge 0$, chỉ bằng $0$ tại $x = 0$: đúng. b) $y' = 3x^2 + 3 \\gt 0$, không có cực trị: sai. c) $y' = 0$ có hai nghiệm phân biệt $\\Leftrightarrow m \\gt 0$: đúng. d) $y_{\\text{CĐ}} = y(-1) = 3$, $y_{\\text{CT}} = y(1) = -1$, hiệu bằng $4$: đúng."
+  }
+ ],
+ "tra_loi_ngan": [
+  {
+   "cau": "Tìm giá trị cực đại của hàm số $y = x^3 - 3x^2 - 9x + 5$.",
+   "dap_an": "10",
+   "giai_thich": "$y' = 3(x + 1)(x - 3)$; cực đại tại $x = -1$: $y = -1 - 3 + 9 + 5 = 10$."
+  },
+  {
+   "cau": "Có bao nhiêu giá trị nguyên của $m$ thuộc đoạn $[-10; 10]$ để hàm số $y = x^3 - 3x^2 + mx + 1$ đồng biến trên $\\mathbb{R}$?",
+   "dap_an": "8",
+   "giai_thich": "$y' = 3x^2 - 6x + m \\ge 0$ với mọi $x \\Leftrightarrow \\Delta' = 9 - 3m \\le 0 \\Leftrightarrow m \\ge 3$; $m \\in \\{3; 4; \\ldots; 10\\}$: $8$ giá trị."
+  },
+  {
+   "cau": "Đồ thị hàm số $y = x^4 - 8x^2 + 3$ có ba điểm cực trị. Tính diện tích tam giác có ba đỉnh là ba điểm cực trị đó.",
+   "dap_an": "32",
+   "giai_thich": "$y' = 4x(x^2 - 4)$; ba điểm cực trị $(0; 3)$, $(-2; -13)$, $(2; -13)$. Đáy $4$, chiều cao $16$, diện tích $\\dfrac{1}{2} \\cdot 4 \\cdot 16 = 32$."
+  }
+ ]
+}, 'nhap/bai-hoc-l12-b01.json');

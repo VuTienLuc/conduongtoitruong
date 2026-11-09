@@ -14,7 +14,7 @@
 - Chuỗi có công thức viết bằng S`…`; trong công thức dùng `\lt \gt`; điểm bội 0,25, tổng barem = điểm câu.
 
 ## Dự án
-- Web tĩnh (HTML + JS thường, không npm) cho học sinh tự học: Toán vào 10 TP.HCM, Toán 10–12 vận dụng – vận dụng cao, Ngữ văn vào 10.
+- Web tĩnh (HTML + JS thường, không npm) cho học sinh tự học: Toán vào 10 TP.HCM, bài giảng – luyện tập online Toán 9–12 theo mục lục SGK KNTT, Toán 10–12 vận dụng – vận dụng cao, Ngữ văn vào 10.
 - Thư mục: `~/Documents/con-duong-toi-truong` · GitHub `VuTienLuc/conduongtoitruong` · mở `index.html` hoặc `dist/con-duong-toi-truong.html`.
 - Sau mỗi thay đổi: `node tools/kiem-tra.js` → `python3 tools/kiem-dap-so.py` → `python3 tools/xuat-de-pdf.py [mã…]` → `python3 tools/test_web.py` → `python3 tools/build.py` → commit, push, `git pull` trên máy thầy.
 - Dữ liệu mới từ AI: chép tệp vào `nhap/` → `python3 tools/nhap-du-lieu.py`.
@@ -26,6 +26,7 @@
   - notes/soan-tu-tai-lieu.md — quy tắc soạn từ tài liệu gốc
   - notes/luyen-de-vao-10.md — luyện đề Toán vào 10, tiến độ từng bài, gợi ý 7b/7c, Thẻ công cụ
   - notes/lop10-12-vdc.md — lớp 10–12 vận dụng, vận dụng cao (Vdc, phiếu QR)
+  - notes/bai-giang-online.md — bài giảng – luyện tập online lớp 9–12 theo mục lục SGK KNTT
   - notes/ngu-van-vao-10.md — Ngữ văn vào 10: cấu trúc, phương pháp, hiển thị
   - notes/xuong-du-lieu.md — Xưởng dữ liệu: prompt cho AI, mẫu JSON, nhập vào hệ thống
   - notes/loi-da-gap.md — lỗi đã gặp và cách sửa

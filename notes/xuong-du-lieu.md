@@ -20,6 +20,10 @@
 - **Kiến thức cần nhớ (thầy yêu cầu 04/11/2026):** hướng dẫn và lệnh bắt AI nhắc lại đầy đủ kiến thức cần nhớ để làm mọi bài (`kien_thuc`, 4–8 mục: tên – phát biểu/công thức – lưu ý; hình học ghi rõ kiến thức phải chứng minh lại) và `can_nho` cho từng bài. `NhapDL.check`: thiếu `kien_thuc` (< 3 mục) là lỗi, thiếu `can_nho` là lưu ý. Phiếu in mục "Kiến thức cần nhớ" đầu phiếu và dòng "🔑 Cần nhớ" dưới mỗi bài.
 - Hiển thị `assets/js/ontap.js`: `#/on-tap`, `#/on-tap/<mã>` (phiếu có dòng kẻ, gợi ý cuối phiếu, tự đánh giá, lời giải; tải .md). PDF: `python3 tools/xuat-de-pdf.py on-tap` → `de-luyen/on-tap/<mã>.pdf`. Mẫu thử: `docs/mau-nhap/on-tap-bai3-mau.txt`.
 
+## Bài giảng – luyện tập online lớp 9–12 (thầy yêu cầu 09/11/2026)
+- Menu prompt → "📚 Bài giảng – luyện tập online": chọn lớp, bài (theo mục lục SGK KNTT, ✓ = đã có), số bài liên tiếp, số câu trắc nghiệm / đúng – sai / trả lời ngắn (mặc định 8/2/4), mức học sinh. Hướng dẫn `Xuong.HD_BAIHOC`: bám đúng thứ tự mục của bài SGK, viết lại ngắn (không chép nguyên văn sách), ví dụ có lời giải, `can_nho` 4–8 mục bắt buộc, ba dạng câu hỏi thi THPT, đáp số trả lời ngắn ≤ 4 kí tự.
+- Bài đã có trên web: lệnh tự liệt kê câu cũ để AI soạn câu mới. Chi tiết trang, kiểm: notes/bai-giang-online.md.
+
 ## Lưu ý
 - Web không vẽ hình từ "hinh" (chỉ in mô tả). Đề hình học nhập từ AI cần thầy kiểm và bổ sung hình nếu cần.
 - AI có thể ra đề và đáp án lệch nhau: khi thầy gửi JSON nhờ kiểm, thay số kiểm từng đáp số bằng Python trước khi nhập.

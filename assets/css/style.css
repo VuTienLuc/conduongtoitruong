@@ -411,3 +411,52 @@ table.ld-the.full{font-size:10.5pt}
 .ot-goi p{margin:1px 0}
 .ld-ot{margin:6px 0;font-weight:600}
 .ot-can{font-size:10pt;font-style:italic;margin:1px 0 2px;color:#333}
+
+/* ---------- Bài giảng – Luyện tập online (lớp 9–12, mục lục SGK KNTT) ---------- */
+.bh-hero{margin:0 0 18px;background:color-mix(in srgb,var(--s-blue) 32%,var(--surface))}
+.bh-hero .g-big{background:var(--ink);font-size:32px}
+.bh-find{display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:700}
+.bh-find input{flex:1;min-width:0;min-height:48px;padding:8px 14px;border-radius:var(--r-pill);border:2.5px solid var(--line);background:var(--surface);color:var(--ink);font:500 17px var(--f-body)}
+.bh-ch{padding:0;overflow:hidden}
+.bh-ch > summary{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;font:700 19px/1.35 var(--f-head);list-style:none}
+.bh-ch > summary::-webkit-details-marker{display:none}
+.bh-ch > summary::before{content:"▸";flex:none;transition:transform .15s}
+.bh-ch[open] > summary::before{transform:rotate(90deg)}
+.bh-ch > summary > span:first-of-type{flex:1;min-width:0}
+.bh-rows{border-top:2px solid var(--grid)}
+.bh-row{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:12px 18px;text-decoration:none;color:var(--ink);border-bottom:1.5px solid var(--grid)}
+.bh-row:last-child{border-bottom:0}
+.bh-row:hover,.bh-row:focus-visible{background:var(--primary-soft)}
+.bh-row.trong .bh-ten{color:var(--muted)}
+.bh-no{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:var(--primary-soft);font:800 16px/1 var(--f-head)}
+.bh-row.trong .bh-no{background:var(--grid)}
+.bh-ten{flex:1 1 220px;min-width:0;font-weight:600}
+.bh-row .chips{display:flex;flex-wrap:wrap;gap:6px}
+.bh-vd{background:var(--primary-soft);border-radius:14px;padding:12px 16px;margin:12px 0 0}
+.bh-vd p{margin:0}
+.bh-vd details{margin-top:8px}
+.bh-vd summary{cursor:pointer;font-weight:700;color:var(--primary)}
+.bh-can{border-style:dashed}
+.bh-lien{margin-top:18px}
+.bh-lien p{margin:8px 0 0}
+.bh-ds{list-style:none;padding:0;margin:4px 0 12px;display:grid;gap:8px}
+.bh-ds li{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px;border:2px solid var(--grid);border-radius:14px}
+.bh-ds li.good{border-color:var(--ok);background:var(--ok-soft)}
+.bh-ds li.bad{border-color:var(--bad);background:var(--bad-soft)}
+.bh-y{flex:1 1 240px;min-width:0}
+.bh-dsb{display:flex;gap:6px;flex:none}
+.bh-dsb .tog{min-height:44px;padding:6px 14px;font-weight:700}
+.bh-dsb .tog.on{background:var(--ink);color:var(--bg)}
+.bh-mark{flex:none;font-weight:800}
+.bh-tlrow{align-items:center}
+.bh-tlrow label{display:flex;align-items:center;gap:8px;font-weight:700}
+.bh-in{width:9em;min-height:48px;padding:6px 12px;border-radius:12px;border:2.5px solid var(--line);background:var(--surface);color:var(--ink);font:700 18px var(--f-body)}
+.bh-in.good{border-color:var(--ok);background:var(--ok-soft)}
+.bh-in.bad{border-color:var(--bad);background:var(--bad-soft)}
+.bh-score{position:sticky;bottom:8px;z-index:2;padding:8px 14px;margin-top:18px}
+.bh-score > p{margin:4px 0}
+.bh-pre{background:var(--surface);color:var(--ink);padding:12px}
+.bh-pre ol{padding-left:22px}
+.bh-pre li{margin:6px 0}
+.xw-wide2{grid-column:span 2}
+@media (max-width:620px){.xw-wide2{grid-column:auto}}
