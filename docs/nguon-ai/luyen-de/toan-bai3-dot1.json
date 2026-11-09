@@ -1,0 +1,92 @@
+{
+  "loai": "luyen_de_toan",
+  "bai": 3,
+  "de": [
+    {
+      "ten": "Gieo hai xúc xắc – tổng số chấm bằng 8",
+      "nguon": "Phóng tác từ SGK Toán 9 (Chuyên đề Xác suất)",
+      "diem": 1.5,
+      "de": "Trong một trò chơi, người ta gieo đồng thời hai con xúc xắc cân đối và đồng chất.\na) Hãy mô tả không gian mẫu của phép thử và cho biết số phần tử của không gian mẫu.\nb) Tính xác suất của biến cố $A$: “Tổng số chấm xuất hiện trên hai con xúc xắc bằng 8”.",
+      "dap_so": "a) $n(\\Omega) = 36$; b) $P(A) = \\dfrac{5}{36}$",
+      "loi_giai": [
+        { "buoc": "a) Không gian mẫu $\\Omega = \\{(i; j) \\mid 1 \\le i, j \\le 6\\}$ với $i, j$ là số chấm xuất hiện trên hai con xúc xắc", "diem": 0.5 },
+        { "buoc": "Số phần tử của không gian mẫu: $n(\\Omega) = 6 \\cdot 6 = 36$", "diem": 0.25 },
+        { "buoc": "b) Các kết quả thuận lợi cho biến cố $A$ (tổng bằng 8): $(2; 6), (3; 5), (4; 4), (5; 3), (6; 2)$", "diem": 0.5 },
+        { "buoc": "Số kết quả thuận lợi là $n(A) = 5$. Xác suất của biến cố $A$: $P(A) = \\dfrac{n(A)}{n(\\Omega)} = \\dfrac{5}{36}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Quên các cặp đảo vị trí như (2; 6) và (6; 2) là hai kết quả phân biệt",
+        "Tính nhầm tổng số kết quả của 2 xúc xắc thành 12 thay vì 36"
+      ]
+    },
+    {
+      "ten": "Rút ngẫu nhiên thẻ từ hộp – số chính phương",
+      "nguon": "Phóng tác từ Đề tham khảo Tuyển sinh 10 năm học 2026 – 2027",
+      "diem": 1.5,
+      "de": "Một chiếc hộp chứa $50$ tấm thẻ cùng loại được đánh số lần lượt từ $1$ đến $50$. Rút ngẫu nhiên một tấm thẻ từ trong hộp.\na) Xác định số phần tử của không gian mẫu của phép thử trên.\nb) Tính xác suất của biến cố $B$: “Số ghi trên tấm thẻ được rút ra là số chính phương”.",
+      "dap_so": "a) $n(\\Omega) = 50$; b) $P(B) = \\dfrac{7}{50}$",
+      "loi_giai": [
+        { "buoc": "a) Phép thử rút ngẫu nhiên 1 thẻ từ 50 tấm thẻ có $50$ kết quả đồng khả năng: $n(\\Omega) = 50$", "diem": 0.5 },
+        { "buoc": "b) Các số chính phương từ $1$ đến $50$ là: $1, 4, 9, 16, 25, 36, 49$. Số kết quả thuận lợi là $n(B) = 7$", "diem": 0.5 },
+        { "buoc": "Xác suất của biến cố $B$: $P(B) = \\dfrac{n(B)}{n(\\Omega)} = \\dfrac{7}{50}$", "diem": 0.5 }
+      ],
+      "loi_hay_sai": [
+        "Bỏ sót số 1 (vì 1 = 1² là số chính phương)",
+        "Đếm thừa số lớn hơn 50 như 64"
+      ]
+    },
+    {
+      "ten": "Tung đồng xu liên tiếp 3 lần – đúng 2 lần liên tiếp sấp",
+      "nguon": "Phóng tác từ tài liệu chuyên đề Xác suất – SGK Toán 9",
+      "diem": 1.5,
+      "de": "Bạn Minh thực hiện phép thử gieo một đồng xu cân đối và đồng chất liên tiếp $3$ lần.\na) Hãy liệt kê tất cả các kết quả có thể xảy ra của phép thử (mô tả không gian mẫu).\nb) Tính xác suất của biến cố $C$: “Có đúng 2 lần liên tiếp xuất hiện mặt sấp”.",
+      "dap_so": "a) $n(\\Omega) = 8$; b) $P(C) = \\dfrac{1}{4}$",
+      "loi_giai": [
+        { "buoc": "a) Kí hiệu $S$ là mặt sấp, $N$ là mặt ngửa. Không gian mẫu: $\\Omega = \\{SSS, SSN, SNS, SNN, NSS, NSN, NNS, NNN\\}$", "diem": 0.5 },
+        { "buoc": "Số phần tử của không gian mẫu: $n(\\Omega) = 8$", "diem": 0.25 },
+        { "buoc": "b) Biến cố $C$ “Có đúng 2 lần liên tiếp xuất hiện mặt sấp” gồm các kết quả: $\\{SSN, NSS\\}$ (không lấy $SSS$ vì có 3 lần liên tiếp)", "diem": 0.5 },
+        { "buoc": "Số kết quả thuận lợi là $n(C) = 2$. Xác suất biến cố $C$: $P(C) = \\dfrac{2}{8} = \\dfrac{1}{4}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Liệt kê thiếu kết quả của không gian mẫu (chỉ nghĩ có 6 kết quả thay vì 2³ = 8)",
+        "Lấy cả trường hợp SSS (sai yêu cầu \"đúng 2 lần liên tiếp\")"
+      ]
+    },
+    {
+      "ten": "Rút đồng thời 2 bông hoa – hai bông cùng màu",
+      "nguon": "Phóng tác từ Đề tham khảo Tuyển sinh 10 (Trường THCS Trường Chinh)",
+      "diem": 1.5,
+      "de": "Một bó hoa gồm $4$ bông hoa màu hồng và $3$ bông hoa màu trắng (các bông hoa đôi một khác nhau). Bạn Hương chọn ngẫu nhiên đồng thời $2$ bông hoa từ bó hoa đó.\na) Hỏi có bao nhiêu cách chọn ra $2$ bông hoa từ bó hoa trên? (Xác định số phần tử không gian mẫu).\nb) Tính xác suất của biến cố $D$: “Hai bông hoa được chọn ra có cùng màu”.",
+      "dap_so": "a) $n(\\Omega) = 21$; b) $P(D) = \\dfrac{3}{7}$",
+      "loi_giai": [
+        { "buoc": "a) Tổng số hoa trong bó: $4 + 3 = 7$ bông. Số cách chọn đồng thời 2 bông hoa từ 7 bông: $n(\\Omega) = \\dfrac{7 \\cdot 6}{2} = 21$ (cách)", "diem": 0.5 },
+        { "buoc": "b) Trường hợp 1: Chọn được 2 bông hồng từ 4 bông hồng có $\\dfrac{4 \\cdot 3}{2} = 6$ cách", "diem": 0.25 },
+        { "buoc": "Trường hợp 2: Chọn được 2 bông trắng từ 3 bông trắng có $\\dfrac{3 \\cdot 2}{2} = 3$ cách", "diem": 0.25 },
+        { "buoc": "Số kết quả thuận lợi cho $D$: $n(D) = 6 + 3 = 9$. Xác suất biến cố $D$: $P(D) = \\dfrac{9}{21} = \\dfrac{3}{7}$", "diem": 0.5 }
+      ],
+      "loi_hay_sai": [
+        "Tính nhầm không gian mẫu có thứ tự: 7 · 6 = 42 thay vì 21",
+        "Quên không cộng cả hai trường hợp 2 bông hồng và 2 bông trắng",
+        "Chưa rút gọn phân số 9/21"
+      ]
+    },
+    {
+      "ten": "Xác suất thực nghiệm – bảng thống kê điểm bắn",
+      "nguon": "Phóng tác từ Đề tham khảo Tuyển sinh 10",
+      "diem": 1.5,
+      "de": "Một xạ thủ bắn $50$ viên đạn vào bia. Số lần đạt được các mức điểm được thống kê trong bảng dưới đây:\na) Hỏi xạ thủ đã bắn đạt điểm 9 bao nhiêu lần trong tổng số 50 lần bắn?\nb) Tính xác suất thực nghiệm của biến cố $E$: “Xạ thủ bắn được điểm lớn hơn 8”.",
+      "bang": [["Mức điểm", "7", "8", "9", "10"], ["Số lần", "10", "15", "13", "12"]],
+      "dap_so": "a) $13$ lần; b) $P(E) = \\dfrac{1}{2}$",
+      "loi_giai": [
+        { "buoc": "a) Dựa vào bảng thống kê tần số, số lần xạ thủ bắn đạt điểm 9 là $13$ lần trong tổng số $50$ lần bắn", "diem": 0.5 },
+        { "buoc": "b) Các mức điểm lớn hơn 8 là điểm 9 và điểm 10. Số lần bắn đạt điểm lớn hơn 8: $13 + 12 = 25$ (lần)", "diem": 0.5 },
+        { "buoc": "Xác suất thực nghiệm của biến cố $E$: $P(E) = \\dfrac{25}{50} = \\dfrac{1}{2}$", "diem": 0.5 }
+      ],
+      "loi_hay_sai": [
+        "Tính cả mức điểm 8 vào điều kiện \"lớn hơn 8\"",
+        "Chưa rút gọn phân số xác suất 25/50"
+      ]
+    }
+  ]
+}
+

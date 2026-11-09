@@ -1,0 +1,92 @@
+{
+  "loai": "luyen_de_toan",
+  "bai": 5,
+  "de": [
+    {
+      "ten": "Hình trụ – bể chứa nước và thời gian bơm đầy",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (Huyện Hóc Môn, Đề 2)",
+      "diem": 1.0,
+      "de": "Một bể chứa nước sinh hoạt hình trụ có đường kính đáy là $2\\text{ m}$ và chiều cao là $1{,}5\\text{ m}$. Cho biết công thức tính thể tích hình trụ là $V = \\pi R^2 h$ (với $R$ là bán kính đáy, $h$ là chiều cao).\na) Tính thể tích của bể chứa nước này (lấy $\\pi \\approx 3{,}14$).\nb) Người ta cần bơm nước vào bể. Biết lúc đầu bể cạn, máy bơm mỗi phút bơm được $50$ lít nước. Hỏi sau bao lâu thì bể đầy nước? (Biết $1\\text{ m}^3 = 1\\,000$ lít).",
+      "dap_so": "a) $V = 4{,}71\\text{ m}^3$; b) Sau $94{,}2$ phút (hay 1 giờ 34 phút 12 giây)",
+      "loi_giai": [
+        { "buoc": "a) Bán kính đáy bể nước: $R = 2 : 2 = 1\\text{ (m)}$", "diem": 0.25 },
+        { "buoc": "Thể tích của bể chứa nước: $V = \\pi R^2 h \\approx 3{,}14 \\cdot 1^2 \\cdot 1{,}5 = 4{,}71\\text{ (m}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "b) Đổi $4{,}71\\text{ m}^3 = 4\\,710\\text{ dm}^3 = 4\\,710$ lít", "diem": 0.25 },
+        { "buoc": "Thời gian bơm đầy bể: $4\\,710 : 50 = 94{,}2$ phút (hay 1 giờ 34 phút 12 giây)", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Quên chia đôi đường kính (dùng R = 2 m)",
+        "Đổi sai đơn vị từ m³ sang lít"
+      ]
+    },
+    {
+      "ten": "Hình nón – chiếc nón lá và số hộp sơn bảo vệ",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (mô hình hình nón)",
+      "diem": 1.0,
+      "de": "Một chiếc nón lá có dạng hình nón. Biết bán kính đường tròn đáy của chiếc nón là $20\\text{ cm}$, chiều cao của nón là $15\\text{ cm}$. Cho công thức tính diện tích xung quanh hình nón là $S_{xq} = \\pi R \\ell$ (với $R$ là bán kính đáy, $\\ell$ là độ dài đường sinh).\na) Tính diện tích xung quanh của chiếc nón lá đó (kết quả làm tròn đến hàng đơn vị, lấy $\\pi \\approx 3{,}14$).\nb) Người thợ thủ công cần phủ một lớp sơn bảo vệ bề mặt ngoài của $100$ chiếc nón lá. Nếu $1$ hộp sơn có thể sơn được tối đa $2\\text{ m}^2$ bề mặt thì người thợ cần mua ít nhất bao nhiêu hộp sơn để sơn đủ $100$ chiếc nón trên?",
+      "dap_so": "a) $S_{xq} \\approx 1\\,570\\text{ cm}^2$; b) Cần mua ít nhất 8 hộp sơn",
+      "loi_giai": [
+        { "buoc": "a) Độ dài đường sinh của hình nón: $\\ell = \\sqrt{R^2 + h^2} = \\sqrt{20^2 + 15^2} = 25\\text{ (cm)}$", "diem": 0.25 },
+        { "buoc": "Diện tích xung quanh của 1 chiếc nón: $S_{xq} = \\pi R \\ell \\approx 3{,}14 \\cdot 20 \\cdot 25 = 1\\,570\\text{ (cm}^2\\text{)}$", "diem": 0.25 },
+        { "buoc": "b) Đổi $1\\,570\\text{ cm}^2 = 0{,}157\\text{ m}^2$. Diện tích bề mặt ngoài của 100 chiếc nón: $0{,}157 \\cdot 100 = 15{,}7\\text{ (m}^2\\text{)}$", "diem": 0.25 },
+        { "buoc": "Số hộp sơn cần dùng: $15{,}7 : 2 = 7{,}85$. Vì số hộp sơn phải là số nguyên nên cần mua ít nhất 8 hộp", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Thay nhầm chiều cao h = 15 cm vào vị trí đường sinh ℓ trong công thức Sxq",
+        "Đổi sai đơn vị từ cm² sang m² (1 m² = 10 000 cm²)",
+        "Làm tròn xuống 7 hộp khiến không đủ sơn"
+      ]
+    },
+    {
+      "ten": "Hình cầu – bồn chứa khí gas và chi phí sơn bảo vệ",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (Quận 11, Đề 2)",
+      "diem": 1.0,
+      "de": "Một bồn chứa khí gas của một nhà máy có dạng hình cầu với đường kính $4\\text{ m}$. Cho biết công thức tính thể tích hình cầu là $V = \\dfrac{4}{3}\\pi R^3$ và diện tích mặt cầu là $S = 4\\pi R^2$ (với $R$ là bán kính hình cầu).\na) Tính thể tích của bồn chứa khí gas này (làm tròn đến chữ số thập phân thứ hai, lấy $\\pi \\approx 3{,}14$).\nb) Để chống gỉ sét, người ta cần sơn bảo vệ toàn bộ bề mặt ngoài của bồn chứa. Biết chi phí sơn (bao gồm cả nhân công và vật tư) cho mỗi mét vuông bề mặt là $150\\,000$ đồng. Tính tổng số tiền cần dùng để sơn bồn chứa gas đó.",
+      "dap_so": "a) $V \\approx 33{,}49\\text{ m}^3$; b) Chi phí sơn: $7\\,536\\,000$ đồng",
+      "loi_giai": [
+        { "buoc": "a) Bán kính của bồn chứa gas: $R = 4 : 2 = 2\\text{ (m)}$", "diem": 0.25 },
+        { "buoc": "Thể tích bồn chứa: $V = \\dfrac{4}{3}\\pi R^3 \\approx \\dfrac{4}{3} \\cdot 3{,}14 \\cdot 2^3 = \\dfrac{100{,}48}{3} \\approx 33{,}49\\text{ (m}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "b) Diện tích bề mặt ngoài cần sơn: $S = 4\\pi R^2 \\approx 4 \\cdot 3{,}14 \\cdot 2^2 = 50{,}24\\text{ (m}^2\\text{)}$", "diem": 0.25 },
+        { "buoc": "Tổng số tiền cần dùng: $50{,}24 \\cdot 150\\,000 = 7\\,536\\,000$ (đồng)", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Lấy R = 4 m (quên chia đôi đường kính)",
+        "Nhầm công thức thể tích với diện tích mặt cầu ở câu b"
+      ]
+    },
+    {
+      "ten": "Khối ghép – hình trụ nối nửa hình cầu và khối lượng kim loại",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (Thành phố Thủ Đức, Đề 2)",
+      "diem": 1.0,
+      "de": "Một thiết bị công nghiệp làm bằng kim loại đặc nguyên khối có hình dạng gồm một khối trụ và một nửa khối cầu úp lên trên mặt đáy trên của khối trụ. Biết khối trụ có chiều cao $1{,}2\\text{ m}$ và bán kính đáy là $0{,}5\\text{ m}$. Cho biết công thức tính thể tích hình trụ $V = \\pi R^2 h$ và hình cầu $V = \\dfrac{4}{3}\\pi R^3$.\na) Tính thể tích của thiết bị này (làm tròn đến 4 chữ số thập phân, lấy $\\pi \\approx 3{,}14$).\nb) Biết khối lượng riêng của loại kim loại này là $7\\,850\\text{ kg/m}^3$. Tính khối lượng của thiết bị trên (biết công thức tính khối lượng $m = D \\cdot V$, kết quả làm tròn đến hàng đơn vị).",
+      "dap_so": "a) $V \\approx 1{,}2037\\text{ m}^3$; b) $m \\approx 9\\,449\\text{ kg}$",
+      "loi_giai": [
+        { "buoc": "a) Thể tích phần hình trụ: $V_1 = \\pi R^2 h \\approx 3{,}14 \\cdot 0{,}5^2 \\cdot 1{,}2 = 0{,}9420\\text{ (m}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "Thể tích phần nửa hình cầu: $V_2 = \\dfrac{1}{2} \\cdot \\dfrac{4}{3}\\pi R^3 = \\dfrac{2}{3} \\cdot 3{,}14 \\cdot 0{,}5^3 \\approx 0{,}2617\\text{ (m}^3\\text{)}$. Thể tích thiết bị: $V = V_1 + V_2 \\approx 0{,}9420 + 0{,}2617 = 1{,}2037\\text{ (m}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "b) Khối lượng của thiết bị: $m = D \\cdot V = 7\\,850 \\cdot 1{,}2037$", "diem": 0.25 },
+        { "buoc": "$m \\approx 9\\,449\\text{ (kg)}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Tính cả quả cầu thay vì chỉ tính một nửa khối cầu",
+        "Làm tròn quá sớm ở bước trung gian dẫn đến sai lệch kết quả khối lượng"
+      ]
+    },
+    {
+      "ten": "Thả vật thể chìm – tính độ dâng của mực nước trong bình trụ",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (Trường THCS Thái Hòa / Quận 11)",
+      "diem": 1.0,
+      "de": "Một bình thủy tinh hình trụ có bán kính đáy bên trong là $10\\text{ cm}$ đang chứa một lượng nước, mức nước chưa đầy bình. Cho công thức thể tích khối nón là $V = \\dfrac{1}{3}\\pi R^2 h$ và thể tích khối trụ là $V = \\pi R^2 h$.\na) Người ta chuẩn bị thả một khối sắt hình nón đặc có bán kính đáy $6\\text{ cm}$ và chiều cao $10\\text{ cm}$ vào bình. Tính thể tích của khối sắt hình nón (lấy $\\pi \\approx 3{,}14$).\nb) Khi thả chìm hoàn toàn khối sắt hình nón vào trong bình nước (giả sử bình đủ cao để nước không tràn ra ngoài), nước trong bình sẽ dâng lên. Hỏi mức nước trong bình dâng lên thêm bao nhiêu cm so với lúc đầu?",
+      "dap_so": "a) $V_{\\text{nón}} = 376{,}8\\text{ cm}^3$; b) Mức nước dâng lên thêm $1{,}2\\text{ cm}$",
+      "loi_giai": [
+        { "buoc": "a) Thể tích của khối sắt hình nón: $V_{\\text{nón}} = \\dfrac{1}{3}\\pi r^2 h \\approx \\dfrac{1}{3} \\cdot 3{,}14 \\cdot 6^2 \\cdot 10 = 376{,}8\\text{ (cm}^3\\text{)}$", "diem": 0.5 },
+        { "buoc": "b) Thể tích nước dâng lên bằng thể tích khối sắt bị chìm: $V_{\\text{dâng}} = 376{,}8\\text{ cm}^3$. Phần nước dâng lên có dạng hình trụ đáy $R = 10\\text{ cm}$, chiều cao $x$: $V_{\\text{dâng}} = \\pi R^2 x = 3{,}14 \\cdot 10^2 \\cdot x = 314x$", "diem": 0.25 },
+        { "buoc": "Chiều cao cột nước dâng lên: $x = 376{,}8 : 314 = 1{,}2\\text{ (cm)}$. Vậy nước dâng thêm $1{,}2\\text{ cm}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Nhầm bán kính đáy của hình nón (6 cm) với bán kính đáy của bình trụ (10 cm)",
+        "Quên hệ số 1/3 trong công thức thể tích hình nón"
+      ]
+    }
+  ]
+}
+

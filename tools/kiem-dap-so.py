@@ -70,6 +70,18 @@ d2 = list(product(range(1, 7), repeat=2))
 chk('CĐ3 B3: P(tổng ≥ 10)', Fr(sum(a + b >= 10 for a, b in d2), 36), Fr(1, 6))
 chk('CĐ3 B3: P(hơn kém 2)', Fr(sum(abs(a - b) == 2 for a, b in d2), 36), Fr(2, 9))
 chk('CĐ3 quiz: tổng 7', Fr(sum(a + b == 7 for a, b in d2), 36), Fr(1, 6))
+# Luyện đề Bài 3
+chk('CĐ3 LD1: P(tổng 8)', Fr(sum(a + b == 8 for a, b in d2), 36), Fr(5, 36))
+cp50 = [i for i in range(1, 51) if math.isqrt(i)**2 == i]
+chk('CĐ3 LD2: số chính phương', len(cp50), 7)
+chk('CĐ3 LD2: P(chính phương)', Fr(len(cp50), 50), Fr(7, 50))
+coins3 = list(product(['S', 'N'], repeat=3))
+chk('CĐ3 LD3: n(Ω) 3 xu', len(coins3), 8)
+chk('CĐ3 LD3: P(đúng 2 sấp liên tiếp)', Fr(sum(''.join(c) in ('SSN', 'NSS') for c in coins3), 8), Fr(1, 4))
+fl_all = list(combinations(['H']*4 + ['T']*3, 2))
+chk('CĐ3 LD4: n(Ω) hoa', len(fl_all), 21)
+chk('CĐ3 LD4: P(cùng màu)', Fr(sum(a == b for a, b in fl_all), len(fl_all)), Fr(3, 7))
+chk('CĐ3 LD5: P thực nghiệm', Fr(13 + 12, 50), Fr(1, 2))
 
 # ---------- Chủ đề 4 ----------
 chk('CĐ4 mẫu 1: 7π ≈', round(7 * 3.14, 2), 21.98)
@@ -88,6 +100,35 @@ v = sp.Rational(1, 3) * sp.Rational(5, 2)**2 * 10 + sp.Rational(2, 3) * sp.Ratio
 chk('CĐ5 B2: hệ số π', v, sp.Rational(125, 4)); chk('CĐ5 B2: ≈', round(31.25 * 3.14, 1), 98.1)
 chk('CĐ5 B3: nước dâng', (3 * sp.Rational(4, 3) * 8) / 16, 2)
 chk('CĐ5 quiz: cầu R=3', sp.Rational(4, 3) * 27, 36)
+# Luyện đề Bài 5 (ld05-hinh-khong-gian.js): tính lại từ số liệu của đề, π ≈ 3,14, so với đáp số ghi trong đề
+PI = 3.14
+r2 = lambda v, k: round(v + 1e-12, k)
+chk('LĐ5 đề 1: V bể trụ d=2, h=1,5', r2(PI * 1**2 * 1.5, 2), 4.71)
+chk('LĐ5 đề 1: phút bơm 50 l/phút', r2(PI * 1**2 * 1.5 * 1000 / 50, 1), 94.2)
+l_ = math.hypot(20, 15); chk('LĐ5 đề 2: đường sinh', l_, 25)
+chk('LĐ5 đề 2: Sxq nón', round(PI * 20 * l_), 1570)
+chk('LĐ5 đề 2: số hộp sơn 100 nón, 2 m²/hộp', math.ceil(PI * 20 * l_ * 100 / 10000 / 2), 8)
+chk('LĐ5 đề 3: V cầu d=4', r2(4 / 3 * PI * 2**3, 2), 33.49)
+chk('LĐ5 đề 3: tiền sơn 150 000 đ/m²', round(4 * PI * 2**2 * 150000), 7536000)
+v4 = PI * 0.5**2 * 1.2 + 2 / 3 * PI * 0.5**3
+chk('LĐ5 đề 4: V trụ + nửa cầu', r2(v4, 4), 1.2037)
+chk('LĐ5 đề 4: khối lượng 7850 kg/m³', round(7850 * v4), 9449)
+chk('LĐ5 đề 4: khối lượng theo V đã làm tròn', round(7850 * 1.2037), 9449)
+vn5 = PI * 6**2 * 10 / 3
+chk('LĐ5 đề 5: V nón r=6, h=10', r2(vn5, 1), 376.8)
+chk('LĐ5 đề 5: nước dâng trong bình r=10', r2(vn5 / (PI * 10**2), 2), 1.2)
+chk('LĐ5 đề 6: Stp lon d=6, h=12', r2(2 * PI * 3 * 12 + 2 * PI * 3**2, 2), 282.6)
+chk('LĐ5 đề 6: 90% dung tích (ml)', r2(PI * 3**2 * 12 * 0.9, 3), 305.208)
+chk('LĐ5 đề 7: V nón kem', r2(PI * 3**2 * 10 / 3, 2), 94.2)
+chk('LĐ5 đề 7: V nửa cầu kem', r2(2 / 3 * PI * 3**3, 2), 56.52)
+chk('LĐ5 đề 7: tổng', r2(PI * 3**2 * 10 / 3 + 2 / 3 * PI * 3**3, 2), 150.72)
+vo, vi = PI * 0.6**2 * 2, PI * (0.6 - 0.1)**2 * 2
+chk('LĐ5 đề 8: V ngoài, V trong', (r2(vo, 4), r2(vi, 4)), (2.2608, 1.57))
+chk('LĐ5 đề 8: tiền bê tông 50 ống', round((vo - vi) * 50 * 1200000), 41448000)
+chk('LĐ5 đề 9: V bể, lít nước 80%', (r2(1.5 * 0.8 * 0.6, 2), round(1.5 * 0.8 * 0.6 * 0.8 * 1000)), (0.72, 576))
+chk('LĐ5 đề 9: kính (đáy + 4 mặt), tiền', (r2(1.5 * 0.8 + 2 * (1.5 + 0.8) * 0.6, 2), round((1.5 * 0.8 + 2 * (1.5 + 0.8) * 0.6) * 500000)), (3.96, 1980000))
+vb = 5 * 4 / 3 * PI * 2**3; vt = PI * 4**2 * (15 - 12)
+chk('LĐ5 đề 10: 5 bi, phần trống, tràn', (r2(vb, 2), r2(vt, 2), vb > vt, r2(vb - vt, 2)), (167.47, 150.72, True, 16.75))
 
 # ---------- Chủ đề 6 ----------
 X, Y = sp.symbols('X Y')

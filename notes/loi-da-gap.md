@@ -7,3 +7,5 @@
 - Trang Luyện tư duy tràn ngang trên điện thoại khi bước barem có công thức dài → `.td-card mjx-container{max-width:100%;overflow-x:auto}`.
 - JSON của AI viết `\frac`, `\Omega` một dấu gạch: `\f` thành kí tự lạ hoặc JSON lỗi → `NhapDL.repair` đọc từng cặp `\x`, nhân đôi khi gặp lệnh LaTeX hoặc kí tự không phải mã thoát JSON.
 - Đáp án trong tài liệu gốc nhiều chỗ sai → luôn tính lại bằng `tools/kiem-dap-so.py` (sympy, toạ độ).
+- `kiem-dap-so.py`: `round(sp.Rational(4,3)*3.14*8, 2) == 33.49` cho False (sympy Float khác float) → tính bằng float/Fraction, tính lại từ số liệu đề (09/11/2026, phần Bài 5 Antigravity viết).
+- Antigravity vừa để JSON trong `nhap/` vừa viết tay `ld*.js` cùng nội dung → lệnh đăng web sẽ nhập lặp; quy tắc `.agents/rules/soan-de-luyen-va-du-lieu.md`.

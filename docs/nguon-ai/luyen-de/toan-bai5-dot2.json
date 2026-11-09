@@ -1,0 +1,92 @@
+{
+  "loai": "luyen_de_toan",
+  "bai": 5,
+  "de": [
+    {
+      "ten": "Hình trụ – lon nước ngọt và diện tích nhôm làm vỏ lon",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (Quận Phú Nhuận)",
+      "diem": 1.0,
+      "de": "Một công ty nước giải khát thiết kế lon nước ngọt dạng hình trụ có đường kính đáy là $6\\text{ cm}$ và chiều cao $12\\text{ cm}$. Cho biết công thức tính diện tích toàn phần hình trụ là $S_{tp} = 2\\pi R h + 2\\pi R^2$ và thể tích hình trụ là $V = \\pi R^2 h$ (với $R$ là bán kính đáy, $h$ là chiều cao, lấy $\\pi \\approx 3{,}14$).\na) (0,5 điểm) Tính diện tích nhôm tối thiểu để làm vỏ một lon nước ngọt (tức là diện tích toàn phần của hình trụ, bỏ qua các mép nối).\nb) (0,5 điểm) Để tránh tình trạng lon bị nổ do áp suất khi vận chuyển, nhà sản xuất chỉ rót lượng nước ngọt chiếm $90\\%$ dung tích của lon. Tính thể tích nước ngọt thực tế có trong một lon (đơn vị ml, biết $1\\text{ cm}^3 = 1\\text{ ml}$).",
+      "dap_so": "a) $S_{tp} = 282{,}6\\text{ cm}^2$; b) $V_{\\text{nước}} = 305{,}208\\text{ ml}$",
+      "loi_giai": [
+        { "buoc": "a) Bán kính đáy lon nước ngọt: $R = 6 : 2 = 3\\text{ (cm)}$. Thay số: $S_{tp} = 2 \\cdot 3{,}14 \\cdot 3 \\cdot 12 + 2 \\cdot 3{,}14 \\cdot 3^2$", "diem": 0.25 },
+        { "buoc": "$S_{tp} = 226{,}08 + 56{,}52 = 282{,}6\\text{ (cm}^2\\text{)}$. Vậy diện tích nhôm vỏ lon là $282{,}6\\text{ cm}^2$", "diem": 0.25 },
+        { "buoc": "b) Thể tích lon nước ngọt: $V = \\pi R^2 h \\approx 3{,}14 \\cdot 3^2 \\cdot 12 = 339{,}12\\text{ (cm}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "Thể tích nước ngọt thực tế: $V_{\\text{nước}} = 339{,}12 \\cdot 90\\% = 305{,}208\\text{ (cm}^3\\text{)} = 305{,}208\\text{ ml}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Lấy R = 6 cm (quên chia đôi đường kính)",
+        "Tính thiếu 2 đáy trong diện tích toàn phần"
+      ]
+    },
+    {
+      "ten": "Khối ghép – cốc kem ốc quế (hình nón úp nửa hình cầu)",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (Quận Bình Tân)",
+      "diem": 1.0,
+      "de": "Một chiếc kem ốc quế gồm hai phần: phần bánh ốc quế bên dưới có dạng hình nón và phần kem úp bên trên có dạng nửa hình cầu. Biết phần bánh ốc quế hình nón có bán kính đáy là $3\\text{ cm}$, chiều cao là $10\\text{ cm}$ và phần kem nửa hình cầu có cùng bán kính với đáy nón. Cho công thức tính thể tích khối nón là $V = \\dfrac{1}{3}\\pi R^2 h$ và khối cầu là $V = \\dfrac{4}{3}\\pi R^3$ (lấy $\\pi \\approx 3{,}14$).\na) (0,5 điểm) Giả sử kem được lấp đầy chặt phần bánh ốc quế bên dưới, hãy tính thể tích kem chứa trong phần hình nón.\nb) (0,5 điểm) Tính tổng dung tích kem của toàn bộ chiếc kem ốc quế đó (kể cả phần nón và phần nửa hình cầu phía trên).",
+      "dap_so": "a) $V_{\\text{nón}} = 94{,}2\\text{ cm}^3$; b) Tổng dung tích kem: $150{,}72\\text{ cm}^3$",
+      "loi_giai": [
+        { "buoc": "a) Thể tích kem trong phần hình nón: $V_{\\text{nón}} = \\dfrac{1}{3}\\pi R^2 h \\approx \\dfrac{1}{3} \\cdot 3{,}14 \\cdot 3^2 \\cdot 10$", "diem": 0.25 },
+        { "buoc": "$V_{\\text{nón}} = 94{,}2\\text{ (cm}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "b) Thể tích phần kem nửa hình cầu phía trên: $V_{\\text{cầu}} = \\dfrac{1}{2} \\cdot \\dfrac{4}{3}\\pi R^3 = \\dfrac{2}{3} \\cdot 3{,}14 \\cdot 3^3 = 56{,}52\\text{ (cm}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "Tổng dung tích kem: $V = V_{\\text{nón}} + V_{\\text{cầu}} = 94{,}2 + 56{,}52 = 150{,}72\\text{ (cm}^3\\text{)}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Tính cả quả cầu thay vì một nửa hình cầu",
+        "Quên hệ số 1/3 trong thể tích hình nón"
+      ]
+    },
+    {
+      "ten": "Hình trụ rỗng – ống cống bê tông và chi phí đúc cống",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (Trường THCS Tô Ngọc Vân)",
+      "diem": 1.0,
+      "de": "Một xí nghiệp đúc ống cống thoát nước bằng bê tông có dạng hình trụ rỗng. Chiều dài của ống cống là $2\\text{ m}$, đường kính ngoài là $1{,}2\\text{ m}$ và bề dày thành cống là $10\\text{ cm}$. Cho biết công thức tính thể tích khối trụ là $V = \\pi R^2 h$ (với $R$ là bán kính đáy, $h$ là chiều cao, lấy $\\pi \\approx 3{,}14$).\na) (0,5 điểm) Đổi các đơn vị sang mét (m). Tính thể tích khối trụ tính theo đường kính ngoài và thể tích khối trụ rỗng tính theo đường kính trong.\nb) (0,5 điểm) Tính thể tích bê tông thực tế cần dùng để đúc một ống cống. Nếu $1\\text{ m}^3$ bê tông tươi có giá $1\\,200\\,000$ đồng, hỏi chi phí tiền bê tông để đúc $50$ ống cống là bao nhiêu?",
+      "dap_so": "a) $V_{\\text{ngoài}} = 2{,}2608\\text{ m}^3$; $V_{\\text{trong}} = 1{,}57\\text{ m}^3$; b) Chi phí: $41\\,448\\,000$ đồng",
+      "loi_giai": [
+        { "buoc": "a) Đổi $10\\text{ cm} = 0{,}1\\text{ m}$. Bán kính ngoài: $R_{\\text{ngoài}} = 1{,}2 : 2 = 0{,}6\\text{ (m)}$. Thể tích trụ ngoài: $V_{\\text{ngoài}} = 3{,}14 \\cdot 0{,}6^2 \\cdot 2 = 2{,}2608\\text{ (m}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "Bán kính trong: $R_{\\text{trong}} = 0{,}6 - 0{,}1 = 0{,}5\\text{ (m)}$. Thể tích trụ trong: $V_{\\text{trong}} = 3{,}14 \\cdot 0{,}5^2 \\cdot 2 = 1{,}57\\text{ (m}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "b) Thể tích bê tông đúc 1 ống cống: $V_{\\text{bê tông}} = V_{\\text{ngoài}} - V_{\\text{trong}} = 2{,}2608 - 1{,}57 = 0{,}6908\\text{ (m}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "Thể tích bê tông cho 50 ống cống: $0{,}6908 \\cdot 50 = 34{,}54\\text{ (m}^3\\text{)}$. Chi phí: $34{,}54 \\cdot 1\\,200\\,000 = 41\\,448\\,000$ (đồng)", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Lấy bán kính trong bằng đường kính ngoài trừ bề dày: 1,2 − 0,1 = 1,1 m",
+        "Quên nhân với 50 ống cống ở bước tính chi phí"
+      ]
+    },
+    {
+      "ten": "Hình hộp chữ nhật – bể cá bằng kính và số tiền mua kính",
+      "nguon": "Phóng tác dựa trên mô hình hình học không gian thực tế",
+      "diem": 1.0,
+      "de": "Một người thợ làm một bể cá cảnh bằng kính (không có nắp đậy) có dạng hình hộp chữ nhật với chiều dài $1{,}5\\text{ m}$, chiều rộng $0{,}8\\text{ m}$ và chiều cao $0{,}6\\text{ m}$. Cho biết công thức tính diện tích xung quanh hình hộp chữ nhật là $S_{xq} = 2(a + b)h$ và thể tích là $V = a \\cdot b \\cdot h$ (với $a, b$ là các cạnh đáy, $h$ là chiều cao).\na) (0,5 điểm) Tính thể tích của bể cá. Người ta đổ nước vào bể sao cho mực nước bằng $80\\%$ chiều cao của bể, hỏi lượng nước trong bể là bao nhiêu lít? (Biết $1\\text{ m}^3 = 1\\,000$ lít).\nb) (0,5 điểm) Người thợ cần mua kính cường lực để ghép thành bể cá đó (gồm 1 tấm kính đáy và 4 tấm kính mặt xung quanh). Tính tổng diện tích kính cần dùng và số tiền mua kính, biết giá mỗi mét vuông kính cường lực là $500\\,000$ đồng.",
+      "dap_so": "a) $V = 0{,}72\\text{ m}^3$; lượng nước: $576$ lít; b) Diện tích kính: $3{,}96\\text{ m}^2$; tiền mua kính: $1\\,980\\,000$ đồng",
+      "loi_giai": [
+        { "buoc": "a) Thể tích bể cá: $V = a \\cdot b \\cdot h = 1{,}5 \\cdot 0{,}8 \\cdot 0{,}6 = 0{,}72\\text{ (m}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "Lượng nước trong bể: $V_{\\text{nước}} = 0{,}72 \\cdot 80\\% = 0{,}576\\text{ (m}^3\\text{)} = 576$ lít", "diem": 0.25 },
+        { "buoc": "b) Bể không có nắp nên diện tích kính cần dùng: $S_{\\text{kính}} = S_{\\text{đáy}} + S_{xq} = (1{,}5 \\cdot 0{,}8) + 2(1{,}5 + 0{,}8) \\cdot 0{,}6 = 1{,}2 + 2{,}76 = 3{,}96\\text{ (m}^2\\text{)}$", "diem": 0.25 },
+        { "buoc": "Số tiền mua kính: $3{,}96 \\cdot 500\\,000 = 1\\,980\\,000$ (đồng)", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Tính cả 2 mặt đáy (bể cá có nắp)",
+        "Đổi sai 0,576 m³ sang lít"
+      ]
+    },
+    {
+      "ten": "Thả vật chìm – 5 viên bi sắt vào ly nước hình trụ",
+      "nguon": "Phóng tác từ Đề tham khảo tuyển sinh 10 TP.HCM (Quận 11)",
+      "diem": 1.0,
+      "de": "Một ly nước hình trụ có bán kính đáy lòng trong là $4\\text{ cm}$, chiều cao $15\\text{ cm}$. Hiện tại trong ly đang chứa một lượng nước có chiều cao mực nước là $12\\text{ cm}$. Người ta thả chìm hoàn toàn 5 viên bi sắt đặc dạng hình cầu, mỗi viên bi có bán kính $2\\text{ cm}$ vào ly. Cho công thức tính thể tích khối trụ $V = \\pi R^2 h$, thể tích khối cầu $V = \\dfrac{4}{3}\\pi R^3$ (lấy $\\pi \\approx 3{,}14$).\na) (0,5 điểm) Tính tổng thể tích của 5 viên bi sắt hình cầu (làm tròn đến hai chữ số thập phân).\nb) (0,5 điểm) Xác định xem nước trong ly có bị tràn ra ngoài hay không? Nếu có, hãy tính thể tích nước bị tràn ra ngoài (kết quả làm tròn hai chữ số thập phân).",
+      "dap_so": "a) $V_{\\text{5 bi}} \\approx 167{,}47\\text{ cm}^3$; b) Nước bị tràn ra ngoài; thể tích nước tràn là $16{,}75\\text{ cm}^3$",
+      "loi_giai": [
+        { "buoc": "a) Thể tích của 1 viên bi sắt: $V_1 = \\dfrac{4}{3}\\pi r^3 \\approx \\dfrac{4}{3} \\cdot 3{,}14 \\cdot 2^3 \\approx 33{,}49\\text{ (cm}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "Tổng thể tích 5 viên bi: $V_{\\text{5 bi}} \\approx 5 \\cdot 33{,}493 = 167{,}47\\text{ (cm}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "b) Chiều cao phần ly còn trống: $h_{\\text{trống}} = 15 - 12 = 3\\text{ (cm)}$. Thể tích phần trống: $V_{\\text{trống}} = \\pi R^2 h_{\\text{trống}} \\approx 3{,}14 \\cdot 4^2 \\cdot 3 = 150{,}72\\text{ (cm}^3\\text{)}$", "diem": 0.25 },
+        { "buoc": "Vì $167{,}47 \\gt 150{,}72$ nên nước tràn ra ngoài. Thể tích nước tràn: $V_{\\text{tràn}} = 167{,}47 - 150{,}72 = 16{,}75\\text{ (cm}^3\\text{)}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Quên tính tổng thể tích của cả 5 viên bi (chỉ so sánh 1 viên bi với phần trống)",
+        "Lấy chiều cao toàn phần 15 cm thay vì chiều cao phần trống 3 cm"
+      ]
+    }
+  ]
+}
+

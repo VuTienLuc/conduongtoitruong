@@ -2,7 +2,8 @@
 
 ## Luyện đề vào 10 – mỗi chủ đề 10 đề, mỗi đề một PDF (thầy yêu cầu 18/10/2026)
 Mục đích: rèn thành thạo từng chủ đề theo đúng dạng, đúng số điểm của bài tương ứng trong đề tuyển sinh TP.HCM. **Làm lần lượt từng chủ đề, ưu tiên nội dung lớp 9 học kì I**:
-Bài 6 hệ PT thực tế ✅ (20 đề) → Bài 4 thực tế đại số – hình học ✅ (20 đề: thêm cung, quạt, viên phân, vành khăn) → Bài 7a, 7b, 7c hình học phẳng ✅ (20 đề mỗi câu) → (học kì II) Bài 1 parabol ✅ (20 đề: vẽ (P), tìm điểm thỏa điều kiện, giao điểm) → Bài 2 Viète ✅ (20 đề: Δ, hai nghiệm trái dấu, biểu thức đối xứng và không đối xứng, tham số m) → Bài 3 xác suất, Bài 5 hình không gian.
+Bài 6 hệ PT thực tế ✅ (20 đề) → Bài 4 thực tế đại số – hình học ✅ (20 đề: thêm cung, quạt, viên phân, vành khăn) → Bài 7a, 7b, 7c hình học phẳng ✅ (20 đề mỗi câu) → (học kì II) Bài 1 parabol ✅ (20 đề: vẽ (P), tìm điểm thỏa điều kiện, giao điểm) → Bài 2 Viète ✅ (20 đề: Δ, hai nghiệm trái dấu, biểu thức đối xứng và không đối xứng, tham số m) → Bài 5 hình không gian ✅ (10 đề, `ld05-hinh-khong-gian.js`) → Bài 3 xác suất ⏳ (5 đề đợt 1, `ld03-xac-suat.js`, còn thiếu đợt 2).
+- Bài 3, Bài 5 do Antigravity soạn (09/11/2026), Claude kiểm: đáp số đúng; sửa nguồn không có trong tai-lieu/ thành "Soạn theo dạng…", viết lại phần kiểm đáp số Bài 5 (bản cũ lỗi so sánh); JSON gốc để ở `docs/nguon-ai/luyen-de/` (không để trong `nhap/` kẻo nhập lặp).
 - Dữ liệu: `data/vao-10/luyen-de/ldNN-<mã chủ đề>.js`, nạp SAU tệp chủ đề trong `index.html`; hợp đồng ở đầu `assets/js/luyende.js`:
   `LuyenDe.add('<mã>', { phut, soat?, de:[{ ten, nguon, pts, h, de, figQ?, fig?, ans, barem:[[bước, điểm]…], loi:[…] }×10k] })` (10, 20… đề).
 - Đề lấy dạng từ `tai-lieu/lop9/Lớp 9 - Tài liệu/Đề thi/` (đề Sở, bộ đề tham khảo, tuyển tập 2026–2027, 53 đề, bộ 15 đề), **đổi số liệu**, ghi `nguon` (tên tệp + đề/cụm). Barem bội 0,25, tổng = `pts`. Mọi đáp số thêm phép kiểm vào `tools/kiem-dap-so.py`.
