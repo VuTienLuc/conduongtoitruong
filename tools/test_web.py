@@ -272,6 +272,31 @@ async def main():
         if r != {'ok': 1, 'merr': 0, 'warn': True}: fails.append(f'nhập bài giảng mẫu: {r}')
         await pg.fill('#nIn', mau.replace('"bai": 1,', '"bai": 40,')); await pg.click('#nGo'); await pg.wait_for_timeout(300)
         if not await pg.locator('.xw-err li', has_text='không có Bài 40').count(): fails.append('nhập bài giảng: không báo lỗi số bài ngoài mục lục')
+        # Nhập trùng bài đã có (thầy chọn 09/11/2026): giữ bài giảng cũ, phần luyện tập thành Bộ 2; câu trùng bỏ; đề ngẫu nhiên rút 12 TN + 2 ĐS + 4 TLN
+        import json as _j
+        j2 = _j.loads(mau)   # cùng là bài mẫu → ghép thành Bộ 2 (bản thật mới thay hẳn bài mẫu)
+        for part in ('trac_nghiem', 'dung_sai', 'tra_loi_ngan'):
+            for q in j2[part]: q['cau'] = q['cau'] + ' (bộ 2)'
+        j2['bai_giang'][0]['tieu_de'] = 'BÀI GIẢNG BẢN HAI'
+        await pg.goto(base + '#/xuong/nhap'); await pg.wait_for_timeout(200)
+        await pg.fill('#nIn', _j.dumps(j2, ensure_ascii=False)); await pg.click('#nGo'); await pg.wait_for_timeout(300)
+        t1 = await pg.locator('.xw-trung').first.inner_text() if await pg.locator('.xw-trung').count() else ''
+        g = await pg.evaluate("j => { const r = BaiHoc.add(NhapDL.bhEntry(j, 'thu')); const e = BaiHoc.own(10, 1); return [r, e.bo.length, e.giang[0].t, NhapDL.fileName(j)]; }", j2)
+        await pg.fill('#nIn', _j.dumps(j2, ensure_ascii=False)); await pg.click('#nGo'); await pg.wait_for_timeout(300)
+        t2 = await pg.locator('.xw-trung').first.inner_text() if await pg.locator('.xw-trung').count() else ''
+        if 'Bộ 2' not in t1 or 'thêm 11 câu' not in t1 or g[0]['bo'] != 2 or g[1] != 2 or 'BẢN HAI' in g[2] or g[3] != 'bai-hoc-l10-b01-bo2.json' or 'Mọi câu' not in t2:
+            fails.append(f'nhập bài giảng trùng: {t1[:120]!r}, {g}, {t2[:80]!r}')
+        await pg.goto(base + '#/bai-hoc/10/1/luyen'); await pg.wait_for_timeout(300)
+        dem = "document.querySelectorAll('#pane .bh-q, #pane .bh-dsq, #pane .bh-tl').length"
+        n_btn = await pg.locator('.bh-bo [data-bo]').count(); n0 = await pg.evaluate(dem); on0 = await pg.locator('.bh-bo .on').get_attribute('data-bo')
+        await pg.click('[data-bo="1"]'); await pg.wait_for_timeout(150); n1 = await pg.evaluate(dem)
+        b2 = await pg.evaluate("[...document.querySelectorAll('#pane .bh-q .qtext, #pane .bh-dsq > .qtext, #pane .bh-tl .qtext')].every(x => x.textContent.includes('(bộ 2)'))")
+        await pg.click('[data-bo="tat"]'); await pg.wait_for_timeout(150); n2 = await pg.evaluate(dem)
+        uu = await pg.evaluate("(() => { const e = BaiHoc.own(10, 1), f = BaiHoc.fpQ(e.ds[3].q), ls = { [f]: 0 }; return [0, 1, 2, 3, 4].every(() => BaiHoc.chonCau(e, 'ngau', Math.random, ls).ds.includes(e.ds[3])); })()")
+        ph = await pg.evaluate("(() => { const e = BaiHoc.own(10, 1), a = BaiHoc.phieuData(e, 1).map(x => x.q.q).join(), b = BaiHoc.phieuData(e, 1).map(x => x.q.q).join(), d = document.createElement('div'); d.innerHTML = BaiHoc.phieuHTML(e, { ma: 1 }); return [a === b, d.querySelectorAll('.sh-q').length, BaiHoc.phieuData(e, 1, '1').length]; })()")
+        if (n_btn, on0, n0, n1, b2, n2, uu, ph) != (4, 'ngau', 18, 11, True, 22, True, [True, 18, 6]):
+            fails.append(f'luyện tập nhiều bộ / ngẫu nhiên: {n_btn, on0, n0, n1, b2, n2, uu, ph}')
+        await pg.evaluate("localStorage.removeItem((CONFIG.storeKey || 'vao10') + ':bh:bo:10-1')"); await pg.goto(base + '#/'); await pg.reload(); await pg.wait_for_timeout(300)
         for i in ids:
             # Trắc nghiệm: chọn phương án A mọi câu, điểm phải bằng số câu chọn đúng.
             await pg.goto(base + f'#/cd/{i}/hieu'); await pg.wait_for_timeout(200)

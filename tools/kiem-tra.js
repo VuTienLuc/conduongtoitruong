@@ -187,6 +187,9 @@ else {
     e.ds.forEach((q, i) => { if (q.y.length !== 4 || q.y.some(y => typeof y[1] !== 'boolean')) err(W, `đúng – sai ${i + 1}: cần 4 ý có kết luận Đúng/Sai`); });
     e.tln.forEach((q, i) => { if (isNaN(BH.numOf(q.ans))) err(W, `trả lời ngắn ${i + 1}: đáp số "${q.ans}" không phải số`); });
     walkStr(W, e);
+    // nhiều bộ (nhập trùng bài): bộ nào cũng có câu, ngân hàng không có hai câu trùng lời đề
+    BH.boList(e).forEach((b, i) => { if (!(b.tn.length + b.ds.length + b.tln.length)) err(W, `Bộ ${i + 1} không có câu nào`); });
+    const thay = new Set(); [...e.tn, ...e.ds, ...e.tln].forEach((q, i) => { const f = BH.fpQ(q.q); if (thay.has(f)) err(W, `câu thứ ${i + 1} của ngân hàng câu trùng câu trước`); thay.add(f); });
   });
   // Trình chiếu, trò chơi HTML gắn vào bài: tệp có thật trong tuong-tac/, bài có trong mục lục; mọi tệp trong tuong-tac/ đều được gắn.
   const dung = new Set();

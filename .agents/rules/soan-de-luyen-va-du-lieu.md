@@ -10,6 +10,7 @@ Rút kinh nghiệm lần nhập đề Bài 3, Bài 5 (09/11/2026). Quy tắc chu
 - JSON từ AI chép vào `nhap/` rồi chạy `python3 tools/nhap-du-lieu.py` (tự tạo `data/nhap/*.js`, tự thêm vào index.html, tự kiểm). Mẫu JSON và hướng dẫn: `notes/xuong-du-lieu.md`.
 - KHÔNG tự viết thêm tệp `data/vao-10/luyen-de/*.js` có cùng nội dung với JSON trong `nhap/` – web sẽ hiện đề hai lần. Nếu đã chuyển tay thành tệp `ld*.js` thì chuyển JSON gốc sang `docs/nguon-ai/`, không để trong `nhap/`.
 - Không gắn `nhap: true` để lách quy tắc "mỗi bộ 10, 20… đề".
+- Bài giảng – luyện tập (`bai_hoc`) cho bài ĐÃ CÓ tệp `nhap/bai-hoc-l<lớp>-b<bài>.json`: không ghi đè, đặt tên `…-bo2.json`, `…-bo3.json`. Web giữ bài giảng tệp đầu, câu luyện tập thành Bộ 2, 3; câu trùng lời đề bị bỏ (lệnh nhập báo "thêm x câu, bỏ y câu trùng"). Chỉ sửa lỗi bản cũ thì mới sửa thẳng tệp cũ.
 
 ## Nguồn
 - Trường `nguon` chỉ ghi tài liệu có thật, đọc được trong `tai-lieu/` hoặc trong notebook thầy chỉ định, ghi đúng tên tài liệu (ví dụ "Bộ đề tham khảo tuyển sinh lớp 10 môn Toán 2025 – 2026 sở GD&ĐT TP Hồ Chí Minh (đề Quận Bình Tân)").

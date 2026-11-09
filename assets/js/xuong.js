@@ -231,7 +231,7 @@ Sai ở đâu thì sửa rồi mới xuất.`;
       '- Bài giảng: đủ các mục của bài theo SGK; mỗi mục có kiến thức, ví dụ kèm lời giải, lưu ý hay sai; nhắc lại 4–8 kiến thức cần nhớ.',
       `- Phần I trắc nghiệm: ${o.n1} câu (khoảng 40% NB, 40% TH, 20% VD)`, `- Phần II đúng – sai: ${o.n2} câu, mỗi câu 4 ý`, `- Phần III trả lời ngắn: ${o.n3} câu`,
       o.rieng ? `Yêu cầu riêng: ${o.rieng}` : '',
-      cu.length ? `Bài này đã có trên web – soạn câu hỏi MỚI, khác các câu đã có:\n${cu.map(x => '- ' + x).join('\n')}` : '',
+      cu.length ? `Bài này đã có trên web (bài giảng giữ nguyên) – bản này sẽ thành bộ câu luyện tập mới: soạn câu hỏi MỚI, khác hẳn các câu đã có (câu trùng bị bỏ):\n${cu.map(x => '- ' + x).join('\n')}` : '',
       `Trả về đúng một khối ${BT}json theo mẫu trong hướng dẫn ("loai":"bai_hoc", "lop":${o.lop}, "bai":${b.so}, "ten_bai":"${b.ten}").`].filter(Boolean).join('\n');
   }
 
@@ -308,7 +308,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
         <button class="btn ghost" type="button" data-dl="${esc(x.key)}">⬇️ Tải tệp chuẩn</button><button class="btn ghost" type="button" data-rm="${esc(x.key)}">🗑️ Xoá</button></li>`; }).join('')}</ul></div>`
         : '<p class="empty">Chưa có. Dữ liệu lưu ở đây chỉ hiện trên trình duyệt này.</p>'}
       <h2 class="sec">Đã có trong hệ thống (${he.length} tệp)</h2>
-      ${he.length ? `<div class="card"><ul class="xw-list">${he.map(x => `<li><b>${esc(x.r.ten || '')}</b> <span class="muted">${esc(x.file || '')}</span>${x.r.errs.length ? ` <span class="chip warnc">${x.r.errs.length} lỗi – chưa hiện</span>` : ''}</li>`).join('')}</ul></div>` : '<p class="empty">Chưa có tệp nào trong data/nhap/.</p>'}`);
+      ${he.length ? `<div class="card"><ul class="xw-list">${he.map(x => `<li><b>${esc(x.r.ten || '')}</b> <span class="muted">${esc(x.file || '')}</span>${x.r.ghep && x.r.ghep.bo > 1 ? ` <span class="chip">Bộ ${x.r.ghep.bo} · +${x.r.ghep.them} câu</span>` : x.r.ghep && !x.r.ghep.bo ? ' <span class="chip warnc">trùng hết – không thêm</span>' : ''}${x.r.errs.length ? ` <span class="chip warnc">${x.r.errs.length} lỗi – chưa hiện</span>` : ''}</li>`).join('')}</ul></div>` : '<p class="empty">Chưa có tệp nào trong data/nhap/.</p>'}`);
     view().querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => { NhapDL.removeLocal(b.dataset.rm); location.reload(); }));
     view().querySelectorAll('[data-dl]').forEach(b => b.addEventListener('click', () => { const x = NhapDL.local().find(y => y.key === b.dataset.dl); if (x) download(NhapDL.fileName(x.json), JSON.stringify(x.json, null, 1)); }));
   }
@@ -412,6 +412,16 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
     const t = Topics.get(r.id) || { id: r.id, bai: 'Bài', title: '' };
     return LuyenDe.sheetHTML(t, { key: true }, null, { phut: 12, de: NhapDL.toanItems(j, 'xem') });
   }
+  // Bài giảng trùng lớp + bài đã có trên web: báo trước sẽ lưu thành bộ mấy, thêm bao nhiêu câu, bỏ bao nhiêu câu trùng.
+  function trungHTML(j) {
+    const cu = BaiHoc.own(+j.lop, +j.bai); if (!cu) return '';
+    const g = BaiHoc.thuGhep(NhapDL.bhEntry(j, 'xem')), nb = BaiHoc.boList(cu).length, nc = cu.tn.length + cu.ds.length + cu.tln.length;
+    const dau = `<b>Toán ${+j.lop} – Bài ${+j.bai} đã có trên web</b> (${nb > 1 ? nb + ' bộ, ' : ''}${nc} câu).`;
+    if (g.thay_mau) return `<div class="xw-trung"><p>${dau} Bản đang có là <i>bài mẫu minh họa</i> → bản này <b>thay hẳn</b> bài mẫu (cả bài giảng).</p></div>`;
+    if (!g.them) return `<div class="xw-trung bad"><p>${dau} <b>Mọi câu trong bản này đều đã có</b> – lưu vào cũng không thêm gì. Nhờ AI soạn câu mới (Menu prompt tự liệt kê các câu đã có để AI tránh).</p></div>`;
+    return `<div class="xw-trung"><p>${dau} Bản này sẽ thành <b>Bộ ${g.bo}</b> của phần Luyện tập: thêm <b>${g.them} câu mới</b>${g.bo_qua ? `, bỏ ${g.bo_qua} câu trùng câu đã có` : ''}. <b>Bài giảng giữ bản đã có</b>; học sinh chọn Bộ 1, Bộ ${g.bo}… hoặc 🎲 đề ngẫu nhiên từ mọi bộ.</p>
+      <p class="muted small">Tệp chuẩn tải về tên <code>${esc(NhapDL.fileName(j))}</code> (không đè tệp cũ). Muốn sửa lỗi bản cũ thì sửa thẳng tệp cũ trong <code>nhap/</code>.</p></div>`;
+  }
   function nhapPage() {
     view().innerHTML = shell('#/xuong', `<section class="card hero"><h2>📥 Nhập dữ liệu</h2><p>Dán nguyên câu trả lời của AI (khối ${BT}json, hoặc ${BT}markdown của phiếu ôn tập) hoặc kéo các tệp <code>.json</code>, <code>.md</code> vào ô dưới. Web tự tách JSON, sửa dấu \\ của công thức, đổi $…$ thành công thức, bỏ số trích dẫn, rồi kiểm điểm từng câu.</p></section>
       <div class="card"><div id="nDrop" class="xw-drop"><textarea id="nIn" rows="10" placeholder="Dán câu trả lời của AI vào đây…"></textarea>
@@ -425,7 +435,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
         const r = NhapDL.check(res.data); s.res = res; s.r = r;
         return `<div class="card xw-res ${r.errs.length ? 'bad' : 'ok'}"><h3>${esc(s.name)} · ${esc(r.ten || 'không rõ loại')}</h3>
           <p class="chips"><span class="chip ${r.errs.length ? 'warnc' : 'ok'}">${r.errs.length ? `${r.errs.length} lỗi` : 'Đúng mẫu ✓'}</span>${r.warns.length ? `<span class="chip">${r.warns.length} lưu ý</span>` : ''}${res.notes.map(n => `<span class="chip">${esc(n)}</span>`).join('')}</p>
-          ${r.errs.length ? `<ul class="xw-err">${r.errs.map(x => `<li>✗ ${esc(x)}</li>`).join('')}</ul>` : ''}${r.warns.length ? `<ul class="xw-warn">${r.warns.map(x => `<li>! ${esc(x)}</li>`).join('')}</ul>` : ''}
+          ${!r.errs.length && r.loai === 'bai_hoc' ? trungHTML(res.data) : ''}${r.errs.length ? `<ul class="xw-err">${r.errs.map(x => `<li>✗ ${esc(x)}</li>`).join('')}</ul>` : ''}${r.warns.length ? `<ul class="xw-warn">${r.warns.map(x => `<li>! ${esc(x)}</li>`).join('')}</ul>` : ''}
           <div class="row">${r.errs.length ? '' : `<button class="btn primary" type="button" data-save="${i}">💾 Lưu trên máy này</button><button class="btn" type="button" data-dl="${i}">⬇️ Tải tệp chuẩn (.json)</button>${r.loai === 'bai_hoc' ? '' : `<button class="btn" type="button" data-print="${i}">🖨️ In / Lưu PDF</button>`}${r.loai === 'on_tap_toan' ? `<button class="btn" type="button" data-md="${i}">⬇️ Tải Markdown (.md)</button>` : ''}`}
             ${r.errs.length || r.warns.length ? `<button class="btn" type="button" data-fix="${i}">📋 Chép lệnh sửa</button>` : ''}</div>
           ${r.errs.length ? '' : `<details class="xw-pre" open><summary>Xem trước</summary><div class="paper-wrap" id="nPre${i}"></div></details>`}</div>`;

@@ -326,7 +326,7 @@ const NhapDL = (() => {
     }
     if (r.loai === 'de_van' && typeof Van !== 'undefined') Van.add(vanEntry(j, src));
     if (r.loai === 'on_tap_toan' && typeof OnTap !== 'undefined') OnTap.add(onTapEntry(j, src));
-    if (r.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined') BaiHoc.add(bhEntry(j, src));
+    if (r.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined') r.ghep = BaiHoc.add(bhEntry(j, src));   // trùng bài đã có → thành Bộ 2, 3…
     return r;
   }
 
@@ -339,21 +339,30 @@ const NhapDL = (() => {
     local().forEach(x => {
       if (x.json.loai === 'de_van' && typeof Van !== 'undefined' && Van.get(String(x.json.ma_de))) return;   // hệ thống đã có mã đề này
       if (x.json.loai === 'on_tap_toan' && typeof OnTap !== 'undefined' && OnTap.get(String(x.json.ma))) return;
-      if (x.json.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined' && BaiHoc.own(+x.json.lop, +x.json.bai)) return;
       items.push({ json: x.json, src: 'may-nay', key: x.key, r: apply(x.json, 'may-nay') });
     });
   }
   function saveLocal(j) {
-    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : r.loai === 'bai_hoc' ? `bh-${+j.lop}-${+j.bai}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
+    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : r.loai === 'bai_hoc' ? `bh-${+j.lop}-${+j.bai}-${hashOf(JSON.stringify([j.trac_nghiem, j.dung_sai, j.tra_loi_ngan]))}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
     const a = local().filter(x => x.key !== key); a.push({ key, json: j, luc: new Date().toISOString() }); U.set(LKEY, a);
     return key;
+  }
+  const hashOf = t => { let h = 2166136261; for (let i = 0; i < t.length; i++) h = Math.imul(h ^ t.charCodeAt(i), 16777619); return (h >>> 0).toString(36); };
+  // Bài giảng trùng bài đã có: tên tệp thêm -bo<N> để không đè tệp cũ trong nhap/ (web lưu thành Bộ N).
+  function boSo(j) {
+    if (typeof BaiHoc === 'undefined' || !BaiHoc.own(+j.lop, +j.bai)) return 0;
+    const e = bhEntry(j, 'xem'), cu = BaiHoc.own(+j.lop, +j.bai), f = new Set(['tn', 'ds', 'tln'].flatMap(p => e[p].map(q => BaiHoc.fpQ(q.q))));
+    // bản này đã nằm trong web (đã lưu trên máy / đã nhập) → đúng số bộ của nó; chưa có → bộ sẽ tạo khi nhập
+    const i = BaiHoc.boList(cu).findIndex(b => { const a = ['tn', 'ds', 'tln'].flatMap(p => b[p]); return a.length && a.every(q => f.has(BaiHoc.fpQ(q.q))); });
+    if (i >= 0) return i ? i + 1 : 0;
+    const g = BaiHoc.thuGhep(e); return g.bo > 1 ? g.bo : 0;
   }
   function removeLocal(key) { U.set(LKEY, local().filter(x => x.key !== key)); }
   // Tên tệp chuẩn khi tải về (đặt vào thư mục nhap/ của dự án).
   function fileName(j) {
     const r = check(j), d = new Date(), ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
     const safe = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase();
-    return r.loai === 'bai_hoc' ? `bai-hoc-l${+j.lop}-b${String(+j.bai).padStart(2, '0')}.json` : r.loai === 'de_van' ? `van-${safe(j.ma_de)}.json` : r.loai === 'on_tap_toan' ? `on-tap-${safe(j.ma)}.json` : `toan-bai${safe(j.bai)}-${ymd}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
+    return r.loai === 'bai_hoc' ? `bai-hoc-l${+j.lop}-b${String(+j.bai).padStart(2, '0')}${boSo(j) ? '-bo' + boSo(j) : ''}.json` : r.loai === 'de_van' ? `van-${safe(j.ma_de)}.json` : r.loai === 'on_tap_toan' ? `on-tap-${safe(j.ma)}.json` : `toan-bai${safe(j.bai)}-${ymd}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
   }
 
   return { BAI, DANG_VAN, extract, parse, repair, norm, check, toanItems, vanEntry, onTapEntry, bhEntry, normBlock, numVN, mdToJson, fp, add, items, loadLocal, saveLocal, removeLocal, local, fileName };

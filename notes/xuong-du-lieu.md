@@ -22,7 +22,7 @@
 
 ## Bài giảng – luyện tập online lớp 9–12 (thầy yêu cầu 09/11/2026)
 - Menu prompt → "📚 Bài giảng – luyện tập online": chọn lớp, bài (theo mục lục SGK KNTT, ✓ = đã có), số bài liên tiếp, số câu trắc nghiệm / đúng – sai / trả lời ngắn (mặc định 8/2/4), mức học sinh. Hướng dẫn `Xuong.HD_BAIHOC`: bám đúng thứ tự mục của bài SGK, viết lại ngắn (không chép nguyên văn sách), ví dụ có lời giải, `can_nho` 4–8 mục bắt buộc, ba dạng câu hỏi thi THPT, đáp số trả lời ngắn ≤ 4 kí tự.
-- Bài đã có trên web: lệnh tự liệt kê câu cũ để AI soạn câu mới. Chi tiết trang, kiểm: notes/bai-giang-online.md.
+- Bài đã có trên web: lệnh tự liệt kê câu cũ để AI soạn câu mới. Chi tiết trang, kiểm: notes/bai-giang-online.md. Nhập bản đó vào thì thành Bộ 2, 3… (giữ bài giảng cũ, bỏ câu trùng; tệp tên `…-bo2.json`).
 
 ## Lưu ý
 - Web không vẽ hình từ "hinh" (chỉ in mô tả). Đề hình học nhập từ AI cần thầy kiểm và bổ sung hình nếu cần.

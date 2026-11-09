@@ -32,7 +32,28 @@ const BaiHoc = (() => {
   }
   const all = lop => (ML[lop] ? ML[lop].chuong.flatMap(c => c.bai.map(b => ({ ...b, chuong: c }))) : []);
   const baiOf = (lop, so) => all(lop).find(b => b.so === +so) || null;
-  function add(e) { LS[key(e.lop, e.bai)] = e; }
+  /* Nhập trùng một bài đã có (cùng lớp, bài): GIỮ bài giảng bản đầu, phần luyện tập của bản mới lưu thành "Bộ 2, Bộ 3…".
+     Câu đã có ở các bộ trước (so dấu vân tay lời đề) thì bỏ; mọi câu đều trùng thì không thêm bộ. Bài đang là bài MẪU (mau:true)
+     mà nhập bản thật thì bản thật thay hẳn. e.tn / e.ds / e.tln = ngân hàng câu của mọi bộ; e.bo = các bộ. (thầy chọn 09/11/2026) */
+  const fpQ = q => fold(String(q || '').replace(/<[^>]+>/g, ' ')).replace(/\\(?:left|right|,|;|!|quad)/g, '').replace(/[^a-z0-9]+/g, '');
+  const PHAN = ['tn', 'ds', 'tln'];
+  const nCau = x => x.tn.length + x.ds.length + x.tln.length;
+  const boMot = e => ({ tn: e.tn, ds: e.ds, tln: e.tln, nguon: e.nguon, src: e.src, mau: !!e.mau });
+  function ghep(e, thu) {
+    const k = key(e.lop, e.bai), cu = LS[k], tong = nCau(e);
+    if (!cu || (cu.mau && !e.mau)) {
+      if (!thu) { e.bo = [boMot(e)]; LS[k] = e; }
+      return { bo: 1, them: tong, bo_qua: 0, thay_mau: !!cu, tong };
+    }
+    const da = new Set(PHAN.flatMap(p => cu[p].map(q => fpQ(q.q))));
+    const nb = boMot(e);
+    PHAN.forEach(p => { nb[p] = e[p].filter(q => { const f = fpQ(q.q); if (da.has(f)) return false; da.add(f); return true; }); });
+    const them = nCau(nb), so = cu.bo.length + 1;
+    if (them && !thu) { cu.bo.push(nb); PHAN.forEach(p => { cu[p] = cu[p].concat(nb[p]); }); }
+    return { bo: them ? so : 0, them, bo_qua: tong - them, tong, co: cu.bo.length };
+  }
+  const add = e => ghep(e, false);
+  const thuGhep = e => ghep(e, true);          // xem trước (Xưởng dữ liệu): nhập vào thì thành bộ mấy, thêm bao nhiêu câu
   function taiNguyen(lop, bai, arr) { (TN[key(lop, bai)] = TN[key(lop, bai)] || []).push(...arr); }
   const tnOf = (lop, bai) => TN[key(lop, bai)] || [];
   function nhung(m) { NHUNG = Object.assign(NHUNG, m); }
@@ -59,6 +80,40 @@ const BaiHoc = (() => {
   }
   const get_ = (lop, bai) => LS[key(lop, bai)] || tuVao10(+lop, +bai);
   const list = () => Object.values(LS);
+  const boList = e => (e.bo && e.bo.length ? e.bo : [boMot(e)]);
+
+  /* Chọn câu cho một lượt luyện tập / phiếu in: 'tat' tất cả; '0','1'… một bộ; 'ngau' rút HAN câu mỗi phần từ ngân hàng.
+     Luyện online: ưu tiên câu em làm sai, rồi câu chưa làm, rồi câu đã đúng (lịch sử 'bh:cau:<lớp>-<bài>'). Phiếu in: rút theo mã đề. */
+  const HAN = { tn: 12, ds: 2, tln: 4 };
+  const vuot = e => PHAN.some(p => e[p].length > HAN[p]);
+  const coChon = e => boList(e).length > 1 || vuot(e);
+  const lsCau = e => get('bh:cau:' + key(e.lop, e.bai), {});
+  function rut(e, r, ls) {
+    const out = {};
+    PHAN.forEach(p => {
+      const a = e[p].map((q, i) => ({ i, h: ls ? ls[fpQ(q.q)] : undefined, r: r() }));
+      a.sort((x, y) => (x.h === 0 ? 0 : x.h === undefined ? 1 : 2) - (y.h === 0 ? 0 : y.h === undefined ? 1 : 2) || x.r - y.r);
+      out[p] = a.slice(0, HAN[p]).sort((x, y) => x.i - y.i).map(x => e[p][x.i]);
+    });
+    return out;
+  }
+  function chonCau(e, chon, r, ls) {
+    if (!coChon(e) || chon === 'tat') return { tn: e.tn, ds: e.ds, tln: e.tln, ten: 'Tất cả' };
+    const B = boList(e);
+    if (/^\d+$/.test(String(chon)) && B[+chon]) return { ...B[+chon], ten: `Bộ ${+chon + 1}` };
+    return { ...rut(e, r || Math.random, ls), ten: 'Ngẫu nhiên' };
+  }
+  const chonMacDinh = e => { const c = get('bh:bo:' + key(e.lop, e.bai), null); return c !== null && (c === 'tat' || c === 'ngau' || boList(e)[+c]) ? String(c) : vuot(e) ? 'ngau' : 'tat'; };
+  const DANG = {};                              // lượt đang hiện ở tab Luyện tập → trình chiếu dùng đúng các câu đó
+  function deTrinhChieu(e) {
+    if (!coChon(e)) return e;
+    const k = key(e.lop, e.bai), s = DANG[k] || (DANG[k] = chonCau(e, chonMacDinh(e), null, lsCau(e)));
+    return { ...e, tn: s.tn, ds: s.ds, tln: s.tln };
+  }
+  const chonHTML = (e, cur, id) => coChon(e) ? `<div class="bh-bo" role="group" aria-label="Chọn bộ câu hỏi">${[
+      ...(vuot(e) ? [['ngau', `🎲 Ngẫu nhiên (${PHAN.reduce((t, p) => t + Math.min(HAN[p], e[p].length), 0)} câu)`]] : []),
+      ...boList(e).map((b, i) => [String(i), `Bộ ${i + 1} (${nCau(b)} câu)`]), ['tat', `Tất cả (${nCau(e)} câu)`]]
+    .map(([v, t]) => `<button type="button" class="chip-btn${v === cur ? ' on' : ''}" data-${id}="${v}" aria-pressed="${v === cur}">${t}</button>`).join('')}</div>` : '';
   const prog = (lop, bai) => get('bh:' + key(lop, bai), null);
 
   /* ---------- Khung trang ---------- */
@@ -84,7 +139,7 @@ const BaiHoc = (() => {
       const e = get_(lop, b.so), p = prog(lop, b.so), t = tnOf(lop, b.so);
       return `<a class="bh-row${e || t.length ? '' : ' trong'}" href="#/bai-hoc/${lop}/${b.so}" data-s="${esc(fold(`bai ${b.so} ${b.ten} ${b.chuong.ten}`))}">
         <span class="bh-no">${b.so}</span><span class="bh-ten">Bài ${b.so}. ${esc(b.ten)}</span>
-        <span class="chips">${t.length ? '<span class="chip ok">🎬 Trình chiếu</span>' : ''}${e ? `<span class="chip ok">${e.vao10 ? '🎯 ' : ''}📘 ✍️ ${e.tn.length + e.ds.length + e.tln.length} câu${e.nld ? ` · ${e.nld} đề luyện` : ''}</span>` : t.length ? '' : '<span class="chip">Đang soạn</span>'}${p ? `<span class="chip">✓ ${p.best}/${p.total}</span>` : ''}</span></a>`;
+        <span class="chips">${t.length ? '<span class="chip ok">🎬 Trình chiếu</span>' : ''}${e ? `<span class="chip ok">${e.vao10 ? '🎯 ' : ''}📘 ✍️ ${e.tn.length + e.ds.length + e.tln.length} câu${boList(e).length > 1 ? ` · ${boList(e).length} bộ` : ''}${e.nld ? ` · ${e.nld} đề luyện` : ''}</span>` : t.length ? '' : '<span class="chip">Đang soạn</span>'}${p ? `<span class="chip">✓ ${p.best}/${p.total}</span>` : ''}</span></a>`;
     };
     const taps = [...new Set(M.chuong.map(c => c.tap))];
     view().innerHTML = shell('#/bai-hoc', 'Chọn lớp', `<section class="card hero"><p class="pill soft">Lớp ${lop}</p><h2>${esc(M.ten)}</h2>
@@ -127,7 +182,7 @@ const BaiHoc = (() => {
       ${lienQuan(lop, b.so)}
       <div class="pane-foot">${e && !tab ? `<a class="btn primary" href="#/bai-hoc/${lop}/${so}/luyen">Luyện tập ngay ✍️ →</a>` : next ? `<a class="btn primary" href="#/bai-hoc/${lop}/${next.so}">Sang Bài ${next.so} →</a>` : `<a class="btn primary" href="#/bai-hoc/${lop}">Về mục lục</a>`}</div></main>`;
     const pane = $('#pane');
-    if (e && $('#bhTC')) $('#bhTC').addEventListener('click', () => TrinhChieu.mo(e, tab === 'luyen' ? 'luyen' : 'giang'));
+    if (e && $('#bhTC')) $('#bhTC').addEventListener('click', () => TrinhChieu.mo(deTrinhChieu(e), tab === 'luyen' ? 'luyen' : 'giang'));
     if (!e) { paneTrong(lop, b, pane); return ttMount(lop, b.so, pane); }
     if (tab === 'phieu') panePhieu(e, pane); else if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
   }
@@ -264,11 +319,15 @@ const BaiHoc = (() => {
     return q.why.replace(/((?:phương|Phương|PHƯƠNG|đáp|Đáp|ĐÁP)\s+án|[Cc]họn|[Cc]âu trả lời)((?:\s*(?:,|và|hoặc|hay|\/)?\s*(?:<\/?b>)?[A-D](?:<\/?b>)?(?![\p{L}\d]))+)/gu,
       (m, k, ds) => k + ds.replace(/[A-D](?![\p{L}\d])/g, c => moi[c] || c));
   }
-  function paneLuyen(e, pane) {
+  function paneLuyen(e0, pane, chon) {
+    chon = chon || chonMacDinh(e0);
+    const k0 = key(e0.lop, e0.bai), s = DANG[k0] = chonCau(e0, chon, null, lsCau(e0));
+    const e = { ...e0, tn: s.tn, ds: s.ds, tln: s.tln };
+    const ghi = (q, ok) => { const h = lsCau(e0); h[fpQ(q.q)] = ok ? 1 : 0; set('bh:cau:' + k0, h); };
     const tn = e.tn.map(q => ({ ...q, good: q.a[0], opts: shuffle(q.a) }));
     const total = tn.length + 4 * e.ds.length + e.tln.length, nQ = tn.length + e.ds.length + e.tln.length;
     let done = 0, right = 0;
-    pane.innerHTML = vao10Box(e) + (e.ds.length || e.tln.length
+    pane.innerHTML = vao10Box(e) + (coChon(e0) ? `<div class="card bh-bo-card"><p><b>Bài này có ${nCau(e0)} câu${boList(e0).length > 1 ? ` trong ${boList(e0).length} bộ` : ''}.</b> ${chon === 'ngau' ? 'Mỗi lượt web rút ngẫu nhiên một đề, ưu tiên câu em làm sai và câu chưa làm.' : 'Chọn bộ câu hỏi để luyện:'}</p>${chonHTML(e0, chon, 'bo')}</div>` : '') + (e.ds.length || e.tln.length
       ? `<p class="lead">Làm lần lượt ba phần như đề thi. Mỗi câu bấm <b>Kiểm tra</b> là biết đúng sai ngay và đọc lời giải thích. Câu đúng – sai: mỗi ý đúng được 1 điểm.</p>`
       : `<p class="lead">Chọn một đáp án cho mỗi câu là biết đúng sai ngay và đọc lời giải thích. Làm xong thì sang <b>Luyện đề</b> để làm bài tự luận như đề thi.</p>`) + `
       ${tn.length ? `<h3 class="sub">Phần I. Trắc nghiệm nhiều phương án (${tn.length} câu)</h3><div class="quiz">${tn.map((q, k) => `<article class="card qcard bh-q" data-k="${k}">
@@ -281,6 +340,7 @@ const BaiHoc = (() => {
         <div class="row bh-tlrow"><label>Đáp số: <input class="bh-in" type="text" inputmode="decimal" autocomplete="off" aria-label="Đáp số câu ${k + 1}"></label><button class="btn primary" type="button" data-chk>Kiểm tra</button></div>
         <div class="why" hidden></div></article>`).join('')}<p class="muted small">Trả lời ngắn: ghi số, dùng dấu phẩy hoặc dấu chấm cho số thập phân (2,5 hoặc 2.5); được ghi phân số dạng 3/4.</p>` : ''}
       <div class="card score bh-score" id="bhScore"><p>Đã làm <b id="bhDone">0</b>/${nQ} câu · đúng <b id="bhRight">0</b>/${total} ý</p></div>`;
+    $$('[data-bo]', pane).forEach(b => b.addEventListener('click', () => { set('bh:bo:' + k0, b.dataset.bo); paneLuyen(e0, pane, b.dataset.bo); }));
     const tick = (ok, pts = ok ? 1 : 0) => { done++; right += pts; $('#bhDone').textContent = done; $('#bhRight').textContent = right; if (done === nQ) finish(); };
     const why = (card, ok, txt) => { const w = $('.why', card); w.hidden = false; w.innerHTML = `${ok ? '<b class="okc">Đúng rồi!</b>' : '<b class="badc">Chưa đúng.</b>'} ${txt || ''}`; };
     $$('.bh-q', pane).forEach(card => {
@@ -290,7 +350,7 @@ const BaiHoc = (() => {
         const ok = q.opts[+btn.dataset.j] === q.good;
         $$('.opt', card).forEach(x => { x.disabled = true; if (q.opts[+x.dataset.j] === q.good) x.classList.add('good'); });
         if (!ok) btn.classList.add('bad');
-        why(card, ok, doiChu(q, q.opts)); tick(ok);
+        why(card, ok, doiChu(q, q.opts)); ghi(q, ok); tick(ok);
       }));
     });
     $$('.bh-dsq', pane).forEach(card => {
@@ -307,7 +367,7 @@ const BaiHoc = (() => {
           li.classList.add(ok ? 'good' : 'bad'); li.insertAdjacentHTML('beforeend', `<span class="bh-mark">${ok ? '✓' : '✗'} ${q.y[j][1] ? 'Đúng' : 'Sai'}</span>`);
           $$('button', li).forEach(x => { x.disabled = true; }); });
         const w = $('.why', card); w.hidden = false;
-        w.innerHTML = `<b class="${n === 4 ? 'okc' : 'badc'}">Đúng ${n}/4 ý.</b> ${q.why || ''}`; tick(n === 4, n);
+        w.innerHTML = `<b class="${n === 4 ? 'okc' : 'badc'}">Đúng ${n}/4 ý.</b> ${q.why || ''}`; ghi(q, n === 4); tick(n === 4, n);
       });
     });
     $$('.bh-tl', pane).forEach(card => {
@@ -316,17 +376,20 @@ const BaiHoc = (() => {
         if (card.classList.contains('locked') || !inp.value.trim()) { if (!inp.value.trim()) inp.focus(); return; }
         card.classList.add('locked'); chk.disabled = true; inp.readOnly = true;
         const ok = sameAns(inp.value, q.ans); inp.classList.add(ok ? 'good' : 'bad');
-        why(card, ok, `${ok ? '' : `Đáp số đúng: <b>${esc(q.ans)}</b>. `}${q.why || ''}`); tick(ok);
+        why(card, ok, `${ok ? '' : `Đáp số đúng: <b>${esc(q.ans)}</b>. `}${q.why || ''}`); ghi(q, ok); tick(ok);
       };
       chk.addEventListener('click', go); inp.addEventListener('keydown', ev => { if (ev.key === 'Enter') go(); });
     });
     function finish() {
-      const old = prog(e.lop, e.bai), best = Math.max(right, old ? old.best : 0);
-      set('bh:' + key(e.lop, e.bai), { best, total, luc: Date.now() });
+      // nhiều bộ / rút ngẫu nhiên: số câu mỗi lượt khác nhau → điểm cao nhất tính theo tỉ lệ, quy về thang của lượt này
+      // nhiều bộ / rút ngẫu nhiên: mỗi lượt số câu khác nhau → giữ lượt có tỉ lệ đúng cao nhất
+      const old = prog(e.lop, e.bai), hon = !old || !old.total || right / total >= old.best / old.total;
+      const kq = hon ? { best: right, total } : { best: old.best, total: old.total };
+      set('bh:' + key(e.lop, e.bai), { ...kq, luc: Date.now() });
       const s = $('#bhScore'), r = right / total;
       s.innerHTML = `<p class="big-score">${right}/${total}</p><p>${r === 1 ? 'Xuất sắc! Em đã nắm chắc bài này.' : r >= 0.8 ? 'Tốt lắm. Đọc lại lời giải thích các câu sai rồi làm lại để đạt điểm tối đa.' : r >= 0.5 ? 'Em hiểu được phần lớn bài. Mở lại Bài giảng, xem mục Cần nhớ và các ví dụ rồi làm lại.' : 'Em nên học lại Bài giảng (đọc kĩ ví dụ) trước khi làm lại.'}</p>
-        <p class="muted">Điểm cao nhất của em: ${best}/${total}</p><div class="row" style="justify-content:center"><button class="btn" type="button" id="bhRedo">↻ Làm lại (đảo phương án)</button><a class="btn ghost" href="#/bai-hoc/${e.lop}/${e.bai}">📘 Xem lại bài giảng</a></div>`;
-      $('#bhRedo').addEventListener('click', () => { paneLuyen(e, pane); pane.scrollIntoView({ block: 'start' }); });
+        <p class="muted">Điểm cao nhất của em: ${kq.best}/${kq.total}</p><div class="row" style="justify-content:center"><button class="btn" type="button" id="bhRedo">${chon === 'ngau' ? '🎲 Làm lượt mới' : '↻ Làm lại (đảo phương án)'}</button><a class="btn ghost" href="#/bai-hoc/${e.lop}/${e.bai}">📘 Xem lại bài giảng</a></div>`;
+      $('#bhRedo').addEventListener('click', () => { paneLuyen(e0, pane, chon); pane.scrollIntoView({ block: 'start' }); });
       s.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
@@ -337,13 +400,16 @@ const BaiHoc = (() => {
   function rngOf(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
   function daoTheoMa(arr, r) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
   const chuThuong = h => String(h).replace(/\\\(|\\\)|\\\[|\\\]/g, '').replace(/<[^>]+>/g, '').replace(/\\[a-zA-Z]+/g, 'x').length;
-  function phieuData(e, ma) {
+  // Câu của phiếu: một bộ, tất cả, hoặc rút ngẫu nhiên CỐ ĐỊNH theo mã đề (in lại cùng mã ra cùng câu).
+  const phieuBo = (e, ma, chon) => { const c = chonCau(e, chon === undefined ? (vuot(e) ? 'ngau' : 'tat') : chon, rngOf(e.lop * 7919 + e.bai * 131 + ma)); return { ...e, tn: c.tn, ds: c.ds, tln: c.tln }; };
+  function phieuData(e, ma, chon) {
     const r = rngOf(e.lop * 100000 + e.bai * 100 + ma);
-    return e.tn.map(q => { const opts = daoTheoMa(q.a, r); return { q, opts, good: opts.indexOf(q.a[0]) }; });
+    return phieuBo(e, ma, chon).tn.map(q => { const opts = daoTheoMa(q.a, r); return { q, opts, good: opts.indexOf(q.a[0]) }; });
   }
-  function phieuHTML(e, o) {
+  function phieuHTML(e0, o) {
+    const e = phieuBo(e0, o.ma, o.bo);
     const b = baiOf(e.lop, e.bai), ten = `Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}`, ma = `${e.lop}${String(e.bai).padStart(2, '0')}${o.ma}`;
-    const tn = phieuData(e, o.ma);
+    const tn = phieuData(e0, o.ma, o.bo);
     const head = r => `<div class="sh-head"><span>${U.tenPhieu()} · PHIẾU LÀM BÀI TRÊN LỚP</span><span>${r}</span></div>`;
     const cot = opts => { const m = Math.max(...opts.map(chuThuong)); return m <= 22 ? 'c4' : m <= 48 ? 'c2' : 'c1'; };
     let s1 = `<section class="sh-page">${head(`Toán ${e.lop} · <span class="bh-tt-ma">Mã ${ma}</span>`)}
@@ -370,8 +436,11 @@ const BaiHoc = (() => {
   }
   function panePhieu(e, pane) {
     const st = Object.assign({ ma: 1, canNho: true, dapAn: false, giai: true, dong: 3 }, get('bh:phieu', {}));
+    let bo = vuot(e) ? 'ngau' : 'tat';
+    const moTa = () => { const x = phieuBo(e, +($('#pMa') ? $('#pMa').value : st.ma), bo); return `${x.tn.length} câu trắc nghiệm${x.ds.length ? `, ${x.ds.length} câu đúng – sai` : ''}${x.tln.length ? `, ${x.tln.length} câu trả lời ngắn` : ''}`; };
     pane.innerHTML = `<section class="card sheet-tools"><h3>🖨️ Phiếu làm bài trên lớp</h3>
-      <p class="muted">In phát cho học sinh làm tại lớp: ${e.tn.length} câu trắc nghiệm${e.ds.length ? `, ${e.ds.length} câu đúng – sai` : ''}${e.tln.length ? `, ${e.tln.length} câu trả lời ngắn` : ''}. Mỗi <b>mã đề</b> đảo thứ tự phương án khác nhau – in 2 mã cho 2 dãy bàn.</p>
+      ${coChon(e) ? `<p><b>Câu hỏi in:</b></p>${chonHTML(e, bo, 'pbo')}<p class="muted small">🎲 Ngẫu nhiên: mỗi mã đề rút một bộ câu khác nhau từ ${nCau(e)} câu của bài (in lại cùng mã ra đúng các câu đó).</p>` : ''}
+      <p class="muted">In phát cho học sinh làm tại lớp: <span id="pMoTa">${moTa()}</span>. Mỗi <b>mã đề</b> đảo thứ tự phương án khác nhau – in 2 mã cho 2 dãy bàn.</p>
       <div class="opts-row"><label class="tog">Mã đề <select id="pMa">${[1, 2, 3, 4].map(m => `<option value="${m}" ${st.ma === m ? 'selected' : ''}>${e.lop}${String(e.bai).padStart(2, '0')}${m}</option>`).join('')}</select></label>
         <label class="tog"><input type="checkbox" id="pCan" ${st.canNho ? 'checked' : ''}> In phần Cần nhớ</label>
         ${e.tln.length ? `<label class="tog">Dòng kẻ mỗi câu trả lời ngắn <select id="pDong">${[0, 2, 3, 5].map(n => `<option ${st.dong === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
@@ -380,8 +449,9 @@ const BaiHoc = (() => {
       <div class="row"><button class="btn primary" type="button" id="pIn">🖨️ In / Lưu PDF</button></div>
       <p class="muted small">Lưu PDF: trong hộp thoại in chọn “Lưu dưới dạng PDF” (Save as PDF), khổ A4.</p></section>
       <div class="paper-wrap" id="paper"></div>`;
-    const opt = () => ({ ma: +$('#pMa').value, canNho: $('#pCan').checked, dapAn: $('#pDa').checked, giai: $('#pGiai').checked, dong: $('#pDong') ? +$('#pDong').value : 0 });
-    const draw = () => { const o = opt(); set('bh:phieu', o); $('#paper').innerHTML = phieuHTML(e, o); };
+    const opt = () => ({ ma: +$('#pMa').value, canNho: $('#pCan').checked, dapAn: $('#pDa').checked, giai: $('#pGiai').checked, dong: $('#pDong') ? +$('#pDong').value : 0, bo });
+    const draw = () => { const o = opt(); const { bo: _, ...luu } = o; set('bh:phieu', luu); $('#pMoTa').textContent = moTa(); $('#paper').innerHTML = phieuHTML(e, o); };
+    $$('[data-pbo]', pane).forEach(b => b.addEventListener('click', () => { bo = b.dataset.pbo; $$('[data-pbo]', pane).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); }); draw(); }));
     $$('#pMa, #pCan, #pDa, #pGiai, #pDong', pane).forEach(x => x.addEventListener('change', draw));
     $('#pIn').addEventListener('click', ev => OnTap.printHTML(phieuHTML(e, opt()), ev.currentTarget));
     draw();
@@ -402,5 +472,5 @@ const BaiHoc = (() => {
     if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, ['luyen', 'phieu'].includes(parts[3]) ? parts[3] : '');
     return true;
   }
-  return { LOP, LIEN_9, DUNG_9, own, tuVao10, doiChu, congCu, phieuHTML, phieuData, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
+  return { LOP, LIEN_9, DUNG_9, HAN, own, thuGhep, boList, chonCau, coChon, fpQ, tuVao10, doiChu, congCu, phieuHTML, phieuData, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
 })();

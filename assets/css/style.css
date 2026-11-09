@@ -552,3 +552,12 @@ table.bh-ds-t{width:100%;border-collapse:collapse;margin:3px 0 0;font-size:11pt}
 table.bh-key{border-collapse:collapse;margin:4px 0 8px;font-size:11pt}
 table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align:center;min-width:8mm}
 .bh-tt-ma{font-weight:700}
+/* Nhiều bộ câu một bài (nhập trùng → Bộ 2, 3…), đề ngẫu nhiên */
+.bh-bo{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px}
+.chip-btn{font:inherit;font-size:14px;font-weight:700;padding:6px 12px;border-radius:var(--r-pill);border:2px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip-btn.on{background:var(--primary-soft);border-color:var(--primary)}
+.chip-btn:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.bh-bo-card p{margin:0}
+.xw-trung{margin:10px 0;padding:10px 12px;border-radius:10px;background:var(--primary-soft)}
+.xw-trung.bad{background:var(--warn-soft)}
+.xw-trung p{margin:4px 0}

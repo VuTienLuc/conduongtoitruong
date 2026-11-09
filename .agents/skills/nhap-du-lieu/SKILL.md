@@ -9,6 +9,7 @@ Tài liệu: `notes/xuong-du-lieu.md` (các loại dữ liệu, trường bắt 
 1. Lưu nguyên văn câu trả lời / tệp vào `nhap/` với tên chuẩn:
    - đề luyện Toán: `toan-bai<N>-dot<k>.json` · phiếu ôn tập: `on-tap-b<N>-dot<k>.json` hoặc `.md`
    - bài giảng: `bai-hoc-l<lớp>-b<bài 2 chữ số>.json` · Ngữ văn: `van-<mã đề>.json`
+   - bài giảng mà bài đó ĐÃ CÓ tệp trong `nhap/`: KHÔNG đè – đặt `bai-hoc-l<lớp>-b<bài>-bo2.json` (bo3…). Web giữ bài giảng tệp đầu, câu luyện tập thành Bộ 2; câu trùng bị bỏ. Sửa lỗi bản cũ thì sửa thẳng tệp cũ.
 2. `python3 tools/nhap-du-lieu.py` – tệp lỗi bị bỏ qua và in lỗi. Sửa lỗi TRONG tệp ở `nhap/` (thiếu trường, điểm không bội 0,25, đáp số trả lời ngắn không phải số…), chạy lại tới khi tất cả ✓.
    - KHÔNG tự viết thêm `data/vao-10/luyen-de/*.js` hay `data/nhap/*.js` bằng tay – lệnh tự tạo.
 3. Kiểm nội dung từng đề, bài mới:

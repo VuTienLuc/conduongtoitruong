@@ -24,10 +24,18 @@
 - Bản gộp `dist/`: `tools/build.py` nhúng nội dung tệp, web mở bằng địa chỉ blob. `kiem-tra.js` báo lỗi nếu tệp không có hoặc tệp trong `tuong-tac/` chưa gắn bài nào.
 - Đã gắn: Toán 11 Bài 11 – trình chiếu tiết 1 "Vị trí tương đối của hai đường thẳng" (ô chữ PHẢN CHỨNG, hình 3D, phản biện AI, trắc nghiệm).
 
+## Nhập trùng bài đã có → Bộ 2, Bộ 3… (thầy chọn 09/11/2026)
+- Cùng lớp + bài đã có: GIỮ bài giảng bản đầu; câu luyện tập của bản mới thành "Bộ N" (`BaiHoc.add` → `ghep`); câu trùng lời đề câu đã có (`BaiHoc.fpQ`) bị bỏ; mọi câu trùng thì không thêm bộ. Bài đang là MẪU (`mau:true`) thì bản thật thay hẳn. `e.tn/ds/tln` = ngân hàng mọi bộ, `e.bo` = từng bộ.
+- Tên tệp bộ mới: `bai-hoc-l<lớp>-b<bài>-bo<N>.json` (Xưởng "Tải tệp chuẩn" tự đặt; `nhap-du-lieu.py` xếp tệp gốc trước tệp -bo). Không bao giờ đè tệp cũ.
+- Xưởng → Nhập dữ liệu báo trước: "sẽ thành Bộ N: thêm x câu mới, bỏ y câu trùng" hoặc "mọi câu đều đã có". Lưu trên máy (localStorage) cũng ghép thành bộ, không còn bị bỏ qua khi hệ thống đã có bài.
+- Luyện tập online: có chọn 🎲 Ngẫu nhiên (khi ngân hàng vượt 12 TN / 2 ĐS / 4 TLN – `BaiHoc.HAN`) · Bộ 1, Bộ 2… · Tất cả. Ngẫu nhiên ưu tiên câu em làm sai, rồi chưa làm, rồi đã đúng (`bh:cau:<lớp>-<bài>`); nút "🎲 Làm lượt mới". Lựa chọn nhớ ở `bh:bo:<lớp>-<bài>`. Điểm cao nhất giữ lượt có tỉ lệ đúng cao nhất.
+- Phiếu làm bài: chọn bộ như trên; 🎲 rút theo mã đề (cùng mã in lại ra cùng câu). Trình chiếu dùng đúng lượt đang hiện ở tab Luyện tập.
+- `nhap-du-lieu.py`: tệp lỗi thì giữ bản cũ đang có trên web (trước đây bị gỡ).
+
 ## Tệp
 - `assets/js/baihoc.js` (BaiHoc): mucLuc, add, get, all, baiOf, route, previewHTML, numOf.
 - `data/bai-hoc/muc-luc-kntt.js`: mục lục Toán 9 (32 bài), 10 (27), 11 (33), 12 (19) – chỉ tên chương, tên bài, không số trang. Đối chiếu web 09/11/2026 (Toán 9 đủ tên bài; Toán 10, 12 tên chương; Toán 11 tên từng bài). `kiem-tra.js` kiểm đủ số bài, đánh số liên tục.
-- Nội dung bài: JSON `"loai":"bai_hoc"` (mẫu `Xuong.MAU_BAIHOC`, kiểm `NhapDL.check`, chuyển `NhapDL.bhEntry`) → `nhap/bai-hoc-l<lớp>-b<bài>.json` → `tools/nhap-du-lieu.py`. Nhập bản mới cùng lớp, bài thì thay bản cũ.
+- Nội dung bài: JSON `"loai":"bai_hoc"` (mẫu `Xuong.MAU_BAIHOC`, kiểm `NhapDL.check`, chuyển `NhapDL.bhEntry`) → `nhap/bai-hoc-l<lớp>-b<bài>.json` → `tools/nhap-du-lieu.py`. Sửa lỗi một bản = sửa thẳng tệp đó trong `nhap/` (cùng tên → thay).
 - Kiểm: lỗi nếu bài ngoài mục lục, < 2 mục bài giảng, không có ví dụ, `can_nho` < 3, trắc nghiệm < 4 câu hoặc không đủ 4 phương án, đúng – sai không đủ 4 ý true/false, đáp số trả lời ngắn không phải số. Lưu ý nếu đáp số > 4 kí tự, tên bài khác mục lục, 4 ý cùng Đúng/Sai.
 
 ## Bài mẫu (mau:true, "Mẫu minh họa" – tự soạn, chưa có SGK trong tai-lieu/)
