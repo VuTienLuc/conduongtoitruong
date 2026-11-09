@@ -45,8 +45,9 @@ const TrinhChieu = (() => {
   /* ---------- Cỡ chữ lấp đầy màn hình ---------- */
   function fit() {
     const sl = root && $('.tc-slide', root), inn = sl && $('.tc-in', sl); if (!inn) return;
-    const cs = getComputedStyle(sl), H = sl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom), W = sl.clientWidth;
-    const bia = sl.classList.contains('bia');
+    const bia = sl.classList.contains('bia'), cs = getComputedStyle(sl), W = sl.clientWidth;
+    // trang nội dung: chữ bám mép trên, chỉ dùng tối đa 80% chiều cao – chừa phía dưới để thầy vẽ hình, viết thêm
+    const H = (sl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) * (bia ? 1 : 0.8);
     let lo = 12, hi = Math.max(16, Math.min(H * (bia ? 0.11 : 0.085), W * (bia ? 0.06 : 0.045)));
     const vua = f => { inn.style.fontSize = f + 'px'; return inn.scrollHeight <= H + 1 && inn.scrollWidth <= inn.clientWidth + 1; };
     if (vua(hi)) return;

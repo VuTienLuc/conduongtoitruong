@@ -114,5 +114,5 @@ const OnTap = (() => {
     if (e) phieuPage(e); else listPage();
     return true;
   }
-  return { add, get, list, ofTopic, nextDot, daDung, sheetHTML, toMd, route, TEN, THU };
+  return { add, get, list, ofTopic, nextDot, daDung, sheetHTML, toMd, route, printHTML, TEN, THU };
 })();

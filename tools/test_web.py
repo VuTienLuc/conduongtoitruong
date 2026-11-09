@@ -188,6 +188,15 @@ async def main():
             last = await pg.locator('.tc-so').inner_text(); good = await pg.evaluate("TrinhChieu.dung(BaiHoc.get(%d, %d)).filter(d => d.loai === 'tn').length" % (l, bb))
             await pg.keyboard.press('Escape'); await pg.keyboard.press('Escape'); await pg.wait_for_timeout(200)
             if not last.startswith(f'{n} /') or tran or not good or await pg.locator('.tc-root').count(): fails.append(f'trình chiếu Toán {l} bài {bb}: {last}, tràn {tran[:3]}, còn mở {await pg.locator(".tc-root").count()}')
+        # 🖨️ Phiếu làm bài: có đủ câu, phương án đảo theo mã đề, đáp án khớp phương án đúng, không lỗi công thức
+        for l, bb in await pg.evaluate("BaiHoc.list().map(e => [e.lop, e.bai]).concat([[9, 31]])"):
+            await pg.goto(base + f'#/bai-hoc/{l}/{bb}/phieu'); await pg.wait_for_timeout(300)
+            await pg.check('#pDa'); await pg.wait_for_timeout(300); await pg.evaluate("MathTS.done(document.getElementById('paper'))")
+            r = await pg.evaluate("""(([l, b]) => { const e = BaiHoc.get(l, b), d1 = BaiHoc.phieuData(e, 1), d2 = BaiHoc.phieuData(e, 2);
+              const p = document.getElementById('paper'); return { trang: p.querySelectorAll('.sh-page').length, cau: p.querySelectorAll('.sh-q').length, n: e.tn.length + e.ds.length + e.tln.length,
+                dung: d1.every(x => x.opts[x.good] === x.q.a[0]), khac: d1.some((x, i) => x.opts.join() !== d2[i].opts.join()), on: d1.every((x, i) => x.opts.join() === BaiHoc.phieuData(e, 1)[i].opts.join()),
+                loi: p.querySelectorAll('mjx-merror').length }; })""", [l, bb])
+            if r['trang'] != 2 or r['cau'] != r['n'] or not r['dung'] or not r['khac'] or not r['on'] or r['loi']: fails.append(f'phiếu làm bài Toán {l} bài {bb}: {r}')
         # Trình chiếu gắn vào bài (tuong-tac/): khung 16:9 nạp được trang, có các slide, không lỗi JS bên trong.
         for (l, bb) in await pg.evaluate("Object.keys(BaiHoc.TN).map(k => k.split('-').map(Number))"):
             await pg.goto(base + f'#/bai-hoc/{l}/{bb}'); await pg.wait_for_timeout(1500)

@@ -495,9 +495,9 @@ body.bh-noscroll{overflow:hidden}
 .tc-main{position:absolute;top:0;left:0;bottom:0;width:100%;transition:width .2s}
 .tc-prog{position:absolute;top:0;left:0;right:0;height:4px;background:rgba(47,111,228,.12);z-index:2}
 .tc-prog i{display:block;height:100%;width:0;background:#2f6fe4;transition:width .25s}
-.tc-slide{position:absolute;inset:0;padding:5vh 6vw 8vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;font-family:var(--f-body);touch-action:pan-y}
+.tc-slide{position:absolute;inset:0;padding:3.2vh 5vw 7vh;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;font-family:var(--f-body);touch-action:pan-y}
 .tc-in{width:100%;line-height:1.45;font-weight:500}
-.tc-slide.bia{text-align:center}
+.tc-slide.bia{text-align:center;justify-content:center;padding:5vh 6vw 8vh}
 .tc-in h1{font:800 2.3em/1.15 var(--f-head);margin:.15em 0;color:#152033}
 .tc-in h2{font:800 1.2em/1.25 var(--f-head);margin:0 0 .45em;color:#1d4ed8}
 .tc-qh span{font-weight:600;color:#64748b;font-size:.7em}
@@ -532,4 +532,18 @@ body.bh-noscroll{overflow:hidden}
 .tc-bar button{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:10px;background:rgba(15,23,42,.08);color:#152033;font-size:18px;line-height:1;cursor:pointer}
 .tc-so{font:600 14px var(--f-body);color:#475569;min-width:4.5em;text-align:center}
 .tc-root .bh-cc-pane{z-index:4}
-@media (max-aspect-ratio:1/1){.tc-opts{grid-template-columns:1fr}.tc-slide{padding:4vh 5vw 9vh}}
+@media (max-aspect-ratio:1/1){.tc-opts{grid-template-columns:1fr}.tc-slide{padding:3vh 5vw 9vh}}
+/* ---------- 🖨️ Phiếu làm bài trên lớp (bài giảng – luyện tập) ---------- */
+.bh-opts{display:grid;gap:1px 10px;margin:2px 0 0 14px}
+.bh-opts.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.bh-opts.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.bh-opts.c1{grid-template-columns:minmax(0,1fr)}
+.bh-opts span b{margin-right:4px}
+.bh-tl-o{display:inline-flex;gap:0;margin-left:6px;vertical-align:middle}
+.bh-tl-o i{display:inline-block;width:7mm;height:8mm;border:1px solid #000;margin-left:-1px}
+table.bh-ds-t{width:100%;border-collapse:collapse;margin:3px 0 0;font-size:11pt}
+.sheet table.bh-ds-t td,.sheet table.bh-ds-t th{border:1px solid #888;padding:2px 6px;text-align:left;vertical-align:top}
+.sheet table.bh-ds-t td.o,.sheet table.bh-ds-t th.o{width:13mm;text-align:center;font-size:13pt}
+table.bh-key{border-collapse:collapse;margin:4px 0 8px;font-size:11pt}
+table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align:center;min-width:8mm}
+.bh-tt-ma{font-weight:700}

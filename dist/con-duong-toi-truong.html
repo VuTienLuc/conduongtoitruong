@@ -508,9 +508,9 @@ body.bh-noscroll{overflow:hidden}
 .tc-main{position:absolute;top:0;left:0;bottom:0;width:100%;transition:width .2s}
 .tc-prog{position:absolute;top:0;left:0;right:0;height:4px;background:rgba(47,111,228,.12);z-index:2}
 .tc-prog i{display:block;height:100%;width:0;background:#2f6fe4;transition:width .25s}
-.tc-slide{position:absolute;inset:0;padding:5vh 6vw 8vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;font-family:var(--f-body);touch-action:pan-y}
+.tc-slide{position:absolute;inset:0;padding:3.2vh 5vw 7vh;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;font-family:var(--f-body);touch-action:pan-y}
 .tc-in{width:100%;line-height:1.45;font-weight:500}
-.tc-slide.bia{text-align:center}
+.tc-slide.bia{text-align:center;justify-content:center;padding:5vh 6vw 8vh}
 .tc-in h1{font:800 2.3em/1.15 var(--f-head);margin:.15em 0;color:#152033}
 .tc-in h2{font:800 1.2em/1.25 var(--f-head);margin:0 0 .45em;color:#1d4ed8}
 .tc-qh span{font-weight:600;color:#64748b;font-size:.7em}
@@ -545,7 +545,21 @@ body.bh-noscroll{overflow:hidden}
 .tc-bar button{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:10px;background:rgba(15,23,42,.08);color:#152033;font-size:18px;line-height:1;cursor:pointer}
 .tc-so{font:600 14px var(--f-body);color:#475569;min-width:4.5em;text-align:center}
 .tc-root .bh-cc-pane{z-index:4}
-@media (max-aspect-ratio:1/1){.tc-opts{grid-template-columns:1fr}.tc-slide{padding:4vh 5vw 9vh}}
+@media (max-aspect-ratio:1/1){.tc-opts{grid-template-columns:1fr}.tc-slide{padding:3vh 5vw 9vh}}
+/* ---------- 🖨️ Phiếu làm bài trên lớp (bài giảng – luyện tập) ---------- */
+.bh-opts{display:grid;gap:1px 10px;margin:2px 0 0 14px}
+.bh-opts.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.bh-opts.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.bh-opts.c1{grid-template-columns:minmax(0,1fr)}
+.bh-opts span b{margin-right:4px}
+.bh-tl-o{display:inline-flex;gap:0;margin-left:6px;vertical-align:middle}
+.bh-tl-o i{display:inline-block;width:7mm;height:8mm;border:1px solid #000;margin-left:-1px}
+table.bh-ds-t{width:100%;border-collapse:collapse;margin:3px 0 0;font-size:11pt}
+.sheet table.bh-ds-t td,.sheet table.bh-ds-t th{border:1px solid #888;padding:2px 6px;text-align:left;vertical-align:top}
+.sheet table.bh-ds-t td.o,.sheet table.bh-ds-t th.o{width:13mm;text-align:center;font-size:13pt}
+table.bh-key{border-collapse:collapse;margin:4px 0 8px;font-size:11pt}
+table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align:center;min-width:8mm}
+.bh-tt-ma{font-weight:700}
 
 </style>
 </head>
@@ -3942,7 +3956,7 @@ const OnTap = (() => {
     if (e) phieuPage(e); else listPage();
     return true;
   }
-  return { add, get, list, ofTopic, nextDot, daDung, sheetHTML, toMd, route, TEN, THU };
+  return { add, get, list, ofTopic, nextDot, daDung, sheetHTML, toMd, route, printHTML, TEN, THU };
 })();
 
 </script>
@@ -4065,7 +4079,7 @@ const BaiHoc = (() => {
   function lesson(lop, so, tab) {
     const b = baiOf(lop, so); if (!b) return mucLucPage(lop);
     const e = get_(lop, so), ds = all(lop), i = ds.findIndex(x => x.so === b.so), prev = ds[i - 1], next = ds[i + 1];
-    const tabs = [['', '📘', 'Bài giảng'], ['luyen', '✍️', 'Luyện tập online']].map(([k, ic, n]) =>
+    const tabs = [['', '📘', 'Bài giảng'], ['luyen', '✍️', 'Luyện tập online'], ['phieu', '🖨️', 'Phiếu làm bài']].map(([k, ic, n]) =>
       `<a class="tab${k === tab ? ' on' : ''}" href="#/bai-hoc/${lop}/${so}${k ? '/' + k : ''}" ${k === tab ? 'aria-current="page"' : ''}><span aria-hidden="true">${ic}</span> ${n}</a>`).join('');
     view().innerHTML = `${App.topBar()}<main class="wrap">
       <div class="toolbar"><a class="back" href="#/bai-hoc/${lop}">← Mục lục Toán ${lop}</a>
@@ -4078,7 +4092,7 @@ const BaiHoc = (() => {
     const pane = $('#pane');
     if (e && $('#bhTC')) $('#bhTC').addEventListener('click', () => TrinhChieu.mo(e, tab === 'luyen' ? 'luyen' : 'giang'));
     if (!e) { paneTrong(lop, b, pane); return ttMount(lop, b.so, pane); }
-    if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
+    if (tab === 'phieu') panePhieu(e, pane); else if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
   }
   // Trình chiếu, trò chơi HTML của bài: khung 16:9 ở đầu tab Bài giảng, nút toàn màn hình, mở tab mới.
   // Toàn màn hình áp cho cả khung (không chỉ iframe) để hiện được bộ công cụ mở nhanh ở góc dưới phải.
@@ -4250,6 +4264,62 @@ const BaiHoc = (() => {
     }
   }
 
+  /* ---------- 🖨️ Phiếu làm bài trên lớp (in / lưu PDF) ----------
+     Trắc nghiệm đảo phương án theo "mã đề" (cố định với mỗi mã – in 2 mã cho 2 dãy bàn), đúng – sai có ô Đúng/Sai,
+     trả lời ngắn có ô ghi số; trang đáp án riêng cho thầy (kèm lời giải thích nếu chọn). */
+  function rngOf(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  function daoTheoMa(arr, r) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  const chuThuong = h => String(h).replace(/\\\(|\\\)|\\\[|\\\]/g, '').replace(/<[^>]+>/g, '').replace(/\\[a-zA-Z]+/g, 'x').length;
+  function phieuData(e, ma) {
+    const r = rngOf(e.lop * 100000 + e.bai * 100 + ma);
+    return e.tn.map(q => { const opts = daoTheoMa(q.a, r); return { q, opts, good: opts.indexOf(q.a[0]) }; });
+  }
+  function phieuHTML(e, o) {
+    const b = baiOf(e.lop, e.bai), ten = `Bài ${e.bai}. ${esc(b ? b.ten : e.ten)}`, ma = `${e.lop}${String(e.bai).padStart(2, '0')}${o.ma}`;
+    const tn = phieuData(e, o.ma);
+    const head = r => `<div class="sh-head"><span>CON ĐƯỜNG TỚI TRƯỜNG · PHIẾU LÀM BÀI TRÊN LỚP</span><span>${r}</span></div>`;
+    const cot = opts => { const m = Math.max(...opts.map(chuThuong)); return m <= 22 ? 'c4' : m <= 48 ? 'c2' : 'c1'; };
+    let s1 = `<section class="sh-page">${head(`Toán ${e.lop} · <span class="bh-tt-ma">Mã ${ma}</span>`)}
+      <h1 class="sh-title">PHIẾU LÀM BÀI</h1><p class="sh-sub">Toán ${e.lop} – ${ten}</p>
+      <p class="sh-info">Họ và tên: ................................................................ Lớp: .............. Ngày: ......../......../........</p>
+      ${o.canNho && e.can_nho.length ? `<div class="sh-remind"><b>Kiến thức cần nhớ:</b><ul>${e.can_nho.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}`;
+    if (tn.length) s1 += `<h2 class="sh-h">PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN (${tn.length} câu) – khoanh tròn chữ cái trước phương án đúng</h2>
+      ${tn.map((x, k) => `<div class="sh-q"><div class="sh-de"><b>Câu ${k + 1}.</b> ${x.q.q}</div><div class="bh-opts ${cot(x.opts)}">${x.opts.map((op, j) => `<span><b>${'ABCD'[j]}.</b>${op}</span>`).join('')}</div></div>`).join('')}`;
+    if (e.ds.length) s1 += `<h2 class="sh-h">PHẦN II. ĐÚNG – SAI (${e.ds.length} câu) – đánh dấu ✗ vào ô Đúng hoặc Sai của từng ý</h2>
+      ${e.ds.map((q, k) => `<div class="sh-q"><div class="sh-de"><b>Câu ${k + 1}.</b> ${q.q}</div><table class="bh-ds-t"><tr><th>Ý</th><th class="o">Đúng</th><th class="o">Sai</th></tr>
+        ${q.y.map((y, j) => `<tr><td><b>${YL[j]})</b> ${y[0]}</td><td class="o">☐</td><td class="o">☐</td></tr>`).join('')}</table></div>`).join('')}`;
+    if (e.tln.length) s1 += `<h2 class="sh-h">PHẦN III. TRẢ LỜI NGẮN (${e.tln.length} câu) – ghi đáp số vào ô, trình bày vắn tắt bên dưới</h2>
+      ${e.tln.map((q, k) => `<div class="sh-q"><div class="sh-de"><b>Câu ${k + 1}.</b> ${q.q}</div><p>Đáp số: <span class="bh-tl-o"><i></i><i></i><i></i><i></i></span></p>${o.dong ? `<div class="sh-lines">${'<i></i>'.repeat(o.dong)}</div>` : ''}</div>`).join('')}`;
+    s1 += `<div class="sh-check"><b>Tự đánh giá:</b><span>Phần I: ......../${tn.length}</span>${e.ds.length ? `<span>Phần II: ......../${e.ds.length * 4} ý</span>` : ''}${e.tln.length ? `<span>Phần III: ......../${e.tln.length}</span>` : ''}<span>☐ Câu sai đã xem lại lời giải</span></div></section>`;
+    if (!o.dapAn) return `<div class="sheet math">${s1}</div>`;
+    const s2 = `<section class="sh-page">${head(`ĐÁP ÁN · Mã ${ma}`)}<h1 class="sh-title">ĐÁP ÁN PHIẾU LÀM BÀI</h1><p class="sh-sub">Toán ${e.lop} – ${ten} · Mã ${ma}</p>
+      ${tn.length ? `<h2 class="sh-h">PHẦN I</h2><table class="bh-key"><tr><th>Câu</th>${tn.map((_, k) => `<th>${k + 1}</th>`).join('')}</tr><tr><th>Đáp án</th>${tn.map(x => `<td><b>${'ABCD'[x.good]}</b></td>`).join('')}</tr></table>
+        ${o.giai ? tn.map((x, k) => x.q.why ? `<div class="sh-vd"><p><b>Câu ${k + 1} (${'ABCD'[x.good]}).</b> ${doiChu(x.q, x.opts)}</p></div>` : '').join('') : ''}` : ''}
+      ${e.ds.length ? `<h2 class="sh-h">PHẦN II</h2><table class="bh-key"><tr><th>Câu</th><th>a</th><th>b</th><th>c</th><th>d</th></tr>${e.ds.map((q, k) => `<tr><th>${k + 1}</th>${q.y.map(y => `<td><b>${y[1] ? 'Đ' : 'S'}</b></td>`).join('')}</tr>`).join('')}</table>
+        ${o.giai ? e.ds.map((q, k) => q.why ? `<div class="sh-vd"><p><b>Câu ${k + 1}.</b> ${q.why}</p></div>` : '').join('') : ''}` : ''}
+      ${e.tln.length ? `<h2 class="sh-h">PHẦN III</h2><table class="bh-key"><tr><th>Câu</th>${e.tln.map((_, k) => `<th>${k + 1}</th>`).join('')}</tr><tr><th>Đáp số</th>${e.tln.map(q => `<td><b>${esc(q.ans)}</b></td>`).join('')}</tr></table>
+        ${o.giai ? e.tln.map((q, k) => q.why ? `<div class="sh-vd"><p><b>Câu ${k + 1} (${esc(q.ans)}).</b> ${q.why}</p></div>` : '').join('') : ''}` : ''}</section>`;
+    return `<div class="sheet math">${s1}${s2}</div>`;
+  }
+  function panePhieu(e, pane) {
+    const st = Object.assign({ ma: 1, canNho: true, dapAn: false, giai: true, dong: 3 }, get('bh:phieu', {}));
+    pane.innerHTML = `<section class="card sheet-tools"><h3>🖨️ Phiếu làm bài trên lớp</h3>
+      <p class="muted">In phát cho học sinh làm tại lớp: ${e.tn.length} câu trắc nghiệm${e.ds.length ? `, ${e.ds.length} câu đúng – sai` : ''}${e.tln.length ? `, ${e.tln.length} câu trả lời ngắn` : ''}. Mỗi <b>mã đề</b> đảo thứ tự phương án khác nhau – in 2 mã cho 2 dãy bàn.</p>
+      <div class="opts-row"><label class="tog">Mã đề <select id="pMa">${[1, 2, 3, 4].map(m => `<option value="${m}" ${st.ma === m ? 'selected' : ''}>${e.lop}${String(e.bai).padStart(2, '0')}${m}</option>`).join('')}</select></label>
+        <label class="tog"><input type="checkbox" id="pCan" ${st.canNho ? 'checked' : ''}> In phần Cần nhớ</label>
+        ${e.tln.length ? `<label class="tog">Dòng kẻ mỗi câu trả lời ngắn <select id="pDong">${[0, 2, 3, 5].map(n => `<option ${st.dong === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
+        <label class="tog"><input type="checkbox" id="pDa" ${st.dapAn ? 'checked' : ''}> Kèm trang đáp án (cho thầy cô)</label>
+        <label class="tog"><input type="checkbox" id="pGiai" ${st.giai ? 'checked' : ''}> Đáp án kèm lời giải thích</label></div>
+      <div class="row"><button class="btn primary" type="button" id="pIn">🖨️ In / Lưu PDF</button></div>
+      <p class="muted small">Lưu PDF: trong hộp thoại in chọn “Lưu dưới dạng PDF” (Save as PDF), khổ A4.</p></section>
+      <div class="paper-wrap" id="paper"></div>`;
+    const opt = () => ({ ma: +$('#pMa').value, canNho: $('#pCan').checked, dapAn: $('#pDa').checked, giai: $('#pGiai').checked, dong: $('#pDong') ? +$('#pDong').value : 0 });
+    const draw = () => { const o = opt(); set('bh:phieu', o); $('#paper').innerHTML = phieuHTML(e, o); };
+    $$('#pMa, #pCan, #pDa, #pGiai, #pDong', pane).forEach(x => x.addEventListener('change', draw));
+    $('#pIn').addEventListener('click', ev => OnTap.printHTML(phieuHTML(e, opt()), ev.currentTarget));
+    draw();
+  }
+
   /* ---------- Xem trước khi nhập (Xưởng dữ liệu): bài giảng + mọi câu kèm đáp án ---------- */
   function previewHTML(e) {
     const b = baiOf(e.lop, e.bai);
@@ -4262,10 +4332,10 @@ const BaiHoc = (() => {
   function route(parts) {
     if (parts[0] !== 'bai-hoc') return false;
     const lop = +parts[1], so = +parts[2];
-    if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, parts[3] === 'luyen' ? 'luyen' : '');
+    if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, ['luyen', 'phieu'].includes(parts[3]) ? parts[3] : '');
     return true;
   }
-  return { LOP, LIEN_9, DUNG_9, own, tuVao10, doiChu, congCu, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
+  return { LOP, LIEN_9, DUNG_9, own, tuVao10, doiChu, congCu, phieuHTML, phieuData, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
 })();
 
 </script>
@@ -4317,8 +4387,9 @@ const TrinhChieu = (() => {
   /* ---------- Cỡ chữ lấp đầy màn hình ---------- */
   function fit() {
     const sl = root && $('.tc-slide', root), inn = sl && $('.tc-in', sl); if (!inn) return;
-    const cs = getComputedStyle(sl), H = sl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom), W = sl.clientWidth;
-    const bia = sl.classList.contains('bia');
+    const bia = sl.classList.contains('bia'), cs = getComputedStyle(sl), W = sl.clientWidth;
+    // trang nội dung: chữ bám mép trên, chỉ dùng tối đa 80% chiều cao – chừa phía dưới để thầy vẽ hình, viết thêm
+    const H = (sl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) * (bia ? 1 : 0.8);
     let lo = 12, hi = Math.max(16, Math.min(H * (bia ? 0.11 : 0.085), W * (bia ? 0.06 : 0.045)));
     const vua = f => { inn.style.fontSize = f + 'px'; return inn.scrollHeight <= H + 1 && inn.scrollWidth <= inn.clientWidth + 1; };
     if (vua(hi)) return;
