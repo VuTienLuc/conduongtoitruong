@@ -338,7 +338,7 @@ const NhapDL = (() => {
     local().forEach(x => {
       if (x.json.loai === 'de_van' && typeof Van !== 'undefined' && Van.get(String(x.json.ma_de))) return;   // hệ thống đã có mã đề này
       if (x.json.loai === 'on_tap_toan' && typeof OnTap !== 'undefined' && OnTap.get(String(x.json.ma))) return;
-      if (x.json.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined' && BaiHoc.get(+x.json.lop, +x.json.bai)) return;
+      if (x.json.loai === 'bai_hoc' && typeof BaiHoc !== 'undefined' && BaiHoc.own(+x.json.lop, +x.json.bai)) return;
       items.push({ json: x.json, src: 'may-nay', key: x.key, r: apply(x.json, 'may-nay') });
     });
   }

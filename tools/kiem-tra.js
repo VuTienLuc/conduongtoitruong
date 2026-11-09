@@ -194,6 +194,7 @@ else {
     if (!BH.baiOf(l, b)) err(`Tài nguyên Toán ${l} – Bài ${b}`, 'bài không có trong mục lục');
     arr.forEach(t => { if (!t.ten || !t.file) err(`Tài nguyên Toán ${l} – Bài ${b}`, 'thiếu ten hoặc file'); else { dung.add(t.file); if (!fs.existsSync(path.join(ROOT, t.file))) err(`Tài nguyên Toán ${l} – Bài ${b}`, `không có tệp ${t.file}`); } }); });
   if (fs.existsSync(path.join(ROOT, 'tuong-tac'))) fs.readdirSync(path.join(ROOT, 'tuong-tac')).filter(f => f.endsWith('.html')).forEach(f => { if (!dung.has('tuong-tac/' + f)) err('tuong-tac/' + f, 'chưa gắn vào bài nào (data/bai-hoc/tai-nguyen.js)'); });
+  Object.entries(BH.DUNG_9).forEach(([so, id]) => { if (!ids.has(id)) err('baihoc.js DUNG_9', `Bài ${so} lớp 9 dùng chủ đề không có: ${id}`); else { const e = BH.tuVao10(9, +so); if (!e || !e.giang.length || !e.tn.length) err('baihoc.js DUNG_9', `Bài ${so} lớp 9: chủ đề ${id} thiếu lý thuyết hoặc trắc nghiệm`); } });
   Object.values(BH.LIEN_9).forEach(id => { if (!ids.has(id)) err('baihoc.js LIEN_9', `liên kết tới chủ đề vào 10 không có: ${id}`); });
 }
 

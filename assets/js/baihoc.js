@@ -21,6 +21,11 @@ const BaiHoc = (() => {
     15: 'thuc-te-dai-so-hinh-hoc', 18: 'ham-so-parabol', 19: 'pt-bac-hai-viete', 20: 'pt-bac-hai-viete', 21: 'thuc-te-dai-so-hinh-hoc',
     25: 'xac-suat', 26: 'xac-suat', 27: 'hinh-7a', 28: 'hinh-7a', 29: 'hinh-7a', 31: 'hinh-khong-gian', 32: 'hinh-khong-gian' };
 
+  // Bài lớp 9 trùng hẳn nội dung một chủ đề ôn thi vào 10: chưa có bài giảng riêng thì dùng luôn nội dung chủ đề đó
+  // (lý thuyết, nhắc nhanh, mẹo, bài mẫu có barem, trắc nghiệm hiểu bài) và trỏ sang bộ đề luyện PDF.
+  const DUNG_9 = { 3: 'he-phuong-trinh-thuc-te', 15: 'thuc-te-dai-so-hinh-hoc', 18: 'ham-so-parabol', 19: 'pt-bac-hai-viete', 20: 'pt-bac-hai-viete',
+    25: 'xac-suat', 26: 'xac-suat', 31: 'hinh-khong-gian', 32: 'hinh-khong-gian' };
+
   /* ---------- Dữ liệu ---------- */
   function mucLuc(lop, ten, chuong) {
     ML[lop] = { lop, ten, chuong: chuong.map(([tap, so, t, bai]) => ({ tap, so, ten: t, bai: bai.map(([s, n]) => ({ so: s, ten: n })) })) };
@@ -34,7 +39,25 @@ const BaiHoc = (() => {
   const blobs = {};
   // Thư mục web: dùng đường dẫn tệp. Bản gộp một tệp: tạo địa chỉ blob từ nội dung đã nhúng.
   const srcOf = f => NHUNG[f] ? (blobs[f] = blobs[f] || URL.createObjectURL(new Blob([NHUNG[f]], { type: 'text/html' }))) : f;
-  const get_ = (lop, bai) => LS[key(lop, bai)];
+  const own = (lop, bai) => LS[key(lop, bai)];          // bài giảng soạn riêng (nhập qua Xưởng dữ liệu)
+  const cache9 = {};
+  function tuVao10(lop, so) {
+    if (lop !== 9 || !DUNG_9[so] || typeof Topics === 'undefined' || !Topics.get(DUNG_9[so])) return null;
+    if (cache9[so]) return cache9[so];
+    const t = Topics.get(DUNG_9[so]), b = baiOf(lop, so), L = typeof LuyenDe !== 'undefined' && LuyenDe.get(t.id);
+    const fig = f => (f ? `<div class="figbox">${f}</div>` : '');
+    const giang = (t.theory || []).map(x => ({ t: x.t, b: x.b + fig(x.fig), luu_y: x.warn || '', vd: [] }));
+    if ((t.tips || []).length) giang.push({ t: 'Mẹo nhớ', b: `<ul>${t.tips.map(x => `<li><b>${x.t}.</b> ${x.b}</li>`).join('')}</ul>`, luu_y: '', vd: [] });
+    if ((t.models || []).length) giang.push({ t: 'Bài mẫu trình bày theo barem', b: '', luu_y: (t.present || []).length ? 'Trình bày: ' + t.present.join(' ') : '',
+      vd: t.models.map(m => ({ de: `<b>${m.title}.</b> ${m.de}${fig(m.fig)}`,
+        lg: m.steps.map(x => x.part ? `<b>${x.part}</b>` : `${x.s}${x.p ? ` <span class="pts">${String(x.p).replace('.', ',')}đ</span>` : ''}`),
+        ds: (m.loi || []).length ? 'Lỗi hay bị trừ điểm: ' + m.loi.join(' ') : '' })) });
+    return (cache9[so] = { lop, bai: so, ten: b ? b.ten : t.title, vao10: t, nld: L && L.de ? L.de.length : 0, mau: false,
+      nguon: `nội dung Chủ đề ${t.no} ôn thi vào 10 – ${t.title}`,
+      muc_tieu: [], can_nho: t.remind || [], giang,
+      tn: (t.quiz || []).map(q => ({ q: q.q, a: q.a, why: q.why || '' })), ds: [], tln: [] });
+  }
+  const get_ = (lop, bai) => LS[key(lop, bai)] || tuVao10(+lop, +bai);
   const list = () => Object.values(LS);
   const prog = (lop, bai) => get('bh:' + key(lop, bai), null);
 
@@ -61,7 +84,7 @@ const BaiHoc = (() => {
       const e = get_(lop, b.so), p = prog(lop, b.so), t = tnOf(lop, b.so);
       return `<a class="bh-row${e || t.length ? '' : ' trong'}" href="#/bai-hoc/${lop}/${b.so}" data-s="${esc(fold(`bai ${b.so} ${b.ten} ${b.chuong.ten}`))}">
         <span class="bh-no">${b.so}</span><span class="bh-ten">Bài ${b.so}. ${esc(b.ten)}</span>
-        <span class="chips">${t.length ? '<span class="chip ok">🎬 Trình chiếu</span>' : ''}${e ? `<span class="chip ok">📘 ✍️ ${e.tn.length + e.ds.length + e.tln.length} câu</span>` : t.length ? '' : '<span class="chip">Đang soạn</span>'}${p ? `<span class="chip">✓ ${p.best}/${p.total}</span>` : ''}</span></a>`;
+        <span class="chips">${t.length ? '<span class="chip ok">🎬 Trình chiếu</span>' : ''}${e ? `<span class="chip ok">${e.vao10 ? '🎯 ' : ''}📘 ✍️ ${e.tn.length + e.ds.length + e.tln.length} câu${e.nld ? ` · ${e.nld} đề luyện` : ''}</span>` : t.length ? '' : '<span class="chip">Đang soạn</span>'}${p ? `<span class="chip">✓ ${p.best}/${p.total}</span>` : ''}</span></a>`;
     };
     const taps = [...new Set(M.chuong.map(c => c.tap))];
     view().innerHTML = shell('#/bai-hoc', 'Chọn lớp', `<section class="card hero"><p class="pill soft">Lớp ${lop}</p><h2>${esc(M.ten)}</h2>
@@ -142,7 +165,9 @@ const BaiHoc = (() => {
         ${m.vd.map(v => vdHTML(v, ++k)).join('')}${m.luu_y ? `<p class="warn">⚠️ ${m.luu_y}</p>` : ''}</article>`).join('')
       + (e.can_nho.length ? `<article class="card remind bh-can"><h3>🔑 Cần nhớ</h3><ul>${e.can_nho.map(x => `<li>${x}</li>`).join('')}</ul></article>` : '');
   }
-  function paneGiang(e, pane) { pane.innerHTML = giangHTML(e); set('bh:doc:' + key(e.lop, e.bai), 1); }
+  const vao10Box = e => e.vao10 ? `<div class="card bh-lien bh-v10"><b>🎯 Đây là ${esc(String(e.vao10.bai || '').split('·')[0].trim() || 'một bài')} của đề thi vào 10 TP.HCM</b>
+    <p>Nội dung lấy từ Chủ đề ${e.vao10.no} ôn thi vào 10. Học xong, luyện tiếp: <a href="#/cd/${e.vao10.id}/de">📝 ${e.nld ? e.nld + ' đề luyện' : 'Luyện đề'} (in PDF, có đáp án – barem)</a> · <a href="#/cd/${e.vao10.id}/phieu">🖨️ Phiếu làm bài</a> · <a href="#/cd/${e.vao10.id}/ai">🤖 Nhờ AI nhận xét</a></p></div>` : '';
+  function paneGiang(e, pane) { pane.innerHTML = vao10Box(e) + giangHTML(e); set('bh:doc:' + key(e.lop, e.bai), 1); }
 
   /* ---------- ✍️ Luyện tập online ---------- */
   const numOf = s => {
@@ -156,7 +181,9 @@ const BaiHoc = (() => {
     const tn = e.tn.map(q => ({ ...q, good: q.a[0], opts: shuffle(q.a) }));
     const total = tn.length + 4 * e.ds.length + e.tln.length, nQ = tn.length + e.ds.length + e.tln.length;
     let done = 0, right = 0;
-    pane.innerHTML = `<p class="lead">Làm lần lượt ba phần như đề thi. Mỗi câu bấm <b>Kiểm tra</b> là biết đúng sai ngay và đọc lời giải thích. Câu đúng – sai: mỗi ý đúng được 1 điểm.</p>
+    pane.innerHTML = vao10Box(e) + (e.ds.length || e.tln.length
+      ? `<p class="lead">Làm lần lượt ba phần như đề thi. Mỗi câu bấm <b>Kiểm tra</b> là biết đúng sai ngay và đọc lời giải thích. Câu đúng – sai: mỗi ý đúng được 1 điểm.</p>`
+      : `<p class="lead">Chọn một đáp án cho mỗi câu là biết đúng sai ngay và đọc lời giải thích. Làm xong thì sang <b>Luyện đề</b> để làm bài tự luận như đề thi.</p>`) + `
       ${tn.length ? `<h3 class="sub">Phần I. Trắc nghiệm nhiều phương án (${tn.length} câu)</h3><div class="quiz">${tn.map((q, k) => `<article class="card qcard bh-q" data-k="${k}">
         <p class="qtext"><b>Câu ${k + 1}.</b> ${q.q}</p><div class="opts">${q.opts.map((o, j) => `<button type="button" class="opt" data-j="${j}"><span class="ol">${'ABCD'[j]}</span><span>${o}</span></button>`).join('')}</div>
         <div class="why" hidden></div></article>`).join('')}</div>` : ''}
@@ -232,5 +259,5 @@ const BaiHoc = (() => {
     if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, parts[3] === 'luyen' ? 'luyen' : '');
     return true;
   }
-  return { LOP, LIEN_9, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
+  return { LOP, LIEN_9, DUNG_9, own, tuVao10, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
 })();

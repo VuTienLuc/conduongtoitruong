@@ -7,6 +7,7 @@
 - Bài giảng: mục tiêu → từng mục kiến thức (ví dụ có "Xem lời giải", ⚠️ lưu ý hay sai) → 🔑 Cần nhớ.
 - Luyện tập: Phần I trắc nghiệm (đảo phương án), Phần II đúng – sai (4 ý, mỗi ý 1 điểm), Phần III trả lời ngắn (nhận 2,5 / 2.5 / 3/4). Chấm ngay từng câu; xong hết thì lưu điểm cao nhất `bh:<lớp>-<bài>` (localStorage), hiện ✓ ở mục lục.
 - Bài chưa có nội dung vẫn mở được: báo "đang soạn" + nút "Tạo prompt cho bài này" (mở Xưởng, chọn sẵn lớp, bài).
+- Lớp 9: bài trùng hẳn một chủ đề ôn thi vào 10 (`BaiHoc.DUNG_9`: Bài 3, 15, 18, 19, 25, 26, 31, 32; Bài 20 có bài riêng) chưa có bài giảng riêng thì tự dùng nội dung chủ đề (lý thuyết, mẹo, bài mẫu barem, trắc nghiệm) + khung 🎯 trỏ sang đề luyện PDF. Nhập bài giảng riêng (`bai_hoc`) thì bài riêng được ưu tiên. (thầy nhắc 09/11/2026: Chủ đề 5 đã có mà Bài 31, 32 ghi "Đang soạn")
 - "Học tiếp": lớp 9 nối sang chủ đề ôn thi vào 10 (`BaiHoc.LIEN_9`); lớp 10–12 tự nối chủ đề Vdc có cùng số bài trong trường `bai`.
 
 ## Trình chiếu, trò chơi HTML của thầy gắn vào bài (thầy yêu cầu 09/11/2026)

@@ -50,7 +50,7 @@ async def main():
             routes += ['#/on-tap'] + [f'#/on-tap/{m}' for m in await pg.evaluate("OnTap.list().map(e => e.ma)")]
             routes += ['#/van-10', '#/van-10/phuong-phap', '#/xuong', '#/xuong/prompt', '#/xuong/nhap'] + [f'#/van-10/de/{m}' for m in await pg.evaluate("Van.list().map(e => e.ma)")]
             routes += [r for g, i, nb in vdc for r in [f'#/{g}/{i}', f'#/{g}/{i}/phieu'] + [f'#/{g}/{i}/lg/{k}' for k in range(1, nb + 1)]]
-            routes += ['#/bai-hoc', '#/bai-hoc/9', '#/bai-hoc/10', '#/bai-hoc/11', '#/bai-hoc/12', '#/bai-hoc/10/2'] + [r for l, b in await pg.evaluate("BaiHoc.list().map(e => [e.lop, e.bai])") for r in (f'#/bai-hoc/{l}/{b}', f'#/bai-hoc/{l}/{b}/luyen')] + [f'#/bai-hoc/{k.replace("-", "/")}' for k in await pg.evaluate("Object.keys(BaiHoc.TN)")]
+            routes += ['#/bai-hoc', '#/bai-hoc/9', '#/bai-hoc/10', '#/bai-hoc/11', '#/bai-hoc/12', '#/bai-hoc/10/2'] + [r for l, b in await pg.evaluate("BaiHoc.list().map(e => [e.lop, e.bai])") for r in (f'#/bai-hoc/{l}/{b}', f'#/bai-hoc/{l}/{b}/luyen')] + [f'#/bai-hoc/{k.replace("-", "/")}' for k in await pg.evaluate("Object.keys(BaiHoc.TN)")] + [f'#/bai-hoc/9/{b}{t}' for b in await pg.evaluate("Object.keys(BaiHoc.DUNG_9)") for t in ('', '/luyen')]
             for r in routes:
                 await pg.goto(base + r)
                 await pg.wait_for_timeout(350)
@@ -162,6 +162,14 @@ async def main():
             if tn_ok or got != f'{want}/{total}': fails.append(f'luyện tập Toán {l} bài {bb}: điểm {got}, cần {want}/{total}')
             saved = await pg.evaluate(f"JSON.parse(localStorage.getItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':bh:{l}-{bb}') || 'null')")
             if not saved or saved['best'] != want: fails.append(f'luyện tập Toán {l} bài {bb}: không lưu điểm ({saved})')
+        # Bài lớp 9 dùng nội dung chủ đề ôn thi vào 10 (BaiHoc.DUNG_9): có bài giảng, liên kết đề luyện, trắc nghiệm chấm được.
+        for so in await pg.evaluate("Object.keys(BaiHoc.DUNG_9).map(Number).filter(b => !BaiHoc.own(9, b))"):
+            await pg.goto(base + f'#/bai-hoc/9/{so}'); await pg.wait_for_timeout(200)
+            ok = await pg.evaluate("document.querySelectorAll('#pane .kt').length > 0 && !!document.querySelector('.bh-v10 a[href*=\"/de\"]')")
+            await pg.goto(base + f'#/bai-hoc/9/{so}/luyen'); await pg.wait_for_timeout(200)
+            n = await pg.locator('.bh-q').count()
+            if n: await pg.locator('.bh-q').first.locator('.opt').first.click()
+            if not ok or not n or await pg.locator('.bh-q .why:not([hidden])').count() != 1: fails.append(f'bài lớp 9 – Bài {so} (nội dung vào 10): thiếu bài giảng, liên kết đề luyện hoặc trắc nghiệm')
         # Trình chiếu gắn vào bài (tuong-tac/): khung 16:9 nạp được trang, có các slide, không lỗi JS bên trong.
         for (l, bb) in await pg.evaluate("Object.keys(BaiHoc.TN).map(k => k.split('-').map(Number))"):
             await pg.goto(base + f'#/bai-hoc/{l}/{bb}'); await pg.wait_for_timeout(1500)
