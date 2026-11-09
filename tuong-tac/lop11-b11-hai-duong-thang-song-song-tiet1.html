@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bài 11. Hai đường thẳng song song – Bài dạy tiết 1</title>
+<meta name="description" content="Trình chiếu tiết 1 Bài 11 Toán 11 KNTT: vị trí tương đối của hai đường thẳng, hình 3D xoay được, phản biện chatbot, trắc nghiệm củng cố.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e9e2d4; --paper:#fffdf8; --text:#2b2520; --muted:#6f6458; --line:#e3d8c6;
+  --ink:#1f4e8c; --primary:#c2562b; --ok:#2f7d4a; --err:#b8322a;
+  --c1:#d9822b; --c2:#c0392b; --c3:#2a6fb0; --c4:#2f8a4c;
+  --plane:#7aa6d6; --plane2:#e0a46a;
+  --radius:6px;
+  --font:"Be Vietnam Pro",system-ui,sans-serif; --serif:"Lora","Noto Serif",Georgia,serif;
+  --u:min(1vw,1.7778vh);
+}
+:root[data-theme="dark"]{
+  --bg:#141210; --paper:#1f1c19; --text:#f1ebe2; --muted:#b3a797; --line:#38312a;
+  --ink:#8db8ee; --primary:#e48a5c; --ok:#6cc48a; --err:#ef7a70;
+  --c1:#f0a34f; --c2:#ef6b5e; --c3:#6aa8e8; --c4:#6cc48a; --plane:#5b87b8; --plane2:#c98b52;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:var(--font)}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:calc(var(--u)*100);height:calc(var(--u)*56.25);background:var(--paper);position:relative;
+  font-size:calc(var(--u)*2.55);line-height:1.45;border-radius:var(--radius);overflow:hidden;
+  background-image:repeating-linear-gradient(transparent 0 calc(var(--u)*3.2 - 1px),var(--line) calc(var(--u)*3.2 - 1px) calc(var(--u)*3.2));}
+.stage::before{content:"";position:absolute;left:calc(var(--u)*5.2);top:0;bottom:0;width:1px;background:var(--primary);opacity:.35}
+.slide{position:absolute;inset:0;padding:calc(var(--u)*2.6) calc(var(--u)*3.5) calc(var(--u)*2.6) calc(var(--u)*7);display:none;flex-direction:column}
+.slide.on{display:flex}
+.slide.game{padding:0}
+.slide.game iframe{width:100%;height:100%;border:0;display:block;background:#f8fafc}
+.kicker{font-size:.72em;color:var(--primary);font-weight:600;letter-spacing:.02em;margin:0}
+h1,h2{font-family:var(--serif);color:var(--ink);margin:.1em 0 .35em;line-height:1.2}
+h1{font-size:2.1em} h2{font-size:1.3em}
+p{margin:.25em 0}
+.row{display:flex;gap:calc(var(--u)*2.5);flex:1;min-height:0}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;gap:.4em}
+.col.w2{flex:1.35}
+.viewer{flex:1;min-height:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);position:relative;touch-action:none;cursor:grab}
+.viewer:active{cursor:grabbing}
+.viewer.zoomed,.zoomable.zoomed{position:fixed;inset:0;z-index:50;border:0;border-radius:0;background:var(--paper)}
+.zoomable{cursor:zoom-in}
+.zoomable.zoomed{width:100vw!important;height:100vh!important;padding:4vh 4vw;cursor:zoom-out}
+.viewer svg{width:100%;height:100%;display:block}
+.viewer .hint{position:absolute;left:.6em;bottom:.4em;font-size:.55em;color:var(--muted);pointer-events:none}
+.tools{display:flex;flex-wrap:wrap;gap:.35em;align-items:center}
+button{font:inherit;font-size:.85em;border:1px solid var(--line);background:var(--paper);color:var(--text);
+  border-radius:var(--radius);padding:.25em .7em;min-height:44px;cursor:pointer}
+button:hover{border-color:var(--primary)}
+button:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+button.on,button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.step{visibility:hidden}
+.step.shown{visibility:visible}
+.box{border-left:4px solid var(--primary);background:color-mix(in srgb,var(--primary) 7%,transparent);padding:.35em .7em;border-radius:0 var(--radius) var(--radius) 0}
+.box.blue{border-color:var(--ink);background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.ans{color:var(--ok);font-weight:600}
+.q{font-weight:600}
+ul,ol{margin:.2em 0;padding-left:1.2em}
+li{margin:.12em 0}
+.small{font-size:.8em}
+.muted{color:var(--muted)}
+.tag{display:inline-block;font-size:.65em;border:1px solid var(--line);border-radius:var(--radius);padding:0 .4em;color:var(--muted)}
+/* bìa */
+.cover{justify-content:center}
+.cover h1{font-size:3em}
+.cover .sub{font-size:1.2em;color:var(--muted)}
+.cover .who{margin-top:2em;font-size:.85em;color:var(--muted)}
+/* chatbot */
+.chat{border:1px solid var(--line);border-radius:var(--radius);padding:.6em .8em;background:var(--paper)}
+.chat .who{font-size:.65em;color:var(--muted);margin-bottom:.2em}
+.bubble{background:color-mix(in srgb,var(--ink) 6%,var(--paper));border-radius:var(--radius);padding:.5em .7em}
+.claim{cursor:pointer;border-bottom:2px dotted var(--muted);padding:0 .05em}
+.claim.marked{text-decoration:line-through;text-decoration-color:var(--err);text-decoration-thickness:3px;border-bottom-color:var(--err)}
+/* quiz */
+.qz-head{display:flex;justify-content:space-between;align-items:baseline}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.45em;margin-top:.4em}
+.opt{text-align:left;font-size:1em;min-height:2.6em;display:flex;gap:.5em;align-items:center}
+.opt b{color:var(--ink)}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--paper))}
+.opt.wrong{border-color:var(--err);background:color-mix(in srgb,var(--err) 10%,var(--paper))}
+.fb{min-height:3em;margin-top:.5em;font-size:.95em}
+.fb .ok{color:var(--ok);font-weight:700}.fb .no{color:var(--err);font-weight:700}
+/* sơ đồ tổng kết */
+.tree{display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:.6em}
+.tree .node{border:1px solid var(--line);border-radius:var(--radius);padding:.5em .8em;background:var(--paper)}
+.tree .node h3{margin:0 0 .2em;font-size:1em;color:var(--ink)}
+/* thanh điều khiển */
+.bar{opacity:0;transition:opacity .2s;position:absolute;left:0;right:0;bottom:0;height:calc(var(--u)*4.5);z-index:5;display:flex;align-items:center;gap:.4em;
+  padding:0 calc(var(--u)*1.5);font-size:calc(var(--u)*1.4);color:var(--muted);border-top:1px solid var(--line);background:var(--paper)}
+.bar button{font-size:1em;min-height:36px;padding:.1em .7em}
+.bar .sp{flex:1}
+.bar:hover,.bar:focus-within{opacity:1}
+.divider{justify-content:center;align-items:flex-start}
+.divider h1{color:var(--primary)}
+.progress{position:absolute;left:0;top:0;height:3px;background:var(--primary);transition:width .2s}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+<div class="progress" id="progress"></div>
+
+<!-- Trò chơi ô chữ (mở đầu) -->
+<section class="slide game">
+  <iframe id="gameFrame" title="Trò chơi ô chữ" allow="fullscreen" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;vi&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Giải mã ô chữ&lt;/title&gt;
+    
+    &lt;!-- Fonts --&gt;
+    &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+    &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;family=Lexend:wght@400;500;600;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+    
+    &lt;!-- KaTeX --&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css&quot;&gt;
+    &lt;script defer src=&quot;https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script defer src=&quot;https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js&quot;&gt;&lt;/script&gt;
+    
+    &lt;!-- Confetti --&gt;
+    &lt;script defer src=&quot;https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js&quot;&gt;&lt;/script&gt;
+
+    &lt;style&gt;
+        :root {
+            /* Light Theme (Phòng Sáng - Default) */
+            --bg-main: #f8fafc;
+            --bg-panel: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+            --accent-primary: #0ea5e9;
+            --accent-hover: #0284c7;
+            --accent-glow: rgba(14, 165, 233, 0.4);
+            --key-col-bg: #fff7ed;
+            --key-col-border: #f97316;
+            --key-col-glow: rgba(249, 115, 22, 0.5);
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --cell-bg: #ffffff;
+            --cell-border: #94a3b8;
+            --cell-text: #0f172a;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            
+            /* Game Config */
+            --scale: 1;
+            --cell: 48px;
+            --font-ui: &#x27;Be Vietnam Pro&#x27;, system-ui, sans-serif;
+            --font-cell: &#x27;Lexend&#x27;, system-ui, sans-serif;
+        }
+
+        [data-theme=&quot;dark&quot;] {
+            /* Dark Theme (Phòng Tối - Space Theme) */
+            --bg-main: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 100%);
+            --bg-panel: rgba(15, 23, 42, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --accent-primary: #38bdf8;
+            --accent-hover: #7dd3fc;
+            --accent-glow: rgba(56, 189, 248, 0.6);
+            --key-col-bg: rgba(234, 179, 8, 0.15);
+            --key-col-border: #eab308;
+            --key-col-glow: rgba(234, 179, 8, 0.6);
+            --success: #4ade80;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --cell-bg: rgba(30, 41, 59, 0.8);
+            --cell-border: #475569;
+            --cell-text: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-ui);
+            background: var(--bg-main);
+            color: var(--text-main);
+            height: 100dvh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+            font-size: calc(16px * var(--scale));
+        }
+
+        /* --- Starry Background for Dark Mode --- */
+        .stars { display: none; position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+        [data-theme=&quot;dark&quot;] .stars { display: block; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle infinite ease-in-out; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 5px white; } }
+
+        /* --- Layout Grid --- */
+        header {
+            height: 9vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.5vw;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-panel);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) clamp(340px, 32vw, 560px);
+            gap: 1.5vw;
+            padding: 1.5vw;
+            min-height: 0;
+        }
+
+        footer {
+            height: 14vh;
+            padding: 0 1.5vw 1.5vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2vw;
+            z-index: 10;
+        }
+
+        /* --- Header Elements --- */
+        .title-area h1 { font-size: calc(1.4rem * var(--scale)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 25vw; }
+        .title-area p { font-size: calc(0.9rem * var(--scale)); color: var(--text-muted); }
+        
+        .timer-container { position: relative; width: 6vh; height: 6vh; display: flex; align-items: center; justify-content: center; }
+        .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .timer-circle-bg { fill: none; stroke: var(--border-color); stroke-width: 4; }
+        .timer-circle { fill: none; stroke: var(--accent-primary); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+        .timer-text { position: absolute; font-weight: 700; font-size: calc(1.1rem * var(--scale)); }
+        .timer-warning .timer-circle { stroke: var(--danger); }
+        .timer-warning .timer-text { color: var(--danger); animation: pulse 1s infinite; }
+
+        .controls { display: flex; gap: 0.5vw; }
+        .btn-icon {
+            width: 5vh; height: 5vh; min-width: 44px; min-height: 44px;
+            border: 1px solid var(--border-color); border-radius: 8px;
+            background: transparent; color: var(--text-main);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; font-size: calc(1.2rem * var(--scale));
+        }
+        .btn-icon:hover, .btn-icon:focus-visible { background: var(--border-color); outline: none; }
+
+        /* --- Left: Crossword Board --- */
+        .board-container {
+            background: var(--bg-panel);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1vw;
+            position: relative;
+            overflow: hidden;
+        }
+        .board { display: flex; flex-direction: column; justify-content: center; }
+        
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: calc(var(--cell) * 0.12);
+            transition: transform 0.2s;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 2px;
+        }
+        .row:hover { background: rgba(148, 163, 184, 0.1); }
+        .row.active { transform: scale(1.03); background: rgba(14, 165, 233, 0.1); outline: 2px solid var(--accent-primary); z-index: 2; }
+        .row.solved { opacity: 0.9; }
+        .row.skipped { filter: grayscale(1) opacity(0.6); }
+
+        .row-num {
+            width: calc(var(--cell) * 0.8);
+            height: var(--cell);
+            display: flex; align-items: center; justify-content: flex-end;
+            padding-right: calc(var(--cell) * 0.2);
+            font-weight: 700; color: var(--text-muted);
+            font-size: calc(var(--cell) * 0.35);
+        }
+
+        .cells-group { display: flex; gap: calc(var(--cell) * 0.12); }
+
+        .cell {
+            width: var(--cell);
+            height: var(--cell);
+            perspective: 1000px;
+        }
+        .cell-inner {
+            width: 100%; height: 100%;
+            position: relative;
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .cell.flipped .cell-inner { transform: rotateY(180deg); }
+        @media (prefers-reduced-motion: reduce) {
+            .cell-inner { transition: opacity 0.3s; transform-style: flat; }
+            .cell.flipped .cell-inner { transform: none; }
+            .cell.flipped .cell-front { opacity: 0; }
+            .cell.flipped .cell-back { opacity: 1; transform: none; }
+        }
+
+        .cell-front, .cell-back {
+            position: absolute; inset: 0;
+            backface-visibility: hidden;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-cell);
+            font-size: calc(var(--cell) * 0.58);
+            font-weight: 800;
+        }
+        
+        .cell-front {
+            background: var(--cell-bg);
+            border: 2px solid var(--cell-border);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .row.active .cell-front { border-color: var(--accent-primary); }
+
+        .cell-back {
+            background: var(--bg-panel);
+            border: 2px solid var(--accent-primary);
+            color: var(--text-main);
+            transform: rotateY(180deg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* The Vertical Keyword Column Styling */
+        .cell.is-key .cell-front {
+            border: 3px solid var(--key-col-border);
+            background: var(--key-col-bg);
+            box-shadow: 0 0 10px var(--key-col-glow);
+        }
+        .cell.is-key .cell-back {
+            background: var(--key-col-border);
+            color: #fff;
+            border-color: var(--key-col-border);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 0 15px var(--key-col-glow);
+        }
+        .row.solved .cell:not(.is-key) .cell-back { background: var(--success); color: white; border-color: var(--success); }
+
+        /* --- Right: Question Panel --- */
+        .panel {
+            background: var(--bg-panel);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+            display: flex; flex-direction: column;
+            padding: 2vw;
+            position: relative;
+        }
+
+        .panel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1vw; flex: 1; align-content: center; }
+        .num-btn {
+            aspect-ratio: 1; border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: transparent; color: var(--text-main);
+            font-size: calc(2rem * var(--scale)); font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .num-btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); transform: scale(1.05); }
+        .num-btn.solved { background: var(--success); color: white; border-color: var(--success); }
+        .num-btn.skipped { background: var(--border-color); color: var(--text-muted); }
+
+        .panel-question { display: none; flex-direction: column; height: 100%; }
+        .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5vh; }
+        .q-badge { background: var(--accent-primary); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: calc(1rem * var(--scale)); }
+        
+        .q-text-container { flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 2vh; }
+        .q-text { 
+            font-size: clamp(1.4rem, 1rem + 1.2vw, 2.5rem); 
+            line-height: 1.4; text-align: center; font-weight: 500;
+            width: 100%; transition: font-size 0.2s;
+        }
+        
+        .q-input-group { display: flex; gap: 10px; margin-bottom: 2vh; }
+        .q-input {
+            flex: 1; padding: 15px; border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-main); color: var(--text-main);
+            font-size: calc(1.8rem * var(--scale)); font-family: var(--font-cell);
+            text-align: center; text-transform: uppercase; font-weight: 700;
+            outline: none; transition: border-color 0.2s;
+        }
+        .q-input:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .q-input.error { border-color: var(--danger); animation: shake 0.4s; }
+        
+        .q-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn {
+            padding: 12px; border: none; border-radius: 8px;
+            font-weight: 600; font-size: calc(1.1rem * var(--scale));
+            cursor: pointer; transition: transform 0.1s, filter 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+        .btn-primary { background: var(--accent-primary); color: white; grid-column: span 2; padding: 16px; font-size: calc(1.3rem * var(--scale));}
+        .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); }
+        .btn-danger { background: var(--danger); color: white; }
+        
+        .q-feedback { text-align: center; font-weight: 700; font-size: calc(1.2rem * var(--scale)); min-height: 30px; margin-bottom: 10px; }
+        .q-feedback.error { color: var(--danger); }
+        .q-feedback.success { color: var(--success); }
+
+        .q-explain {
+            display: none; flex-direction: column; height: 100%;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .explain-box {
+            background: rgba(34, 197, 94, 0.1); border: 1px solid var(--success);
+            border-radius: 12px; padding: 1.5vw; flex: 1;
+            display: flex; flex-direction: column; justify-content: center;
+            font-size: clamp(1.3rem, 0.9rem + 1.1vw, 2.2rem); line-height: 1.5;
+        }
+        .explain-title { color: var(--success); font-weight: 700; font-size: calc(2.2rem * var(--scale)); margin-bottom: 1vh; display: flex; align-items: center; gap: 10px; }
+
+        /* --- Bottom: Keyword Decode (xáo trộn) --- */
+        .decode-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+        .decode-hint { font-size: calc(0.95rem * var(--scale)); color: var(--text-muted); font-weight: 600; }
+        .decode-area { display: flex; gap: 1vw; justify-content: center; }
+        .decode-cell {
+            position: relative;
+            width: calc(var(--cell) * 1.2); height: calc(var(--cell) * 1.2);
+            max-width: 9vh; max-height: 9vh;
+            border: 3px dashed var(--border-color); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-cell); font-size: clamp(1.4rem, calc(var(--cell) * 0.8), 5vh);
+            font-weight: 800; color: transparent;
+            transition: all 0.5s;
+        }
+        .decode-cell::after {
+            content: attr(data-row);
+            position: absolute; top: 2px; left: 5px;
+            font-size: 0.32em; font-weight: 700; color: var(--text-muted);
+        }
+        .decode-cell.revealed {
+            border-style: solid; border-color: var(--key-col-border);
+            background: var(--key-col-bg); color: var(--key-col-border);
+            text-shadow: 0 0 10px var(--key-col-glow); transform: scale(1.1);
+        }
+        .decode-cell.final { border-color: var(--success); color: var(--success); background: rgba(34,197,94,0.12); }
+        .decode-cell.final::after { content: none; }
+        .decode-gap { width: 1.5vw; }
+        .btn-guess {
+            height: calc(var(--cell) * 1.2); max-height: 9vh; padding: 0 2vw;
+            border-radius: 8px; border: none; background: var(--warning); color: #000;
+            font-weight: 800; font-size: calc(1.4rem * var(--scale));
+            cursor: pointer; box-shadow: var(--shadow-md); transition: transform 0.2s;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .btn-guess:hover { transform: scale(1.05); }
+
+        /* --- Modals --- */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px); z-index: 100;
+            display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal {
+            background: var(--bg-panel); color: var(--text-main);
+            padding: 3vw; border-radius: 16px; border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg); max-width: 90vw; width: 600px;
+            text-align: center; transform: translateY(20px); transition: transform 0.3s;
+        }
+        [data-theme=&quot;dark&quot;] .modal { background: #0f172a; }
+        .modal-overlay.active .modal { transform: translateY(0); }
+        .modal-title { font-size: calc(2rem * var(--scale)); font-weight: 800; margin-bottom: 2vh; color: var(--accent-primary); }
+        
+        .modal-input {
+            width: 100%; padding: 20px; font-size: calc(2.5rem * var(--scale));
+            text-align: center; text-transform: uppercase; font-weight: 800; font-family: var(--font-cell);
+            border: 3px solid var(--border-color); border-radius: 12px; margin-bottom: 2vh;
+            background: var(--bg-main); color: var(--text-main);
+        }
+        .modal-input:focus { outline: none; border-color: var(--warning); box-shadow: 0 0 15px var(--warning); }
+
+        /* --- Summary Screen (Slides) --- */
+        .summary-screen {
+            position: fixed; inset: 0; background: var(--bg-main); z-index: 200;
+            display: none; flex-direction: column;
+        }
+        .summary-screen.active { display: flex; animation: fadeIn 0.4s; }
+        .slide-container { flex: 1; position: relative; overflow: hidden; }
+        .slide {
+            position: absolute; inset: 0; padding: 4vw 8vw;
+            display: flex; flex-direction: column; opacity: 0; pointer-events: none;
+            transition: opacity 0.4s, transform 0.4s; transform: translateX(50px);
+        }
+        .slide.active { opacity: 1; pointer-events: auto; transform: translateX(0); }
+        .slide-title { font-size: clamp(2.2rem, 1.4rem + 2vw, 3.6rem); font-weight: 800; color: var(--accent-primary); margin-bottom: 3vh; text-align: center; }
+        
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2vw; flex: 1; align-content: center; }
+        .info-card {
+            background: var(--bg-panel); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 2vw; box-shadow: var(--shadow-md);
+            font-size: clamp(1.4rem, 1rem + 1.1vw, 2.4rem); line-height: 1.5;
+        }
+        .info-card strong { color: var(--accent-primary); }
+        .info-card .icon { font-size: 1.5em; margin-bottom: 10px; display: block; }
+
+        .slide-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.1); border: none; font-size: 3rem; color: var(--text-main); cursor: pointer; padding: 20px 10px; z-index: 10; border-radius: 8px;}
+        .slide-nav:hover { background: rgba(0,0,0,0.2); }
+        .slide-nav.prev { left: 1vw; }
+        .slide-nav.next { right: 1vw; }
+        
+        .slide-dots { position: absolute; bottom: 2vh; left: 0; right: 0; display: flex; justify-content: center; gap: 10px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--border-color); cursor: pointer; }
+        .dot.active { background: var(--accent-primary); transform: scale(1.2); }
+
+        .btn-close-summary { position: absolute; top: 2vh; right: 2vw; z-index: 20; }
+
+        .katex { font-size: 1.05em !important; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 1023px) {
+            body { overflow-y: auto; height: auto; min-height: 100dvh; }
+            main { grid-template-columns: 1fr; }
+            .board-container { min-height: 50vh; }
+            .panel { position: sticky; bottom: 0; z-index: 20; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); }
+            footer { flex-wrap: wrap; height: auto; padding: 2vh; }
+        }
+        
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;stars&quot; id=&quot;stars-container&quot;&gt;&lt;/div&gt;
+
+    &lt;header&gt;
+        &lt;div class=&quot;title-area&quot;&gt;
+            &lt;h1&gt;Giải mã ô chữ&lt;/h1&gt;
+            &lt;p&gt;Khởi động • Toán 11&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;div class=&quot;timer-container&quot; aria-label=&quot;Đồng hồ đếm ngược&quot;&gt;
+            &lt;svg class=&quot;timer-svg&quot; viewBox=&quot;0 0 100 100&quot;&gt;
+                &lt;circle class=&quot;timer-circle-bg&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;45&quot;&gt;&lt;/circle&gt;
+                &lt;circle class=&quot;timer-circle&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;45&quot; stroke-dasharray=&quot;283&quot; stroke-dashoffset=&quot;0&quot; id=&quot;timer-path&quot;&gt;&lt;/circle&gt;
+            &lt;/svg&gt;
+            &lt;span class=&quot;timer-text&quot; id=&quot;timer-text&quot;&gt;--&lt;/span&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;controls&quot;&gt;
+            &lt;button class=&quot;btn-icon&quot; onclick=&quot;toggleFullScreen()&quot; title=&quot;Toàn màn hình (F)&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;⛶&lt;/span&gt;&lt;span class=&quot;sr-only&quot;&gt;Toàn màn hình&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;btn-icon&quot; onclick=&quot;toggleTheme()&quot; title=&quot;Đổi giao diện Sáng/Tối&quot;&gt;&lt;span aria-hidden=&quot;true&quot; id=&quot;theme-icon&quot;&gt;🌙&lt;/span&gt;&lt;span class=&quot;sr-only&quot;&gt;Đổi giao diện&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;btn-icon&quot; onclick=&quot;toggleSound()&quot; title=&quot;Bật/Tắt Âm thanh (M)&quot;&gt;&lt;span aria-hidden=&quot;true&quot; id=&quot;sound-icon&quot;&gt;🔊&lt;/span&gt;&lt;span class=&quot;sr-only&quot;&gt;Âm thanh&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;btn-icon&quot; onclick=&quot;adjustScale(0.1)&quot; title=&quot;Tăng cỡ chữ (A+)&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;A+&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;btn-icon&quot; onclick=&quot;adjustScale(-0.1)&quot; title=&quot;Giảm cỡ chữ (A-)&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;A-&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;btn-icon&quot; onclick=&quot;showHelp()&quot; title=&quot;Phím tắt (?)&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;⌨&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;btn-icon&quot; onclick=&quot;restartGame()&quot; title=&quot;Chơi lại&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;↺&lt;/span&gt;&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        &lt;section class=&quot;board-container&quot; id=&quot;board-container&quot;&gt;
+            &lt;div class=&quot;board&quot; id=&quot;crossword-board&quot; role=&quot;grid&quot; aria-label=&quot;Bảng ô chữ&quot;&gt;&lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class=&quot;panel&quot; id=&quot;side-panel&quot;&gt;
+            &lt;div class=&quot;panel-grid&quot; id=&quot;panel-grid&quot;&gt;&lt;/div&gt;
+
+            &lt;div class=&quot;panel-question&quot; id=&quot;panel-question&quot;&gt;
+                &lt;div class=&quot;q-header&quot;&gt;
+                    &lt;span class=&quot;q-badge&quot; id=&quot;q-row-info&quot;&gt;Hàng 1 • 7 chữ cái&lt;/span&gt;
+                    &lt;button class=&quot;btn-icon&quot; style=&quot;border:none;&quot; onclick=&quot;backToGrid()&quot; title=&quot;Quay lại danh sách (Esc)&quot;&gt;✕&lt;/button&gt;
+                &lt;/div&gt;
+                
+                &lt;div class=&quot;q-text-container&quot;&gt;
+                    &lt;div class=&quot;q-text&quot; id=&quot;q-text&quot;&gt;Câu hỏi sẽ hiển thị ở đây...&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;q-feedback&quot; id=&quot;q-feedback&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+
+                &lt;div class=&quot;q-input-group&quot;&gt;
+                    &lt;input type=&quot;text&quot; class=&quot;q-input&quot; id=&quot;q-input&quot; placeholder=&quot;Nhập đáp án...&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot;&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;q-actions&quot;&gt;
+                    &lt;button class=&quot;btn btn-primary&quot; onclick=&quot;checkAnswer()&quot;&gt;Kiểm tra (Enter)&lt;/button&gt;
+                    &lt;button class=&quot;btn btn-outline&quot; onclick=&quot;hintLetter()&quot;&gt;Gợi ý 1 chữ (H)&lt;/button&gt;
+                    &lt;button class=&quot;btn btn-danger&quot; onclick=&quot;revealRow()&quot;&gt;Mở đáp án (R)&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;q-explain&quot; id=&quot;panel-explain&quot;&gt;
+                &lt;div class=&quot;q-header&quot;&gt;
+                    &lt;span class=&quot;q-badge&quot; style=&quot;background:var(--success)&quot;&gt;Đã giải quyết&lt;/span&gt;
+                    &lt;button class=&quot;btn btn-outline&quot; style=&quot;padding: 4px 12px; font-size: 0.9em;&quot; onclick=&quot;backToGrid()&quot;&gt;Tiếp tục ➔&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;explain-box&quot;&gt;
+                    &lt;div class=&quot;explain-title&quot; id=&quot;explain-title&quot;&gt;✓ Chính xác!&lt;/div&gt;
+                    &lt;div id=&quot;explain-text&quot;&gt;Giải thích...&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;footer&gt;
+        &lt;div class=&quot;decode-wrap&quot;&gt;
+            &lt;div class=&quot;decode-hint&quot; id=&quot;decode-hint&quot;&gt;Các chữ khóa đã bị xáo trộn – hãy sắp xếp lại để tìm từ khóa (2 từ, 9 chữ cái)&lt;/div&gt;
+            &lt;div class=&quot;decode-area&quot; id=&quot;decode-area&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;button class=&quot;btn-guess&quot; onclick=&quot;openGuessModal()&quot;&gt;
+            &lt;span&gt;🔑&lt;/span&gt; Đoán từ khóa (K)
+        &lt;/button&gt;
+    &lt;/footer&gt;
+
+    &lt;!-- Modals --&gt;
+    &lt;div class=&quot;modal-overlay&quot; id=&quot;guess-modal&quot;&gt;
+        &lt;div class=&quot;modal&quot;&gt;
+            &lt;div class=&quot;modal-title&quot;&gt;Đoán Từ Khóa&lt;/div&gt;
+            &lt;p style=&quot;margin-bottom: 20px; font-size: 1.2rem;&quot;&gt;Gồm 2 từ, 9 chữ cái (không cần gõ dấu)&lt;/p&gt;
+            &lt;input type=&quot;text&quot; class=&quot;modal-input&quot; id=&quot;guess-input&quot; autocomplete=&quot;off&quot; spellcheck=&quot;false&quot;&gt;
+            &lt;div style=&quot;display:flex; gap:10px; justify-content:center;&quot;&gt;
+                &lt;button class=&quot;btn btn-outline&quot; onclick=&quot;closeModals()&quot;&gt;Hủy&lt;/button&gt;
+                &lt;button class=&quot;btn btn-primary&quot; style=&quot;grid-column:auto;&quot; onclick=&quot;checkKeywordGuess()&quot;&gt;Xác nhận&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;q-feedback error&quot; id=&quot;guess-feedback&quot; style=&quot;margin-top:15px;&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;modal-overlay&quot; id=&quot;win-modal&quot;&gt;
+        &lt;div class=&quot;modal&quot; style=&quot;width: 800px; max-width: 95vw;&quot;&gt;
+            &lt;div style=&quot;font-size: 4rem; margin-bottom: 10px;&quot;&gt;🏆&lt;/div&gt;
+            &lt;h2 style=&quot;font-size: clamp(2rem, 3vw, 3rem); font-weight: 800; color: var(--accent-primary); margin-bottom: 10px;&quot;&gt;XUẤT SẮC!&lt;/h2&gt;
+            &lt;p style=&quot;font-size: 1.5rem; margin-bottom: 30px;&quot;&gt;Từ khóa chính là:&lt;/p&gt;
+            &lt;div id=&quot;win-keyword&quot; style=&quot;font-size: clamp(3rem, 5vw, 6rem); font-weight: 800; color: var(--key-col-border); letter-spacing: 5px; margin-bottom: 40px; text-shadow: 0 0 20px var(--key-col-glow);&quot;&gt;PHẢN CHỨNG&lt;/div&gt;
+            &lt;button class=&quot;btn btn-primary&quot; style=&quot;width: 100%; font-size: 1.5rem; padding: 20px;&quot; onclick=&quot;showSummary()&quot;&gt;Vào bài mới ➔&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;modal-overlay&quot; id=&quot;help-modal&quot; onclick=&quot;if(event.target===this) closeModals()&quot;&gt;
+        &lt;div class=&quot;modal&quot; style=&quot;text-align: left;&quot;&gt;
+            &lt;h2 class=&quot;modal-title&quot;&gt;Phím Tắt Điều Khiển&lt;/h2&gt;
+            &lt;ul style=&quot;font-size: 1.2rem; line-height: 1.8; list-style: none;&quot;&gt;
+                &lt;li&gt;&lt;kbd&gt;1&lt;/kbd&gt; - &lt;kbd&gt;9&lt;/kbd&gt;: Chọn nhanh hàng ngang&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;Enter&lt;/kbd&gt;: Kiểm tra đáp án khi đang nhập&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;H&lt;/kbd&gt;: Gợi ý 1 chữ (khi đang ở câu hỏi)&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;R&lt;/kbd&gt;: Mở toàn bộ đáp án hàng đó&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;K&lt;/kbd&gt;: Mở bảng đoán từ khóa (cần mở ít nhất 4 hàng)&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;T&lt;/kbd&gt;: Tạm dừng / Tiếp tục đồng hồ&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;F&lt;/kbd&gt;: Bật / Tắt toàn màn hình&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;M&lt;/kbd&gt;: Bật / Tắt âm thanh&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;+&lt;/kbd&gt; / &lt;kbd&gt;-&lt;/kbd&gt;: Phóng to / Thu nhỏ giao diện&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;Esc&lt;/kbd&gt;: Đóng cửa sổ / Quay lại bảng chọn&lt;/li&gt;
+                &lt;li&gt;&lt;kbd&gt;→&lt;/kbd&gt; / &lt;kbd&gt;Space&lt;/kbd&gt; / &lt;kbd&gt;PgDn&lt;/kbd&gt;: Chuyển slide&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;div style=&quot;text-align: center; margin-top: 20px;&quot;&gt;
+                &lt;button class=&quot;btn btn-primary&quot; onclick=&quot;closeModals()&quot;&gt;Đã hiểu&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;summary-screen&quot; id=&quot;summary-screen&quot;&gt;
+        &lt;button class=&quot;btn-icon btn-close-summary&quot; onclick=&quot;closeSummary()&quot; title=&quot;Đóng (Esc)&quot;&gt;✕&lt;/button&gt;
+        &lt;button class=&quot;slide-nav prev&quot; onclick=&quot;changeSlide(-1)&quot;&gt;❮&lt;/button&gt;
+        &lt;button class=&quot;slide-nav next&quot; onclick=&quot;changeSlide(1)&quot;&gt;❯&lt;/button&gt;
+        &lt;div class=&quot;slide-container&quot; id=&quot;slides-container&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;slide-dots&quot; id=&quot;slide-dots&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        /** --- 1. DỮ LIỆU GAME --- 
+         * Từ khóa: PHẢN CHỨNG (PHANCHUNG).
+         * Chữ khóa của các hàng KHÔNG theo thứ tự từ khóa: cột dọc đọc ra U G H N A C P N H,
+         * học sinh phải sắp xếp lại các chữ để tìm từ khóa.
+         * Các hàng chỉ dùng kiến thức cũ (Bài 10 và lớp dưới), không lộ khái niệm mới của Bài 11.
+         */
+        const KEYWORD = &quot;PHANCHUNG&quot;;
+        const KEYWORD_DISPLAY = &quot;PHẢN CHỨNG&quot;;
+        const KEYWORD_SPLIT = 4;   // khoảng trống sau chữ thứ 4 khi hiện từ khóa đúng thứ tự
+        const MIN_OPEN_TO_GUESS = 4;
+        const STORAGE_PREFIX = &#x27;pc11_&#x27;;
+
+        const puzzleData = [
+            {
+                id: 1, keyLetter: &quot;U&quot;, answer: &quot;TRUNGDIEM&quot;, keyIndex: 2,
+                question: &quot;Điểm nằm giữa và chia đoạn thẳng thành hai đoạn bằng nhau được gọi là…&quot;,
+                explain: &quot;$M$ là trung điểm của $AB$ khi $M$ nằm giữa $A, B$ và $MA = MB$.&quot;
+            },
+            {
+                id: 2, keyLetter: &quot;G&quot;, answer: &quot;GIAODIEM&quot;, keyIndex: 0,
+                question: &quot;Đường thẳng $d$ không nằm trong mặt phẳng $(P)$ và có đúng một điểm chung với $(P)$. Điểm chung đó gọi là…&quot;,
+                explain: &quot;Kí hiệu $d \\cap (P) = \\{I\\}$. Muốn tìm giao điểm, ta tìm một đường thẳng nằm trong $(P)$ cắt $d$.&quot;
+            },
+            {
+                id: 3, keyLetter: &quot;H&quot;, answer: &quot;DUONGTHANG&quot;, keyIndex: 6,
+                question: &quot;Qua hai điểm phân biệt có một và chỉ một…&quot;,
+                explain: &quot;Qua hai điểm phân biệt $A, B$ có duy nhất một đường thẳng, kí hiệu là $AB$.&quot;
+            },
+            {
+                id: 4, keyLetter: &quot;N&quot;, answer: &quot;TUDIEN&quot;, keyIndex: 5,
+                question: &quot;Hình chóp tam giác còn được gọi là hình…&quot;,
+                explain: &quot;Tứ diện $ABCD$ có 4 đỉnh, 6 cạnh và 4 mặt đều là tam giác.&quot;
+            },
+            {
+                id: 5, keyLetter: &quot;A&quot;, answer: &quot;GIAOTUYEN&quot;, keyIndex: 2,
+                question: &quot;Đường thẳng chung của hai mặt phẳng phân biệt được gọi là…&quot;,
+                explain: &quot;Hai mặt phẳng phân biệt $(P)$ và $(Q)$ có một điểm chung thì có đúng một đường thẳng chung đi qua điểm đó, gọi là giao tuyến: $d = (P) \\cap (Q)$.&quot;
+            },
+            {
+                id: 6, keyLetter: &quot;C&quot;, answer: &quot;CATNHAU&quot;, keyIndex: 0,
+                question: &quot;Trong mặt phẳng, hai đường thẳng có đúng một điểm chung thì chúng…&quot;,
+                explain: &quot;Kí hiệu $a \\cap b = \\{M\\}$. Trong mặt phẳng, hai đường thẳng phân biệt chỉ có thể cắt nhau hoặc song song. Trong không gian thì sao? Hôm nay ta sẽ tìm câu trả lời.&quot;
+            },
+            {
+                id: 7, keyLetter: &quot;P&quot;, answer: &quot;MATPHANG&quot;, keyIndex: 3,
+                question: &quot;Qua ba điểm không thẳng hàng xác định duy nhất một…&quot;,
+                explain: &quot;Mặt phẳng đi qua ba điểm $A, B, C$ không thẳng hàng kí hiệu là $(ABC)$.&quot;
+            },
+            {
+                id: 8, keyLetter: &quot;N&quot;, answer: &quot;BINHHANH&quot;, keyIndex: 2,
+                question: &quot;Tứ giác có các cặp cạnh đối song song là hình…&quot;,
+                explain: &quot;Hình bình hành $ABCD$ có $AB \\parallel CD$, $AD \\parallel BC$; hai đường chéo cắt nhau tại trung điểm của mỗi đường.&quot;
+            },
+            {
+                id: 9, keyLetter: &quot;H&quot;, answer: &quot;HINHCHOP&quot;, keyIndex: 3,
+                question: &quot;Hình gồm đỉnh $S$ và đáy là tứ giác $ABCD$, các mặt bên là tam giác, được gọi là…&quot;,
+                explain: &quot;Hình chóp $S.ABCD$ có đỉnh $S$, đáy $ABCD$ và 4 mặt bên $SAB, SBC, SCD, SDA$.&quot;
+            }
+        ];
+
+        const summarySlides = [
+            {
+                title: &quot;Từ khóa: PHẢN CHỨNG&quot;,
+                cards: [
+                    { icon: &quot;🧠&quot;, title: &quot;Phương pháp chứng minh phản chứng&quot;, text: &quot;&lt;strong&gt;Bước 1.&lt;/strong&gt; Giả sử điều cần chứng minh là &lt;strong&gt;sai&lt;/strong&gt;.&lt;br&gt;&lt;strong&gt;Bước 2.&lt;/strong&gt; Từ giả sử đó, lập luận đến một &lt;strong&gt;mâu thuẫn&lt;/strong&gt; (với giả thiết hoặc với điều đã biết).&lt;br&gt;&lt;strong&gt;Bước 3.&lt;/strong&gt; Kết luận: giả sử sai, vậy điều cần chứng minh là &lt;strong&gt;đúng&lt;/strong&gt;.&quot; }
+                ]
+            },
+            {
+                title: &quot;Câu hỏi của bài hôm nay&quot;,
+                cards: [
+                    { icon: &quot;📐&quot;, title: &quot;Trong mặt phẳng&quot;, text: &quot;Hai đường thẳng phân biệt chỉ có thể &lt;strong&gt;cắt nhau&lt;/strong&gt; hoặc &lt;strong&gt;song song&lt;/strong&gt;.&quot; },
+                    { icon: &quot;🤔&quot;, title: &quot;Trong không gian thì sao?&quot;, text: &quot;Hai đường thẳng &lt;strong&gt;không có điểm chung&lt;/strong&gt; thì có chắc chắn song song không?&lt;br&gt;Phương pháp phản chứng sẽ giúp ta trả lời.&quot; }
+                ]
+            }
+        ];
+
+        /** --- 2. TRẠNG THÁI &amp; HỆ THỐNG --- */
+        let state = {
+            maxLeft: 0,
+            cols: 0,
+            rows: puzzleData.length,
+            currentRow: null,
+            timer: 30,
+            timerInterval: null,
+            timerPaused: false,
+            solvedRows: [],
+            skippedRows: [],
+            keywordSolved: false,
+            isMuted: false,
+            uiScale: 1,
+            currentSlide: 0
+        };
+
+        let audioCtx;
+        const sounds = {
+            play(type) {
+                if (state.isMuted) return;
+                try {
+                    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    if (audioCtx.state === &#x27;suspended&#x27;) audioCtx.resume();
+                } catch (e) { return; }
+                
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+                
+                switch(type) {
+                    case &#x27;flip&#x27;:
+                        osc.type = &#x27;sine&#x27;;
+                        osc.frequency.setValueAtTime(800, now);
+                        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.05);
+                        gain.gain.setValueAtTime(0.3, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                        osc.start(now); osc.stop(now + 0.1);
+                        break;
+                    case &#x27;correct&#x27;:
+                        osc.type = &#x27;triangle&#x27;;
+                        osc.frequency.setValueAtTime(523.25, now);
+                        osc.frequency.setValueAtTime(659.25, now + 0.1);
+                        osc.frequency.setValueAtTime(783.99, now + 0.2);
+                        gain.gain.setValueAtTime(0.5, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                        osc.start(now); osc.stop(now + 0.5);
+                        break;
+                    case &#x27;wrong&#x27;:
+                        osc.type = &#x27;sawtooth&#x27;;
+                        osc.frequency.setValueAtTime(150, now);
+                        osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+                        gain.gain.setValueAtTime(0.3, now);
+                        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                        osc.start(now); osc.stop(now + 0.2);
+                        break;
+                    case &#x27;tick&#x27;:
+                        osc.type = &#x27;square&#x27;;
+                        osc.frequency.setValueAtTime(200, now);
+                        gain.gain.setValueAtTime(0.1, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                        osc.start(now); osc.stop(now + 0.05);
+                        break;
+                    case &#x27;win&#x27;:
+                        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) =&gt; {
+                            const o = audioCtx.createOscillator();
+                            const g = audioCtx.createGain();
+                            o.type = &#x27;sine&#x27;; o.frequency.value = freq;
+                            o.connect(g); g.connect(audioCtx.destination);
+                            g.gain.setValueAtTime(0, now + i*0.1);
+                            g.gain.linearRampToValueAtTime(0.4, now + i*0.1 + 0.05);
+                            g.gain.exponentialRampToValueAtTime(0.01, now + i*0.1 + 0.5);
+                            o.start(now + i*0.1); o.stop(now + i*0.1 + 0.5);
+                        });
+                        break;
+                }
+            }
+        };
+
+        /** --- 3. KHỞI TẠO &amp; TÍNH TOÁN LƯỚI --- */
+        function init() {
+            let maxRight = 0;
+            puzzleData.forEach(row =&gt; {
+                if (row.keyIndex &gt; state.maxLeft) state.maxLeft = row.keyIndex;
+                const rightLen = row.answer.length - row.keyIndex - 1;
+                if (rightLen &gt; maxRight) maxRight = rightLen;
+            });
+            state.cols = 1 + state.maxLeft + 1 + maxRight;
+
+            loadProgress();
+            buildBoard();
+            buildPanelGrid();
+            buildDecodeArea();
+            generateStars();
+            
+            setTimeout(fitGrid, 50);
+            window.addEventListener(&#x27;resize&#x27;, fitGrid);
+            document.addEventListener(&#x27;keydown&#x27;, handleShortcuts);
+        }
+
+        function isOpened(id) {
+            return state.solvedRows.includes(id) || state.skippedRows.includes(id);
+        }
+
+        function buildBoard() {
+            const board = document.getElementById(&#x27;crossword-board&#x27;);
+            board.innerHTML = &#x27;&#x27;;
+            
+            puzzleData.forEach(row =&gt; {
+                const rowEl = document.createElement(&#x27;div&#x27;);
+                rowEl.className = `row ${state.solvedRows.includes(row.id) ? &#x27;solved&#x27; : &#x27;&#x27;} ${state.skippedRows.includes(row.id) ? &#x27;skipped&#x27; : &#x27;&#x27;}`;
+                rowEl.id = `row-${row.id}`;
+                rowEl.onclick = () =&gt; selectRow(row.id);
+                
+                const offset = state.maxLeft - row.keyIndex;
+                rowEl.style.marginLeft = `calc(${offset} * (var(--cell) * 1.12))`;
+                
+                const numEl = document.createElement(&#x27;div&#x27;);
+                numEl.className = &#x27;row-num&#x27;;
+                numEl.innerHTML = `&lt;span&gt;${row.id}&lt;/span&gt;`;
+                rowEl.appendChild(numEl);
+
+                const cellsGroup = document.createElement(&#x27;div&#x27;);
+                cellsGroup.className = &#x27;cells-group&#x27;;
+                
+                for (let i = 0; i &lt; row.answer.length; i++) {
+                    const isKey = (i === row.keyIndex);
+                    const cell = document.createElement(&#x27;div&#x27;);
+                    cell.className = `cell ${isKey ? &#x27;is-key&#x27; : &#x27;&#x27;} ${isOpened(row.id) || state.keywordSolved ? &#x27;flipped&#x27; : &#x27;&#x27;}`;
+                    cell.id = `cell-${row.id}-${i}`;
+                    cell.onclick = (e) =&gt; {
+                        if (state.currentRow === row.id &amp;&amp; !state.solvedRows.includes(row.id) &amp;&amp; !cell.classList.contains(&#x27;flipped&#x27;)) {
+                            e.stopPropagation();
+                            flipCell(row.id, i);
+                        }
+                    };
+                    cell.innerHTML = `
+                        &lt;div class=&quot;cell-inner&quot;&gt;
+                            &lt;div class=&quot;cell-front&quot;&gt;&lt;/div&gt;
+                            &lt;div class=&quot;cell-back&quot;&gt;${row.answer[i]}&lt;/div&gt;
+                        &lt;/div&gt;
+                    `;
+                    cellsGroup.appendChild(cell);
+                }
+                rowEl.appendChild(cellsGroup);
+                board.appendChild(rowEl);
+            });
+        }
+
+        function buildPanelGrid() {
+            const grid = document.getElementById(&#x27;panel-grid&#x27;);
+            grid.innerHTML = &#x27;&#x27;;
+            puzzleData.forEach(row =&gt; {
+                const btn = document.createElement(&#x27;button&#x27;);
+                btn.className = `num-btn ${state.solvedRows.includes(row.id) ? &#x27;solved&#x27; : &#x27;&#x27;} ${state.skippedRows.includes(row.id) ? &#x27;skipped&#x27; : &#x27;&#x27;}`;
+                btn.id = `num-btn-${row.id}`;
+                btn.innerText = row.id;
+                btn.onclick = () =&gt; selectRow(row.id);
+                grid.appendChild(btn);
+            });
+        }
+
+        // Ô giải mã: ô thứ i ứng với hàng i (chữ đã xáo trộn). Chữ chỉ được ghi vào khi hàng đã mở.
+        function buildDecodeArea() {
+            const area = document.getElementById(&#x27;decode-area&#x27;);
+            area.innerHTML = &#x27;&#x27;;
+            puzzleData.forEach(row =&gt; {
+                const cell = document.createElement(&#x27;div&#x27;);
+                cell.className = &#x27;decode-cell&#x27;;
+                cell.id = `decode-${row.id}`;
+                cell.dataset.row = row.id;
+                if (isOpened(row.id)) {
+                    cell.innerText = row.keyLetter;
+                    cell.classList.add(&#x27;revealed&#x27;);
+                }
+                area.appendChild(cell);
+            });
+        }
+
+        function revealDecodeLetter(id) {
+            const row = puzzleData.find(r =&gt; r.id === id);
+            const cell = document.getElementById(`decode-${id}`);
+            if (row &amp;&amp; cell &amp;&amp; !cell.classList.contains(&#x27;revealed&#x27;)) {
+                cell.innerText = row.keyLetter;
+                cell.classList.add(&#x27;revealed&#x27;);
+            }
+        }
+
+        // Khi đoán đúng: sắp lại các ô theo đúng thứ tự từ khóa
+        function showKeywordInOrder() {
+            const area = document.getElementById(&#x27;decode-area&#x27;);
+            area.innerHTML = &#x27;&#x27;;
+            [...KEYWORD].forEach((ch, i) =&gt; {
+                if (i === KEYWORD_SPLIT) {
+                    const gap = document.createElement(&#x27;div&#x27;);
+                    gap.className = &#x27;decode-gap&#x27;;
+                    area.appendChild(gap);
+                }
+                const cell = document.createElement(&#x27;div&#x27;);
+                cell.className = &#x27;decode-cell revealed final&#x27;;
+                cell.innerText = ch;
+                area.appendChild(cell);
+            });
+            document.getElementById(&#x27;decode-hint&#x27;).innerText = &#x27;Từ khóa: &#x27; + KEYWORD_DISPLAY;
+        }
+
+        function fitGrid() {
+            const container = document.getElementById(&#x27;board-container&#x27;);
+            if (!container) return;
+            const W = container.clientWidth - (window.innerWidth * 0.02);
+            const H = container.clientHeight - (window.innerWidth * 0.02);
+            let cell = Math.min(W / (state.cols * 1.12), H / (state.rows * 1.15));
+            cell = Math.max(28, Math.min(128, cell));
+            document.documentElement.style.setProperty(&#x27;--cell&#x27;, `${cell}px`);
+        }
+
+        /** --- 4. LOGIC TRÒ CHƠI --- */
+        function selectRow(id) {
+            if (state.keywordSolved) return;
+            const rowData = puzzleData.find(r =&gt; r.id === id);
+            if (!rowData) return;
+
+            document.querySelectorAll(&#x27;.row&#x27;).forEach(r =&gt; r.classList.remove(&#x27;active&#x27;));
+            document.getElementById(`row-${id}`).classList.add(&#x27;active&#x27;);
+            state.currentRow = id;
+            
+            document.getElementById(&#x27;panel-grid&#x27;).style.display = &#x27;none&#x27;;
+            document.getElementById(&#x27;panel-question&#x27;).style.display = &#x27;flex&#x27;;
+            document.getElementById(&#x27;panel-explain&#x27;).style.display = &#x27;none&#x27;;
+            
+            document.getElementById(&#x27;q-row-info&#x27;).innerText = `Hàng ${id} • ${rowData.answer.length} chữ cái`;
+            document.getElementById(&#x27;q-text&#x27;).innerText = rowData.question;
+            renderMathSafely(document.getElementById(&#x27;q-text&#x27;));
+            
+            const input = document.getElementById(&#x27;q-input&#x27;);
+            input.value = &#x27;&#x27;;
+            
+            const feedback = document.getElementById(&#x27;q-feedback&#x27;);
+            feedback.innerText = &#x27;&#x27;;
+            feedback.className = &#x27;q-feedback&#x27;;
+
+            if (isOpened(id)) {
+                stopTimer();
+                resetTimerUI();
+                showExplain(rowData, state.solvedRows.includes(id));
+                return;
+            }
+            input.focus();
+            startTimer();
+        }
+
+        function backToGrid() {
+            state.currentRow = null;
+            document.querySelectorAll(&#x27;.row&#x27;).forEach(r =&gt; r.classList.remove(&#x27;active&#x27;));
+            document.getElementById(&#x27;panel-question&#x27;).style.display = &#x27;none&#x27;;
+            document.getElementById(&#x27;panel-explain&#x27;).style.display = &#x27;none&#x27;;
+            document.getElementById(&#x27;panel-grid&#x27;).style.display = &#x27;grid&#x27;;
+            stopTimer();
+            resetTimerUI();
+        }
+
+        function normalizeStr(str) {
+            return str.normalize(&quot;NFD&quot;).replace(/[\u0300-\u036f]/g, &quot;&quot;)
+                .replace(/đ/g, &quot;d&quot;).replace(/Đ/g, &quot;D&quot;)
+                .replace(/[^A-Za-z]/g, &quot;&quot;).toUpperCase();
+        }
+
+        function checkAnswer() {
+            if (!state.currentRow) return;
+            const rowData = puzzleData.find(r =&gt; r.id === state.currentRow);
+            if (state.solvedRows.includes(rowData.id)) return;
+            const inputEl = document.getElementById(&#x27;q-input&#x27;);
+            const feedback = document.getElementById(&#x27;q-feedback&#x27;);
+            const ans = normalizeStr(inputEl.value);
+
+            if (ans === rowData.answer) {
+                stopTimer();
+                feedback.innerText = &#x27;Chính xác! ✓&#x27;;
+                feedback.className = &#x27;q-feedback success&#x27;;
+                sounds.play(&#x27;correct&#x27;);
+                markRowSolved(rowData.id);
+                
+                let delay = 0;
+                for (let i = 0; i &lt; rowData.answer.length; i++) {
+                    const cell = document.getElementById(`cell-${rowData.id}-${i}`);
+                    if (!cell.classList.contains(&#x27;flipped&#x27;)) {
+                        setTimeout(() =&gt; flipCell(rowData.id, i), delay);
+                        delay += 100;
+                    }
+                }
+                setTimeout(() =&gt; showExplain(rowData, true), delay + 300);
+            } else {
+                inputEl.classList.remove(&#x27;error&#x27;);
+                void inputEl.offsetWidth;
+                inputEl.classList.add(&#x27;error&#x27;);
+                feedback.innerText = &#x27;Chưa đúng ✗&#x27;;
+                feedback.className = &#x27;q-feedback error&#x27;;
+                sounds.play(&#x27;wrong&#x27;);
+            }
+        }
+
+        function showExplain(rowData, solved) {
+            document.getElementById(&#x27;panel-question&#x27;).style.display = &#x27;none&#x27;;
+            document.getElementById(&#x27;panel-explain&#x27;).style.display = &#x27;flex&#x27;;
+            document.getElementById(&#x27;explain-title&#x27;).innerText = solved
+                ? `✓ ${rowData.answer}`
+                : `Đáp án: ${rowData.answer}`;
+            const exText = document.getElementById(&#x27;explain-text&#x27;);
+            exText.innerHTML = rowData.explain;
+            renderMathSafely(exText);
+        }
+
+        function flipCell(rowId, colIndex) {
+            const cell = document.getElementById(`cell-${rowId}-${colIndex}`);
+            if (cell &amp;&amp; !cell.classList.contains(&#x27;flipped&#x27;)) {
+                cell.classList.add(&#x27;flipped&#x27;);
+                sounds.play(&#x27;flip&#x27;);
+            }
+        }
+
+        function hintLetter() {
+            if (!state.currentRow) return;
+            const rowData = puzzleData.find(r =&gt; r.id === state.currentRow);
+            // Gợi ý: ưu tiên mở chữ không phải chữ khóa để không lộ từ khóa
+            const order = [...Array(rowData.answer.length).keys()]
+                .filter(i =&gt; i !== rowData.keyIndex).concat([rowData.keyIndex]);
+            for (const i of order) {
+                const cell = document.getElementById(`cell-${rowData.id}-${i}`);
+                if (!cell.classList.contains(&#x27;flipped&#x27;)) {
+                    flipCell(rowData.id, i);
+                    break;
+                }
+            }
+        }
+
+        function revealRow() {
+            if (!state.currentRow) return;
+            const rowData = puzzleData.find(r =&gt; r.id === state.currentRow);
+            
+            for (let i = 0; i &lt; rowData.answer.length; i++) flipCell(rowData.id, i);
+            
+            if (!isOpened(rowData.id)) {
+                state.skippedRows.push(rowData.id);
+                document.getElementById(`row-${rowData.id}`).classList.add(&#x27;skipped&#x27;);
+                document.getElementById(`num-btn-${rowData.id}`).classList.add(&#x27;skipped&#x27;);
+                revealDecodeLetter(rowData.id);
+                saveProgress();
+            }
+            stopTimer();
+            setTimeout(() =&gt; showExplain(rowData, false), 500);
+        }
+
+        function markRowSolved(id) {
+            if (!state.solvedRows.includes(id)) {
+                state.solvedRows.push(id);
+                state.skippedRows = state.skippedRows.filter(x =&gt; x !== id);
+                document.getElementById(`row-${id}`).classList.add(&#x27;solved&#x27;);
+                document.getElementById(`row-${id}`).classList.remove(&#x27;skipped&#x27;);
+                document.getElementById(`num-btn-${id}`).classList.add(&#x27;solved&#x27;);
+                document.getElementById(`num-btn-${id}`).classList.remove(&#x27;skipped&#x27;);
+                revealDecodeLetter(id);
+                saveProgress();
+            }
+        }
+
+        function triggerWin() {
+            if (state.keywordSolved) return;
+            state.keywordSolved = true;
+            stopTimer();
+            sounds.play(&#x27;win&#x27;);
+            
+            puzzleData.forEach(r =&gt; {
+                for (let i = 0; i &lt; r.answer.length; i++) {
+                    document.getElementById(`cell-${r.id}-${i}`).classList.add(&#x27;flipped&#x27;);
+                }
+            });
+            showKeywordInOrder();
+
+            if (typeof confetti === &#x27;function&#x27;) {
+                const end = Date.now() + 3000;
+                (function frame() {
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: [&#x27;#0ea5e9&#x27;, &#x27;#eab308&#x27;] });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: [&#x27;#0ea5e9&#x27;, &#x27;#eab308&#x27;] });
+                    if (Date.now() &lt; end) requestAnimationFrame(frame);
+                }());
+            }
+            setTimeout(() =&gt; document.getElementById(&#x27;win-modal&#x27;).classList.add(&#x27;active&#x27;), 1500);
+        }
+
+        /** --- 5. ĐOÁN TỪ KHÓA --- */
+        function openedCount() {
+            return puzzleData.filter(r =&gt; isOpened(r.id)).length;
+        }
+
+        function openGuessModal() {
+            if (state.keywordSolved) return;
+            document.getElementById(&#x27;guess-modal&#x27;).classList.add(&#x27;active&#x27;);
+            const input = document.getElementById(&#x27;guess-input&#x27;);
+            const fb = document.getElementById(&#x27;guess-feedback&#x27;);
+            input.value = &#x27;&#x27;;
+            const n = openedCount();
+            fb.innerText = n &lt; MIN_OPEN_TO_GUESS
+                ? `Cần mở ít nhất ${MIN_OPEN_TO_GUESS} hàng ngang mới được đoán (đã mở ${n}).`
+                : &#x27;&#x27;;
+            setTimeout(() =&gt; input.focus(), 100);
+        }
+
+        function checkKeywordGuess() {
+            const input = document.getElementById(&#x27;guess-input&#x27;);
+            const fb = document.getElementById(&#x27;guess-feedback&#x27;);
+            const n = openedCount();
+            if (n &lt; MIN_OPEN_TO_GUESS) {
+                fb.innerText = `Cần mở ít nhất ${MIN_OPEN_TO_GUESS} hàng ngang mới được đoán (đã mở ${n}).`;
+                sounds.play(&#x27;wrong&#x27;);
+                return;
+            }
+            if (normalizeStr(input.value) === KEYWORD) {
+                closeModals();
+                triggerWin();
+            } else {
+                fb.innerText = &#x27;Chưa chính xác! Đội này mất quyền đoán.&#x27;;
+                sounds.play(&#x27;wrong&#x27;);
+                input.classList.add(&#x27;error&#x27;);
+                setTimeout(() =&gt; input.classList.remove(&#x27;error&#x27;), 400);
+            }
+        }
+
+        /** --- 6. TIMER --- */
+        function startTimer() {
+            stopTimer();
+            state.timer = 30;
+            state.timerPaused = false;
+            updateTimerUI();
+            state.timerInterval = setInterval(() =&gt; {
+                if (!state.timerPaused) {
+                    state.timer--;
+                    updateTimerUI();
+                    if (state.timer &lt;= 10 &amp;&amp; state.timer &gt; 0) sounds.play(&#x27;tick&#x27;);
+                    if (state.timer &lt;= 0) {
+                        stopTimer();
+                        document.getElementById(&#x27;q-feedback&#x27;).innerText = &#x27;Hết giờ!&#x27;;
+                        document.getElementById(&#x27;q-feedback&#x27;).className = &#x27;q-feedback error&#x27;;
+                        sounds.play(&#x27;wrong&#x27;);
+                    }
+                }
+            }, 1000);
+        }
+
+        function stopTimer() { clearInterval(state.timerInterval); }
+        function toggleTimer() { state.timerPaused = !state.timerPaused; }
+
+        function updateTimerUI() {
+            const path = document.getElementById(&#x27;timer-path&#x27;);
+            const text = document.getElementById(&#x27;timer-text&#x27;);
+            const container = document.querySelector(&#x27;.timer-container&#x27;);
+            text.innerText = state.timer;
+            path.style.strokeDashoffset = 283 - (state.timer / 30) * 283;
+            container.classList.toggle(&#x27;timer-warning&#x27;, state.timer &lt;= 10);
+        }
+
+        function resetTimerUI() {
+            document.getElementById(&#x27;timer-text&#x27;).innerText = &#x27;--&#x27;;
+            document.getElementById(&#x27;timer-path&#x27;).style.strokeDashoffset = 0;
+            document.querySelector(&#x27;.timer-container&#x27;).classList.remove(&#x27;timer-warning&#x27;);
+        }
+
+        /** --- 7. SLIDE VÀO BÀI --- */
+        function showSummary() {
+            closeModals();
+            document.getElementById(&#x27;summary-screen&#x27;).classList.add(&#x27;active&#x27;);
+            const container = document.getElementById(&#x27;slides-container&#x27;);
+            const dotsContainer = document.getElementById(&#x27;slide-dots&#x27;);
+            container.innerHTML = &#x27;&#x27;; dotsContainer.innerHTML = &#x27;&#x27;;
+            
+            summarySlides.forEach((slide, idx) =&gt; {
+                const sEl = document.createElement(&#x27;div&#x27;);
+                sEl.className = `slide ${idx === 0 ? &#x27;active&#x27; : &#x27;&#x27;}`;
+                sEl.id = `slide-${idx}`;
+                const cardsHtml = slide.cards.map(c =&gt; `
+                    &lt;div class=&quot;info-card&quot;&gt;
+                        &lt;span class=&quot;icon&quot;&gt;${c.icon}&lt;/span&gt;
+                        &lt;div style=&quot;font-weight:700; margin-bottom:10px;&quot;&gt;${c.title}&lt;/div&gt;
+                        &lt;div&gt;${c.text}&lt;/div&gt;
+                    &lt;/div&gt;
+                `).join(&#x27;&#x27;);
+                sEl.innerHTML = `&lt;div class=&quot;slide-title&quot;&gt;${slide.title}&lt;/div&gt;&lt;div class=&quot;card-grid&quot;&gt;${cardsHtml}&lt;/div&gt;`;
+                container.appendChild(sEl);
+                renderMathSafely(sEl);
+                
+                const dot = document.createElement(&#x27;div&#x27;);
+                dot.className = `dot ${idx === 0 ? &#x27;active&#x27; : &#x27;&#x27;}`;
+                dot.onclick = () =&gt; goToSlide(idx);
+                dotsContainer.appendChild(dot);
+            });
+            state.currentSlide = 0;
+        }
+
+        function closeSummary() { document.getElementById(&#x27;summary-screen&#x27;).classList.remove(&#x27;active&#x27;); }
+        function changeSlide(dir) { goToSlide(state.currentSlide + dir); }
+
+        function goToSlide(idx) {
+            if (idx &gt;= summarySlides.length) { try { parent.postMessage({ tc: &#x27;next&#x27; }, &#x27;*&#x27;); } catch (e) {} return; }
+            if (idx &lt; 0) return;
+            document.getElementById(`slide-${state.currentSlide}`).classList.remove(&#x27;active&#x27;);
+            document.getElementById(&#x27;slide-dots&#x27;).children[state.currentSlide].classList.remove(&#x27;active&#x27;);
+            state.currentSlide = idx;
+            document.getElementById(`slide-${state.currentSlide}`).classList.add(&#x27;active&#x27;);
+            document.getElementById(&#x27;slide-dots&#x27;).children[state.currentSlide].classList.add(&#x27;active&#x27;);
+        }
+
+        /** --- 8. TIỆN ÍCH &amp; ĐIỀU KHIỂN --- */
+        function renderMathSafely(element) {
+            if (typeof renderMathInElement === &#x27;function&#x27;) {
+                try {
+                    renderMathInElement(element, {
+                        delimiters: [
+                            {left: &quot;$$&quot;, right: &quot;$$&quot;, display: true},
+                            {left: &quot;$&quot;, right: &quot;$&quot;, display: false}
+                        ],
+                        throwOnError: false
+                    });
+                } catch(e) { console.warn(&quot;KaTeX error&quot;, e); }
+            }
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() =&gt; {});
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            if (body.hasAttribute(&#x27;data-theme&#x27;)) {
+                body.removeAttribute(&#x27;data-theme&#x27;);
+                document.getElementById(&#x27;theme-icon&#x27;).innerText = &#x27;🌙&#x27;;
+            } else {
+                body.setAttribute(&#x27;data-theme&#x27;, &#x27;dark&#x27;);
+                document.getElementById(&#x27;theme-icon&#x27;).innerText = &#x27;☀️&#x27;;
+            }
+        }
+
+        function toggleSound() {
+            state.isMuted = !state.isMuted;
+            document.getElementById(&#x27;sound-icon&#x27;).innerText = state.isMuted ? &#x27;🔇&#x27; : &#x27;🔊&#x27;;
+        }
+
+        function adjustScale(delta) {
+            state.uiScale = Math.max(0.7, Math.min(1.5, state.uiScale + delta));
+            document.documentElement.style.setProperty(&#x27;--scale&#x27;, state.uiScale);
+            try { localStorage.setItem(STORAGE_PREFIX + &#x27;scale&#x27;, state.uiScale); } catch(e) {}
+            setTimeout(fitGrid, 50);
+        }
+
+        function generateStars() {
+            const container = document.getElementById(&#x27;stars-container&#x27;);
+            for (let i = 0; i &lt; 50; i++) {
+                const star = document.createElement(&#x27;div&#x27;);
+                star.className = &#x27;star&#x27;;
+                star.style.width = Math.random() * 3 + &#x27;px&#x27;;
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + &#x27;vw&#x27;;
+                star.style.top = Math.random() * 100 + &#x27;vh&#x27;;
+                star.style.animationDuration = (2 + Math.random() * 3) + &#x27;s&#x27;;
+                star.style.animationDelay = Math.random() * 2 + &#x27;s&#x27;;
+                container.appendChild(star);
+            }
+        }
+
+        function showHelp() { document.getElementById(&#x27;help-modal&#x27;).classList.add(&#x27;active&#x27;); }
+        function closeModals() { document.querySelectorAll(&#x27;.modal-overlay&#x27;).forEach(m =&gt; m.classList.remove(&#x27;active&#x27;)); }
+
+        function handleShortcuts(e) {
+            const inInput = document.activeElement.tagName === &#x27;INPUT&#x27;;
+            if (inInput &amp;&amp; e.key !== &#x27;Enter&#x27; &amp;&amp; e.key !== &#x27;Escape&#x27;) return;
+
+            if (document.getElementById(&#x27;summary-screen&#x27;).classList.contains(&#x27;active&#x27;)) {
+                if (e.key === &#x27;ArrowRight&#x27; || e.key === &#x27;PageDown&#x27; || e.key === &#x27; &#x27;) changeSlide(1);
+                if (e.key === &#x27;ArrowLeft&#x27; || e.key === &#x27;PageUp&#x27;) changeSlide(-1);
+                if (e.key === &#x27;Escape&#x27;) closeSummary();
+                return;
+            }
+
+            if (!document.querySelector(&#x27;.modal-overlay.active&#x27;) &amp;&amp; !state.currentRow) {
+                if (e.key === &#x27;ArrowRight&#x27; || e.key === &#x27;PageDown&#x27;) { try { parent.postMessage({ tc: &#x27;next&#x27; }, &#x27;*&#x27;); } catch (err) {} return; }
+                if (e.key === &#x27;ArrowLeft&#x27; || e.key === &#x27;PageUp&#x27;) { try { parent.postMessage({ tc: &#x27;prev&#x27; }, &#x27;*&#x27;); } catch (err) {} return; }
+            }
+            if (e.key === &#x27;Escape&#x27;) { closeModals(); backToGrid(); return; }
+
+            if (e.key === &#x27;Enter&#x27;) {
+                if (document.getElementById(&#x27;guess-modal&#x27;).classList.contains(&#x27;active&#x27;)) checkKeywordGuess();
+                else if (state.currentRow &amp;&amp; inInput) checkAnswer();
+                return;
+            }
+            if (document.querySelector(&#x27;.modal-overlay.active&#x27;)) return;
+
+            if (e.key &gt;= &#x27;1&#x27; &amp;&amp; e.key &lt;= &#x27;9&#x27; &amp;&amp; !state.currentRow) selectRow(parseInt(e.key));
+            const k = e.key.toLowerCase();
+            if (k === &#x27;h&#x27; &amp;&amp; state.currentRow) hintLetter();
+            if (k === &#x27;r&#x27; &amp;&amp; state.currentRow) revealRow();
+            if (k === &#x27;k&#x27;) openGuessModal();
+            if (k === &#x27;t&#x27;) toggleTimer();
+            if (k === &#x27;f&#x27;) toggleFullScreen();
+            if (k === &#x27;m&#x27;) toggleSound();
+            if (e.key === &#x27;+&#x27; || e.key === &#x27;=&#x27;) adjustScale(0.1);
+            if (e.key === &#x27;-&#x27;) adjustScale(-0.1);
+            if (e.key === &#x27;?&#x27;) showHelp();
+        }
+
+        /** --- 9. LƯU TIẾN TRÌNH --- */
+        function saveProgress() {
+            try {
+                localStorage.setItem(STORAGE_PREFIX + &#x27;solved&#x27;, JSON.stringify(state.solvedRows));
+                localStorage.setItem(STORAGE_PREFIX + &#x27;skipped&#x27;, JSON.stringify(state.skippedRows));
+            } catch(e) {}
+        }
+
+        function loadProgress() {
+            try {
+                const s = localStorage.getItem(STORAGE_PREFIX + &#x27;solved&#x27;);
+                const sk = localStorage.getItem(STORAGE_PREFIX + &#x27;skipped&#x27;);
+                const scale = localStorage.getItem(STORAGE_PREFIX + &#x27;scale&#x27;);
+                if (s) state.solvedRows = JSON.parse(s);
+                if (sk) state.skippedRows = JSON.parse(sk);
+                if (scale) { state.uiScale = parseFloat(scale); document.documentElement.style.setProperty(&#x27;--scale&#x27;, state.uiScale); }
+            } catch(e) {}
+        }
+
+        function restartGame() {
+            if (confirm(&#x27;Làm mới toàn bộ tiến trình trò chơi?&#x27;)) {
+                try {
+                    localStorage.removeItem(STORAGE_PREFIX + &#x27;solved&#x27;);
+                    localStorage.removeItem(STORAGE_PREFIX + &#x27;skipped&#x27;);
+                } catch(e) {}
+                location.reload();
+            }
+        }
+
+        window.onload = init;
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</section>
+
+<!-- 0. Bìa -->
+<section class="slide cover">
+  <h1>Bài 11. Hai đường thẳng song song</h1>
+  <p class="sub">Vị trí tương đối của hai đường thẳng</p>
+</section>
+
+<!-- 1. HĐ1 nút giao -->
+<section class="slide">
+  <h2>Bốn tuyến đường ở một nút giao</h2>
+  <div class="row">
+    <div class="col w2"><div class="viewer" data-scene="junction"></div></div>
+    <div class="col">
+      <p class="q">a) Tuyến nào giao nhau?</p>
+      <p class="ans step" data-step="1">(1) và (2)</p>
+      <p class="q">b) Tuyến nào song song?</p>
+      <p class="ans step" data-step="2">(1) và (4); (2) và (3)</p>
+      <p class="q">c) Không giao nhau?</p>
+      <p class="ans step" data-step="3">Các cặp còn lại</p>
+      <div class="box step" data-step="4"><b>(3) và (4) song song?</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Khám phá -->
+<section class="slide">
+  <h2>Hai đường thẳng a và b nằm thế nào?</h2>
+  <div class="row">
+    <div class="col w2"><div class="viewer" data-scene="explore"></div></div>
+    <div class="col">
+      <div class="tools" id="kTools">
+        <button data-k="1" class="on">k = 1</button><button data-k="2">k = 2</button>
+        <button data-k="3">k = 3</button><button data-k="4">k = 4</button>
+      </div>
+      <div class="tools"><button id="togglePlane" aria-pressed="true">Mặt phẳng (α)</button></div>
+      <p>Có điểm chung không?<br>Có mặt phẳng chứa cả a và b không?</p>
+      <button id="showK">Kết luận</button>
+      <div class="box blue" id="kAns" hidden></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Chốt kiến thức -->
+<section class="slide">
+  <h2>Vị trí tương đối của hai đường thẳng</h2>
+  <div class="row">
+    <div class="col w2">
+      <svg class="zoomable" viewBox="-10 -12 720 270" style="width:100%" role="img" aria-label="Bốn vị trí tương đối">
+        <g fill="none" stroke="var(--muted)" stroke-width="2">
+          <path d="M10 120 L50 20 L150 20 L110 120 Z"/><path d="M175 120 L215 20 L315 20 L275 120 Z"/>
+          <path d="M340 120 L380 20 L480 20 L440 120 Z"/><path d="M505 120 L545 20 L645 20 L605 120 Z"/>
+        </g>
+        <g stroke-width="4">
+          <line x1="35" y1="55" x2="135" y2="95" stroke="var(--c2)"/><line x1="50" y1="100" x2="125" y2="35" stroke="var(--c3)"/>
+          <line x1="200" y1="55" x2="295" y2="40" stroke="var(--c2)"/><line x1="195" y1="100" x2="285" y2="85" stroke="var(--c3)"/>
+          <line x1="360" y1="95" x2="460" y2="50" stroke="var(--c2)"/><line x1="360" y1="95" x2="460" y2="50" stroke="var(--c3)" stroke-dasharray="7 7"/>
+          <line x1="520" y1="95" x2="625" y2="65" stroke="var(--c2)"/><line x1="578" y1="4" x2="582" y2="136" stroke="var(--c3)"/>
+        </g>
+        <g font-family="Be Vietnam Pro" font-size="24" fill="var(--text)" text-anchor="middle">
+          <text x="80" y="162">cắt nhau</text><text x="245" y="162">song song</text>
+          <text x="410" y="162">trùng nhau</text><text x="575" y="162">chéo nhau</text>
+        </g>
+        <path d="M10 195 H480" stroke="var(--ink)" stroke-width="3"/><text x="245" y="230" font-size="24" fill="var(--ink)" text-anchor="middle" font-family="Be Vietnam Pro">đồng phẳng</text>
+        <path d="M505 195 H645" stroke="var(--primary)" stroke-width="3"/><text x="575" y="230" font-size="20" fill="var(--primary)" text-anchor="middle" font-family="Be Vietnam Pro">không đồng phẳng</text>
+      </svg>
+      <div class="box step" data-step="1">a, b <b>không cùng nằm trong mặt phẳng nào</b> thì a, b <b>chéo nhau</b>.</div>
+    </div>
+    <div class="col">
+      <div class="box blue step" data-step="2">Song song = đồng phẳng + không có điểm chung.</div>
+      <div class="box blue step" data-step="3">Không có điểm chung thì <b>song song hoặc chéo nhau</b>.</div>
+      <p class="ans step" data-step="4">(3) và (4) chéo nhau.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10. Ví dụ 1 -->
+<section class="slide">
+  <h2>Ví dụ 1</h2>
+  <div class="row">
+    <div class="col w2">
+      <p>Cho hai hình bình hành ABCD và ABEF không cùng nằm trong một mặt phẳng.</p>
+      <p class="q">a) Quan sát bốn đường thẳng AB, BC, CD, DA. Chỉ ra các cặp đường thẳng cắt nhau, các cặp đường thẳng song song.</p>
+      <div class="box step" data-step="1">Cắt nhau: AB và BC, AB và DA, BC và CD, CD và DA.<br>Song song: AB và CD, DA và BC.</div>
+      <p class="q">b) Trong ba đường thẳng AB, AF, BE có hai đường thẳng nào chéo nhau không?</p>
+      <div class="box step" data-step="2">Không. AB, AF, BE cùng nằm trong mặt phẳng (ABEF) nên không có hai đường thẳng nào chéo nhau.</div>
+    </div>
+    <div class="col">
+      <div class="viewer" data-scene="vd1"></div>
+      <div class="tools"><button data-hl="vd1-abef">Tô (ABEF)</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. Luyện tập 1 -->
+<section class="slide">
+  <h2>Luyện tập 1</h2>
+  <div class="row">
+    <div class="col w2">
+      <p>Cho hình chóp S.ABCD có đáy ABCD là hình bình hành.</p>
+      <p class="q">a) Trong các đường thẳng AB, AC, CD, hai đường thẳng nào song song, hai đường thẳng nào cắt nhau?</p>
+      <div class="box step" data-step="1">AB // CD (ABCD là hình bình hành); AB cắt AC tại A; AC cắt CD tại C.</div>
+      <p class="q">b) Gọi M, N lần lượt là hai điểm thuộc hai cạnh SA, SB. Trong các đường thẳng SA, MN, AB có hai đường thẳng nào chéo nhau không?</p>
+      <div class="box step" data-step="2">M ∈ SA, N ∈ SB nên MN nằm trong (SAB); SA, AB cũng nằm trong (SAB). Vậy không có hai đường thẳng nào chéo nhau.</div>
+    </div>
+    <div class="col">
+      <div class="viewer" data-scene="pyr"></div>
+      <div class="tools"><button data-hl="ab-cd">AB, CD</button><button data-hl="ab-ac">AB, AC</button><button data-hl="ac-cd">AC, CD</button><button data-hl="sab">(SAB)</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Ví dụ 2 -->
+<section class="slide">
+  <h2>Ví dụ 2. Tứ diện ABCD: AB và CD có chéo nhau không?</h2>
+  <div class="row">
+    <div class="col"><div class="viewer" data-scene="tet"></div>
+      <div class="tools"><button id="tetTrick">AB cắt CD?</button><button id="tetReset">Góc nhìn chuẩn</button></div></div>
+    <div class="col">
+      <ol>
+        <li class="step" data-step="1">Giả sử AB, CD đồng phẳng ⇒ A, B, C, D đồng phẳng.</li>
+        <li class="step" data-step="2">Trái giả thiết ABCD là tứ diện.</li>
+        <li class="step" data-step="3">Vậy AB và CD <b>chéo nhau</b>.</li>
+      </ol>
+      <div class="box step" data-step="4">Tương tự: AC và BD, AD và BC.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 12. Luyện tập 2 -->
+<section class="slide">
+  <h2>Luyện tập 2</h2>
+  <div class="row">
+    <div class="col w2">
+      <p>Trong hình chóp tứ giác S.ABCD, chỉ ra những đường thẳng:</p>
+      <p class="q">a) Chéo với đường thẳng SA.</p>
+      <div class="box step" data-step="1">BC và CD. Chẳng hạn, nếu SA và BC đồng phẳng thì S thuộc (ABCD): vô lí.</div>
+      <p class="q">b) Chéo với đường thẳng BC.</p>
+      <div class="box step" data-step="2">SA và SD.</div>
+    </div>
+    <div class="col">
+      <div class="viewer" data-scene="pyr2"></div>
+      <div class="tools"><button data-hl="sa-bc">SA, BC</button><button data-hl="sa-cd">SA, CD</button><button data-hl="bc-sd">BC, SD</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Phản biện chatbot -->
+<section class="slide">
+  <h2>Trợ lí AI trả lời. Em có đồng ý không?</h2>
+  <div class="row">
+    <div class="col w2">
+      <div class="chat">
+        <div class="bubble">
+          <span class="claim" data-claim="1">SA cắt BC</span>
+          <span class="claim" data-claim="2">vì trên hình vẽ hai đoạn này giao nhau.</span>
+          <span class="claim" data-claim="3">Hai đường thẳng không có điểm chung thì luôn song song.</span>
+        </div>
+      </div>
+      <div class="box step" data-step="1"><b>Sai 1.</b> SA cắt BC ⇒ S thuộc (ABCD): vô lí. SA và BC <b>chéo nhau</b>.</div>
+      <div class="box step" data-step="2"><b>Sai 2.</b> Không có điểm chung: <b>song song hoặc chéo nhau</b>.</div>
+      <div class="box blue step" data-step="3">Kết quả của AI phải được <b>kiểm chứng</b>.</div>
+    </div>
+    <div class="col"><div class="viewer" data-scene="pyrTrick"></div></div>
+  </div>
+</section>
+
+<!-- 6. Trắc nghiệm -->
+<section class="slide" id="quizSlide">
+  <div class="qz-head"><h2 id="qzTitle">Câu 1</h2><span class="tag" id="qzCount"></span></div>
+  <p id="qzStem" style="font-size:1.05em"></p>
+  <div class="opts" id="qzOpts"></div>
+  <div class="fb" id="qzFb" aria-live="polite"></div>
+  <div class="tools"><button id="qzPrev">Câu trước</button><button id="qzNext">Câu tiếp</button></div>
+</section>
+
+<!-- 7. Vận dụng -->
+<section class="slide">
+  <h2>Vận dụng 1. Chiếc gậy dựa vào tường</h2>
+  <div class="row">
+    <div class="col w2">
+      <svg class="zoomable" viewBox="0 0 520 330" style="width:100%;flex:1" role="img" aria-label="Chiếc gậy dựa vào tường">
+        <g fill="none" stroke="var(--muted)" stroke-width="2">
+          <path d="M120 40 H400 V220 H120 Z"/><path d="M20 320 L120 220 M400 220 L500 320 M120 40 L20 0 M400 40 L500 0"/>
+        </g>
+        <path d="M120 220 H400 L500 320 H20 Z" fill="var(--line)" opacity=".6"/>
+        <line x1="170" y1="300" x2="250" y2="95" stroke="var(--primary)" stroke-width="9" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="col">
+      <p>Gậy có song song với mép tường nào không?</p>
+      <div class="box step" data-step="1"><span class="ans">Không.</span> Gậy nằm nghiêng; mép tường thẳng đứng hoặc nằm ngang.</div>
+      <p class="q step" data-step="2">Gậy chéo nhau với mép tường nào?</p>
+      <div class="box blue step" data-step="3">Các mép không có điểm chung với gậy và không cùng mặt phẳng với gậy.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Tổng kết -->
+<section class="slide">
+  <h2>Không giao nhau chưa chắc đã song song</h2>
+  <div class="tree">
+    <div class="node"><h3>Đồng phẳng</h3>cắt nhau · song song · trùng nhau</div>
+    <div class="node"><h3>Không đồng phẳng</h3>chéo nhau (chứng minh bằng phản chứng)</div>
+  </div>
+  <div class="box step" data-step="1" style="margin-top:.6em"><b>Về nhà:</b> bài 4.9, 4.10; Padlet: 2 ảnh – một cặp song song, một cặp chéo nhau.</div>
+</section>
+
+<div class="bar">
+  <button id="prevBtn" aria-label="Trang trước">←</button>
+  <button id="nextBtn" aria-label="Bước tiếp">→</button>
+  <span id="counter"></span>
+  <span class="sp"></span>
+  <button id="themeBtn">Nền tối</button>
+  <button id="fsBtn">Toàn màn hình</button>
+</div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ================= HÌNH 3D ĐƠN GIẢN ================= */
+const sub = (a, b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+const add = (a, b) => [a[0]+b[0], a[1]+b[1], a[2]+b[2]];
+const mul = (a, k) => [a[0]*k, a[1]*k, a[2]*k];
+const cross = (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+const dot = (a, b) => a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const lerp = (a, b, t) => add(a, mul(sub(b, a), t));
+
+class Viewer {
+  constructor(el, scene) {
+    this.el = el; this.scene = scene;
+    this.yaw = scene.yaw ?? -0.55; this.pitch = scene.pitch ?? 0.38;
+    this.hl = null;
+    this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    this.svg.setAttribute('role', 'img');
+    this.svg.setAttribute('aria-label', scene.label || 'Hình không gian');
+    el.prepend(this.svg);
+    // Kéo = xoay hình; bấm (không kéo) = phóng to / thu lại
+    let drag = null, moved = 0;
+    el.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; moved = 0; el.setPointerCapture(e.pointerId); });
+    el.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const dx = e.clientX - drag[0], dy = e.clientY - drag[1];
+      moved += Math.abs(dx) + Math.abs(dy);
+      this.yaw += dx * 0.01;
+      this.pitch = Math.max(-0.2, Math.min(1.5, this.pitch + dy * 0.01));
+      drag = [e.clientX, e.clientY]; this.draw();
+    });
+    el.addEventListener('pointerup', () => {
+      if (drag && moved < 6) toggleZoom(el);
+      drag = null;
+    });
+    new ResizeObserver(() => this.draw()).observe(el);
+  }
+  view(p) {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const x1 = p[0]*cy - p[1]*sy, y1 = p[0]*sy + p[1]*cy, z1 = p[2];
+    return [x1, y1*cp - z1*sp, y1*sp + z1*cp]; // x, độ sâu, cao
+  }
+  proj(p) {
+    const v = this.view(p), f = 14 / (14 + v[1]);
+    return [this.cx + v[0]*f*this.k, this.cy - v[2]*f*this.k, v[1]];
+  }
+  draw() {
+    const r = this.el.getBoundingClientRect();
+    if (!r.width) return;
+    const W = r.width, H = r.height;
+    this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    this.k = Math.min(W, H) / (this.scene.size || 7.5);
+    this.cx = W / 2; this.cy = H / 2 + (this.scene.dy || 0) * this.k;
+    const s = this.scene.build(this), out = [];
+    const P = this.scene.pts || s.pts || {};
+    const pt = x => typeof x === 'string' ? P[x] : x;
+    const fs = Math.max(13, Math.min(W, H) / 22);
+    // mặt phẳng
+    (s.polys || []).forEach(o => {
+      const d = o.pts.map(q => this.proj(pt(q))).map(q => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join(' ');
+      out.push(`<polygon points="${d}" fill="${o.fill}" fill-opacity="${o.op ?? .18}" stroke="${o.fill}" stroke-opacity=".6" stroke-width="1.5"/>`);
+      if (o.label) { const q = this.proj(pt(o.labelAt || o.pts[1])); out.push(`<text x="${q[0]+6}" y="${q[1]+fs}" font-size="${fs}" fill="${o.fill}" font-style="italic">${o.label}</text>`); }
+    });
+    // khối đa diện: cạnh khuất nét đứt
+    if (s.solid) {
+      const sol = s.solid, cen = mul(Object.values(sol.v).reduce(add, [0,0,0]), 1 / Object.keys(sol.v).length);
+      const front = sol.faces.map(f => {
+        const a = this.view(P[f[0]]), b = this.view(P[f[1]]), c = this.view(P[f[2]]);
+        let n = cross(sub(b, a), sub(c, a));
+        const fc = mul(f.map(x => this.view(P[x])).reduce(add, [0,0,0]), 1 / f.length);
+        if (dot(n, sub(fc, this.view(cen))) < 0) n = mul(n, -1);
+        // vector từ mặt tới camera (camera ở độ sâu -14)
+        const toCam = sub([0, -14, 0], fc);
+        return dot(n, toCam) > 0;
+      });
+      const edges = new Map();
+      sol.faces.forEach((f, i) => f.forEach((x, j) => {
+        const y = f[(j + 1) % f.length], key = [x, y].sort().join('');
+        if (!edges.has(key)) edges.set(key, { a: x, b: y, vis: false });
+        if (front[i]) edges.get(key).vis = true;
+      }));
+      edges.forEach(e => {
+        const a = this.proj(P[e.a]), b = this.proj(P[e.b]);
+        out.push(`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${css('--text')}" stroke-width="2" ${e.vis ? '' : 'stroke-dasharray="7 6" stroke-opacity=".75"'}/>`);
+      });
+    }
+    // đoạn và đường thẳng
+    (s.segs || []).forEach(o => {
+      let a = pt(o.a), b = pt(o.b);
+      if (o.ext) { const d = sub(b, a); a = add(a, mul(d, -o.ext)); b = add(b, mul(d, o.ext)); }
+      const A = this.proj(a), B = this.proj(b);
+      out.push(`<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="${o.color || css('--text')}" stroke-width="${o.w || 2}" stroke-linecap="round" ${o.dash ? `stroke-dasharray="${o.dash}"` : ''} ${o.op ? `stroke-opacity="${o.op}"` : ''}/>`);
+      if (o.label) { const q = this.proj(o.labelAt ? pt(o.labelAt) : b); out.push(`<text x="${q[0]+8}" y="${q[1]-6}" font-size="${fs*1.05}" font-weight="700" fill="${o.color}">${o.label}</text>`); }
+    });
+    // nhãn điểm
+    const names = s.labels || [];
+    if (names.length) {
+      const c2 = names.map(n => this.proj(P[n])), mx = c2.reduce((s, q) => s + q[0], 0) / c2.length, my = c2.reduce((s, q) => s + q[1], 0) / c2.length;
+      names.forEach((n, i) => {
+        const q = c2[i]; let dx = q[0] - mx, dy = q[1] - my; const L = Math.hypot(dx, dy) || 1;
+        dx = dx / L * fs * .95; dy = dy / L * fs * .95;
+        out.push(`<circle cx="${q[0]}" cy="${q[1]}" r="3.5" fill="${css('--text')}"/>`);
+        out.push(`<text x="${q[0]+dx}" y="${q[1]+dy+fs*.35}" font-size="${fs}" text-anchor="middle" fill="${css('--text')}" font-weight="600">${n}</text>`);
+      });
+    }
+    this.svg.innerHTML = out.join('');
+  }
+}
+
+/* ---------- các cảnh ---------- */
+const scenes = {};
+scenes.junction = {
+  label: 'Bốn tuyến đường ở nút giao', size: 8, dy: .4, yaw: -0.7, pitch: 0.45,
+  build() {
+    const L = 3.4, segs = [];
+    // trụ đỡ
+    for (let t = -3; t <= 3; t += 1.5) {
+      segs.push({ a: [t, 0, 0], b: [t, 0, 2.2], color: css('--muted'), w: 1.5, op: .6 });
+      segs.push({ a: [0, t, 0], b: [0, t, 1.1], color: css('--muted'), w: 1.5, op: .6 });
+    }
+    segs.push({ a: [-L, 0, 0], b: [L, 0, 0], color: css('--c1'), w: 5, label: '(1)' });
+    segs.push({ a: [0, -L, 0], b: [0, L, 0], color: css('--c2'), w: 5, label: '(2)' });
+    segs.push({ a: [0, -L, 1.1], b: [0, L, 1.1], color: css('--c3'), w: 5, label: '(3)' });
+    segs.push({ a: [-L, 0, 2.2], b: [L, 0, 2.2], color: css('--c4'), w: 5, label: '(4)', labelAt: [-L, 0, 2.2] });
+    return {
+      polys: [{ pts: [[-L, -L, 0], [L, -L, 0], [L, L, 0], [-L, L, 0]], fill: css('--muted'), op: .08 }],
+      segs
+    };
+  }
+};
+
+let K = 1, showPlane = true;
+scenes.explore = {
+  label: 'Hai đường thẳng a và b', size: 8, yaw: -0.5, pitch: 0.45,
+  build() {
+    const a1 = [-3.2, -0.7, 0], a2 = [3.2, -0.7, 0];
+    let b1, b2, extra = [];
+    if (K === 1) { const M = [0.3, -0.7, 0], d = [1.1, 1.4, 0]; b1 = add(M, mul(d, -1)); b2 = add(M, mul(d, 1.2)); extra = [{ a: M, b: M, color: css('--text'), w: 8 }]; }
+    if (K === 2) { b1 = [-3.2, 1, 0]; b2 = [3.2, 1, 0]; }
+    if (K === 3) { b1 = a1; b2 = a2; }
+    if (K === 4) { b1 = [0.6, -2.4, 1.7]; b2 = [0.6, 2.4, 1.7]; }
+    return {
+      polys: showPlane ? [{ pts: [[-3.6, -2.6, 0], [3.6, -2.6, 0], [3.6, 2.6, 0], [-3.6, 2.6, 0]], fill: css('--plane'), label: 'α', labelAt: [3.6, -2.6, 0] }] : [],
+      segs: [
+        { a: a1, b: a2, color: css('--c2'), w: 5, label: 'a' },
+        { a: b1, b: b2, color: css('--c3'), w: K === 3 ? 3 : 5, dash: K === 3 ? '10 8' : '', label: 'b', labelAt: K === 3 ? a1 : b2 },
+        ...extra
+      ]
+    };
+  }
+};
+const kText = {
+  1: 'a và b có đúng một điểm chung và cùng nằm trong (α): <b>cắt nhau</b>, a ∩ b = {M}.',
+  2: 'a và b cùng nằm trong (α) và không có điểm chung: <b>song song</b>, a // b.',
+  3: 'a và b có vô số điểm chung: <b>trùng nhau</b>, a ≡ b.',
+  4: 'a và b không có điểm chung, và không có mặt phẳng nào chứa cả hai: <b>chéo nhau</b>.'
+};
+
+const VD = (() => {
+  const A = [-1.6, -0.9, 0], B = [1.6, -0.9, 0], v = [0.7, 2.2, 0], w = [0.3, -0.6, 2.1];
+  return { A, B, C: add(B, v), D: add(A, v), E: add(B, w), F: add(A, w) };
+})();
+let vd1Plane = false;
+scenes.vd1 = {
+  label: 'Hai hình bình hành ABCD và ABEF', pts: VD, size: 7, yaw: -0.4, pitch: 0.42,
+  build() {
+    return {
+      polys: [{ pts: ['A', 'B', 'C', 'D'], fill: css('--plane'), op: .15 }, { pts: ['A', 'B', 'E', 'F'], fill: css('--plane2'), op: vd1Plane ? .4 : .12 }],
+      segs: [['A','B'],['B','C'],['C','D'],['D','A'],['B','E'],['E','F'],['F','A']].map(([a, b]) => ({ a, b, w: 2.2 })),
+      labels: ['A', 'B', 'C', 'D', 'E', 'F']
+    };
+  }
+};
+
+const TET = { A: [0.1, 0.1, 2.7], B: [-1.8, -1.1, 0], C: [1.9, -0.9, 0], D: [0.3, 1.8, 0] };
+scenes.tet = {
+  label: 'Tứ diện ABCD', pts: TET, size: 6.5, yaw: -0.35, pitch: 0.3, dy: .35,
+  build() {
+    return {
+      solid: { v: TET, faces: [['A','B','C'], ['A','C','D'], ['A','D','B'], ['B','D','C']] },
+      segs: [{ a: 'A', b: 'B', color: css('--c2'), w: 4 }, { a: 'C', b: 'D', color: css('--c3'), w: 4 }],
+      labels: ['A', 'B', 'C', 'D']
+    };
+  }
+};
+
+const PY = (() => {
+  const A = [-1.9, -1.2, 0], B = [1.5, -1.2, 0], C = [2.0, 1.2, 0], D = [-1.4, 1.2, 0], S = [-0.3, -0.1, 2.9];
+  return { A, B, C, D, S, M: lerp(S, A, 0.42), N: lerp(S, B, 0.45) };
+})();
+const pyrHL = {
+  'ab-cd': [['A','B','--c2'], ['C','D','--c3']],
+  'ab-ac': [['A','B','--c2'], ['A','C','--c4']],
+  'ac-cd': [['A','C','--c4'], ['C','D','--c3']],
+  'sab':   [['S','A','--c2'], ['M','N','--c4'], ['A','B','--c3']],
+  'sa-bc': [['S','A','--c2'], ['B','C','--c3']],
+  'sa-cd': [['S','A','--c2'], ['C','D','--c3']],
+  'bc-sd': [['B','C','--c3'], ['S','D','--c2']]
+};
+function pyrBuild(viewer) {
+  const segs = [{ a: 'A', b: 'C', color: css('--muted'), w: 1.5, dash: '4 5' }, { a: 'M', b: 'N', w: 2 }];
+  const polys = [];
+  (pyrHL[viewer.hl] || []).forEach(([a, b, c]) => segs.push({ a, b, color: css(c), w: 4.5, ext: .45 }));
+  if (viewer.hl === 'sab') polys.push({ pts: ['S', 'A', 'B'], fill: css('--plane2'), op: .3 });
+  return {
+    polys,
+    solid: { v: { S: PY.S, A: PY.A, B: PY.B, C: PY.C, D: PY.D }, faces: [['S','A','B'], ['S','B','C'], ['S','C','D'], ['S','D','A'], ['A','D','C','B']] },
+    segs, labels: ['S', 'A', 'B', 'C', 'D', 'M', 'N']
+  };
+}
+scenes.pyr = { label: 'Hình chóp S.ABCD', pts: PY, size: 7, yaw: -0.45, pitch: 0.3, dy: .3, build: pyrBuild };
+scenes.pyr2 = { label: 'Hình chóp S.ABCD', pts: PY, size: 7, yaw: -0.45, pitch: 0.3, dy: .3, build: pyrBuild };
+scenes.pyrTrick = { label: 'Hình chóp S.ABCD, góc nhìn dễ nhầm', pts: PY, size: 7, dy: .3, build: v => { v.hl = 'sa-bc'; return pyrBuild(v); } };
+
+/* tìm góc nhìn mà hai đoạn thẳng "trông như" cắt nhau trên hình phẳng */
+function crossView(viewer, P, a, b, c, d) {
+  const inter = (p1, p2, p3, p4) => {
+    const o = (p, q, r) => Math.sign((q[0]-p[0])*(r[1]-p[1]) - (q[1]-p[1])*(r[0]-p[0]));
+    return o(p1, p2, p3) * o(p1, p2, p4) < 0 && o(p3, p4, p1) * o(p3, p4, p2) < 0;
+  };
+  viewer.k = 1; viewer.cx = 0; viewer.cy = 0;
+  let best = null;
+  for (let pitch = 0.15; pitch <= 1.2; pitch += 0.05)
+    for (let yaw = -Math.PI; yaw < Math.PI; yaw += 0.05) {
+      viewer.yaw = yaw; viewer.pitch = pitch;
+      if (inter(viewer.proj(P[a]), viewer.proj(P[b]), viewer.proj(P[c]), viewer.proj(P[d]))) {
+        const score = Math.abs(pitch - 0.35) + Math.abs(yaw + 0.5) * 0.3;
+        if (!best || score < best.s) best = { yaw, pitch, s: score };
+      }
+    }
+  return best;
+}
+
+function toggleZoom(el) {
+  const on = !el.classList.contains('zoomed');
+  $$('.zoomed').forEach(v => v.classList.remove('zoomed'));
+  if (on) el.classList.add('zoomed');
+}
+function unzoom() { $$('.zoomed').forEach(v => v.classList.remove('zoomed')); }
+
+const viewers = {};
+$$('.viewer').forEach(el => { viewers[el.dataset.scene] = new Viewer(el, scenes[el.dataset.scene]); });
+const trick = crossView(viewers.pyrTrick, PY, 'S', 'A', 'B', 'C');
+if (trick) { viewers.pyrTrick.yaw = trick.yaw; viewers.pyrTrick.pitch = trick.pitch; }
+const tetTrick = crossView(viewers.tet, TET, 'A', 'B', 'C', 'D');
+viewers.tet.yaw = scenes.tet.yaw; viewers.tet.pitch = scenes.tet.pitch;
+
+/* ================= TRẮC NGHIỆM ================= */
+const quiz = [
+  { stem: 'Hai đường thẳng không có điểm chung thì', opts: ['song song.', 'chéo nhau.', 'song song hoặc chéo nhau.', 'cắt nhau.'], ans: 2,
+    fb: ['Còn trường hợp chéo nhau: không có điểm chung nhưng không cùng nằm trong một mặt phẳng.', 'Hai đường thẳng song song cũng không có điểm chung.', 'Đúng. Chỉ khi biết thêm hai đường thẳng đồng phẳng mới kết luận được song song.', 'Cắt nhau thì có đúng một điểm chung.'] },
+  { stem: 'Mệnh đề nào sau đây đúng?', opts: ['Nếu a và b không cắt nhau thì a // b.', 'Nếu b và c chéo nhau thì b và c không cùng thuộc một mặt phẳng.', 'Nếu a cắt b và b cắt c thì a cắt c.', 'Hai đường thẳng phân biệt cùng nằm trong một mặt phẳng thì chéo nhau.'], ans: 1,
+    fb: ['Không cắt nhau thì a và b có thể chéo nhau.', 'Đúng, đây chính là định nghĩa hai đường thẳng chéo nhau.', 'Trong hình chóp S.ABCD: SA cắt AB, AB cắt BC nhưng SA và BC chéo nhau.', 'Cùng nằm trong một mặt phẳng là đồng phẳng, không thể chéo nhau.'] },
+  { stem: 'Cho hình chóp S.ABCD có đáy là hình bình hành. Hai đường thẳng SB và CD', opts: ['cắt nhau.', 'song song.', 'chéo nhau.', 'trùng nhau.'], ans: 2,
+    fb: ['Nếu SB cắt CD thì S, B, C, D đồng phẳng, khi đó S thuộc (ABCD) – vô lí.', 'Nếu SB // CD thì S, B, C, D cũng đồng phẳng – vô lí.', 'Đúng. SB và CD không thể đồng phẳng vì S không thuộc (ABCD).', 'SB và CD là hai đường thẳng phân biệt.'] }
+];
+let qi = 0; const picked = quiz.map(() => null);
+function renderQuiz() {
+  const q = quiz[qi];
+  $('#qzTitle').textContent = `Câu ${qi + 1}`;
+  $('#qzCount').textContent = `${qi + 1}/${quiz.length}`;
+  $('#qzStem').textContent = q.stem;
+  $('#qzOpts').innerHTML = q.opts.map((o, i) => {
+    let cls = 'opt';
+    if (picked[qi] !== null && i === q.ans) cls += ' right';
+    if (picked[qi] === i && i !== q.ans) cls += ' wrong';
+    return `<button class="${cls}" data-opt="${i}"><b>${'ABCD'[i]}.</b> <span>${o}</span></button>`;
+  }).join('');
+  const p = picked[qi];
+  $('#qzFb').innerHTML = p === null ? '' :
+    (p === q.ans ? `<span class="ok">✓ ${'ABCD'[p]} đúng.</span> ${q.fb[p].replace(/^Đúng\.?\s*/, '')}`
+                 : `<span class="no">✗ ${'ABCD'[p]} chưa đúng.</span> ${q.fb[p]} <span class="muted">Đáp án: ${'ABCD'[q.ans]}.</span>`);
+  if (typeof slides !== 'undefined') fit($('#quizSlide'));
+  $('#qzPrev').disabled = qi === 0; $('#qzNext').disabled = qi === quiz.length - 1;
+}
+
+/* ================= ĐIỀU HƯỚNG ================= */
+const slides = $$('.slide');
+let cur = 0;
+function stepsOf(s) { return [...new Set($$('.step', s).map(e => +e.dataset.step))].sort((a, b) => a - b); }
+function shownCount(s) { return +(s.dataset.shown || 0); }
+function setShown(s, n) {
+  s.dataset.shown = n; const st = stepsOf(s);
+  $$('.step', s).forEach(e => e.classList.toggle('shown', st.indexOf(+e.dataset.step) < n));
+}
+function fit(s) {
+  s.style.fontSize = '';
+  const over = () => [s, ...$$('.col', s)].some(e => e.scrollHeight > e.clientHeight + 2);
+  let f = 1;
+  while (over() && f > 0.55) { f -= 0.04; s.style.fontSize = f + 'em'; }
+}
+function go(i) {
+  unzoom();
+  cur = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, j) => s.classList.toggle('on', j === cur));
+  fit(slides[cur]);
+  const fr = slides[cur].querySelector('iframe');
+  if (fr) setTimeout(() => { try { fr.contentWindow.focus(); } catch (e) {} }, 50);
+  else if (document.activeElement && document.activeElement.tagName === 'IFRAME') document.activeElement.blur();
+  $('#counter').textContent = `${cur + 1} / ${slides.length}`;
+  $('#progress').style.width = `${(cur + 1) / slides.length * 100}%`;
+  $$('.viewer', slides[cur]).forEach(el => viewers[el.dataset.scene].draw());
+  try { localStorage.setItem('tc_hdtss_v4_slide', cur); } catch (e) {}
+}
+function next() {
+  const s = slides[cur], n = shownCount(s);
+  if (n < stepsOf(s).length) setShown(s, n + 1); else go(cur + 1);
+}
+function prev() { go(cur - 1); }
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); next(); }
+  else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
+  else if (e.key === 'Escape') unzoom();
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key.toLowerCase() === 'f') toggleFs();
+});
+function toggleFs() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {});
+  else document.exitFullscreen?.();
+}
+
+document.addEventListener('click', e => {
+  const z = e.target.closest('.zoomable');
+  if (z) return toggleZoom(z);
+  const t = e.target.closest('button, .claim');
+  if (!t) return;
+  if (t.id === 'nextBtn') return next();
+  if (t.id === 'prevBtn') return prev();
+  if (t.id === 'fsBtn') return toggleFs();
+  if (t.id === 'themeBtn') {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+    t.textContent = dark ? 'Nền tối' : 'Nền sáng';
+    Object.values(viewers).forEach(v => v.draw());
+    return;
+  }
+  if (t.dataset.k) {
+    K = +t.dataset.k;
+    $$('#kTools button').forEach(b => b.classList.toggle('on', b === t));
+    $('#kAns').hidden = true; viewers.explore.draw(); return;
+  }
+  if (t.id === 'togglePlane') {
+    showPlane = !showPlane; t.setAttribute('aria-pressed', showPlane); viewers.explore.draw(); return;
+  }
+  if (t.id === 'showK') { $('#kAns').innerHTML = kText[K]; $('#kAns').hidden = false; fit(slides[cur]); return; }
+  if (t.dataset.hl === 'vd1-abef') { vd1Plane = !vd1Plane; t.classList.toggle('on', vd1Plane); viewers.vd1.draw(); return; }
+  if (t.dataset.hl) {
+    const v = viewers[t.closest('.slide').querySelector('.viewer').dataset.scene], same = v.hl === t.dataset.hl;
+    v.hl = same ? null : t.dataset.hl;
+    $$('[data-hl]', t.closest('.slide')).forEach(b => b.classList.toggle('on', !same && b === t));
+    v.draw(); return;
+  }
+  if (t.id === 'tetTrick' && tetTrick) { viewers.tet.yaw = tetTrick.yaw; viewers.tet.pitch = tetTrick.pitch; viewers.tet.draw(); return; }
+  if (t.id === 'tetReset') { viewers.tet.yaw = scenes.tet.yaw; viewers.tet.pitch = scenes.tet.pitch; viewers.tet.draw(); return; }
+  if (t.classList.contains('claim')) { t.classList.toggle('marked'); return; }
+  if (t.dataset.opt !== undefined) { if (picked[qi] === null) { picked[qi] = +t.dataset.opt; renderQuiz(); } return; }
+  if (t.id === 'qzNext') { qi = Math.min(quiz.length - 1, qi + 1); renderQuiz(); return; }
+  if (t.id === 'qzPrev') { qi = Math.max(0, qi - 1); renderQuiz(); return; }
+});
+
+renderQuiz();
+let start = 0;
+try { start = +(localStorage.getItem('tc_hdtss_v4_slide') || 0); } catch (e) {}
+go(start);
+window.addEventListener('message', e => {
+  if (e.data && e.data.tc === 'next') next();
+  if (e.data && e.data.tc === 'prev') prev();
+});
+window.addEventListener('resize', () => fit(slides[cur]));
+document.fonts?.ready.then(() => fit(slides[cur]));
+setTimeout(() => fit(slides[cur]), 1500);
+})();
+</script>
+</body>
+</html>

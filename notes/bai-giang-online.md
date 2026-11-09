@@ -9,6 +9,12 @@
 - Bài chưa có nội dung vẫn mở được: báo "đang soạn" + nút "Tạo prompt cho bài này" (mở Xưởng, chọn sẵn lớp, bài).
 - "Học tiếp": lớp 9 nối sang chủ đề ôn thi vào 10 (`BaiHoc.LIEN_9`); lớp 10–12 tự nối chủ đề Vdc có cùng số bài trong trường `bai`.
 
+## Trình chiếu, trò chơi HTML của thầy gắn vào bài (thầy yêu cầu 09/11/2026)
+- Tệp HTML tự chạy đặt trong `tuong-tac/` (tên `lop<lớp>-b<bài>-<tên-ngắn>.html`, chép nguyên tệp thầy gửi, không sửa), khai báo trong `data/bai-hoc/tai-nguyen.js`: `BaiHoc.taiNguyen(lớp, bài, [{ ten, mo_ta, file, nguon }])`.
+- Trang bài hiện khung 16:9 ở đầu tab Bài giảng (cả khi bài chưa có bài giảng chữ), nút ⛶ Toàn màn hình (iPhone không hỗ trợ thì mở tab mới) và ↗ Mở trong tab mới; mục lục hiện chip 🎬.
+- Bản gộp `dist/`: `tools/build.py` nhúng nội dung tệp, web mở bằng địa chỉ blob. `kiem-tra.js` báo lỗi nếu tệp không có hoặc tệp trong `tuong-tac/` chưa gắn bài nào.
+- Đã gắn: Toán 11 Bài 11 – trình chiếu tiết 1 "Vị trí tương đối của hai đường thẳng" (ô chữ PHẢN CHỨNG, hình 3D, phản biện AI, trắc nghiệm).
+
 ## Tệp
 - `assets/js/baihoc.js` (BaiHoc): mucLuc, add, get, all, baiOf, route, previewHTML, numOf.
 - `data/bai-hoc/muc-luc-kntt.js`: mục lục Toán 9 (32 bài), 10 (27), 11 (33), 12 (19) – chỉ tên chương, tên bài, không số trang. Đối chiếu web 09/11/2026 (Toán 9 đủ tên bài; Toán 10, 12 tên chương; Toán 11 tên từng bài). `kiem-tra.js` kiểm đủ số bài, đánh số liên tục.

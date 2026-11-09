@@ -4,7 +4,8 @@
    #/bai-hoc/<lớp>              mục lục: Tập 1, Tập 2 → chương → bài (tìm nhanh theo tên)
    #/bai-hoc/<lớp>/<bài>        📘 Bài giảng: mục tiêu, kiến thức từng mục, ví dụ có lời giải, lưu ý hay sai, cần nhớ
    #/bai-hoc/<lớp>/<bài>/luyen  ✍️ Luyện tập online: Phần I trắc nghiệm, Phần II đúng – sai, Phần III trả lời ngắn; chấm ngay, lưu điểm cao nhất
-   Mục lục: data/bai-hoc/muc-luc-kntt.js (BaiHoc.mucLuc). Nội dung từng bài: JSON "loai":"bai_hoc" tạo bằng Xưởng dữ liệu
+   Mục lục: data/bai-hoc/muc-luc-kntt.js (BaiHoc.mucLuc). Trình chiếu, trò chơi HTML của thầy gắn vào bài: data/bai-hoc/tai-nguyen.js
+   (BaiHoc.taiNguyen, tệp trong tuong-tac/) – hiện ở đầu tab Bài giảng, có nút toàn màn hình. Nội dung từng bài: JSON "loai":"bai_hoc" tạo bằng Xưởng dữ liệu
    (NotebookLM / Gem) → NhapDL (assets/js/nhap.js) → BaiHoc.add. Bài chưa có nội dung vẫn hiện trong mục lục.
    ===================================================================== */
 const BaiHoc = (() => {
@@ -12,6 +13,8 @@ const BaiHoc = (() => {
   const LOP = [9, 10, 11, 12];
   const ML = {};                       // lớp → { lop, ten, chuong: [{ tap, so, ten, bai: [{ so, ten }] }] }
   const LS = {};                       // 'lớp-bài' → bài học
+  const TN = {};                       // 'lớp-bài' → [{ ten, mo_ta, file, nguon }] trình chiếu, trò chơi HTML
+  let NHUNG = {};                      // bản gộp dist/: nội dung các tệp tuong-tac/ (tools/build.py nhúng vào)
   const key = (l, b) => `${l}-${b}`;
   // Bài lớp 9 gắn với chủ đề ôn thi vào 10; lớp 10–12 tự tìm chủ đề vận dụng – VDC có cùng số bài.
   const LIEN_9 = { 1: 'he-phuong-trinh-thuc-te', 2: 'he-phuong-trinh-thuc-te', 3: 'he-phuong-trinh-thuc-te', 11: 'kien-thuc-thong-nhat', 12: 'kien-thuc-thong-nhat',
@@ -25,6 +28,12 @@ const BaiHoc = (() => {
   const all = lop => (ML[lop] ? ML[lop].chuong.flatMap(c => c.bai.map(b => ({ ...b, chuong: c }))) : []);
   const baiOf = (lop, so) => all(lop).find(b => b.so === +so) || null;
   function add(e) { LS[key(e.lop, e.bai)] = e; }
+  function taiNguyen(lop, bai, arr) { (TN[key(lop, bai)] = TN[key(lop, bai)] || []).push(...arr); }
+  const tnOf = (lop, bai) => TN[key(lop, bai)] || [];
+  function nhung(m) { NHUNG = Object.assign(NHUNG, m); }
+  const blobs = {};
+  // Thư mục web: dùng đường dẫn tệp. Bản gộp một tệp: tạo địa chỉ blob từ nội dung đã nhúng.
+  const srcOf = f => NHUNG[f] ? (blobs[f] = blobs[f] || URL.createObjectURL(new Blob([NHUNG[f]], { type: 'text/html' }))) : f;
   const get_ = (lop, bai) => LS[key(lop, bai)];
   const list = () => Object.values(LS);
   const prog = (lop, bai) => get('bh:' + key(lop, bai), null);
@@ -36,10 +45,10 @@ const BaiHoc = (() => {
 
   function pickLop() {
     const cards = LOP.map(l => {
-      const n = all(l).length, k = all(l).filter(b => get_(l, b.so)).length;
+      const n = all(l).length, k = all(l).filter(b => get_(l, b.so)).length, t = all(l).filter(b => tnOf(l, b.so).length).length;
       return `<a class="card grade-card" href="#/bai-hoc/${l}"><span class="g-big">${l}</span><span class="g-body"><b>Toán ${l}</b>
         <span>${ML[l] ? esc(ML[l].ten) : 'Kết nối tri thức với cuộc sống'} · ${ML[l] ? ML[l].chuong.length : 0} chương</span>
-        <span class="chips"><span class="chip">${n} bài</span>${k ? `<span class="chip ok">${k} bài có bài giảng</span>` : ''}</span></span></a>`;
+        <span class="chips"><span class="chip">${n} bài</span>${k ? `<span class="chip ok">${k} bài có bài giảng</span>` : ''}${t ? `<span class="chip ok">🎬 ${t} bài có trình chiếu</span>` : ''}</span></span></a>`;
     }).join('');
     view().innerHTML = shell('#/', 'Chọn lớp', `<section class="card hero"><p class="pill">📚 Học theo SGK</p><h2>Bài giảng – Luyện tập online</h2>
       <p>Học đúng thứ tự mục lục SGK Toán <b>Kết nối tri thức với cuộc sống</b>. Mỗi bài có bài giảng ngắn (kiến thức, ví dụ có lời giải, lưu ý hay sai) và bài luyện tập làm ngay trên máy theo ba dạng của đề thi: trắc nghiệm, đúng – sai, trả lời ngắn.</p></section>
@@ -49,10 +58,10 @@ const BaiHoc = (() => {
   function mucLucPage(lop) {
     const M = ML[lop]; if (!M) return pickLop();
     const row = b => {
-      const e = get_(lop, b.so), p = prog(lop, b.so);
-      return `<a class="bh-row${e ? '' : ' trong'}" href="#/bai-hoc/${lop}/${b.so}" data-s="${esc(fold(`bai ${b.so} ${b.ten} ${b.chuong.ten}`))}">
+      const e = get_(lop, b.so), p = prog(lop, b.so), t = tnOf(lop, b.so);
+      return `<a class="bh-row${e || t.length ? '' : ' trong'}" href="#/bai-hoc/${lop}/${b.so}" data-s="${esc(fold(`bai ${b.so} ${b.ten} ${b.chuong.ten}`))}">
         <span class="bh-no">${b.so}</span><span class="bh-ten">Bài ${b.so}. ${esc(b.ten)}</span>
-        <span class="chips">${e ? `<span class="chip ok">📘 ✍️ ${e.tn.length + e.ds.length + e.tln.length} câu</span>` : '<span class="chip">Đang soạn</span>'}${p ? `<span class="chip">✓ ${p.best}/${p.total}</span>` : ''}</span></a>`;
+        <span class="chips">${t.length ? '<span class="chip ok">🎬 Trình chiếu</span>' : ''}${e ? `<span class="chip ok">📘 ✍️ ${e.tn.length + e.ds.length + e.tln.length} câu</span>` : t.length ? '' : '<span class="chip">Đang soạn</span>'}${p ? `<span class="chip">✓ ${p.best}/${p.total}</span>` : ''}</span></a>`;
     };
     const taps = [...new Set(M.chuong.map(c => c.tap))];
     view().innerHTML = shell('#/bai-hoc', 'Chọn lớp', `<section class="card hero"><p class="pill soft">Lớp ${lop}</p><h2>${esc(M.ten)}</h2>
@@ -95,10 +104,28 @@ const BaiHoc = (() => {
       ${lienQuan(lop, b.so)}
       <div class="pane-foot">${e && !tab ? `<a class="btn primary" href="#/bai-hoc/${lop}/${so}/luyen">Luyện tập ngay ✍️ →</a>` : next ? `<a class="btn primary" href="#/bai-hoc/${lop}/${next.so}">Sang Bài ${next.so} →</a>` : `<a class="btn primary" href="#/bai-hoc/${lop}">Về mục lục</a>`}</div></main>`;
     const pane = $('#pane');
-    if (!e) return paneTrong(lop, b, pane);
-    if (tab === 'luyen') paneLuyen(e, pane); else paneGiang(e, pane);
+    if (!e) { paneTrong(lop, b, pane); return ttMount(lop, b.so, pane); }
+    if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
+  }
+  // Trình chiếu, trò chơi HTML của bài: khung 16:9 ở đầu tab Bài giảng, nút toàn màn hình, mở tab mới.
+  function ttMount(lop, so, pane) {
+    const ts = tnOf(lop, so); if (!ts.length) return;
+    pane.insertAdjacentHTML('afterbegin', ts.map((t, i) => `<article class="card bh-tt"><h3>🎬 ${esc(t.ten)}</h3>${t.mo_ta ? `<p class="muted small">${esc(t.mo_ta)}</p>` : ''}
+      <div class="bh-frame"><iframe src="${esc(srcOf(t.file))}" title="${esc(t.ten)}" allow="fullscreen" allowfullscreen loading="lazy" data-tt="${i}"></iframe></div>
+      <div class="row"><button class="btn primary" type="button" data-fs="${i}">⛶ Toàn màn hình</button><a class="btn ghost" href="${esc(srcOf(t.file))}" target="_blank" rel="noopener">↗ Mở trong tab mới</a>${t.nguon ? `<span class="muted small">${esc(t.nguon)}</span>` : ''}</div></article>`).join(''));
+    $$('[data-fs]', pane).forEach(btn => btn.addEventListener('click', () => {
+      const f = $(`iframe[data-tt="${btn.dataset.fs}"]`, pane), go = f.requestFullscreen || f.webkitRequestFullscreen;
+      if (go) Promise.resolve(go.call(f)).then(() => { try { f.contentWindow.focus(); } catch (e) { /* khác nguồn */ } }).catch(() => window.open(f.src, '_blank'));
+      else window.open(f.src, '_blank');
+    }));
   }
   function paneTrong(lop, b, pane) {
+    if (tnOf(lop, b.so).length) {
+      pane.innerHTML = `<div class="card"><p>📭 Bài giảng tóm tắt và bài luyện tập online của bài này đang được soạn. Trong lúc chờ, em xem phần trình chiếu ở trên và làm bài tập trong SGK.</p>
+        <button class="btn ghost" type="button" id="bhMake">🧰 Thầy cô: tạo prompt cho bài này</button></div>`;
+      $('#bhMake').addEventListener('click', () => { set('xuong:prompt', Object.assign(get('xuong:prompt', {}), { loai: 'baihoc', bhLop: String(lop), bhBai: String(b.so) })); location.hash = '#/xuong/prompt'; });
+      return;
+    }
     pane.innerHTML = `<div class="card"><h3>📭 Bài này đang được soạn</h3><p>Em vẫn học được: đọc SGK Toán ${lop} – Bài ${b.so}, làm các ví dụ và bài tập trong sách, rồi quay lại đây khi bài giảng online có trên web.</p>
       <p class="muted small">Thầy cô: tạo nội dung bài này bằng Xưởng dữ liệu (NotebookLM / Gem có gắn SGK, sách bài tập).</p>
       <button class="btn" type="button" id="bhMake">🧰 Tạo prompt cho bài này</button></div>`;
@@ -205,5 +232,5 @@ const BaiHoc = (() => {
     if (!LOP.includes(lop)) pickLop(); else if (!so) mucLucPage(lop); else lesson(lop, so, parts[3] === 'luyen' ? 'luyen' : '');
     return true;
   }
-  return { LOP, LIEN_9, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML };
+  return { LOP, LIEN_9, mucLuc, all, baiOf, add, get: get_, list, prog, route, previewHTML, numOf, sameAns, ML, taiNguyen, tnOf, nhung, TN };
 })();

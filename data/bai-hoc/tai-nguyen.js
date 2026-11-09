@@ -1,0 +1,10 @@
+/* =====================================================================
+   TÀI NGUYÊN TƯƠNG TÁC GẮN VỚI TỪNG BÀI SGK (trình chiếu, trò chơi… dạng tệp HTML tự chạy) – hiện trên trang bài học.
+   Tệp đặt trong thư mục tuong-tac/, đặt tên lop<lớp>-b<bài>-<tên-ngắn>.html. Bản gộp dist/ tự nhúng tệp (tools/build.py).
+   BaiHoc.taiNguyen(lớp, bài, [{ ten, mo_ta, file, nguon }])
+   ===================================================================== */
+BaiHoc.taiNguyen(11, 11, [
+  { ten: 'Trình chiếu tiết 1 – Vị trí tương đối của hai đường thẳng',
+    mo_ta: 'Ô chữ khởi động, hình không gian xoay được, ví dụ và luyện tập, phản biện câu trả lời của trợ lí AI, trắc nghiệm củng cố, vận dụng. Bấm → (hoặc phím cách) để hiện từng bước; kéo hình để xoay, chạm vào hình để phóng to.',
+    file: 'tuong-tac/lop11-b11-hai-duong-thang-song-song-tiet1.html', nguon: 'Bài dạy của thầy Vũ Tiến Lực' },
+]);

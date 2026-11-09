@@ -25,7 +25,7 @@ Mỗi chủ đề có 7 tab: 📘 Lý thuyết · 💡 Mẹo nhớ · ✅ Hiểu
 | `tools/build.py` | Gộp thành `dist/con-duong-toi-truong.html` |
 | `assets/js/luyende.js`, `data/vao-10/luyen-de/`, `tools/xuat-de-pdf.py`, `de-luyen/` | Luyện đề vào 10: 10 đề/chủ đề, mỗi đề một PDF (notes/luyen-de-vao-10.md) |
 | `assets/js/van.js` | Ngữ văn vào 10: `#/van-10` danh sách, phương pháp, `#/van-10/de/<mã>` đề → bài làm có gợi ý → hướng dẫn chấm (notes/ngu-van-vao-10.md) |
-| `assets/js/baihoc.js`, `data/bai-hoc/muc-luc-kntt.js` | Bài giảng – luyện tập online lớp 9–12: `#/bai-hoc/<lớp>/<bài>`, mục lục SGK KNTT, nội dung nhập loại `bai_hoc` (notes/bai-giang-online.md) |
+| `assets/js/baihoc.js`, `data/bai-hoc/muc-luc-kntt.js`, `data/bai-hoc/tai-nguyen.js`, `tuong-tac/` | Bài giảng – luyện tập online lớp 9–12: `#/bai-hoc/<lớp>/<bài>`, mục lục SGK KNTT, nội dung nhập loại `bai_hoc` (notes/bai-giang-online.md) |
 | `assets/js/nhap.js`, `assets/js/xuong.js`, `nhap/`, `data/nhap/`, `tools/nhap-du-lieu.py` | Xưởng dữ liệu: prompt cho AI, nhập JSON, đưa vào hệ thống (notes/xuong-du-lieu.md) |
 
 ## Hợp đồng dữ liệu một chủ đề

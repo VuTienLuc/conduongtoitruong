@@ -50,7 +50,7 @@ async def main():
             routes += ['#/on-tap'] + [f'#/on-tap/{m}' for m in await pg.evaluate("OnTap.list().map(e => e.ma)")]
             routes += ['#/van-10', '#/van-10/phuong-phap', '#/xuong', '#/xuong/prompt', '#/xuong/nhap'] + [f'#/van-10/de/{m}' for m in await pg.evaluate("Van.list().map(e => e.ma)")]
             routes += [r for g, i, nb in vdc for r in [f'#/{g}/{i}', f'#/{g}/{i}/phieu'] + [f'#/{g}/{i}/lg/{k}' for k in range(1, nb + 1)]]
-            routes += ['#/bai-hoc', '#/bai-hoc/9', '#/bai-hoc/10', '#/bai-hoc/11', '#/bai-hoc/12', '#/bai-hoc/10/2'] + [r for l, b in await pg.evaluate("BaiHoc.list().map(e => [e.lop, e.bai])") for r in (f'#/bai-hoc/{l}/{b}', f'#/bai-hoc/{l}/{b}/luyen')]
+            routes += ['#/bai-hoc', '#/bai-hoc/9', '#/bai-hoc/10', '#/bai-hoc/11', '#/bai-hoc/12', '#/bai-hoc/10/2'] + [r for l, b in await pg.evaluate("BaiHoc.list().map(e => [e.lop, e.bai])") for r in (f'#/bai-hoc/{l}/{b}', f'#/bai-hoc/{l}/{b}/luyen')] + [f'#/bai-hoc/{k.replace("-", "/")}' for k in await pg.evaluate("Object.keys(BaiHoc.TN)")]
             for r in routes:
                 await pg.goto(base + r)
                 await pg.wait_for_timeout(350)
@@ -162,6 +162,13 @@ async def main():
             if tn_ok or got != f'{want}/{total}': fails.append(f'luyện tập Toán {l} bài {bb}: điểm {got}, cần {want}/{total}')
             saved = await pg.evaluate(f"JSON.parse(localStorage.getItem((window.CONFIG && CONFIG.storeKey || 'vao10') + ':bh:{l}-{bb}') || 'null')")
             if not saved or saved['best'] != want: fails.append(f'luyện tập Toán {l} bài {bb}: không lưu điểm ({saved})')
+        # Trình chiếu gắn vào bài (tuong-tac/): khung 16:9 nạp được trang, có các slide, không lỗi JS bên trong.
+        for (l, bb) in await pg.evaluate("Object.keys(BaiHoc.TN).map(k => k.split('-').map(Number))"):
+            await pg.goto(base + f'#/bai-hoc/{l}/{bb}'); await pg.wait_for_timeout(1500)
+            fr = pg.frame_locator('.bh-frame iframe').first
+            n = await fr.locator('.slide').count() if await pg.locator('.bh-frame iframe').count() else 0
+            box = await pg.locator('.bh-frame').first.bounding_box() if n else None
+            if not n or not box or abs(box['width'] / box['height'] - 16 / 9) > 0.05: fails.append(f'trình chiếu Toán {l} bài {bb}: không nạp được ({n} slide, khung {box})')
         await pg.goto(base + '#/xuong/prompt'); await pg.wait_for_timeout(200)
         await pg.locator('[name=xLoai][value=baihoc]').check(); await pg.select_option('#bLop', '10'); await pg.wait_for_timeout(100); await pg.select_option('#bBai', '1'); await pg.wait_for_timeout(150)
         ok = await pg.evaluate("document.querySelector('#xHd').value.includes('bai_hoc') && document.querySelector('#xHd').value.includes('can_nho') && document.querySelector('#xL0').value.includes('Bài 1. Mệnh đề') && document.querySelector('#xL0').value.includes('đã có trên web')")

@@ -184,6 +184,12 @@ else {
     e.tln.forEach((q, i) => { if (isNaN(BH.numOf(q.ans))) err(W, `trả lời ngắn ${i + 1}: đáp số "${q.ans}" không phải số`); });
     walkStr(W, e);
   });
+  // Trình chiếu, trò chơi HTML gắn vào bài: tệp có thật trong tuong-tac/, bài có trong mục lục; mọi tệp trong tuong-tac/ đều được gắn.
+  const dung = new Set();
+  Object.entries(BH.TN).forEach(([k, arr]) => { const [l, b] = k.split('-').map(Number);
+    if (!BH.baiOf(l, b)) err(`Tài nguyên Toán ${l} – Bài ${b}`, 'bài không có trong mục lục');
+    arr.forEach(t => { if (!t.ten || !t.file) err(`Tài nguyên Toán ${l} – Bài ${b}`, 'thiếu ten hoặc file'); else { dung.add(t.file); if (!fs.existsSync(path.join(ROOT, t.file))) err(`Tài nguyên Toán ${l} – Bài ${b}`, `không có tệp ${t.file}`); } }); });
+  if (fs.existsSync(path.join(ROOT, 'tuong-tac'))) fs.readdirSync(path.join(ROOT, 'tuong-tac')).filter(f => f.endsWith('.html')).forEach(f => { if (!dung.has('tuong-tac/' + f)) err('tuong-tac/' + f, 'chưa gắn vào bài nào (data/bai-hoc/tai-nguyen.js)'); });
   Object.values(BH.LIEN_9).forEach(id => { if (!ids.has(id)) err('baihoc.js LIEN_9', `liên kết tới chủ đề vào 10 không có: ${id}`); });
 }
 
@@ -195,7 +201,7 @@ used.forEach(id => { if (id && !/^lop\d+$/.test(id) && !ids.has(id)) err('app.js
 
 console.log(`Ôn thi vào 10: ${T.length} chủ đề, ${sum(T.map(t => t.quiz.length))} câu trắc nghiệm, ${sum(T.map(t => t.models.length))} bài mẫu, ${sum(T.map(t => t.practice.length))} bài tự luyện, ${nLD} đề luyện (${ctx.LuyenDe ? ctx.LuyenDe.ids().length : 0} chủ đề).`);
 console.log(`Ngữ văn vào 10: ${ctx.Van ? ctx.Van.list().length : 0} đề · phiếu ôn tập 90 phút: ${ctx.OnTap ? ctx.OnTap.list().length : 0} · dữ liệu nhập từ AI: ${nNhap} tệp.`);
-if (BH) console.log(`Bài giảng – luyện tập online: mục lục ${BH.LOP.map(l => `Toán ${l} ${BH.all(l).length} bài`).join(', ')}; ${BH.list().length} bài có nội dung, ${sum(BH.list().map(e => e.tn.length + e.ds.length + e.tln.length))} câu luyện tập.`);
+if (BH) console.log(`Bài giảng – luyện tập online: mục lục ${BH.LOP.map(l => `Toán ${l} ${BH.all(l).length} bài`).join(', ')}; ${BH.list().length} bài có nội dung, ${Object.keys(BH.TN).length} bài có trình chiếu, ${sum(BH.list().map(e => e.tn.length + e.ds.length + e.tln.length))} câu luyện tập.`);
 console.log(`Lớp 10–12 (VD–VDC): ${V.length} chủ đề, ${sum(V.map(t => t.dang.length))} dạng, ${sum(V.map(t => sum(t.dang.map(d => d.bt.length))))} bài tương tự.`);
 warns.forEach(w => console.log('! ' + w));
 if (errs.length) { errs.forEach(e => console.log(e)); console.log(`KẾT QUẢ: CHƯA ĐẠT ✗ (${errs.length} lỗi)`); process.exit(1); }

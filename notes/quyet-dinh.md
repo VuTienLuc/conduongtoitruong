@@ -13,3 +13,4 @@
 | 01/11/2026 | Tổ chức bộ nhớ dự án 3 cấp: CLAUDE.md ≤ 50 dòng, notes/, ACTIVE.md | Thầy yêu cầu (CLAUDE.md dài làm loãng bộ nhớ) |
 | 04/11/2026 | Phiếu ôn tập 90 phút theo chủ đề: AI tìm bài trong notebook (mặc định giữ nguyên đề gốc, ghi nguồn), cơ bản → nâng cao; mỗi đợt tránh bài đợt trước bằng danh sách "Đã dùng" + kiểm trùng khi nhập; JSON hoặc Markdown | Thầy yêu cầu; dùng lại tài liệu thật để ôn sát đề |
 | 09/11/2026 | Thêm menu Bài giảng – Luyện tập online lớp 9–12 xếp theo mục lục SGK Toán KNTT; nội dung từng bài tạo bằng Xưởng dữ liệu (JSON `bai_hoc`), luyện tập theo 3 dạng đề THPT chấm ngay; 4 bài mẫu minh họa | Thầy yêu cầu; dùng chung một quy trình prompt → JSON → nhập |
+| 09/11/2026 | Trình chiếu, trò chơi HTML thầy soạn được gắn vào trang bài học (thư mục `tuong-tac/`, khai báo `data/bai-hoc/tai-nguyen.js`), giữ nguyên tệp gốc, nhúng khung 16:9 + toàn màn hình | Thầy yêu cầu gắn bài dạy Hai đường thẳng song song vào bài 11 lớp 11 |
