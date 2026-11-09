@@ -18,3 +18,4 @@
 | 09/11/2026 | Antigravity có 5 lệnh (skill) `/dang-web`, `/kiem-tra-web`, `/gan-html`, `/nhap-du-lieu`, `/soan-noi-dung`; quy tắc luôn bật: làm xong tự kiểm (`day-len.py --chi-kiem`) rồi đăng (`day-len.py --khong-hoi`), kiểm chưa đạt thì không đăng | Thầy yêu cầu lệnh hướng dẫn cho Antigravity và tự động cập nhật lên web |
 | 09/11/2026 | Dòng tên đầu mọi phiếu, đề PDF: "LỚP TOÁN – THẦY VŨ TIẾN LỰC" (thay "CON ĐƯỜNG TỚI TRƯỜNG"), sửa ở `config.js` → `tenPhieu`; tên web giữ nguyên | Thầy yêu cầu |
 | 09/11/2026 | Phím O bật/tắt nhanh công cụ ⭐ khi trình chiếu (thu gọn giữ trang, mở lại như lần trước); không chiếm phím khi đang gõ vào ô nhập | Thầy yêu cầu |
+| 09/11/2026 | Trang công cụ ⭐/🖼️ trong khung không được tự bật toàn màn hình (bỏ allowfullscreen); thanh ◧ ⛶ ▁ ✕ rõ hơn khi cả màn hình; focus luôn trả về bài giảng | Thầy báo: công cụ full màn hình không có nút về nửa màn hình / thu gọn, phím O không chạy |

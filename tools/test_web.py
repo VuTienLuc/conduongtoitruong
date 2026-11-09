@@ -203,7 +203,7 @@ async def main():
                 loi: p.querySelectorAll('mjx-merror').length }; })""", [l, bb])
             if r['trang'] != 2 or r['cau'] != r['n'] or not r['dung'] or not r['khac'] or not r['on'] or r['loi']: fails.append(f'phiếu làm bài Toán {l} bài {bb}: {r}')
         # Công cụ ⭐/🖼️ tự bật toàn màn hình trong lúc trình chiếu: không được đóng trình chiếu, không về trang đầu; mở lại chiếu tiếp đúng trang
-        async def fs_page(route): await route.fulfill(status=200, content_type='text/html; charset=utf-8', body='<html><body style="margin:0;height:100vh;display:grid;place-items:center"><button id="fs" onclick="document.documentElement.requestFullscreen()">FS</button></body></html>')
+        async def fs_page(route): await route.fulfill(status=200, content_type='text/html; charset=utf-8', body='<html><body style="margin:0;height:100vh;display:grid;place-items:center"><button id="fs" onclick="document.documentElement.requestFullscreen().catch(() => document.title = `bi-chan`)">FS</button></body></html>')
         await pg.route(await pg.evaluate("new URL(CONFIG.congCuTrinhChieu[0].url).origin") + '/**', fs_page)
         st = "(() => [document.querySelectorAll('.tc-root').length, document.querySelector('.tc-so') && document.querySelector('.tc-so').textContent])()"
         await pg.goto(base + '#/bai-hoc/10/1'); await pg.wait_for_timeout(300); await pg.evaluate("localStorage.removeItem((CONFIG.storeKey || 'vao10') + ':tc:vitri')")
@@ -212,12 +212,22 @@ async def main():
         a0 = await pg.evaluate(st)
         await pg.click('.tc-root .bh-cc-fab'); await pg.click('.tc-root .bh-cc-ic[data-i="0"]'); await pg.wait_for_timeout(400); await pg.click('.tc-root .bh-cc-bar [data-m="full"]')
         await pg.frame_locator('.tc-root .bh-cc-pane iframe').first.locator('#fs').click(); await pg.wait_for_timeout(300); a1 = await pg.evaluate(st)
-        await pg.evaluate("document.fullscreenElement && document.exitFullscreen()"); await pg.wait_for_timeout(300); a2 = await pg.evaluate(st)
+        # trang công cụ không được tự bật toàn màn hình (bị chặn) → trình chiếu vẫn giữ nguyên, nút ◧ ▁ vẫn thấy
+        a2 = await pg.evaluate(st); a2b = await pg.frame_locator('.tc-root .bh-cc-pane iframe').first.locator('title').text_content(); vis_bar = await pg.locator('.tc-root .bh-cc-bar [data-m="half"]').is_visible()
+        if a2b != 'bi-chan' or not vis_bar: fails.append(f'công cụ tự bật toàn màn hình phải bị chặn: {a2b, vis_bar}')
         await pg.evaluate("TrinhChieu.dong()"); await pg.click('#bhTC'); await pg.wait_for_timeout(300); a3 = await pg.evaluate(st)
         # Phím O: mở nhanh ⭐ (nửa màn hình), O lần nữa thu gọn, O lần ba mở lại; trang trình chiếu không đổi
         mo = "(() => document.querySelector('.tc-root .bh-cc').dataset.mode)()"
         await pg.keyboard.press('o'); o1 = await pg.evaluate(mo); await pg.keyboard.press('O'); o2 = await pg.evaluate(mo)
         await pg.keyboard.press('o'); o3 = await pg.evaluate(mo); o4 = await pg.evaluate(st)
+        # bấm vào trong trang công cụ (focus sang trang khác nguồn) rồi đưa chuột về bài giảng → O vẫn thu gọn được
+        await pg.frame_locator('.tc-root .bh-cc-pane iframe').first.locator('body').click(position={'x': 5, 'y': 5})
+        vp = pg.viewport_size; await pg.mouse.move(vp['width'] * 0.2, vp['height'] * 0.5); await pg.mouse.move(vp['width'] * 0.25, vp['height'] * 0.5)
+        await pg.keyboard.press('o'); o5 = await pg.evaluate(mo)
+        # mở bằng chuột (biểu tượng ⭐) rồi bấm O là thu gọn; công cụ không được tự bật toàn màn hình (mất nút ◧ ▁)
+        await pg.click('.tc-root .bh-cc-fab'); await pg.click('.tc-root .bh-cc-ic[data-i="0"]'); await pg.keyboard.press('o'); o6 = await pg.evaluate(mo)
+        o7 = await pg.evaluate("[...document.querySelectorAll('.bh-cc-pane iframe')].some(f => f.hasAttribute('allowfullscreen') || /fullscreen/.test(f.allow))")
+        if o5 != 'min' or o6 != 'min' or o7: fails.append(f'phím O sau khi bấm vào công cụ / mở bằng chuột: {o5, o6, o7}')
         await pg.evaluate("TrinhChieu.dong()")
         if not (a0 == a1 == a2 == a3 and a0[0] == 1): fails.append(f'trình chiếu + công cụ toàn màn hình: {a0, a1, a2, a3}')
         if (o1, o2, o3, o4) != ('full', 'min', 'full', a3) and (o1, o2, o3) != ('half', 'min', 'half'): fails.append(f'phím O trong trình chiếu: {o1, o2, o3, o4}')

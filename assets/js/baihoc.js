@@ -141,7 +141,11 @@ const BaiHoc = (() => {
     $$('.bh-frame[data-tt]', pane).forEach(fr => {
       congCu(fr);
       const f = $(':scope > iframe', fr);   // focus thường nằm trong trang bài giảng (cùng nguồn) → nghe phím O ở đó
-      f.addEventListener('load', () => { try { f.contentWindow.document.addEventListener('keydown', ev => { if (fr.classList.contains('is-full')) phimO(ev, fr); }); } catch (e) { /* khác nguồn */ } });
+      f.addEventListener('load', () => { try {
+        const d = f.contentWindow.document;
+        d.addEventListener('keydown', ev => { if (fr.classList.contains('is-full')) phimO(ev, fr); });
+        d.addEventListener('pointermove', () => fr.ccVe && fr.ccVe());
+      } catch (e) { /* khác nguồn */ } });
     });
     $$('[data-fs]', pane).forEach(btn => btn.addEventListener('click', () => {
       const fr = $(`.bh-frame[data-tt="${btn.dataset.fs}"]`, pane), go = fr.requestFullscreen || fr.webkitRequestFullscreen;
@@ -187,20 +191,23 @@ const BaiHoc = (() => {
     };
     const menu = on => { cc.classList.toggle('open', on); fab.setAttribute('aria-expanded', on ? 'true' : 'false'); };
     fab.addEventListener('click', () => menu(!cc.classList.contains('open')));
-    const moCC = (i, giuFocus) => {
+    const moCC = (i, phim) => {
       let f = $(`iframe[data-i="${i}"]`, pane);
       if (!f) {   // tạo khi bấm lần đầu, giữ lại để mở lại không phải tải lại
-        pane.insertAdjacentHTML('beforeend', `<iframe data-i="${i}" src="${esc(ds[i].url)}" title="Công cụ ${i + 1}" allow="fullscreen; autoplay; clipboard-read; clipboard-write; camera; microphone" allowfullscreen referrerpolicy="no-referrer"></iframe>`);
+        pane.insertAdjacentHTML('beforeend', `<iframe data-i="${i}" src="${esc(ds[i].url)}" title="Công cụ ${i + 1}" allow="autoplay; clipboard-read; clipboard-write; camera; microphone" referrerpolicy="no-referrer"></iframe>`);
         f = $(`iframe[data-i="${i}"]`, pane);
       }
       $$('iframe', pane).forEach(x => { x.hidden = x !== f; });
       const giu = cc.dataset.mode === 'full' && cur === i;
-      cur = i; menu(false); mode(giu ? 'full' : cc.dataset.mode === 'full' ? 'full' : giuFocus ? moCuoi : 'half');
-      if (!giuFocus) try { f.focus(); } catch (e) { /* bỏ qua */ }
+      cur = i; menu(false); mode(giu ? 'full' : cc.dataset.mode === 'full' ? 'full' : phim ? moCuoi : 'half');
+      ve();   // focus ở lại bài giảng để phím O, →, ← vẫn dùng được; bấm vào công cụ thì công cụ mới nhận phím
     };
     $$('.bh-cc-ic', cc).forEach(b => b.addEventListener('click', () => moCC(+b.dataset.i)));
     $$('.bh-cc-bar [data-m]', cc).forEach(b => b.addEventListener('click', () => mode(b.dataset.m === 'off' ? '' : b.dataset.m)));
     // Phím O: công cụ i đang hiện → thu gọn (giữ nguyên trang công cụ); đang ẩn → mở lại như lần trước. Không chuyển focus sang công cụ để bấm O lần nữa vẫn tắt được.
+    // Đã bấm vào trang công cụ (khác nguồn, giữ hết phím) → đưa chuột về phía bài giảng là lấy lại focus, phím O dùng lại được
+    fr.ccVe = () => { if (pane.contains(document.activeElement)) ve(); };
+    fr.addEventListener('pointermove', fr.ccVe);
     fr.ccToggle = (i = 0) => {
       if (!ds[i]) return;
       const m = cc.dataset.mode;
@@ -210,8 +217,9 @@ const BaiHoc = (() => {
   }
   // phím tắt O (bật/tắt công cụ đầu tiên ⭐) – bỏ qua khi đang gõ chữ vào ô nhập
   const dangGo = t => !!t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName || '') || t.isContentEditable);
+  const laO = ev => ev.key === 'o' || ev.key === 'O' || ev.code === 'KeyO';   // code: bộ gõ tiếng Việt có thể đổi ev.key
   function phimO(ev, fr) {
-    if (ev.altKey || ev.ctrlKey || ev.metaKey || (ev.key !== 'o' && ev.key !== 'O') || dangGo(ev.target) || !fr.ccToggle) return false;
+    if (ev.altKey || ev.ctrlKey || ev.metaKey || !laO(ev) || dangGo(ev.target) || !fr.ccToggle) return false;
     ev.preventDefault(); fr.ccToggle(0); return true;
   }
   function paneTrong(lop, b, pane) {

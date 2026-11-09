@@ -132,7 +132,7 @@ const TrinhChieu = (() => {
       else if (k === 'Home') ve(0); else if (k === 'End') ve(deck.length - 1);
       else if (k === 'Escape') dong();
       else if (k === 'f' || k === 'F') toanManHinh();
-      else if (k === 'o' || k === 'O') { ev.preventDefault(); if (root.ccToggle) root.ccToggle(0); }
+      else if (k === 'o' || k === 'O' || ev.code === 'KeyO') { ev.preventDefault(); if (root.ccToggle) root.ccToggle(0); }
       else if (/^[a-dA-D]$/.test(k)) chon(ABCD.indexOf(k.toUpperCase()));
     };
     document.addEventListener('keydown', keyFn);
