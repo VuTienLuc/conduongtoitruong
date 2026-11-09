@@ -141,6 +141,10 @@ if (ctx.LuyenDe) ctx.LuyenDe.ids().forEach(id => {
   if (!ids.has(id)) err(W, 'không có chủ đề vào 10 mã này');
   const goc = (L.de || []).filter(d => !d.nhap);   // đề soạn sẵn; đề nhập từ AI (nhap) được thêm số lượng bất kì
   if (!L.de || !L.de.length || (goc.length && goc.length % 10)) err(W, `số đề soạn sẵn phải là bội của 10 (đang có ${goc.length})`);
+  // Đề trùng: thường do vừa để JSON trong nhap/ (tự nhập thành data/nhap/*.js) vừa viết tay cùng đề vào data/vao-10/luyen-de/*.js
+  const dau = d => String(d.de || '').replace(/<[^>]+>|\\[()\[\]]|\s+/g, ' ').toLowerCase().trim().slice(0, 160);
+  const gap = new Map();
+  (L.de || []).forEach((d, i) => { const k = dau(d); if (gap.has(k)) err(W, `đề ${i + 1} "${d.ten}" TRÙNG đề ${gap.get(k) + 1} – có thể vừa để JSON trong nhap/ vừa viết tay vào data/vao-10/luyen-de/; chỉ giữ một nơi (JSON gốc đã chuyển tay thì để ở docs/nguon-ai/)`); else gap.set(k, i); });
   (L.de || []).forEach((d, i) => {
     const w = `${W} › đề ${i + 1}`; nLD++;
     ['ten', 'nguon', 'de', 'ans'].forEach(k => { if (!d[k]) err(w, `thiếu ${k}`); });
