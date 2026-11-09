@@ -131,16 +131,64 @@ const BaiHoc = (() => {
     if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
   }
   // Trình chiếu, trò chơi HTML của bài: khung 16:9 ở đầu tab Bài giảng, nút toàn màn hình, mở tab mới.
+  // Toàn màn hình áp cho cả khung (không chỉ iframe) để hiện được bộ công cụ mở nhanh ở góc dưới phải.
   function ttMount(lop, so, pane) {
     const ts = tnOf(lop, so); if (!ts.length) return;
     pane.insertAdjacentHTML('afterbegin', ts.map((t, i) => `<article class="card bh-tt"><h3>🎬 ${esc(t.ten)}</h3>${t.mo_ta ? `<p class="muted small">${esc(t.mo_ta)}</p>` : ''}
-      <div class="bh-frame"><iframe src="${esc(srcOf(t.file))}" title="${esc(t.ten)}" allow="fullscreen" allowfullscreen loading="lazy" data-tt="${i}"></iframe></div>
+      <div class="bh-frame" data-tt="${i}"><iframe src="${esc(srcOf(t.file))}" title="${esc(t.ten)}" allow="fullscreen; autoplay; clipboard-write" allowfullscreen loading="lazy"></iframe></div>
       <div class="row"><button class="btn primary" type="button" data-fs="${i}">⛶ Toàn màn hình</button><a class="btn ghost" href="${esc(srcOf(t.file))}" target="_blank" rel="noopener">↗ Mở trong tab mới</a>${t.nguon ? `<span class="muted small">${esc(t.nguon)}</span>` : ''}</div></article>`).join(''));
+    $$('.bh-frame[data-tt]', pane).forEach(congCu);
     $$('[data-fs]', pane).forEach(btn => btn.addEventListener('click', () => {
-      const f = $(`iframe[data-tt="${btn.dataset.fs}"]`, pane), go = f.requestFullscreen || f.webkitRequestFullscreen;
-      if (go) Promise.resolve(go.call(f)).then(() => { try { f.contentWindow.focus(); } catch (e) { /* khác nguồn */ } }).catch(() => window.open(f.src, '_blank'));
-      else window.open(f.src, '_blank');
+      const fr = $(`.bh-frame[data-tt="${btn.dataset.fs}"]`, pane), go = fr.requestFullscreen || fr.webkitRequestFullscreen;
+      const gia = () => { fr.classList.add('gia', 'is-full'); document.body.classList.add('bh-noscroll'); ttFocus(fr); };   // máy không cho toàn màn hình (iPhone): phủ kín cửa sổ
+      if (go) Promise.resolve(go.call(fr)).then(() => ttFocus(fr)).catch(gia); else gia();
     }));
+  }
+  const ttFocus = fr => { try { $('iframe', fr).focus(); $('iframe', fr).contentWindow.focus(); } catch (e) { /* khác nguồn */ } };
+  function ttThoat(fr) { fr.classList.remove('gia', 'is-full'); document.body.classList.remove('bh-noscroll'); }
+  function ttSync() {
+    const fe = document.fullscreenElement || document.webkitFullscreenElement;
+    $$('.bh-frame[data-tt]').forEach(fr => fr.classList.toggle('is-full', fe === fr || fr.classList.contains('gia')));
+  }
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    document.addEventListener('fullscreenchange', ttSync); document.addEventListener('webkitfullscreenchange', ttSync);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.bh-frame.gia').forEach(ttThoat); });
+  }
+
+  // Bộ công cụ mở nhanh (CONFIG.congCuTrinhChieu): biểu tượng mờ góc dưới phải → các biểu tượng công cụ (không ghi tên web)
+  // → trang mở ngay trong bài giảng: ◧ nửa màn hình (bài giảng thu về nửa trái) · ⛶ cả màn hình · ▁ thu gọn (giữ nguyên trang) · ✕ đóng.
+  const CC = () => ((window.CONFIG && window.CONFIG.congCuTrinhChieu) || []).filter(x => x && x.url);
+  const icHTML = x => /^(https?:|data:)/.test(String(x.icon || '')) ? `<img src="${esc(x.icon)}" alt="">` : esc(x.icon || '●');
+  function congCu(fr) {
+    const ds = CC();
+    fr.insertAdjacentHTML('beforeend', `<button type="button" class="bh-cc-exit" aria-label="Thoát toàn màn hình">✕</button>${ds.length ? `<div class="bh-cc" data-mode="">
+      <div class="bh-cc-pane"><div class="bh-cc-bar"><button type="button" data-m="half" aria-label="Nửa màn hình">◧</button><button type="button" data-m="full" aria-label="Cả màn hình">⛶</button><button type="button" data-m="min" aria-label="Thu gọn">▁</button><button type="button" data-m="off" aria-label="Đóng">✕</button></div></div>
+      <div class="bh-cc-menu">${ds.map((x, i) => `<button type="button" class="bh-cc-ic" data-i="${i}" aria-label="Công cụ ${i + 1}">${icHTML(x)}</button>`).join('')}</div>
+      <button type="button" class="bh-cc-fab" aria-label="Công cụ" aria-expanded="false"><span aria-hidden="true">✦</span></button></div>` : ''}`);
+    $('.bh-cc-exit', fr).addEventListener('click', () => ttThoat(fr));
+    const cc = $('.bh-cc', fr); if (!cc) return;
+    const pane = $('.bh-cc-pane', cc), fab = $('.bh-cc-fab', cc);
+    let cur = -1;
+    const mode = m => {
+      cc.dataset.mode = m; fr.classList.toggle('cc-half', m === 'half');
+      cc.classList.toggle('dang', m === 'min');
+      if (m === '' || m === 'min') ttFocus(fr);
+    };
+    const menu = on => { cc.classList.toggle('open', on); fab.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+    fab.addEventListener('click', () => menu(!cc.classList.contains('open')));
+    $$('.bh-cc-ic', cc).forEach(b => b.addEventListener('click', () => {
+      const i = +b.dataset.i;
+      let f = $(`iframe[data-i="${i}"]`, pane);
+      if (!f) {   // tạo khi bấm lần đầu, giữ lại để mở lại không phải tải lại
+        pane.insertAdjacentHTML('beforeend', `<iframe data-i="${i}" src="${esc(ds[i].url)}" title="Công cụ ${i + 1}" allow="fullscreen; autoplay; clipboard-read; clipboard-write; camera; microphone" allowfullscreen referrerpolicy="no-referrer"></iframe>`);
+        f = $(`iframe[data-i="${i}"]`, pane);
+      }
+      $$('iframe', pane).forEach(x => { x.hidden = x !== f; });
+      const giu = cc.dataset.mode === 'full' && cur === i;
+      cur = i; menu(false); mode(giu ? 'full' : cc.dataset.mode === 'full' ? 'full' : 'half');
+      try { f.focus(); } catch (e) { /* bỏ qua */ }
+    }));
+    $$('.bh-cc-bar [data-m]', cc).forEach(b => b.addEventListener('click', () => mode(b.dataset.m === 'off' ? '' : b.dataset.m)));
   }
   function paneTrong(lop, b, pane) {
     if (tnOf(lop, b.so).length) {

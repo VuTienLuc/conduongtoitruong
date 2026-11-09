@@ -177,6 +177,24 @@ async def main():
             n = await fr.locator('.slide').count() if await pg.locator('.bh-frame iframe').count() else 0
             box = await pg.locator('.bh-frame').first.bounding_box() if n else None
             if not n or not box or abs(box['width'] / box['height'] - 16 / 9) > 0.05: fails.append(f'trình chiếu Toán {l} bài {bb}: không nạp được ({n} slide, khung {box})')
+        # Bộ công cụ mở nhanh khi trình chiếu toàn màn hình (CONFIG.congCuTrinhChieu): ẩn khi chưa toàn màn hình; biểu tượng mờ → chọn → nửa / cả màn hình / thu gọn / đóng
+        if await pg.evaluate("Object.keys(BaiHoc.TN).length && (CONFIG.congCuTrinhChieu || []).length"):
+            async def gia_lap(route): await route.fulfill(status=200, content_type='text/html; charset=utf-8', body='<html><body>cong cu</body></html>')
+            for x in await pg.evaluate("CONFIG.congCuTrinhChieu.map(x => new URL(x.url).origin)"): await pg.route(x + '/**', gia_lap)
+            l, bb = (await pg.evaluate("Object.keys(BaiHoc.TN)[0]")).split('-')
+            await pg.goto(base + f'#/bai-hoc/{l}/{bb}'); await pg.wait_for_timeout(500)
+            st = "(() => { const fr = document.querySelector('.bh-frame'), cc = fr.querySelector('.bh-cc'), pn = cc.querySelector('.bh-cc-pane'); return [fr.classList.contains('is-full'), cc.dataset.mode, Math.round(pn.getBoundingClientRect().width / fr.getBoundingClientRect().width * 100), Math.round(fr.querySelector(':scope > iframe').getBoundingClientRect().width / fr.getBoundingClientRect().width * 100)]; })()"
+            r0 = await pg.locator('.bh-cc').first.is_visible()
+            await pg.click('[data-fs="0"]'); await pg.wait_for_timeout(500)
+            r1 = await pg.evaluate(st); vis = await pg.locator('.bh-cc-fab').first.is_visible()
+            await pg.click('.bh-cc-fab'); n_ic = await pg.locator('.bh-cc-ic:visible').count(); txt = await pg.locator('.bh-cc-menu').first.inner_text()
+            await pg.locator('.bh-cc-ic').first.click(); await pg.wait_for_timeout(300); r2 = await pg.evaluate(st)
+            await pg.click('.bh-cc-bar [data-m="full"]'); r3 = await pg.evaluate(st)
+            await pg.click('.bh-cc-bar [data-m="min"]'); r4 = await pg.evaluate(st)
+            await pg.evaluate("document.exitFullscreen && document.fullscreenElement && document.exitFullscreen()"); await pg.wait_for_timeout(300)
+            want_ic = await pg.evaluate("CONFIG.congCuTrinhChieu.length")
+            if r0 or not vis or r1[:2] != [True, ''] or n_ic != want_ic or 'vercel' in txt.lower() or r2[1:] != ['half', 50, 50] or r3[1:3] != ['full', 100] or r4[1] != 'min':
+                fails.append(f'công cụ trình chiếu: {r0, vis, r1, n_ic, txt, r2, r3, r4}')
         await pg.goto(base + '#/xuong/prompt'); await pg.wait_for_timeout(200)
         await pg.locator('[name=xLoai][value=baihoc]').check(); await pg.select_option('#bLop', '10'); await pg.wait_for_timeout(100); await pg.select_option('#bBai', '1'); await pg.wait_for_timeout(150)
         ok = await pg.evaluate("document.querySelector('#xHd').value.includes('bai_hoc') && document.querySelector('#xHd').value.includes('can_nho') && document.querySelector('#xL0').value.includes('Bài 1. Mệnh đề') && document.querySelector('#xL0').value.includes('đã có trên web')")

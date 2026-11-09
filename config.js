@@ -16,5 +16,12 @@ window.CONFIG = {
   // Địa chỉ web sau khi đưa lên mạng (vd 'https://conduongtoitruong.vercel.app/'). Mã QR trên phiếu in trỏ về đây
   // khi phiếu được in từ máy (mở tệp trực tiếp). In từ trang web thật thì tự dùng địa chỉ trang đó.
   siteUrl: '',
+  // Công cụ mở nhanh khi trình chiếu bài giảng HTML toàn màn hình: biểu tượng mờ ở góc dưới phải, bấm vào hiện các
+  // biểu tượng dưới đây (không hiện tên web); trang mở ngay trong bài giảng, nửa hoặc cả màn hình, thu gọn được.
+  // icon: một emoji, hoặc đường link ảnh (https://… .png/.svg).
+  congCuTrinhChieu: [
+    { url: 'https://dojotienluc.vercel.app/', icon: '⭐' },
+    { url: 'https://picvtl.vercel.app/', icon: '🖼️' },
+  ],
   storeKey: 'vao10',                         // tiền tố khoá localStorage
 };
