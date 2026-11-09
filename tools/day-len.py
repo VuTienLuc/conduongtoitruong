@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""ĐẨY WEB LÊN HỆ THỐNG – một lệnh làm hết (lệnh "Đẩy lên web.command" ngoài Desktop gọi tệp này).
+"""ĐẨY WEB LÊN HỆ THỐNG – một lệnh làm hết (lệnh "Đăng Con đường tới trường lên web.command" ngoài Desktop gọi tệp này).
 Chạy:  python3 tools/day-len.py [--inbox "<thư mục thả HTML>"] [--msg "nội dung thay đổi"] [--khong-hoi]
 Các bước (bước nào lỗi thì dừng, KHÔNG đẩy):
   1. git pull – lấy bản mới nhất (giữ nguyên phần thầy đang sửa dở).
-  2. Thư mục thả HTML (mặc định ~/Desktop/Đưa lên web): mỗi tệp .html được kiểm định dạng và gắn vào bài SGK
+  2. Thư mục thả HTML (mặc định ~/Desktop/Con đường tới trường (Thả HTML Vào Đây)): mỗi tệp .html được kiểm định dạng và gắn vào bài SGK
      (tools/gan-html.py). Tên tệp dạng lop11-b11-ten-ngan.html thì tự biết lớp, bài; tên khác thì hỏi lớp, bài
      (chế độ --khong-hoi thì bỏ qua tệp đó). Tệp đã gắn chuyển vào thư mục con "Đã đưa lên".
   3. Dữ liệu AI trong nhap/ → tools/nhap-du-lieu.py.
@@ -15,7 +15,7 @@ import argparse, datetime, glob, importlib.util, os, re, shutil, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
-INBOX = os.path.join(os.path.expanduser('~'), 'Desktop', 'Đưa lên web')
+INBOX = os.path.join(os.path.expanduser('~'), 'Desktop', 'Con đường tới trường (Thả HTML Vào Đây)')
 spec = importlib.util.spec_from_file_location('gan_html', os.path.join(ROOT, 'tools', 'gan-html.py'))
 G = importlib.util.module_from_spec(spec); spec.loader.exec_module(G)
 
@@ -74,6 +74,8 @@ def main():
     for tool in ('git', 'python3'):
         if not shutil.which(tool): raise SystemExit(f'✗ Máy chưa có {tool}. Cài Xcode Command Line Tools: mở Terminal, gõ  xcode-select --install')
 
+    if run(['git', 'config', 'user.name'], show=False).returncode: run(['git', 'config', 'user.name', 'Vu Tien Luc'], show=False)
+    if run(['git', 'config', 'user.email'], show=False).returncode: run(['git', 'config', 'user.email', 'vutluc@gmail.com'], show=False)
     buoc(1, 'Lấy bản mới nhất từ GitHub')
     if not a.khong_day:
         r = run(['git', 'pull', '--rebase', '--autostash', 'origin', 'main'])

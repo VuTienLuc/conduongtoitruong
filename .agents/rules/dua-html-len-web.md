@@ -27,8 +27,8 @@ Người dùng: thầy Vũ Tiến Lực, giáo viên Toán. Xưng "thầy", tr�
 ## 3. Đẩy lên hệ thống (GitHub → web tự cập nhật)
 - Chỉ dùng một lệnh, chạy trong thư mục dự án:
   `python3 tools/day-len.py --khong-hoi --msg "<mô tả ngắn điều đã thay đổi>"`
-  Lệnh tự làm: git pull → gắn các tệp HTML đặt tên đúng dạng trong `~/Desktop/Đưa lên web` → nhập dữ liệu AI trong `nhap/` → `kiem-tra.js`, `kiem-dap-so.py` → `build.py` → commit → push.
-- Thầy tự làm: bấm đúp `Đẩy lên web.command` ngoài Desktop (cùng lệnh, có hỏi lớp, bài cho tệp chưa đặt tên đúng dạng).
+  Lệnh tự làm: git pull → gắn các tệp HTML đặt tên đúng dạng trong `~/Desktop/Con đường tới trường (Thả HTML Vào Đây)` → nhập dữ liệu AI trong `nhap/` → `kiem-tra.js`, `kiem-dap-so.py` → `build.py` → commit → push.
+- Thầy tự làm: bấm đúp `Đăng Con đường tới trường lên web.command` ngoài Desktop (cùng lệnh, có hỏi lớp, bài cho tệp chưa đặt tên đúng dạng).
 - Lệnh dừng ở bước nào thì đọc lỗi, sửa, chạy lại. Không bỏ qua bước kiểm tra.
 - CẤM: `git push --force`, `git reset --hard`, `git clean`, xoá tệp của thầy, đưa `tai-lieu/` lên GitHub.
 - Khi đổi code của web (assets/js, assets/css, tools/): chạy thêm `python3 tools/test_web.py` (cần Playwright) trước khi đẩy.

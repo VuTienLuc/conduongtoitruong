@@ -10,7 +10,7 @@
 - "Học tiếp": lớp 9 nối sang chủ đề ôn thi vào 10 (`BaiHoc.LIEN_9`); lớp 10–12 tự nối chủ đề Vdc có cùng số bài trong trường `bai`.
 
 ## Trình chiếu, trò chơi HTML của thầy gắn vào bài (thầy yêu cầu 09/11/2026)
-- Gắn bằng lệnh `python3 tools/gan-html.py <tệp> --lop L --bai B` (kiểm định dạng một tệp tự chạy, đặt tên, khai báo) hoặc thả tệp vào `~/Desktop/Đưa lên web` rồi bấm `Đẩy lên web.command` (`tools/day-len.py`). Quy tắc định dạng: `.agents/rules/dua-html-len-web.md`.
+- Gắn bằng lệnh `python3 tools/gan-html.py <tệp> --lop L --bai B` (kiểm định dạng một tệp tự chạy, đặt tên, khai báo) hoặc thả tệp vào `~/Desktop/Con đường tới trường (Thả HTML Vào Đây)` rồi bấm `Đăng Con đường tới trường lên web.command` (`tools/day-len.py`). Quy tắc định dạng: `.agents/rules/dua-html-len-web.md`.
 - Tệp HTML tự chạy đặt trong `tuong-tac/` (tên `lop<lớp>-b<bài>-<tên-ngắn>.html`, chép nguyên tệp thầy gửi, không sửa), khai báo trong `data/bai-hoc/tai-nguyen.js`: `BaiHoc.taiNguyen(lớp, bài, [{ ten, mo_ta, file, nguon }])`.
 - Trang bài hiện khung 16:9 ở đầu tab Bài giảng (cả khi bài chưa có bài giảng chữ), nút ⛶ Toàn màn hình (iPhone không hỗ trợ thì mở tab mới) và ↗ Mở trong tab mới; mục lục hiện chip 🎬.
 - Bản gộp `dist/`: `tools/build.py` nhúng nội dung tệp, web mở bằng địa chỉ blob. `kiem-tra.js` báo lỗi nếu tệp không có hoặc tệp trong `tuong-tac/` chưa gắn bài nào.
