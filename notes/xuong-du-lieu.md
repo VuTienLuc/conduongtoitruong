@@ -28,3 +28,10 @@
 - Web không vẽ hình từ "hinh" (chỉ in mô tả). Đề hình học nhập từ AI cần thầy kiểm và bổ sung hình nếu cần.
 - AI có thể ra đề và đáp án lệch nhau: khi thầy gửi JSON nhờ kiểm, thay số kiểm từng đáp số bằng Python trước khi nhập.
 - Mẫu câu trả lời AI để thử: `docs/mau-nhap/toan-bai3-cau-tra-loi-ai.txt` (có lỗi `\` đơn, trích dẫn – test_web.py dùng để kiểm trang nhập).
+
+## Trình soạn thảo bài học (`cong-cu/soan-bai-hoc.html`, thầy gửi 10/11/2026, tôi bổ sung)
+- Tệp của thầy (Vue 3 + Tailwind CDN): soạn JSON `bai_hoc` theo form, chuẩn hoá LaTeX, đồng bộ Google Sheets (Apps Script, `gas_url`), xuất đề math-exam-v1. Trên web: `https://conduongtoitruong.vercel.app/cong-cu/soan-bai-hoc.html`; Xưởng dữ liệu có thẻ ✏️ trỏ tới (chỉ khi chạy http/https).
+- Bổ sung 10/11/2026: menu 📂 Quản lý JSON (thư viện trên máy `bh-editor:thu-vien`, tự lưu bản đang soạn `bh-editor:dang-soan`; kiểm theo quy tắc web; mở, lưu, nhân bản, xoá 2 bước, tải tệp chuẩn `bai-hoc-l..-b...json`, nhập nhiều tệp, xuất tất cả để sao lưu); Xuất JSON đặt tên chuẩn.
+- 📽️ Đưa lên web (trong Đồng bộ Google Sheets: bài đang soạn + nút "Lên web" từng bài trên Cloud; trong Quản lý JSON): mở `#/xuong/nhan/<giờ>` ở tab `cdtt-web` → web báo `cdtt-san-sang` → gửi `{type:'cdtt-bai-hoc', json}` → web báo `cdtt-da-nhan`. Web chỉ nhận từ đúng cửa sổ đã mở nó, kiểm, xem trước; "Lưu & trình chiếu ngay" lưu khoá `bh-gui-<lớp>-<bài>` (gửi lại thì thay bản trước) rồi tự mở trình chiếu (F để toàn màn hình).
+- Hình `figures:[{id,svg}]` + `[[svg:id]]` trong lời đề: web hiện hình (lọc script, on…, foreignObject, javascript:), hình không có chỗ đặt thì đặt sau lời đề.
+- Đăng cho mọi học sinh: thả tệp .json vào `~/Desktop/Con đường tới trường (Thả HTML Vào Đây)` → lệnh Đăng (`day-len.py nhan_json`) chép vào `nhap/` (trùng tên khác nội dung → `-bo2`…).

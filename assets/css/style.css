@@ -561,3 +561,9 @@ table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align
 .xw-trung{margin:10px 0;padding:10px 12px;border-radius:10px;background:var(--primary-soft)}
 .xw-trung.bad{background:var(--warn-soft)}
 .xw-trung p{margin:4px 0}
+/* Hình SVG kèm câu hỏi (Trình soạn thảo bài học: figures + [[svg:id]]) */
+.bh-hinh{display:inline-block;vertical-align:middle;max-width:100%;margin:4px 6px}
+.bh-hinh-ds{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:8px 0}
+.bh-hinh svg{max-width:100%;height:auto;max-height:260px}
+.tc-slide .bh-hinh svg{max-height:38vh}
+.sheet .bh-hinh svg{max-height:5.5cm}

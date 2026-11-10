@@ -574,6 +574,12 @@ table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align
 .xw-trung{margin:10px 0;padding:10px 12px;border-radius:10px;background:var(--primary-soft)}
 .xw-trung.bad{background:var(--warn-soft)}
 .xw-trung p{margin:4px 0}
+/* Hình SVG kèm câu hỏi (Trình soạn thảo bài học: figures + [[svg:id]]) */
+.bh-hinh{display:inline-block;vertical-align:middle;max-width:100%;margin:4px 6px}
+.bh-hinh-ds{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:8px 0}
+.bh-hinh svg{max-width:100%;height:auto;max-height:260px}
+.tc-slide .bh-hinh svg{max-height:38vh}
+.sheet .bh-hinh svg{max-height:5.5cm}
 
 </style>
 </head>
@@ -4244,6 +4250,9 @@ const BaiHoc = (() => {
     if (e && $('#bhTC')) $('#bhTC').addEventListener('click', () => TrinhChieu.mo(deTrinhChieu(e), tab === 'luyen' ? 'luyen' : 'giang'));
     if (!e) { paneTrong(lop, b, pane); return ttMount(lop, b.so, pane); }
     if (tab === 'phieu') panePhieu(e, pane); else if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
+    // vừa nhận bài từ Trình soạn thảo và bấm "Lưu & trình chiếu ngay" → mở trình chiếu luôn (bấm F hoặc ⛶ để toàn màn hình)
+    let tu = null; try { tu = sessionStorage.getItem('bh:tc-tu-dong'); } catch (er) { /* bỏ qua */ }
+    if (tu === `${lop}-${so}` && typeof TrinhChieu !== 'undefined') { try { sessionStorage.removeItem('bh:tc-tu-dong'); } catch (er) { /* bỏ qua */ } setTimeout(() => { TrinhChieu.mo(deTrinhChieu(e), 'giang'); U.toast('Bấm F hoặc ⛶ để chiếu toàn màn hình'); }, 50); }
   }
   // Trình chiếu, trò chơi HTML của bài: khung 16:9 ở đầu tab Bài giảng, nút toàn màn hình, mở tab mới.
   // Toàn màn hình áp cho cả khung (không chỉ iframe) để hiện được bộ công cụ mở nhanh ở góc dưới phải.
@@ -4967,18 +4976,18 @@ const NhapDL = (() => {
         if (!q.cau) errs.push(`${w}: thiếu "cau"`);
         if (pa.length !== 4 || new Set(pa).size !== 4) errs.push(`${w}: cần đúng 4 phương án khác nhau`);
         if (dapIdx(q, pa) < 0) errs.push(`${w}: "dap_an" phải là A, B, C hoặc D`);
-        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); kiemHinh(q, w, warns); fps.push([w, fp(q.cau)]); });
       ds.forEach((q, i) => { const w = `Đúng – sai câu ${i + 1}`, y = Array.isArray(q.y) ? q.y : [];
         if (!q.cau) errs.push(`${w}: thiếu "cau" (lời dẫn)`);
         if (y.length !== 4) errs.push(`${w}: cần đúng 4 ý a, b, c, d (đang có ${y.length})`);
         y.forEach((x, k) => { if (!x.noi_dung) errs.push(`${w} ý ${'abcd'[k]}: thiếu "noi_dung"`); if (boolOf(x.dung) === null) errs.push(`${w} ý ${'abcd'[k]}: "dung" phải là true hoặc false`); });
         if (y.length === 4 && y.every(x => boolOf(x.dung) === boolOf(y[0].dung))) warns.push(`${w}: cả 4 ý cùng ${boolOf(y[0].dung) ? 'Đúng' : 'Sai'} – nên có cả ý đúng và ý sai`);
-        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); kiemHinh(q, w, warns); fps.push([w, fp(q.cau)]); });
       tl.forEach((q, i) => { const w = `Trả lời ngắn câu ${i + 1}`, a = String(q.dap_an ?? '').trim();
         if (!q.cau) errs.push(`${w}: thiếu "cau"`);
         if (!a || isNaN(numVN(a))) errs.push(`${w}: "dap_an" phải là MỘT số (ví dụ "2,5", "-3", "0,25"), đang là ${JSON.stringify(q.dap_an)}`);
         else if (a.replace(/^-/, '').length > 4) warns.push(`${w}: đáp số "${a}" dài hơn 4 kí tự – đề thi THPT chỉ ghi được 4 kí tự, nên yêu cầu làm tròn`);
-        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); kiemHinh(q, w, warns); fps.push([w, fp(q.cau)]); });
       fps.forEach(([w, f], i) => { if (f && fps.findIndex(x => x[1] === f) < i) errs.push(`${w}: trùng với một câu khác`); });
       const n = tn.length + ds.length + tl.length;
       return { loai, errs, warns, n, ten: `Bài giảng – luyện tập Toán ${lop} – Bài ${bai}${sgk ? '. ' + sgk.ten : ''} (${n} câu)`, id: `${lop}-${bai}`, lop, bai };
@@ -5027,6 +5036,26 @@ const NhapDL = (() => {
       phan: (j.phan || []).map(p => ({ muc: norm(p.muc), phut: +p.phut, bai: (p.bai || []).map(b => ({ so: ++so, de: norm(b.de), f: fp(b.de),
         nguon: norm(b.nguon), can: norm(b.can_nho), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
   }
+  /* Hình SVG kèm câu hỏi (Trình soạn thảo bài học: "figures":[{"id":"hinh1","svg":"<svg…>"}], trong lời đề ghi [[svg:hinh1]]).
+     Chỉ nhận mã bắt đầu <svg, bỏ script, foreignObject, thuộc tính on…, liên kết javascript:. Hình không có chỗ [[svg:…]] thì đặt sau lời đề. */
+  function svgSach(x) {
+    const t = String(x || '').trim();
+    if (!/^<svg[\s>]/i.test(t) || !/<\/svg>$/i.test(t)) return '';
+    return t.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '')
+      .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '').replace(/((?:xlink:)?href\s*=\s*["']?)\s*javascript:/gi, '$1#');
+  }
+  function ganHinh(html, figs) {
+    const F = (Array.isArray(figs) ? figs : []).map(f => ({ id: String((f && f.id) || '').trim(), svg: svgSach(f && f.svg) })).filter(f => f.svg);
+    const da = new Set();
+    html = String(html).replace(/\[\[\s*svg\s*:\s*([\w-]+)\s*\]\]/gi, (m, id) => { const f = F.find(x => x.id === id); if (!f) return ''; da.add(id); return `<span class="bh-hinh">${f.svg}</span>`; });
+    const con = F.filter(f => !da.has(f.id));
+    return html + (con.length ? `<span class="bh-hinh-ds">${con.map(f => `<span class="bh-hinh">${f.svg}</span>`).join('')}</span>` : '');
+  }
+  function kiemHinh(q, w, warns) {
+    const F = Array.isArray(q.figures) ? q.figures : [];
+    F.forEach((f, k) => { if (f && String(f.svg || '').trim() && !svgSach(f.svg)) warns.push(`${w}: hình ${k + 1}${f.id ? ` "${f.id}"` : ''} không phải mã SVG trọn vẹn (<svg …>…</svg>) – web bỏ hình này`); });
+    String(q.cau || '').replace(/\[\[\s*svg\s*:\s*([\w-]+)\s*\]\]/gi, (m, id) => { if (!F.some(f => f && f.id === id && svgSach(f.svg))) warns.push(`${w}: lời đề có [[svg:${id}]] nhưng không có hình "${id}"`); return m; });
+  }
   function bhEntry(j, src) {
     const lg = x => (Array.isArray(x) ? x : String(x || '').split(/\n+/)).map(y => norm(typeof y === 'object' ? (y.buoc ?? y.noi_dung ?? '') : y)).filter(Boolean);
     const sgk = typeof BaiHoc !== 'undefined' ? BaiHoc.baiOf(+j.lop, +j.bai) : null;
@@ -5036,9 +5065,9 @@ const NhapDL = (() => {
         vd: (m.vi_du || []).map(v => ({ de: normBlock(v.de), lg: lg(v.loi_giai), ds: norm(v.dap_so) })) })),
       tn: (j.trac_nghiem || []).map(q => { const pa = q.phuong_an.map(x => String(x).replace(/^\s*[A-D][.)]\s+/, '')), k = dapIdx(q, pa);
         return { q: normBlock(q.cau), a: [pa[k], ...pa.filter((_, i) => i !== k)].map(x => norm(x)), goc: [k, ...[0, 1, 2, 3].filter(i => i !== k)],
-          why: norm(q.giai_thich), muc: q.muc || '' }; }),
-      ds: (j.dung_sai || []).map(q => ({ q: normBlock(q.cau), y: q.y.map(x => [norm(x.noi_dung).replace(/^[a-d]\)\s*/, ''), boolOf(x.dung)]), why: normBlock(q.giai_thich) })),
-      tln: (j.tra_loi_ngan || []).map(q => ({ q: normBlock(q.cau), ans: String(q.dap_an).trim(), why: normBlock(q.giai_thich) })) };
+          why: norm(q.giai_thich), muc: q.muc || '' }; }).map((x, i) => ({ ...x, q: ganHinh(x.q, j.trac_nghiem[i].figures) })),
+      ds: (j.dung_sai || []).map(q => ({ q: ganHinh(normBlock(q.cau), q.figures), y: q.y.map(x => [norm(x.noi_dung).replace(/^[a-d]\)\s*/, ''), boolOf(x.dung)]), why: normBlock(q.giai_thich) })),
+      tln: (j.tra_loi_ngan || []).map(q => ({ q: ganHinh(normBlock(q.cau), q.figures), ans: String(q.dap_an).trim(), why: normBlock(q.giai_thich) })) };
   }
   function apply(j, src) {
     const r = check(j);
@@ -5065,8 +5094,8 @@ const NhapDL = (() => {
       items.push({ json: x.json, src: 'may-nay', key: x.key, r: apply(x.json, 'may-nay') });
     });
   }
-  function saveLocal(j) {
-    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : r.loai === 'bai_hoc' ? `bh-${+j.lop}-${+j.bai}-${hashOf(JSON.stringify([j.trac_nghiem, j.dung_sai, j.tra_loi_ngan]))}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
+  function saveLocal(j, khoa) {
+    const r = check(j), key = khoa ? khoa : r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : r.loai === 'bai_hoc' ? `bh-${+j.lop}-${+j.bai}-${hashOf(JSON.stringify([j.trac_nghiem, j.dung_sai, j.tra_loi_ngan]))}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
     const a = local().filter(x => x.key !== key); a.push({ key, json: j, luc: new Date().toISOString() }); U.set(LKEY, a);
     return key;
   }
@@ -5398,6 +5427,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
         <li><b>Đưa lên hệ thống cho mọi học sinh:</b> bấm <i>Tải tệp chuẩn</i>, chép tệp vào thư mục <code>nhap/</code> của dự án rồi chạy <code>python3 tools/nhap-du-lieu.py</code> (hoặc nhắn Claude "nhập dữ liệu mới"), đẩy lên GitHub.</li></ol></section>
       <div class="two"><a class="card link-card" href="#/xuong/prompt"><span class="big">🧾</span><b>Menu prompt</b><span>Ngữ văn vào 10 · Toán luyện đề theo bài · Phiếu ôn tập 90 phút · Bài giảng lớp 9–12</span></a>
         <a class="card link-card" href="#/xuong/nhap"><span class="big">📥</span><b>Nhập dữ liệu</b><span>Dán câu trả lời AI hoặc kéo tệp .json</span></a></div>
+      ${/^https?:$/.test(location.protocol) ? `<div class="two"><a class="card link-card" href="cong-cu/soan-bai-hoc.html" target="_blank" rel="noopener"><span class="big">✏️</span><b>Trình soạn thảo bài học</b><span>Soạn, quản lý JSON bài giảng, đồng bộ Google Sheets, đưa bài lên web để trình chiếu</span></a></div>` : ''}
       <h2 class="sec">Đã lưu trên máy này (${loc.length})</h2>
       ${loc.length ? `<div class="card"><ul class="xw-list">${loc.map(x => { const r = NhapDL.check(x.json); return `<li><b>${esc(r.ten || x.key)}</b> <span class="muted">${new Date(x.luc).toLocaleString('vi-VN')}</span>
         <button class="btn ghost" type="button" data-dl="${esc(x.key)}">⬇️ Tải tệp chuẩn</button><button class="btn ghost" type="button" data-rm="${esc(x.key)}">🗑️ Xoá</button></li>`; }).join('')}</ul></div>`
@@ -5565,9 +5595,45 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
     dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('on'); if (e.dataTransfer.files.length) readFiles(e.dataTransfer.files); });
   }
 
+  /* ---------- Nhận bài từ Trình soạn thảo bài học (cong-cu/soan-bai-hoc.html) ----------
+     Trình soạn thảo mở trang này (#/xuong/nhan) trong cửa sổ mới; trang báo "cdtt-san-sang" cho cửa sổ mở nó, nhận
+     { type:'cdtt-bai-hoc', json } rồi kiểm, cho xem trước. Chỉ nhận từ đúng cửa sổ đã mở trang; phải bấm Lưu mới ghi.
+     Bài gửi từ trình soạn thảo lưu khoá cố định bh-gui-<lớp>-<bài>: gửi lại bản sửa thì thay bản trước (không thành bộ mới). */
+  let ngheGui = null;
+  function nhanPage() {
+    view().innerHTML = shell('#/xuong', `<section class="card hero"><h2>📽️ Nhận bài từ Trình soạn thảo</h2>
+      <p id="gStt">${window.opener ? '⏳ Đang chờ bài gửi sang…' : 'Trang này nhận bài khi thầy bấm <b>📽️ Đưa lên web</b> trong Trình soạn thảo bài học.'}</p></section><div id="gOut"></div>`);
+    if (ngheGui) window.removeEventListener('message', ngheGui);
+    ngheGui = ev => {
+      const d = ev.data;
+      if (!d || d.type !== 'cdtt-bai-hoc' || !window.opener || ev.source !== window.opener || !d.json || typeof d.json !== 'object' || !$i('gOut')) return;
+      try { ev.source.postMessage({ type: 'cdtt-da-nhan' }, ev.origin === 'null' ? '*' : ev.origin); } catch (e) { /* bỏ qua */ }
+      const j = { loai: 'bai_hoc', ...d.json }, r = NhapDL.check(j);
+      $i('gStt').innerHTML = `Đã nhận: <b>${esc(r.ten || 'bài học')}</b> – ${new Date().toLocaleTimeString('vi-VN')}`;
+      $i('gOut').innerHTML = `<div class="card xw-res ${r.errs.length ? 'bad' : 'ok'}">
+        <p class="chips"><span class="chip ${r.errs.length ? 'warnc' : 'ok'}">${r.errs.length ? `${r.errs.length} lỗi` : 'Đúng mẫu ✓'}</span>${r.warns.length ? `<span class="chip">${r.warns.length} lưu ý</span>` : ''}</p>
+        ${r.errs.length ? '' : r.loai === 'bai_hoc' && !NhapDL.local().some(x => x.key === `bh-gui-${r.lop}-${r.bai}`) ? trungHTML(j) : ''}
+        ${r.errs.length ? `<ul class="xw-err">${r.errs.map(x => `<li>✗ ${esc(x)}</li>`).join('')}</ul><p>Sửa trong Trình soạn thảo rồi bấm <b>Đưa lên web</b> lần nữa – trang này nhận lại bản mới.</p>` : ''}
+        ${r.warns.length ? `<details><summary>${r.warns.length} lưu ý</summary><ul class="xw-warn">${r.warns.map(x => `<li>! ${esc(x)}</li>`).join('')}</ul></details>` : ''}
+        ${r.errs.length || r.loai !== 'bai_hoc' ? '' : `<div class="row"><button class="btn primary" type="button" id="gTC">📽️ Lưu &amp; trình chiếu ngay</button><button class="btn" type="button" id="gMo">💾 Lưu &amp; mở bài</button><button class="btn" type="button" id="gDl">⬇️ Tải tệp chuẩn (đăng cho mọi học sinh)</button></div>
+          <p class="muted small">Lưu trên trình duyệt này (máy chiếu ở lớp). Gửi lại bản sửa của cùng bài thì thay bản trước. Muốn mọi học sinh thấy: tải tệp chuẩn, thả vào thư mục <i>Con đường tới trường (Thả HTML Vào Đây)</i> trên Desktop rồi bấm lệnh <i>Đăng Con đường tới trường lên web</i>.</p>
+          <details class="xw-pre"><summary>Xem trước</summary><div class="paper-wrap" id="gPre"></div></details>`}</div>`;
+      if (r.errs.length || r.loai !== 'bai_hoc') return;
+      $i('gPre').innerHTML = previewHTML(j, r);
+      const luu = tc => { NhapDL.saveLocal(j, `bh-gui-${r.lop}-${r.bai}`); if (tc) try { sessionStorage.setItem('bh:tc-tu-dong', `${r.lop}-${r.bai}`); } catch (e) { /* bỏ qua */ }
+        U.toast(tc ? 'Đã lưu. Đang mở trình chiếu…' : 'Đã lưu trên máy này. Đang mở bài…');
+        setTimeout(() => { history.replaceState(null, '', `#/bai-hoc/${r.lop}/${r.bai}`); location.reload(); }, 400); };   // replaceState: không phát hashchange trước khi tải lại
+      $i('gTC').addEventListener('click', () => luu(true));
+      $i('gMo').addEventListener('click', () => luu(false));
+      $i('gDl').addEventListener('click', () => download(NhapDL.fileName(j), JSON.stringify(j, null, 1)));
+    };
+    window.addEventListener('message', ngheGui);
+    if (window.opener) try { window.opener.postMessage({ type: 'cdtt-san-sang' }, '*'); } catch (e) { /* bỏ qua */ }
+  }
+
   function route(parts) {
     if (parts[0] !== 'xuong') return false;
-    if (parts[1] === 'prompt') promptPage(); else if (parts[1] === 'nhap') nhapPage(); else home();
+    if (parts[1] === 'prompt') promptPage(); else if (parts[1] === 'nhap') nhapPage(); else if (parts[1] === 'nhan') nhanPage(); else home();
     return true;
   }
   return { route, HD_VAN, HD_TOAN, HD_ONTAP, HD_BAIHOC, MAU_VAN, MAU_TOAN, MAU_ONTAP, MAU_MD_ONTAP, MAU_BAIHOC, SUA, lenhVan, lenhToan, lenhOnTap, lenhBaiHoc };

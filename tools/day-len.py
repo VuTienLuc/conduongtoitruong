@@ -3,7 +3,8 @@
 Chạy:  python3 tools/day-len.py [--inbox "<thư mục thả HTML>"] [--msg "nội dung thay đổi"] [--khong-hoi]
 Các bước (bước nào lỗi thì dừng, KHÔNG đẩy):
   1. git pull – lấy bản mới nhất (giữ nguyên phần thầy đang sửa dở).
-  2. Thư mục thả HTML (mặc định ~/Desktop/Con đường tới trường (Thả HTML Vào Đây)): mỗi tệp .html được kiểm định dạng và gắn vào bài SGK
+  2. Thư mục thả HTML (mặc định ~/Desktop/Con đường tới trường (Thả HTML Vào Đây)): tệp bài giảng .json (Trình soạn thảo bài học) chép vào nhap/;
+     mỗi tệp .html được kiểm định dạng và gắn vào bài SGK
      (tools/gan-html.py). Tên tệp dạng lop11-b11-ten-ngan.html thì tự biết lớp, bài; tên khác thì hỏi lớp, bài
      (chế độ --khong-hoi thì bỏ qua tệp đó). Tệp đã gắn chuyển vào thư mục con "Đã đưa lên".
   3. Dữ liệu AI trong nhap/ → tools/nhap-du-lieu.py.
@@ -35,6 +36,35 @@ def hoi(q, default=''):
 
 
 def buoc(n, t): print(f'\n── {n}. {t}')
+
+
+def nhan_json(inbox):
+    """Tệp bài giảng .json (Trình soạn thảo bài học / Xưởng dữ liệu "Tải tệp chuẩn") thả vào thư mục → chép vào nhap/.
+    Không đè tệp cũ: trùng tên mà khác nội dung thì đặt …-bo2, -bo3 (web giữ bài giảng tệp đầu, câu luyện tập thành Bộ 2, 3)."""
+    import json
+    files = sorted(f for f in glob.glob(os.path.join(inbox, '*.json')) if os.path.isfile(f))
+    done, n = os.path.join(inbox, 'Đã đưa lên'), 0
+    for f in files:
+        name = os.path.basename(f); print(f'   • {name}')
+        try: j = json.load(open(f, encoding='utf-8'))
+        except Exception as e: print(f'     ✗ không đọc được JSON: {e}'); continue
+        if not isinstance(j, dict) or j.get('loai', 'bai_hoc') != 'bai_hoc' or not j.get('lop') or not j.get('bai'):
+            print('     bỏ qua: không phải bài giảng (cần "loai":"bai_hoc", "lop", "bai")'); continue
+        j['loai'] = 'bai_hoc'
+        goc = f"bai-hoc-l{int(j['lop'])}-b{int(j['bai']):02d}"
+        dst, k = os.path.join('nhap', goc + '.json'), 1
+        while os.path.exists(dst):
+            if json.load(open(dst, encoding='utf-8')) == j: dst = None; break
+            k += 1; dst = os.path.join('nhap', f'{goc}-bo{k}.json')
+        if dst is None: print('     đã có y hệt trong nhap/ – bỏ qua')
+        else:
+            json.dump(j, open(dst, 'w', encoding='utf-8'), ensure_ascii=False, indent=1); n += 1
+            print(f'     → {dst}' + (f' (bài đã có → Bộ {k})' if k > 1 else ''))
+        os.makedirs(done, exist_ok=True)
+        d2 = os.path.join(done, name)
+        if os.path.exists(d2): d2 = os.path.join(done, f'{os.path.splitext(name)[0]}-{datetime.datetime.now():%Y%m%d-%H%M}.json')
+        shutil.move(f, d2)
+    return n
 
 
 def nhan_html(inbox, khong_hoi):
@@ -84,9 +114,9 @@ def main():
         r = run(['git', 'pull', '--rebase', '--autostash', 'origin', 'main'])
         if r.returncode: raise SystemExit('✗ Không lấy được bản mới (mạng, hoặc hai nơi cùng sửa một chỗ). Chưa đẩy gì. Nhờ Claude: "git pull bị lỗi".')
 
-    buoc(2, 'Gắn các trang HTML mới vào bài học')
+    buoc(2, 'Gắn các trang HTML mới vào bài học, nhận tệp bài giảng .json')
     if a.chi_kiem: print('   (chỉ kiểm – bỏ qua)')
-    else: nhan_html(a.inbox, a.khong_hoi)
+    else: nhan_html(a.inbox, a.khong_hoi); nhan_json(a.inbox)
 
     buoc(3, 'Nhập dữ liệu AI trong nhap/')
     if glob.glob('nhap/*.json') or glob.glob('nhap/*.md') or glob.glob('nhap/*.txt'):

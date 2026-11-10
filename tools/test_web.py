@@ -309,6 +309,18 @@ async def main():
         if (n_btn, on0, n0, n1, b2, n2, uu, ph) != (4, 'ngau', 18, 11, True, 22, True, [True, 18, 6]):
             fails.append(f'luyện tập nhiều bộ / ngẫu nhiên: {n_btn, on0, n0, n1, b2, n2, uu, ph}')
         await pg.evaluate("localStorage.removeItem((CONFIG.storeKey || 'vao10') + ':bh:bo:10-1')"); await pg.goto(base + '#/'); await pg.reload(); await pg.wait_for_timeout(300)
+        # Trình soạn thảo bài học → web: trang #/xuong/nhan nhận bài qua postMessage từ cửa sổ đã mở nó; hình SVG lọc script/on…
+        j3 = _j.loads(mau); j3.pop('mau', None)
+        j3['trac_nghiem'][0]['cau'] += ' [[svg:h1]]'; j3['trac_nghiem'][0]['figures'] = [{'id': 'h1', 'svg': '<svg viewBox="0 0 10 10" onload="x()"><circle r="4" cx="5" cy="5"/><script>x()</script></svg>'}]
+        async with pg.context.expect_page() as npg:
+            await pg.evaluate("j => { window.__w = window.open(location.href.split('#')[0] + '#/xuong/nhan/1', 'cdtt-web'); window.addEventListener('message', ev => { if (ev.data && ev.data.type === 'cdtt-san-sang') ev.source.postMessage({ type: 'cdtt-bai-hoc', json: j }, '*'); if (ev.data && ev.data.type === 'cdtt-da-nhan') window.__nhan = 1; }); }", j3)
+        w2 = await npg.value; await w2.wait_for_timeout(1200)
+        g1 = await w2.locator('#gOut .chips').inner_text() if await w2.locator('#gOut .chips').count() else ''
+        nhan = await pg.evaluate('window.__nhan || 0')
+        hinh = await pg.evaluate("j => { const q = NhapDL.bhEntry(j, 'x').tn[0].q; return [q.includes('<circle'), /onload|<script/i.test(q)]; }", j3)
+        if 'Đúng mẫu' not in g1 or not nhan or hinh != [True, False] or not await w2.locator('#gTC').count():
+            fails.append(f'nhận bài từ Trình soạn thảo: {g1!r}, {nhan}, {hinh}')
+        await w2.close()
         for i in ids:
             # Trắc nghiệm: chọn phương án A mọi câu, điểm phải bằng số câu chọn đúng.
             await pg.goto(base + f'#/cd/{i}/hieu'); await pg.wait_for_timeout(200)

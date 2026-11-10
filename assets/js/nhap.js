@@ -244,18 +244,18 @@ const NhapDL = (() => {
         if (!q.cau) errs.push(`${w}: thiếu "cau"`);
         if (pa.length !== 4 || new Set(pa).size !== 4) errs.push(`${w}: cần đúng 4 phương án khác nhau`);
         if (dapIdx(q, pa) < 0) errs.push(`${w}: "dap_an" phải là A, B, C hoặc D`);
-        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); kiemHinh(q, w, warns); fps.push([w, fp(q.cau)]); });
       ds.forEach((q, i) => { const w = `Đúng – sai câu ${i + 1}`, y = Array.isArray(q.y) ? q.y : [];
         if (!q.cau) errs.push(`${w}: thiếu "cau" (lời dẫn)`);
         if (y.length !== 4) errs.push(`${w}: cần đúng 4 ý a, b, c, d (đang có ${y.length})`);
         y.forEach((x, k) => { if (!x.noi_dung) errs.push(`${w} ý ${'abcd'[k]}: thiếu "noi_dung"`); if (boolOf(x.dung) === null) errs.push(`${w} ý ${'abcd'[k]}: "dung" phải là true hoặc false`); });
         if (y.length === 4 && y.every(x => boolOf(x.dung) === boolOf(y[0].dung))) warns.push(`${w}: cả 4 ý cùng ${boolOf(y[0].dung) ? 'Đúng' : 'Sai'} – nên có cả ý đúng và ý sai`);
-        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); kiemHinh(q, w, warns); fps.push([w, fp(q.cau)]); });
       tl.forEach((q, i) => { const w = `Trả lời ngắn câu ${i + 1}`, a = String(q.dap_an ?? '').trim();
         if (!q.cau) errs.push(`${w}: thiếu "cau"`);
         if (!a || isNaN(numVN(a))) errs.push(`${w}: "dap_an" phải là MỘT số (ví dụ "2,5", "-3", "0,25"), đang là ${JSON.stringify(q.dap_an)}`);
         else if (a.replace(/^-/, '').length > 4) warns.push(`${w}: đáp số "${a}" dài hơn 4 kí tự – đề thi THPT chỉ ghi được 4 kí tự, nên yêu cầu làm tròn`);
-        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); fps.push([w, fp(q.cau)]); });
+        if (!q.giai_thich) warns.push(`${w}: thiếu "giai_thich"`); kiemHinh(q, w, warns); fps.push([w, fp(q.cau)]); });
       fps.forEach(([w, f], i) => { if (f && fps.findIndex(x => x[1] === f) < i) errs.push(`${w}: trùng với một câu khác`); });
       const n = tn.length + ds.length + tl.length;
       return { loai, errs, warns, n, ten: `Bài giảng – luyện tập Toán ${lop} – Bài ${bai}${sgk ? '. ' + sgk.ten : ''} (${n} câu)`, id: `${lop}-${bai}`, lop, bai };
@@ -304,6 +304,26 @@ const NhapDL = (() => {
       phan: (j.phan || []).map(p => ({ muc: norm(p.muc), phut: +p.phut, bai: (p.bai || []).map(b => ({ so: ++so, de: norm(b.de), f: fp(b.de),
         nguon: norm(b.nguon), can: norm(b.can_nho), goi: norm(b.goi_y), dap: norm(b.dap_so), lg: lg(b.loi_giai), dong: +b.dong_ke || 6 })) })) };
   }
+  /* Hình SVG kèm câu hỏi (Trình soạn thảo bài học: "figures":[{"id":"hinh1","svg":"<svg…>"}], trong lời đề ghi [[svg:hinh1]]).
+     Chỉ nhận mã bắt đầu <svg, bỏ script, foreignObject, thuộc tính on…, liên kết javascript:. Hình không có chỗ [[svg:…]] thì đặt sau lời đề. */
+  function svgSach(x) {
+    const t = String(x || '').trim();
+    if (!/^<svg[\s>]/i.test(t) || !/<\/svg>$/i.test(t)) return '';
+    return t.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '')
+      .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '').replace(/((?:xlink:)?href\s*=\s*["']?)\s*javascript:/gi, '$1#');
+  }
+  function ganHinh(html, figs) {
+    const F = (Array.isArray(figs) ? figs : []).map(f => ({ id: String((f && f.id) || '').trim(), svg: svgSach(f && f.svg) })).filter(f => f.svg);
+    const da = new Set();
+    html = String(html).replace(/\[\[\s*svg\s*:\s*([\w-]+)\s*\]\]/gi, (m, id) => { const f = F.find(x => x.id === id); if (!f) return ''; da.add(id); return `<span class="bh-hinh">${f.svg}</span>`; });
+    const con = F.filter(f => !da.has(f.id));
+    return html + (con.length ? `<span class="bh-hinh-ds">${con.map(f => `<span class="bh-hinh">${f.svg}</span>`).join('')}</span>` : '');
+  }
+  function kiemHinh(q, w, warns) {
+    const F = Array.isArray(q.figures) ? q.figures : [];
+    F.forEach((f, k) => { if (f && String(f.svg || '').trim() && !svgSach(f.svg)) warns.push(`${w}: hình ${k + 1}${f.id ? ` "${f.id}"` : ''} không phải mã SVG trọn vẹn (<svg …>…</svg>) – web bỏ hình này`); });
+    String(q.cau || '').replace(/\[\[\s*svg\s*:\s*([\w-]+)\s*\]\]/gi, (m, id) => { if (!F.some(f => f && f.id === id && svgSach(f.svg))) warns.push(`${w}: lời đề có [[svg:${id}]] nhưng không có hình "${id}"`); return m; });
+  }
   function bhEntry(j, src) {
     const lg = x => (Array.isArray(x) ? x : String(x || '').split(/\n+/)).map(y => norm(typeof y === 'object' ? (y.buoc ?? y.noi_dung ?? '') : y)).filter(Boolean);
     const sgk = typeof BaiHoc !== 'undefined' ? BaiHoc.baiOf(+j.lop, +j.bai) : null;
@@ -313,9 +333,9 @@ const NhapDL = (() => {
         vd: (m.vi_du || []).map(v => ({ de: normBlock(v.de), lg: lg(v.loi_giai), ds: norm(v.dap_so) })) })),
       tn: (j.trac_nghiem || []).map(q => { const pa = q.phuong_an.map(x => String(x).replace(/^\s*[A-D][.)]\s+/, '')), k = dapIdx(q, pa);
         return { q: normBlock(q.cau), a: [pa[k], ...pa.filter((_, i) => i !== k)].map(x => norm(x)), goc: [k, ...[0, 1, 2, 3].filter(i => i !== k)],
-          why: norm(q.giai_thich), muc: q.muc || '' }; }),
-      ds: (j.dung_sai || []).map(q => ({ q: normBlock(q.cau), y: q.y.map(x => [norm(x.noi_dung).replace(/^[a-d]\)\s*/, ''), boolOf(x.dung)]), why: normBlock(q.giai_thich) })),
-      tln: (j.tra_loi_ngan || []).map(q => ({ q: normBlock(q.cau), ans: String(q.dap_an).trim(), why: normBlock(q.giai_thich) })) };
+          why: norm(q.giai_thich), muc: q.muc || '' }; }).map((x, i) => ({ ...x, q: ganHinh(x.q, j.trac_nghiem[i].figures) })),
+      ds: (j.dung_sai || []).map(q => ({ q: ganHinh(normBlock(q.cau), q.figures), y: q.y.map(x => [norm(x.noi_dung).replace(/^[a-d]\)\s*/, ''), boolOf(x.dung)]), why: normBlock(q.giai_thich) })),
+      tln: (j.tra_loi_ngan || []).map(q => ({ q: ganHinh(normBlock(q.cau), q.figures), ans: String(q.dap_an).trim(), why: normBlock(q.giai_thich) })) };
   }
   function apply(j, src) {
     const r = check(j);
@@ -342,8 +362,8 @@ const NhapDL = (() => {
       items.push({ json: x.json, src: 'may-nay', key: x.key, r: apply(x.json, 'may-nay') });
     });
   }
-  function saveLocal(j) {
-    const r = check(j), key = r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : r.loai === 'bai_hoc' ? `bh-${+j.lop}-${+j.bai}-${hashOf(JSON.stringify([j.trac_nghiem, j.dung_sai, j.tra_loi_ngan]))}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
+  function saveLocal(j, khoa) {
+    const r = check(j), key = khoa ? khoa : r.loai === 'de_van' ? `van-${j.ma_de}` : r.loai === 'on_tap_toan' ? `ontap-${j.ma}` : r.loai === 'bai_hoc' ? `bh-${+j.lop}-${+j.bai}-${hashOf(JSON.stringify([j.trac_nghiem, j.dung_sai, j.tra_loi_ngan]))}` : `toan-${String(j.bai).toLowerCase()}-${Date.now()}`;
     const a = local().filter(x => x.key !== key); a.push({ key, json: j, luc: new Date().toISOString() }); U.set(LKEY, a);
     return key;
   }

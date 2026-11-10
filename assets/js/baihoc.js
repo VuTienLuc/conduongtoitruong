@@ -185,6 +185,9 @@ const BaiHoc = (() => {
     if (e && $('#bhTC')) $('#bhTC').addEventListener('click', () => TrinhChieu.mo(deTrinhChieu(e), tab === 'luyen' ? 'luyen' : 'giang'));
     if (!e) { paneTrong(lop, b, pane); return ttMount(lop, b.so, pane); }
     if (tab === 'phieu') panePhieu(e, pane); else if (tab === 'luyen') paneLuyen(e, pane); else { paneGiang(e, pane); ttMount(lop, b.so, pane); }
+    // vừa nhận bài từ Trình soạn thảo và bấm "Lưu & trình chiếu ngay" → mở trình chiếu luôn (bấm F hoặc ⛶ để toàn màn hình)
+    let tu = null; try { tu = sessionStorage.getItem('bh:tc-tu-dong'); } catch (er) { /* bỏ qua */ }
+    if (tu === `${lop}-${so}` && typeof TrinhChieu !== 'undefined') { try { sessionStorage.removeItem('bh:tc-tu-dong'); } catch (er) { /* bỏ qua */ } setTimeout(() => { TrinhChieu.mo(deTrinhChieu(e), 'giang'); U.toast('Bấm F hoặc ⛶ để chiếu toàn màn hình'); }, 50); }
   }
   // Trình chiếu, trò chơi HTML của bài: khung 16:9 ở đầu tab Bài giảng, nút toàn màn hình, mở tab mới.
   // Toàn màn hình áp cho cả khung (không chỉ iframe) để hiện được bộ công cụ mở nhanh ở góc dưới phải.

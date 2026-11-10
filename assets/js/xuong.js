@@ -303,6 +303,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
         <li><b>Đưa lên hệ thống cho mọi học sinh:</b> bấm <i>Tải tệp chuẩn</i>, chép tệp vào thư mục <code>nhap/</code> của dự án rồi chạy <code>python3 tools/nhap-du-lieu.py</code> (hoặc nhắn Claude "nhập dữ liệu mới"), đẩy lên GitHub.</li></ol></section>
       <div class="two"><a class="card link-card" href="#/xuong/prompt"><span class="big">🧾</span><b>Menu prompt</b><span>Ngữ văn vào 10 · Toán luyện đề theo bài · Phiếu ôn tập 90 phút · Bài giảng lớp 9–12</span></a>
         <a class="card link-card" href="#/xuong/nhap"><span class="big">📥</span><b>Nhập dữ liệu</b><span>Dán câu trả lời AI hoặc kéo tệp .json</span></a></div>
+      ${/^https?:$/.test(location.protocol) ? `<div class="two"><a class="card link-card" href="cong-cu/soan-bai-hoc.html" target="_blank" rel="noopener"><span class="big">✏️</span><b>Trình soạn thảo bài học</b><span>Soạn, quản lý JSON bài giảng, đồng bộ Google Sheets, đưa bài lên web để trình chiếu</span></a></div>` : ''}
       <h2 class="sec">Đã lưu trên máy này (${loc.length})</h2>
       ${loc.length ? `<div class="card"><ul class="xw-list">${loc.map(x => { const r = NhapDL.check(x.json); return `<li><b>${esc(r.ten || x.key)}</b> <span class="muted">${new Date(x.luc).toLocaleString('vi-VN')}</span>
         <button class="btn ghost" type="button" data-dl="${esc(x.key)}">⬇️ Tải tệp chuẩn</button><button class="btn ghost" type="button" data-rm="${esc(x.key)}">🗑️ Xoá</button></li>`; }).join('')}</ul></div>`
@@ -470,9 +471,45 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
     dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('on'); if (e.dataTransfer.files.length) readFiles(e.dataTransfer.files); });
   }
 
+  /* ---------- Nhận bài từ Trình soạn thảo bài học (cong-cu/soan-bai-hoc.html) ----------
+     Trình soạn thảo mở trang này (#/xuong/nhan) trong cửa sổ mới; trang báo "cdtt-san-sang" cho cửa sổ mở nó, nhận
+     { type:'cdtt-bai-hoc', json } rồi kiểm, cho xem trước. Chỉ nhận từ đúng cửa sổ đã mở trang; phải bấm Lưu mới ghi.
+     Bài gửi từ trình soạn thảo lưu khoá cố định bh-gui-<lớp>-<bài>: gửi lại bản sửa thì thay bản trước (không thành bộ mới). */
+  let ngheGui = null;
+  function nhanPage() {
+    view().innerHTML = shell('#/xuong', `<section class="card hero"><h2>📽️ Nhận bài từ Trình soạn thảo</h2>
+      <p id="gStt">${window.opener ? '⏳ Đang chờ bài gửi sang…' : 'Trang này nhận bài khi thầy bấm <b>📽️ Đưa lên web</b> trong Trình soạn thảo bài học.'}</p></section><div id="gOut"></div>`);
+    if (ngheGui) window.removeEventListener('message', ngheGui);
+    ngheGui = ev => {
+      const d = ev.data;
+      if (!d || d.type !== 'cdtt-bai-hoc' || !window.opener || ev.source !== window.opener || !d.json || typeof d.json !== 'object' || !$i('gOut')) return;
+      try { ev.source.postMessage({ type: 'cdtt-da-nhan' }, ev.origin === 'null' ? '*' : ev.origin); } catch (e) { /* bỏ qua */ }
+      const j = { loai: 'bai_hoc', ...d.json }, r = NhapDL.check(j);
+      $i('gStt').innerHTML = `Đã nhận: <b>${esc(r.ten || 'bài học')}</b> – ${new Date().toLocaleTimeString('vi-VN')}`;
+      $i('gOut').innerHTML = `<div class="card xw-res ${r.errs.length ? 'bad' : 'ok'}">
+        <p class="chips"><span class="chip ${r.errs.length ? 'warnc' : 'ok'}">${r.errs.length ? `${r.errs.length} lỗi` : 'Đúng mẫu ✓'}</span>${r.warns.length ? `<span class="chip">${r.warns.length} lưu ý</span>` : ''}</p>
+        ${r.errs.length ? '' : r.loai === 'bai_hoc' && !NhapDL.local().some(x => x.key === `bh-gui-${r.lop}-${r.bai}`) ? trungHTML(j) : ''}
+        ${r.errs.length ? `<ul class="xw-err">${r.errs.map(x => `<li>✗ ${esc(x)}</li>`).join('')}</ul><p>Sửa trong Trình soạn thảo rồi bấm <b>Đưa lên web</b> lần nữa – trang này nhận lại bản mới.</p>` : ''}
+        ${r.warns.length ? `<details><summary>${r.warns.length} lưu ý</summary><ul class="xw-warn">${r.warns.map(x => `<li>! ${esc(x)}</li>`).join('')}</ul></details>` : ''}
+        ${r.errs.length || r.loai !== 'bai_hoc' ? '' : `<div class="row"><button class="btn primary" type="button" id="gTC">📽️ Lưu &amp; trình chiếu ngay</button><button class="btn" type="button" id="gMo">💾 Lưu &amp; mở bài</button><button class="btn" type="button" id="gDl">⬇️ Tải tệp chuẩn (đăng cho mọi học sinh)</button></div>
+          <p class="muted small">Lưu trên trình duyệt này (máy chiếu ở lớp). Gửi lại bản sửa của cùng bài thì thay bản trước. Muốn mọi học sinh thấy: tải tệp chuẩn, thả vào thư mục <i>Con đường tới trường (Thả HTML Vào Đây)</i> trên Desktop rồi bấm lệnh <i>Đăng Con đường tới trường lên web</i>.</p>
+          <details class="xw-pre"><summary>Xem trước</summary><div class="paper-wrap" id="gPre"></div></details>`}</div>`;
+      if (r.errs.length || r.loai !== 'bai_hoc') return;
+      $i('gPre').innerHTML = previewHTML(j, r);
+      const luu = tc => { NhapDL.saveLocal(j, `bh-gui-${r.lop}-${r.bai}`); if (tc) try { sessionStorage.setItem('bh:tc-tu-dong', `${r.lop}-${r.bai}`); } catch (e) { /* bỏ qua */ }
+        U.toast(tc ? 'Đã lưu. Đang mở trình chiếu…' : 'Đã lưu trên máy này. Đang mở bài…');
+        setTimeout(() => { history.replaceState(null, '', `#/bai-hoc/${r.lop}/${r.bai}`); location.reload(); }, 400); };   // replaceState: không phát hashchange trước khi tải lại
+      $i('gTC').addEventListener('click', () => luu(true));
+      $i('gMo').addEventListener('click', () => luu(false));
+      $i('gDl').addEventListener('click', () => download(NhapDL.fileName(j), JSON.stringify(j, null, 1)));
+    };
+    window.addEventListener('message', ngheGui);
+    if (window.opener) try { window.opener.postMessage({ type: 'cdtt-san-sang' }, '*'); } catch (e) { /* bỏ qua */ }
+  }
+
   function route(parts) {
     if (parts[0] !== 'xuong') return false;
-    if (parts[1] === 'prompt') promptPage(); else if (parts[1] === 'nhap') nhapPage(); else home();
+    if (parts[1] === 'prompt') promptPage(); else if (parts[1] === 'nhap') nhapPage(); else if (parts[1] === 'nhan') nhanPage(); else home();
     return true;
   }
   return { route, HD_VAN, HD_TOAN, HD_ONTAP, HD_BAIHOC, MAU_VAN, MAU_TOAN, MAU_ONTAP, MAU_MD_ONTAP, MAU_BAIHOC, SUA, lenhVan, lenhToan, lenhOnTap, lenhBaiHoc };

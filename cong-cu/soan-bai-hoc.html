@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình Soạn Thảo Bài Học</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .slide-enter-active, .slide-leave-active { transition: all 0.3s ease; }
+        .slide-enter-from, .slide-leave-to { opacity: 0; transform: translateY(-20px); }
+        /* CSS cho vùng hiển thị hình ảnh SVG */
+        .svg-container svg { max-width: 100%; max-height: 150px; width: auto; height: auto; }
+    </style>
+</head>
+<body>
+    <div id="app" class="min-h-screen pb-24">
+        <!-- Toast Notifications -->
+        <div class="fixed top-4 right-4 z-50 flex flex-col gap-2">
+            <transition-group name="slide">
+                <div v-for="toast in toasts" :key="toast.id" 
+                     class="px-4 py-3 rounded-lg shadow-lg text-white flex items-center gap-3 min-w-[250px]"
+                     :class="toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'">
+                    <i class="fas" :class="toast.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+                    <span>{{ toast.message }}</span>
+                </div>
+            </transition-group>
+        </div>
+
+        <!-- Header (Sticky) -->
+        <header class="bg-white shadow-sm sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 text-white p-2 rounded-lg">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-gray-800 hidden sm:block">Trình Soạn Thảo Bài Học Toán</h1>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button @click="autoFormatLatex" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium shadow transition flex items-center gap-2" title="Tự động sửa lỗi và làm đẹp công thức LaTeX">
+                        <i class="fas fa-magic"></i> <span class="hidden md:inline">Chuẩn hoá LaTeX</span>
+                    </button>
+                    <button @click="showLib = true" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium shadow transition flex items-center gap-2" title="Thư viện bài đã soạn trên máy này: mở, lưu, kiểm tra, nhập/xuất nhiều tệp, đưa lên web">
+                        <i class="fas fa-folder-open"></i> <span class="hidden md:inline">Quản lý JSON</span>
+                    </button>
+                    <button @click="openCloudModal" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow transition flex items-center gap-2">
+                        <i class="fas fa-cloud"></i> <span class="hidden md:inline">Lưu / Tải Cloud</span>
+                    </button>
+                    <input type="file" ref="fileInput" @change="importJSON" accept=".json" class="hidden">
+                    <button @click="$refs.fileInput.click()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition flex items-center gap-2">
+                        <i class="fas fa-file-import"></i> <span class="hidden md:inline">Nhập JSON</span>
+                    </button>
+                    <button @click="exportJSON" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow transition flex items-center gap-2">
+                        <i class="fas fa-file-export"></i> <span class="hidden md:inline">Xuất JSON</span>
+                    </button>
+                    <button @click="exportExamJSON" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-medium shadow transition flex items-center gap-2" title="Xuất ra cấu trúc Đề Thi (math-exam-v1)">
+                        <i class="fas fa-file-code"></i> <span class="hidden md:inline">Xuất Đề Thi</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
+            <!-- 1. THÔNG TIN CHUNG -->
+            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
+                    <i class="fas fa-info-circle text-blue-500"></i> Thông Tin Chung
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Loại</label>
+                        <input v-model="data.loai" type="text" class="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Lớp</label>
+                        <input v-model.number="data.lop" type="number" class="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Bài số</label>
+                        <input v-model.number="data.bai" type="number" class="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div class="md:col-span-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tên bài</label>
+                        <input v-model="data.ten_bai" type="text" class="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div class="md:col-span-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nguồn (Sách)</label>
+                        <input v-model="data.nguon" type="text" class="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. MỤC TIÊU & CẦN NHỚ -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Mục tiêu -->
+                <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-bullseye text-red-500"></i> Mục Tiêu
+                        </h2>
+                        <button @click="addStringItem(data.muc_tieu)" class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-md hover:bg-blue-100 font-medium">
+                            <i class="fas fa-plus"></i> Thêm
+                        </button>
+                    </div>
+                    <div class="space-y-2">
+                        <div v-for="(item, idx) in data.muc_tieu" :key="'mt'+idx" class="flex gap-2">
+                            <textarea v-model="data.muc_tieu[idx]" rows="2" class="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-y"></textarea>
+                            <button @click="removeStringItem(data.muc_tieu, idx)" class="text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <p v-if="data.muc_tieu.length === 0" class="text-gray-400 text-sm italic">Chưa có mục tiêu nào.</p>
+                    </div>
+                </section>
+
+                <!-- Cần nhớ -->
+                <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-yellow-500"></i> Kiến Thức Cần Nhớ
+                        </h2>
+                        <button @click="addStringItem(data.can_nho)" class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-md hover:bg-blue-100 font-medium">
+                            <i class="fas fa-plus"></i> Thêm
+                        </button>
+                    </div>
+                    <div class="space-y-2">
+                        <div v-for="(item, idx) in data.can_nho" :key="'cn'+idx" class="flex gap-2">
+                            <textarea v-model="data.can_nho[idx]" rows="2" class="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-y"></textarea>
+                            <button @click="removeStringItem(data.can_nho, idx)" class="text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <p v-if="data.can_nho.length === 0" class="text-gray-400 text-sm italic">Chưa có ghi chú nào.</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 3. BÀI GIẢNG -->
+            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-chalkboard-teacher text-green-600"></i> Nội Dung Bài Giảng
+                    </h2>
+                    <button @click="addBaiGiang" class="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-md hover:bg-green-100 font-medium border border-green-200">
+                        <i class="fas fa-plus"></i> Thêm phần bài giảng
+                    </button>
+                </div>
+
+                <div class="space-y-6">
+                    <div v-for="(bg, bgIdx) in data.bai_giang" :key="'bg'+bgIdx" class="bg-gray-50 p-4 rounded-lg border border-gray-200 relative">
+                        <button @click="data.bai_giang.splice(bgIdx, 1)" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                        
+                        <div class="grid gap-4 mb-4 pr-8">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tiêu đề phần</label>
+                                <input v-model="bg.tieu_de" type="text" class="w-full rounded-md border border-gray-300 p-2 font-bold focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nội dung (hỗ trợ LaTeX, Markdown)</label>
+                                <textarea v-model="bg.noi_dung" rows="4" class="w-full rounded-md border border-gray-300 p-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Lưu ý (Tùy chọn)</label>
+                                <textarea v-model="bg.luu_y" rows="2" class="w-full rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Ví dụ của bài giảng -->
+                        <div class="ml-4 pl-4 border-l-2 border-blue-200 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-semibold text-gray-700 text-sm">Các Ví Dụ:</h4>
+                                <button @click="addViDu(bg)" class="text-xs bg-white border border-gray-300 text-gray-600 px-2 py-1 rounded hover:bg-gray-100">
+                                    <i class="fas fa-plus"></i> Thêm ví dụ
+                                </button>
+                            </div>
+                            
+                            <div v-for="(vd, vdIdx) in bg.vi_du" :key="'vd'+bgIdx+'-'+vdIdx" class="bg-white p-4 rounded border border-gray-200 shadow-sm relative">
+                                <button @click="bg.vi_du.splice(vdIdx, 1)" class="absolute top-2 right-2 text-red-400 hover:text-red-600">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                                <div class="grid gap-3 pr-6">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-500 mb-1">Đề bài</label>
+                                        <textarea v-model="vd.de" rows="2" class="w-full rounded-md border border-gray-300 p-2 text-sm outline-none"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-500 mb-1 flex justify-between">
+                                            <span>Các bước giải</span>
+                                            <button @click="addStringItem(vd.loi_giai)" class="text-blue-500 hover:underline">Thêm bước giải</button>
+                                        </label>
+                                        <div class="space-y-1">
+                                            <div v-for="(lg, lgIdx) in vd.loi_giai" :key="'lg'+lgIdx" class="flex gap-1">
+                                                <span class="text-gray-400 text-xs mt-2">{{lgIdx + 1}}.</span>
+                                                <input v-model="vd.loi_giai[lgIdx]" type="text" class="w-full rounded border border-gray-200 p-1.5 text-sm outline-none">
+                                                <button @click="removeStringItem(vd.loi_giai, lgIdx)" class="text-red-400 px-1"><i class="fas fa-times"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-500 mb-1">Đáp số</label>
+                                        <input v-model="vd.dap_so" type="text" class="w-full rounded-md border border-gray-300 p-2 text-sm outline-none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p v-if="data.bai_giang.length === 0" class="text-gray-400 text-center py-4">Chưa có nội dung bài giảng nào.</p>
+                </div>
+            </section>
+
+            <!-- 4. TRẮC NGHIỆM -->
+            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                 <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-list-ul text-purple-500"></i> Bài Tập Trắc Nghiệm (4 lựa chọn)
+                    </h2>
+                    <button @click="addTracNghiem" class="text-sm bg-purple-50 text-purple-700 px-3 py-1 rounded-md hover:bg-purple-100 font-medium border border-purple-200">
+                        <i class="fas fa-plus"></i> Thêm câu hỏi
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div v-for="(tn, idx) in data.trac_nghiem" :key="'tn'+idx" class="bg-gray-50 p-4 rounded-lg border border-gray-200 relative">
+                        <button @click="data.trac_nghiem.splice(idx, 1)" class="absolute top-2 right-2 text-red-400 hover:text-red-600">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <div class="grid gap-4 pr-6">
+                            <div class="flex gap-4 items-start">
+                                <span class="bg-purple-100 text-purple-800 font-bold px-2 py-1 rounded text-sm shrink-0">Câu {{idx + 1}}</span>
+                                <textarea v-model="tn.cau" rows="2" placeholder="Nội dung câu hỏi..." class="w-full rounded-md border border-gray-300 p-2 text-sm outline-none"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-12">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-gray-500 w-6">A.</span>
+                                    <input v-model="tn.phuong_an[0]" type="text" class="w-full rounded border border-gray-300 p-1.5 text-sm">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-gray-500 w-6">B.</span>
+                                    <input v-model="tn.phuong_an[1]" type="text" class="w-full rounded border border-gray-300 p-1.5 text-sm">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-gray-500 w-6">C.</span>
+                                    <input v-model="tn.phuong_an[2]" type="text" class="w-full rounded border border-gray-300 p-1.5 text-sm">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-gray-500 w-6">D.</span>
+                                    <input v-model="tn.phuong_an[3]" type="text" class="w-full rounded border border-gray-300 p-1.5 text-sm">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pl-12">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-1">Đáp án đúng</label>
+                                    <select v-model="tn.dap_an" class="w-full rounded border border-gray-300 p-1.5 text-sm outline-none bg-white">
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 mb-1">Mức độ</label>
+                                    <select v-model="tn.muc" class="w-full rounded border border-gray-300 p-1.5 text-sm outline-none bg-white">
+                                        <option value="NB">Nhận biết (NB)</option>
+                                        <option value="TH">Thông hiểu (TH)</option>
+                                        <option value="VD">Vận dụng (VD)</option>
+                                        <option value="VDC">Vận dụng cao (VDC)</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-3">
+                                    <label class="block text-xs font-bold text-gray-500 mb-1">Giải thích</label>
+                                    <textarea v-model="tn.giai_thich" rows="2" class="w-full rounded border border-gray-300 p-2 text-sm outline-none"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- KHU VỰC HÌNH ẢNH SVG (Trắc Nghiệm) -->
+                            <div class="pl-12 mt-3 pt-3 border-t border-gray-100">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-gray-500"><i class="fas fa-image text-blue-500"></i> Hình ảnh SVG (Mã: [[svg:hinh_id]])</span>
+                                    <button @click="addFigure(tn)" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded transition"><i class="fas fa-plus"></i> Thêm hình</button>
+                                </div>
+                                <div v-for="(fig, fIdx) in tn.figures" :key="'fig'+fIdx" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2 p-2 bg-white rounded border border-gray-200 relative">
+                                    <button @click="removeFigure(tn, fIdx)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 bg-white rounded-full p-1"><i class="fas fa-times"></i></button>
+                                    <div class="pr-4">
+                                        <input v-model="fig.id" type="text" placeholder="ID (vd: hinh1)" class="w-full rounded border border-gray-300 p-1.5 text-xs mb-2 font-mono">
+                                        <textarea v-model="fig.svg" rows="3" placeholder="<svg>...</svg>" class="w-full rounded border border-gray-300 p-1.5 text-xs font-mono outline-none"></textarea>
+                                    </div>
+                                    <div class="flex items-center justify-center bg-gray-50 border border-gray-200 rounded p-1 overflow-hidden" style="min-height: 100px;">
+                                        <div v-html="fig.svg" class="w-full h-full flex justify-center items-center svg-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- KẾT THÚC HÌNH ẢNH -->
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. TRẮC NGHIỆM ĐÚNG / SAI -->
+            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-check-double text-teal-500"></i> Bài Tập Đúng / Sai
+                    </h2>
+                    <button @click="addDungSai" class="text-sm bg-teal-50 text-teal-700 px-3 py-1 rounded-md hover:bg-teal-100 font-medium border border-teal-200">
+                        <i class="fas fa-plus"></i> Thêm câu hỏi
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <div v-for="(ds, idx) in data.dung_sai" :key="'ds'+idx" class="bg-gray-50 p-4 rounded-lg border border-gray-200 relative">
+                         <button @click="data.dung_sai.splice(idx, 1)" class="absolute top-2 right-2 text-red-400 hover:text-red-600">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <div class="grid gap-4 pr-6">
+                            <div class="flex gap-4 items-start">
+                                <span class="bg-teal-100 text-teal-800 font-bold px-2 py-1 rounded text-sm shrink-0">Câu {{idx + 1}}</span>
+                                <textarea v-model="ds.cau" rows="2" placeholder="Nội dung câu hỏi gốc..." class="w-full rounded-md border border-gray-300 p-2 text-sm outline-none"></textarea>
+                            </div>
+                            
+                            <div class="pl-12 space-y-2">
+                                <label class="block text-xs font-bold text-gray-500">Các ý a, b, c, d:</label>
+                                <div v-for="(y, yIdx) in ds.y" :key="'y'+idx+'-'+yIdx" class="flex gap-2 items-center">
+                                    <span class="font-bold text-gray-500 w-4">{{ ['a', 'b', 'c', 'd'][yIdx] }})</span>
+                                    <input v-model="y.noi_dung" type="text" class="flex-1 rounded border border-gray-300 p-1.5 text-sm outline-none">
+                                    <select v-model="y.dung" class="rounded border border-gray-300 p-1.5 text-sm font-semibold outline-none" :class="y.dung ? 'text-green-600' : 'text-red-600'">
+                                        <option :value="true">Đúng</option>
+                                        <option :value="false">Sai</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="pl-12">
+                                <label class="block text-xs font-bold text-gray-500 mb-1">Giải thích chung</label>
+                                <textarea v-model="ds.giai_thich" rows="2" class="w-full rounded border border-gray-300 p-2 text-sm outline-none"></textarea>
+                            </div>
+
+                            <!-- KHU VỰC HÌNH ẢNH SVG (Đúng Sai) -->
+                            <div class="pl-12 mt-3 pt-3 border-t border-gray-100">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-gray-500"><i class="fas fa-image text-blue-500"></i> Hình ảnh SVG (Mã: [[svg:hinh_id]])</span>
+                                    <button @click="addFigure(ds)" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded transition"><i class="fas fa-plus"></i> Thêm hình</button>
+                                </div>
+                                <div v-for="(fig, fIdx) in ds.figures" :key="'figds'+fIdx" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2 p-2 bg-white rounded border border-gray-200 relative">
+                                    <button @click="removeFigure(ds, fIdx)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 bg-white rounded-full p-1"><i class="fas fa-times"></i></button>
+                                    <div class="pr-4">
+                                        <input v-model="fig.id" type="text" placeholder="ID (vd: hinh1)" class="w-full rounded border border-gray-300 p-1.5 text-xs mb-2 font-mono">
+                                        <textarea v-model="fig.svg" rows="3" placeholder="<svg>...</svg>" class="w-full rounded border border-gray-300 p-1.5 text-xs font-mono outline-none"></textarea>
+                                    </div>
+                                    <div class="flex items-center justify-center bg-gray-50 border border-gray-200 rounded p-1 overflow-hidden" style="min-height: 100px;">
+                                        <div v-html="fig.svg" class="w-full h-full flex justify-center items-center svg-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- KẾT THÚC HÌNH ẢNH -->
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. TRẢ LỜI NGẮN -->
+            <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                 <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-keyboard text-orange-500"></i> Bài Tập Trả Lời Ngắn
+                    </h2>
+                    <button @click="addTraLoiNgan" class="text-sm bg-orange-50 text-orange-700 px-3 py-1 rounded-md hover:bg-orange-100 font-medium border border-orange-200">
+                        <i class="fas fa-plus"></i> Thêm câu hỏi
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <div v-for="(tln, idx) in data.tra_loi_ngan" :key="'tln'+idx" class="bg-gray-50 p-4 rounded-lg border border-gray-200 relative">
+                         <button @click="data.tra_loi_ngan.splice(idx, 1)" class="absolute top-2 right-2 text-red-400 hover:text-red-600">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <div class="grid gap-3 pr-6">
+                            <div class="flex gap-4 items-start">
+                                <span class="bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded text-sm shrink-0">Câu {{idx + 1}}</span>
+                                <textarea v-model="tln.cau" rows="2" class="w-full rounded-md border border-gray-300 p-2 text-sm outline-none"></textarea>
+                            </div>
+                            <div class="pl-12 grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div class="md:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-500 mb-1">Đáp án</label>
+                                    <input v-model="tln.dap_an" type="text" class="w-full rounded border border-gray-300 p-2 text-sm outline-none font-bold text-blue-700">
+                                </div>
+                                <div class="md:col-span-3">
+                                    <label class="block text-xs font-bold text-gray-500 mb-1">Giải thích / Lời giải</label>
+                                    <textarea v-model="tln.giai_thich" rows="2" class="w-full rounded border border-gray-300 p-2 text-sm outline-none"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- KHU VỰC HÌNH ẢNH SVG (Trả lời ngắn) -->
+                            <div class="pl-12 mt-3 pt-3 border-t border-gray-100">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-gray-500"><i class="fas fa-image text-blue-500"></i> Hình ảnh SVG (Mã: [[svg:hinh_id]])</span>
+                                    <button @click="addFigure(tln)" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded transition"><i class="fas fa-plus"></i> Thêm hình</button>
+                                </div>
+                                <div v-for="(fig, fIdx) in tln.figures" :key="'figtln'+fIdx" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2 p-2 bg-white rounded border border-gray-200 relative">
+                                    <button @click="removeFigure(tln, fIdx)" class="absolute top-1 right-1 text-red-400 hover:text-red-600 bg-white rounded-full p-1"><i class="fas fa-times"></i></button>
+                                    <div class="pr-4">
+                                        <input v-model="fig.id" type="text" placeholder="ID (vd: hinh1)" class="w-full rounded border border-gray-300 p-1.5 text-xs mb-2 font-mono">
+                                        <textarea v-model="fig.svg" rows="3" placeholder="<svg>...</svg>" class="w-full rounded border border-gray-300 p-1.5 text-xs font-mono outline-none"></textarea>
+                                    </div>
+                                    <div class="flex items-center justify-center bg-gray-50 border border-gray-200 rounded p-1 overflow-hidden" style="min-height: 100px;">
+                                        <div v-html="fig.svg" class="w-full h-full flex justify-center items-center svg-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- KẾT THÚC HÌNH ẢNH -->
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Quản lý JSON: thư viện bài trên máy này -->
+        <div v-if="showLib" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-0 sm:p-4" @keydown.esc="showLib = false">
+            <div class="bg-white sm:rounded-xl shadow-2xl w-full h-full sm:max-w-7xl sm:h-[95vh] flex flex-col" role="dialog" aria-label="Quản lý JSON">
+                <div class="p-6 border-b flex justify-between items-center gap-4">
+                    <h2 class="text-xl font-bold flex items-center gap-2 text-gray-800"><i class="fas fa-folder-open text-amber-500"></i> Quản lý JSON <span class="text-sm font-normal text-gray-500">({{ libRows.length }} bài trên máy này)</span></h2>
+                    <button @click="showLib = false" class="text-gray-500 hover:text-red-500" aria-label="Đóng"><i class="fas fa-times text-xl"></i></button>
+                </div>
+                <div class="p-6 overflow-y-auto flex-1 space-y-5">
+                    <div class="p-4 rounded-lg bg-gray-50 border border-gray-200 flex flex-col lg:flex-row lg:items-center gap-3">
+                        <div class="flex-1 text-sm text-gray-700">
+                            <div><b>Đang soạn:</b> {{ maBai(data) }} – {{ data.ten_bai || '(chưa có tên bài)' }}</div>
+                            <div class="mt-1"><span v-if="!kiemHienTai.errs.length" class="text-green-700 font-semibold"><i class="fas fa-check-circle"></i> Đúng mẫu web</span>
+                                <span v-else class="text-red-600 font-semibold"><i class="fas fa-exclamation-circle"></i> {{ kiemHienTai.errs.length }} lỗi</span>
+                                <span v-if="kiemHienTai.warns.length" class="text-amber-700 ml-2">· {{ kiemHienTai.warns.length }} lưu ý</span>
+                                <button v-if="kiemHienTai.errs.length || kiemHienTai.warns.length" @click="moLoi = moLoi === '__hien_tai' ? '' : '__hien_tai'" class="ml-2 text-blue-600 hover:underline text-xs">{{ moLoi === '__hien_tai' ? 'Ẩn' : 'Xem' }}</button></div>
+                            <ul v-if="moLoi === '__hien_tai'" class="mt-2 text-xs space-y-0.5"><li v-for="x in kiemHienTai.errs" class="text-red-600">✗ {{ x }}</li><li v-for="x in kiemHienTai.warns" class="text-amber-700">! {{ x }}</li></ul>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button @click="luuThuVien" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-lg text-sm font-medium"><i class="fas fa-save"></i> Lưu vào thư viện</button>
+                            <button @click="guiLenWeb(data)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm font-medium"><i class="fas fa-tv"></i> Đưa lên web</button>
+                            <button @click="baiMoi" class="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium"><i class="fas fa-file"></i> Bài mới</button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-3 md:items-center">
+                        <div class="relative flex-1"><i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                            <input v-model="timLib" type="search" placeholder="Tìm theo mã bài, tên bài…" class="w-full rounded-md border border-gray-300 p-2 pl-9 text-sm focus:ring-2 focus:ring-amber-400 outline-none" aria-label="Tìm bài"></div>
+                        <input type="file" ref="libFiles" @change="nhapNhieuTep" accept=".json,application/json" multiple class="hidden">
+                        <button @click="$refs.libFiles.click()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium"><i class="fas fa-file-import"></i> Nhập nhiều tệp JSON</button>
+                        <button @click="xuatTatCa" :disabled="!libRows.length" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium disabled:opacity-50"><i class="fas fa-file-export"></i> Xuất tất cả (sao lưu)</button>
+                    </div>
+
+                    <p v-if="!libRows.length" class="text-center text-gray-500 py-8 italic">Thư viện trống. Bấm <b>Lưu vào thư viện</b> để cất bài đang soạn, hoặc <b>Nhập nhiều tệp JSON</b>.</p>
+                    <div v-for="g in libGroups" :key="g.lop" class="border border-gray-200 rounded-lg overflow-hidden">
+                        <div class="px-4 py-2 bg-gray-50 font-bold text-blue-800"><i class="fas fa-folder text-blue-500"></i> Lớp {{ g.lop }} <span class="text-xs font-medium bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full ml-1">{{ g.rows.length }} bài</span></div>
+                        <div class="overflow-x-auto"><table class="w-full text-left border-collapse bg-white text-sm">
+                            <thead><tr class="bg-gray-100 border-b text-gray-700"><th class="p-2 w-32">Mã bài</th><th class="p-2">Tên bài</th><th class="p-2 w-28 text-center">Số câu<br><span class="text-xs font-normal">TN · ĐS · TLN</span></th><th class="p-2 w-36">Kiểm tra</th><th class="p-2 w-32">Cập nhật</th><th class="p-2 w-80 text-center">Thao tác</th></tr></thead>
+                            <tbody><template v-for="r in g.rows" :key="r.id">
+                                <tr class="border-b hover:bg-gray-50" :class="r.id === maBai(data) ? 'bg-amber-50' : ''">
+                                    <td class="p-2 font-mono text-gray-600">{{ r.id }}</td>
+                                    <td class="p-2 font-medium text-gray-800">{{ r.d.ten_bai || '(chưa có tên)' }}</td>
+                                    <td class="p-2 text-center text-gray-600">{{ (r.d.trac_nghiem || []).length }} · {{ (r.d.dung_sai || []).length }} · {{ (r.d.tra_loi_ngan || []).length }}</td>
+                                    <td class="p-2"><button @click="moLoi = moLoi === r.id ? '' : r.id" class="text-left" :title="'Bấm để xem chi tiết'">
+                                        <span v-if="!r.k.errs.length" class="text-green-700 font-semibold"><i class="fas fa-check-circle"></i> Đúng mẫu</span>
+                                        <span v-else class="text-red-600 font-semibold"><i class="fas fa-exclamation-circle"></i> {{ r.k.errs.length }} lỗi</span>
+                                        <span v-if="r.k.warns.length" class="text-amber-700 text-xs block">{{ r.k.warns.length }} lưu ý</span></button></td>
+                                    <td class="p-2 text-gray-500 text-xs">{{ new Date(r.luc).toLocaleString('vi-VN') }}</td>
+                                    <td class="p-2"><div class="flex flex-wrap gap-1 justify-center">
+                                        <button @click="moBai(r.id)" class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1 rounded text-xs font-medium hover:bg-blue-100"><i class="fas fa-edit"></i> Mở</button>
+                                        <button @click="guiLenWeb(r.d)" class="bg-indigo-600 text-white px-2 py-1 rounded text-xs font-medium hover:bg-indigo-700"><i class="fas fa-tv"></i> Lên web</button>
+                                        <button @click="taiTepChuan(r.d)" class="bg-gray-100 text-gray-700 border border-gray-200 px-2 py-1 rounded text-xs font-medium hover:bg-gray-200" title="Tệp đặt tên chuẩn bai-hoc-l..-b...json để thả vào thư mục nhap/ của web"><i class="fas fa-download"></i> Tệp chuẩn</button>
+                                        <button @click="nhanBan(r.id)" class="bg-gray-100 text-gray-700 border border-gray-200 px-2 py-1 rounded text-xs font-medium hover:bg-gray-200"><i class="fas fa-copy"></i> Nhân bản</button>
+                                        <button @click="xoaBai(r.id)" class="px-2 py-1 rounded text-xs font-medium border" :class="choXoa === r.id ? 'bg-red-600 text-white border-red-600' : 'bg-white text-red-600 border-red-200 hover:bg-red-50'"><i class="fas fa-trash"></i> {{ choXoa === r.id ? 'Bấm lần nữa để xoá' : 'Xoá' }}</button>
+                                    </div></td>
+                                </tr>
+                                <tr v-if="moLoi === r.id"><td colspan="6" class="px-4 pb-3 bg-gray-50"><ul class="text-xs space-y-0.5 pt-2"><li v-for="x in r.k.errs" class="text-red-600">✗ {{ x }}</li><li v-for="x in r.k.warns" class="text-amber-700">! {{ x }}</li><li v-if="!r.k.errs.length && !r.k.warns.length" class="text-green-700">Không có lỗi.</li></ul></td></tr>
+                            </template></tbody>
+                        </table></div>
+                    </div>
+                    <p class="text-xs text-gray-500">Thư viện và bản đang soạn lưu trên trình duyệt của máy này (tự lưu bản đang soạn mỗi lần sửa). Nên <b>Xuất tất cả</b> định kỳ để sao lưu; bài đã lưu Google Sheets thì xem ở <b>Lưu / Tải Cloud</b>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cloud Modal -->
+        <div v-if="showCloudModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-0 sm:p-4">
+            <div class="bg-white sm:rounded-xl shadow-2xl w-full h-full sm:max-w-7xl sm:h-[95vh] flex flex-col">
+                <div class="p-6 border-b flex justify-between items-center">
+                    <h2 class="text-xl font-bold flex items-center gap-2 text-gray-800"><i class="fas fa-cloud text-green-600"></i> Đồng Bộ Google Sheets</h2>
+                    <button @click="showCloudModal = false" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+                </div>
+                <div class="p-6 overflow-y-auto flex-1">
+                    <div class="mb-6 max-w-3xl">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Web App URL (Triển khai từ Apps Script)</label>
+                        <input v-model="scriptUrl" @change="updateUrl" type="text" placeholder="https://script.google.com/macros/s/..." class="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-green-500 outline-none">
+                        <p class="text-xs text-gray-500 mt-1">Dán đường dẫn Web App của Google Apps Script vào đây (Chỉ cần dán 1 lần).</p>
+                    </div>
+
+                    <div class="mb-6 max-w-3xl p-4 rounded-lg bg-indigo-50 border border-indigo-100">
+                        <label class="block text-sm font-bold text-indigo-900 mb-2"><i class="fas fa-tv"></i> Đưa bài lên web "Con đường tới trường" để trình chiếu</label>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input v-model="webUrl" @change="luuWebUrl" type="text" class="flex-1 rounded-md border border-gray-300 p-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" aria-label="Địa chỉ web">
+                            <button @click="guiLenWeb(data)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2"><i class="fas fa-tv"></i> Đưa bài đang soạn lên web</button>
+                        </div>
+                        <p class="text-xs text-indigo-800 mt-2">Web mở trong tab mới, nhận bài, kiểm lỗi, cho xem trước → bấm <b>Lưu &amp; trình chiếu ngay</b>. Bài lưu trên trình duyệt của máy đang dùng (máy chiếu); gửi lại bản sửa thì thay bản trước. Mỗi bài trên Cloud cũng có nút <b>Lên web</b>.</p>
+                    </div>
+
+                    <div v-if="scriptUrl" class="space-y-4">
+                        <div class="flex gap-3 max-w-3xl">
+                            <button @click="saveToCloud" :disabled="isSyncing" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 disabled:opacity-50">
+                                <i class="fas" :class="isSyncing ? 'fa-spinner fa-spin' : 'fa-cloud-upload-alt'"></i> Lưu Bài Hiện Tại
+                            </button>
+                            <button @click="loadListFromCloud" :disabled="isSyncing" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 disabled:opacity-50">
+                                <i class="fas" :class="isSyncing ? 'fa-spinner fa-spin' : 'fa-sync'"></i> Tải Danh Sách
+                            </button>
+                        </div>
+
+                        <div v-if="cloudLessons.length > 0" class="mt-6 space-y-4">
+                            <div v-for="group in groupedLessons" :key="group.className" class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                                <button @click="toggleGroup(group.className)" class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition focus:outline-none">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-folder text-blue-500 text-xl"></i>
+                                        <span class="font-bold text-lg text-blue-800">{{ group.className }}</span>
+                                        <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium ml-2">{{ group.lessons.length }} bài học</span>
+                                    </div>
+                                    <i class="fas text-gray-400 text-lg" :class="openGroups[group.className] ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                                </button>
+                                
+                                <div v-show="openGroups[group.className]" class="border-t border-gray-200">
+                                    <table class="w-full text-left border-collapse bg-white">
+                                        <thead>
+                                            <tr class="bg-gray-100 border-b">
+                                                <th class="p-3 text-sm font-bold text-gray-700 w-28 lg:w-40 border-r border-gray-200">Mã Bài</th>
+                                                <th class="p-3 text-sm font-bold text-gray-700 border-r border-gray-200">Tên Bài Học</th>
+                                                <th class="p-3 text-sm font-bold text-gray-700 w-72 text-center">Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="lesson in group.lessons" :key="lesson.id" class="border-b hover:bg-gray-50 transition-colors">
+                                                <td class="p-3 text-sm text-gray-600 font-mono border-r border-gray-200">{{ lesson.id }}</td>
+                                                <td class="p-3 text-sm text-gray-800 font-medium border-r border-gray-200">{{ lesson.name }}</td>
+                                                <td class="p-3 text-sm text-center">
+                                                    <div class="flex flex-wrap gap-2 justify-center">
+                                                    <button @click="loadLesson(lesson.id)" :disabled="isSyncing" class="bg-blue-50 text-blue-600 px-4 py-1.5 rounded hover:bg-blue-100 font-medium text-xs disabled:opacity-50 transition-colors flex items-center justify-center gap-2 shadow-sm border border-blue-200">
+                                                        <i class="fas fa-download"></i> Tải bài này
+                                                    </button>
+                                                    <button @click="guiTuCloud(lesson.id)" :disabled="isSyncing" class="bg-indigo-600 text-white px-4 py-1.5 rounded hover:bg-indigo-700 font-medium text-xs disabled:opacity-50 transition-colors flex items-center justify-center gap-2 shadow-sm" title="Tải bài này từ Cloud và đưa lên web để trình chiếu">
+                                                        <i class="fas fa-tv"></i> Lên web
+                                                    </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <p v-else-if="!isSyncing" class="text-center text-gray-500 py-4 italic">Chưa có dữ liệu trên Cloud, hãy bấm Tải Danh Sách hoặc Lưu bài đầu tiên!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, reactive, computed, watch } = Vue;
+
+        // Cấu trúc mặc định ban đầu
+        const createDefaultData = () => ({
+            loai: "bai_hoc",
+            lop: 10,
+            bai: 9,
+            ten_bai: "",
+            nguon: "",
+            muc_tieu: [""],
+            bai_giang: [{
+                tieu_de: "",
+                noi_dung: "",
+                luu_y: "",
+                vi_du: [{
+                    de: "",
+                    loi_giai: [""],
+                    dap_so: ""
+                }]
+            }],
+            can_nho: [""],
+            trac_nghiem: [],
+            dung_sai: [],
+            tra_loi_ngan: []
+        });
+
+        const app = createApp({
+            setup() {
+                const data = reactive(createDefaultData());
+                const toasts = ref([]);
+                let toastId = 0;
+
+                // Hàm hiển thị thông báo thay thế alert()
+                const showToast = (message, type = 'success') => {
+                    const id = toastId++;
+                    toasts.value.push({ id, message, type });
+                    setTimeout(() => {
+                        toasts.value = toasts.value.filter(t => t.id !== id);
+                    }, 3000);
+                };
+
+                // Các hàm thao tác mảng string
+                const addStringItem = (arr) => arr.push("");
+                const removeStringItem = (arr, index) => arr.splice(index, 1);
+
+                // Các hàm thêm Complex Objects
+                const addBaiGiang = () => {
+                    data.bai_giang.push({
+                        tieu_de: "", noi_dung: "", luu_y: "", 
+                        vi_du: []
+                    });
+                };
+
+                const addViDu = (bai_giang_item) => {
+                    if(!bai_giang_item.vi_du) bai_giang_item.vi_du = [];
+                    bai_giang_item.vi_du.push({ de: "", loi_giai: [""], dap_so: "" });
+                };
+
+                const addTracNghiem = () => {
+                    data.trac_nghiem.push({
+                        cau: "", phuong_an: ["", "", "", ""], dap_an: "A", giai_thich: "", muc: "NB", figures: []
+                    });
+                };
+
+                const addDungSai = () => {
+                    data.dung_sai.push({
+                        cau: "", 
+                        y: [
+                            { noi_dung: "", dung: true },
+                            { noi_dung: "", dung: false },
+                            { noi_dung: "", dung: true },
+                            { noi_dung: "", dung: false }
+                        ], 
+                        giai_thich: "",
+                        figures: []
+                    });
+                };
+
+                const addTraLoiNgan = () => {
+                    data.tra_loi_ngan.push({ cau: "", dap_an: "", giai_thich: "", figures: [] });
+                };
+
+                const addFigure = (question) => {
+                    if (!question.figures) question.figures = [];
+                    question.figures.push({ id: `hinh${question.figures.length + 1}`, svg: "" });
+                };
+
+                const removeFigure = (question, index) => {
+                    if (question.figures) question.figures.splice(index, 1);
+                };
+
+                // Nhập JSON từ file
+                const importJSON = (event) => {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const parsed = JSON.parse(e.target.result);
+                            
+                            // Tự động phát hiện nếu file là định dạng đề thi (math-exam-v1)
+                            if (parsed.format === "math-exam-v1") {
+                                // Khởi tạo trắng dữ liệu
+                                Object.assign(data, createDefaultData());
+                                data.ten_bai = parsed.title || "";
+                                data.lop = parseInt(parsed.grade) || 10;
+                                
+                                if (parsed.questions && Array.isArray(parsed.questions)) {
+                                    parsed.questions.forEach(q => {
+                                        if (q.type === 'mc') {
+                                            const dap_an_map = ['A', 'B', 'C', 'D'];
+                                            let correctIdx = (q.options || []).findIndex(o => o.correct);
+                                            if (correctIdx === -1) correctIdx = 0;
+                                            
+                                            data.trac_nghiem.push({
+                                                cau: q.stem || "",
+                                                phuong_an: [
+                                                    q.options[0]?.text || "",
+                                                    q.options[1]?.text || "",
+                                                    q.options[2]?.text || "",
+                                                    q.options[3]?.text || ""
+                                                ],
+                                                dap_an: dap_an_map[correctIdx],
+                                                giai_thich: (q.solution || []).join("\n"),
+                                                muc: "NB",
+                                                figures: q.figures || []
+                                            });
+                                        } else if (q.type === 'tf') {
+                                            data.dung_sai.push({
+                                                cau: q.stem || "",
+                                                y: (q.options || []).map(o => ({
+                                                    noi_dung: o.text || "",
+                                                    dung: !!o.correct
+                                                })),
+                                                giai_thich: (q.solution || []).join("\n"),
+                                                figures: q.figures || []
+                                            });
+                                        } else if (q.type === 'short') {
+                                            data.tra_loi_ngan.push({
+                                                cau: q.stem || "",
+                                                dap_an: q.answer || "",
+                                                giai_thich: (q.solution || []).join("\n"),
+                                                figures: q.figures || []
+                                            });
+                                        }
+                                    });
+                                }
+                                showToast('Nhập thành công từ định dạng Đề Thi (math-exam-v1)!', 'success');
+                            } else {
+                                // Import chuẩn bài học
+                                Object.keys(createDefaultData()).forEach(key => {
+                                    if(parsed[key] !== undefined) {
+                                        data[key] = parsed[key];
+                                    }
+                                });
+                                showToast('Nhập file JSON Bài Học thành công!', 'success');
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            showToast('File JSON không hợp lệ!', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                    event.target.value = null; // reset input
+                };
+
+                // Xuất JSON ra file tải về
+                const exportJSON = () => {
+                    try {
+                        // Cleanup empty strings arrays to keep JSON clean if needed, 
+                        // but here we just export as is to maintain exact structure.
+                        const jsonString = JSON.stringify(data, null, 2);
+                        const blob = new Blob([jsonString], { type: "application/json" });
+                        const url = URL.createObjectURL(blob);
+                        
+                        const a = document.createElement('a');
+                        a.href = url;
+                        // Tên tệp chuẩn của web Con đường tới trường: bai-hoc-l10-b09.json (thả thẳng vào thư mục nhap/)
+                        a.download = tenTepChuan(data);
+                        a.click();
+                        
+                        URL.revokeObjectURL(url);
+                        showToast('Đã xuất file JSON!', 'success');
+                    } catch(err) {
+                        showToast('Lỗi khi xuất file!', 'error');
+                    }
+                };
+
+                // Xuất ra định dạng Đề Toán (math-exam-v1)
+                const exportExamJSON = () => {
+                    try {
+                        let qId = 1;
+                        const questions = [];
+                        
+                        data.trac_nghiem.forEach(tn => {
+                            const dap_an_map = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+                            const correctIdx = dap_an_map[tn.dap_an] !== undefined ? dap_an_map[tn.dap_an] : 0;
+                            
+                            questions.push({
+                                id: `q${qId++}`,
+                                type: "mc",
+                                section: "Trắc nghiệm một phương án đúng",
+                                stem: tn.cau,
+                                options: tn.phuong_an.map((text, idx) => ({
+                                    text: text,
+                                    correct: idx === correctIdx
+                                })),
+                                solution: tn.giai_thich ? [tn.giai_thich] : [],
+                                figures: tn.figures || []
+                            });
+                        });
+                        
+                        data.dung_sai.forEach(ds => {
+                            questions.push({
+                                id: `q${qId++}`,
+                                type: "tf",
+                                section: "Trắc nghiệm đúng sai",
+                                stem: ds.cau,
+                                options: ds.y.map(opt => ({
+                                    text: opt.noi_dung,
+                                    correct: opt.dung
+                                })),
+                                solution: ds.giai_thich ? [ds.giai_thich] : [],
+                                figures: ds.figures || []
+                            });
+                        });
+                        
+                        data.tra_loi_ngan.forEach(tln => {
+                            questions.push({
+                                id: `q${qId++}`,
+                                type: "short",
+                                section: "Trả lời ngắn",
+                                stem: tln.cau,
+                                answer: tln.dap_an,
+                                solution: tln.giai_thich ? [tln.giai_thich] : [],
+                                figures: tln.figures || []
+                            });
+                        });
+
+                        const examData = {
+                            format: "math-exam-v1",
+                            title: data.ten_bai || "Đề kiểm tra",
+                            grade: data.lop.toString(),
+                            duration: 90,
+                            questions: questions
+                        };
+
+                        const jsonString = JSON.stringify(examData, null, 2);
+                        const blob = new Blob([jsonString], { type: "application/json" });
+                        const url = URL.createObjectURL(blob);
+                        
+                        const a = document.createElement('a');
+                        a.href = url;
+                        const safeName = (data.ten_bai || 'de_thi').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+                        a.download = `de_thi_${safeName}.json`;
+                        a.click();
+                        
+                        URL.revokeObjectURL(url);
+                        showToast('Đã xuất file JSON định dạng Đề Thi!', 'success');
+                    } catch(err) {
+                        showToast('Lỗi khi xuất file Đề Thi!', 'error');
+                        console.error(err);
+                    }
+                };
+
+                // Hàm tiện ích chuẩn hoá LaTeX trong 1 chuỗi
+                const standardizeLatexStr = (text) => {
+                    if (typeof text !== 'string') return text;
+                    let res = text;
+                    
+                    // 1. Chuyển \vec{AB} (2 ký tự trở lên) thành \overrightarrow{AB}
+                    // Chấp nhận cả việc có khoảng trắng thừa: \vec { AB }
+                    res = res.replace(/\\vec\s*\{\s*([a-zA-Z0-9]{2,})\s*\}/g, '\\overrightarrow{$1}');
+                    
+                    // 2. Chuyển đổi các dấu suy ra, tương đương
+                    // Chỉ chuyển nếu không có dấu \ đằng trước (tránh ghi đè nếu user đã gõ đúng)
+                    res = res.replace(/(?<![\\=<>])<=>/g, ' \\Leftrightarrow ');
+                    res = res.replace(/(?<![\\=<>])=>/g, ' \\Rightarrow ');
+                    
+                    // 3. Các dấu nhỏ hơn/lớn hơn hoặc bằng
+                    res = res.replace(/(?<!\\)<=/g, ' \\le ');
+                    res = res.replace(/(?<!\\)>=/g, ' \\ge ');
+                    res = res.replace(/(?<!\\)!=/g, ' \\neq ');
+
+                    // Sửa lỗi các khoảng trắng thừa do thêm vào
+                    res = res.replace(/\s+/g, ' ');
+
+                    return res.trim();
+                };
+
+                // Quét đệ quy toàn bộ data và thực hiện chuẩn hoá
+                const autoFormatLatex = () => {
+                    const traverseAndFormat = (obj) => {
+                        if (typeof obj === 'string') {
+                            return standardizeLatexStr(obj);
+                        } else if (Array.isArray(obj)) {
+                            return obj.map(item => traverseAndFormat(item));
+                        } else if (obj !== null && typeof obj === 'object') {
+                            const newObj = {};
+                            for (const key in obj) {
+                                newObj[key] = traverseAndFormat(obj[key]);
+                            }
+                            return newObj;
+                        }
+                        return obj;
+                    };
+
+                    const formattedData = traverseAndFormat(data);
+                    // Gán lại dữ liệu đã chuẩn hoá vào object Reactive
+                    Object.keys(formattedData).forEach(key => {
+                        data[key] = formattedData[key];
+                    });
+                    
+                    showToast('Đã tự động chuẩn hoá toàn bộ LaTeX!', 'success');
+                };
+
+                // --- HÀM TƯƠNG TÁC VỚI GOOGLE SHEETS (CLOUD) ---
+                const scriptUrl = ref(localStorage.getItem('gas_url') || '');
+                const showCloudModal = ref(false);
+                const cloudLessons = ref([]);
+                const isSyncing = ref(false);
+                const openGroups = ref({});
+
+                const toggleGroup = (className) => {
+                    openGroups.value[className] = !openGroups.value[className];
+                };
+
+                // Computed: Nhóm bài học theo Lớp
+                const groupedLessons = computed(() => {
+                    const groups = {};
+                    cloudLessons.value.forEach(lesson => {
+                        // Trích xuất số lớp từ ID (Ví dụ: "Lop10_Bai9" -> 10)
+                        const match = lesson.id.match(/^Lop(\d+)/i);
+                        let className = "Khác";
+                        let classNum = 999; // Để sắp xếp "Khác" xuống cuối cùng
+
+                        if (match) {
+                            classNum = parseInt(match[1], 10);
+                            className = "Lớp " + classNum;
+                        }
+
+                        if (!groups[className]) {
+                            groups[className] = {
+                                className: className,
+                                classNum: classNum,
+                                lessons: []
+                            };
+                            // Khởi tạo mục lục mặc định là đang Đóng
+                            if (openGroups.value[className] === undefined) {
+                                openGroups.value[className] = false;
+                            }
+                        }
+                        groups[className].lessons.push(lesson);
+                    });
+
+                    // Chuyển sang mảng và sắp xếp theo khối lớp (10 -> 11 -> 12 -> Khác)
+                    return Object.values(groups).sort((a, b) => a.classNum - b.classNum);
+                });
+
+                const updateUrl = () => {
+                    localStorage.setItem('gas_url', scriptUrl.value);
+                };
+
+                const openCloudModal = () => {
+                    showCloudModal.value = true;
+                    if (scriptUrl.value && cloudLessons.value.length === 0) {
+                        loadListFromCloud();
+                    }
+                };
+
+                const saveToCloud = async () => {
+                    if (!scriptUrl.value) return showToast('Vui lòng nhập URL Web App!', 'error');
+                    isSyncing.value = true;
+                    try {
+                        const payload = { action: 'save', payload: data };
+                        const res = await fetch(scriptUrl.value, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        const result = await res.json();
+                        if (result.status === 'success') {
+                            showToast('Lưu lên Google Sheets thành công!', 'success');
+                            loadListFromCloud(); // Cập nhật lại danh sách bài học
+                        }
+                        else showToast('Lỗi: ' + result.message, 'error');
+                    } catch (e) {
+                        showToast('Lỗi kết nối tới Cloud!', 'error');
+                    }
+                    isSyncing.value = false;
+                };
+
+                const loadListFromCloud = async () => {
+                    if (!scriptUrl.value) return;
+                    isSyncing.value = true;
+                    try {
+                        const res = await fetch(`${scriptUrl.value}?action=list`);
+                        const result = await res.json();
+                        if (result.status === 'success') {
+                            // Cập nhật mảng (Computed property sẽ tự động chia nhóm lại)
+                            cloudLessons.value = result.data.reverse(); 
+                        } else showToast('Lỗi: ' + result.message, 'error');
+                    } catch (e) {
+                        showToast('Lỗi kết nối tới Cloud!', 'error');
+                    }
+                    isSyncing.value = false;
+                };
+
+                const loadLesson = async (id) => {
+                    isSyncing.value = true;
+                    try {
+                        const res = await fetch(`${scriptUrl.value}?action=get&id=${id}`);
+                        const result = await res.json();
+                        if (result.status === 'success') {
+                            const parsed = result.data;
+                            Object.keys(createDefaultData()).forEach(key => {
+                                if(parsed[key] !== undefined) data[key] = parsed[key];
+                            });
+                            showToast('Tải bài học thành công!', 'success');
+                            showCloudModal.value = false;
+                        } else showToast('Lỗi: ' + result.message, 'error');
+                    } catch (e) {
+                        showToast('Lỗi kết nối tới Cloud!', 'error');
+                    }
+                    isSyncing.value = false;
+                };
+
+                // ================= QUẢN LÝ JSON (thư viện trên máy này) =================
+                const LIB = 'bh-editor:thu-vien', DRAFT = 'bh-editor:dang-soan';
+                const sao = x => JSON.parse(JSON.stringify(x));
+                const maBai = d => `Lop${+d.lop || 0}_Bai${+d.bai || 0}`;
+                const tenTepChuan = d => `bai-hoc-l${+d.lop || 0}-b${String(+d.bai || 0).padStart(2, '0')}.json`;
+                const taiVe = (ten, obj) => {
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' }));
+                    a.download = ten; document.body.appendChild(a); a.click();
+                    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+                };
+                const docLib = () => { try { return JSON.parse(localStorage.getItem(LIB) || '{}') || {}; } catch (e) { return {}; } };
+                const library = ref(docLib());
+                const ghiLib = () => { try { localStorage.setItem(LIB, JSON.stringify(library.value)); return true; } catch (e) { showToast('Bộ nhớ trình duyệt đã đầy – bấm Xuất tất cả để sao lưu rồi xoá bớt bài', 'error'); return false; } };
+                const showLib = ref(false), timLib = ref(''), moLoi = ref(''), choXoa = ref('');
+                const napData = parsed => {
+                    const goc = createDefaultData();
+                    Object.keys(goc).forEach(k => { data[k] = parsed && parsed[k] !== undefined ? sao(parsed[k]) : goc[k]; });
+                };
+                const coNoiDung = d => !!(String(d.ten_bai || '').trim() || (d.trac_nghiem || []).length || (d.dung_sai || []).length || (d.tra_loi_ngan || []).length
+                    || (d.bai_giang || []).some(m => String(m.noi_dung || '').trim()));
+
+                // Kiểm tra theo đúng quy tắc trang Nhập dữ liệu của web (để biết trước bài có lên web được không)
+                const soVN = a => { const t = String(a ?? '').trim().replace(/\s+/g, '').replace(/−/g, '-');
+                    if (/^-?\d+([.,]\d+)?$/.test(t)) return parseFloat(t.replace(',', '.'));
+                    const m = t.match(/^(-?\d+)\/(\d+)$/); return m && +m[2] ? +m[1] / +m[2] : NaN; };
+                const co = x => !!String(x ?? '').trim();
+                const kiemTra = d => {
+                    const errs = [], warns = [];
+                    if (![9, 10, 11, 12].includes(+d.lop)) errs.push('Lớp phải là 9, 10, 11 hoặc 12');
+                    if (!(+d.bai >= 1)) errs.push('Chưa có số bài (theo mục lục SGK)');
+                    if (!co(d.nguon)) warns.push('Chưa ghi nguồn');
+                    const bg = d.bai_giang || [];
+                    if (bg.length < 2) errs.push('Bài giảng cần ít nhất 2 phần');
+                    bg.forEach((m, i) => { if (!co(m.tieu_de) || !co(m.noi_dung)) errs.push(`Phần bài giảng ${i + 1}: thiếu tiêu đề hoặc nội dung`);
+                        (m.vi_du || []).forEach((v, k) => { if (!co(v.de) || !(v.loi_giai || []).some(co)) errs.push(`Phần ${i + 1}, ví dụ ${k + 1}: thiếu đề hoặc lời giải`); }); });
+                    if (!bg.some(m => (m.vi_du || []).length)) errs.push('Bài giảng chưa có ví dụ nào');
+                    if ((d.can_nho || []).filter(co).length < 3) errs.push('Cần ít nhất 3 ý "Kiến thức cần nhớ"');
+                    if (!(d.muc_tieu || []).filter(co).length) warns.push('Chưa có mục tiêu');
+                    const tn = d.trac_nghiem || [], ds = d.dung_sai || [], tl = d.tra_loi_ngan || [];
+                    if (tn.length < 4) errs.push(`Trắc nghiệm cần ít nhất 4 câu (đang có ${tn.length})`);
+                    if (!ds.length) errs.push('Cần ít nhất 1 câu Đúng/Sai');
+                    if (!tl.length) errs.push('Cần ít nhất 1 câu Trả lời ngắn');
+                    const hinh = (q, w) => { const F = q.figures || [];
+                        F.forEach((f, k) => { if (co(f.svg) && !/^\s*<svg[\s>][\s\S]*<\/svg>\s*$/i.test(f.svg)) warns.push(`${w}: hình ${k + 1} không phải mã <svg>…</svg> trọn vẹn`); });
+                        String(q.cau || '').replace(/\[\[\s*svg\s*:\s*([\w-]+)\s*\]\]/gi, (m, id) => { if (!F.some(f => f.id === id && co(f.svg))) warns.push(`${w}: có [[svg:${id}]] nhưng chưa có hình "${id}"`); return m; }); };
+                    tn.forEach((q, i) => { const w = `Trắc nghiệm câu ${i + 1}`, pa = (q.phuong_an || []).map(x => String(x ?? '').trim());
+                        if (!co(q.cau)) errs.push(`${w}: thiếu nội dung`);
+                        if (pa.length !== 4 || pa.some(x => !x) || new Set(pa).size !== 4) errs.push(`${w}: cần đủ 4 phương án khác nhau`);
+                        if (!'ABCD'.includes(String(q.dap_an || '').toUpperCase()) || !q.dap_an) errs.push(`${w}: đáp án phải là A, B, C hoặc D`);
+                        if (!co(q.giai_thich)) warns.push(`${w}: thiếu giải thích`); hinh(q, w); });
+                    ds.forEach((q, i) => { const w = `Đúng/Sai câu ${i + 1}`, y = q.y || [];
+                        if (!co(q.cau)) errs.push(`${w}: thiếu lời dẫn`);
+                        if (y.length !== 4 || y.some(x => !co(x.noi_dung))) errs.push(`${w}: cần đủ nội dung 4 ý a, b, c, d`);
+                        else if (y.every(x => !!x.dung === !!y[0].dung)) warns.push(`${w}: cả 4 ý cùng ${y[0].dung ? 'Đúng' : 'Sai'}`);
+                        if (!co(q.giai_thich)) warns.push(`${w}: thiếu giải thích`); hinh(q, w); });
+                    tl.forEach((q, i) => { const w = `Trả lời ngắn câu ${i + 1}`;
+                        if (!co(q.cau)) errs.push(`${w}: thiếu nội dung`);
+                        if (isNaN(soVN(q.dap_an))) errs.push(`${w}: đáp án phải là MỘT số (ví dụ 2,5 hoặc -3)`);
+                        else if (String(q.dap_an).trim().replace(/^-/, '').length > 4) warns.push(`${w}: đáp án dài hơn 4 kí tự`);
+                        if (!co(q.giai_thich)) warns.push(`${w}: thiếu giải thích`); hinh(q, w); });
+                    const seen = new Map();
+                    [...tn.map((q, i) => [`Trắc nghiệm câu ${i + 1}`, q.cau]), ...ds.map((q, i) => [`Đúng/Sai câu ${i + 1}`, q.cau]), ...tl.map((q, i) => [`Trả lời ngắn câu ${i + 1}`, q.cau])]
+                        .forEach(([w, c]) => { const f = String(c || '').toLowerCase().replace(/\s+/g, ' ').trim(); if (!f) return; if (seen.has(f)) errs.push(`${w}: trùng ${seen.get(f)}`); else seen.set(f, w); });
+                    return { errs, warns };
+                };
+                const kiemHienTai = computed(() => kiemTra(data));
+                const fold = t => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd');
+                const libRows = computed(() => Object.entries(library.value).map(([id, x]) => ({ id, d: x.data || {}, luc: x.luc || 0, k: kiemTra(x.data || {}) }))
+                    .sort((a, b) => (+a.d.lop - +b.d.lop) || (+a.d.bai - +b.d.bai) || a.id.localeCompare(b.id)));
+                const libGroups = computed(() => {
+                    const q = fold(timLib.value).trim(), g = {};
+                    libRows.value.filter(r => !q || fold(`${r.id} ${r.d.ten_bai} lop ${r.d.lop} bai ${r.d.bai}`).includes(q))
+                        .forEach(r => { const l = +r.d.lop || 0; (g[l] = g[l] || { lop: l || '?', rows: [] }).rows.push(r); });
+                    return Object.values(g);
+                });
+                const luuThuVien = () => {
+                    const id = maBai(data), cu = !!library.value[id];
+                    library.value = { ...library.value, [id]: { data: sao(data), luc: Date.now() } };
+                    if (ghiLib()) showToast(cu ? `Đã cập nhật ${id} trong thư viện` : `Đã lưu ${id} vào thư viện`);
+                };
+                const moBai = id => { const x = library.value[id]; if (!x) return; napData(x.data); showLib.value = false; showToast(`Đã mở ${id}`); };
+                const baiMoi = () => {
+                    if (coNoiDung(data)) { const id = maBai(data); library.value = { ...library.value, [id]: { data: sao(data), luc: Date.now() } }; ghiLib(); showToast(`Đã cất bài đang soạn vào thư viện (${id})`); }
+                    napData(createDefaultData()); showLib.value = false;
+                };
+                const nhanBan = id => { const x = library.value[id]; if (!x) return; const d = sao(x.data); d.ten_bai = (d.ten_bai || '') + ' (bản sao)'; napData(d); showLib.value = false;
+                    showToast('Đã mở bản sao – đổi Lớp / Bài số rồi bấm Lưu vào thư viện'); };
+                let henXoa = null;
+                const xoaBai = id => {
+                    if (choXoa.value !== id) { choXoa.value = id; clearTimeout(henXoa); henXoa = setTimeout(() => { choXoa.value = ''; }, 4000); return; }
+                    const m = { ...library.value }; delete m[id]; library.value = m; choXoa.value = ''; if (ghiLib()) showToast(`Đã xoá ${id} khỏi thư viện`);
+                };
+                const taiTepChuan = d => taiVe(tenTepChuan(d), { loai: 'bai_hoc', ...sao(d) });
+                const xuatTatCa = () => { taiVe(`thu-vien-bai-hoc-${new Date().toISOString().slice(0, 10)}.json`, libRows.value.map(r => r.d)); showToast(`Đã xuất ${libRows.value.length} bài`); };
+                const nhapNhieuTep = async ev => {
+                    const files = [...(ev.target.files || [])]; ev.target.value = null; let n = 0, loi = 0;
+                    const m = { ...library.value };
+                    for (const f of files) {
+                        try { const j = JSON.parse(await f.text()); const ds = Array.isArray(j) ? j : [j];
+                            ds.forEach(x => { if (x && typeof x === 'object' && x.lop && x.bai && (x.bai_giang || x.trac_nghiem)) { m[maBai(x)] = { data: { ...createDefaultData(), ...x }, luc: Date.now() }; n++; } else loi++; });
+                        } catch (e) { loi++; }
+                    }
+                    library.value = m; if (ghiLib()) showToast(`Đã nhập ${n} bài vào thư viện${loi ? ` · ${loi} tệp/mục không phải bài học` : ''}`, n ? 'success' : 'error');
+                };
+                // tự lưu bản đang soạn (mở lại trang không mất bài)
+                try { const nh = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (nh && coNoiDung(nh)) { napData(nh); setTimeout(() => showToast('Đã mở lại bài đang soạn dở'), 300); } } catch (e) { /* bỏ qua */ }
+                let henNhap = null;
+                const ghiNhap = () => { try { localStorage.setItem(DRAFT, JSON.stringify(data)); } catch (e) { /* đầy bộ nhớ */ } };
+                watch(data, () => { clearTimeout(henNhap); henNhap = setTimeout(ghiNhap, 600); }, { deep: true });
+                window.addEventListener('pagehide', ghiNhap);
+
+                // ================= ĐƯA BÀI LÊN WEB "CON ĐƯỜNG TỚI TRƯỜNG" ĐỂ TRÌNH CHIẾU =================
+                // Mở trang #/xuong/nhan của web trong tab "cdtt-web"; web báo sẵn sàng (cdtt-san-sang) → gửi bài (cdtt-bai-hoc) → web báo đã nhận.
+                const webMacDinh = () => /^https?:$/.test(location.protocol) && /\/cong-cu\//.test(location.pathname) ? location.href.replace(/cong-cu\/.*$/, '') : 'https://conduongtoitruong.vercel.app/';
+                const webUrl = ref(localStorage.getItem('cdtt_web') || webMacDinh());
+                const luuWebUrl = () => { webUrl.value = webUrl.value.trim() || webMacDinh(); localStorage.setItem('cdtt_web', webUrl.value); };
+                const webGoc = () => { try { return new URL(webUrl.value).origin; } catch (e) { return '*'; } };
+                let cho = null;
+                const guiNeuDu = () => { if (cho && cho.sanSang && cho.json && !cho.daGui) { try { cho.w.postMessage({ type: 'cdtt-bai-hoc', json: cho.json }, webGoc()); cho.daGui = true; } catch (e) { showToast('Không gửi được sang web', 'error'); } } };
+                const moWeb = () => {
+                    let u = String(webUrl.value || '').trim().replace(/#.*$/, '');
+                    if (!/^https?:\/\//i.test(u)) { showToast('Địa chỉ web phải bắt đầu bằng https://', 'error'); return null; }
+                    if (!/\/$|\.html?$/i.test(u)) u += '/';
+                    const w = window.open(`${u}#/xuong/nhan/${Date.now()}`, 'cdtt-web');
+                    if (!w) { showToast('Trình duyệt chặn cửa sổ mới – cho phép cửa sổ bật lên (pop-up) cho trang này rồi bấm lại', 'error'); return null; }
+                    const c = cho = { w, json: null, sanSang: false, daGui: false, xong: false };
+                    setTimeout(() => { if (cho === c && !c.xong) showToast('Web chưa nhận được bài – kiểm tra địa chỉ web, mạng rồi bấm lại', 'error'); }, 25000);
+                    return c;
+                };
+                const guiLenWeb = d => {
+                    const c = moWeb(); if (!c) return;
+                    c.json = { loai: 'bai_hoc', ...sao(d) }; guiNeuDu();
+                    const k = kiemTra(d);
+                    showToast(k.errs.length ? `Đã mở web – bài còn ${k.errs.length} lỗi, web sẽ báo chi tiết` : 'Đang gửi bài sang web…', k.errs.length ? 'error' : 'success');
+                };
+                const guiTuCloud = async id => {
+                    const c = moWeb(); if (!c) return;   // mở cửa sổ ngay khi bấm (trình duyệt chỉ cho mở lúc bấm), tải bài xong mới gửi
+                    isSyncing.value = true;
+                    try {
+                        const res = await fetch(`${scriptUrl.value}?action=get&id=${encodeURIComponent(id)}`);
+                        const result = await res.json();
+                        if (result.status === 'success') { c.json = { loai: 'bai_hoc', ...result.data }; guiNeuDu(); showToast('Đã tải từ Cloud, đang gửi sang web…'); }
+                        else showToast('Lỗi: ' + result.message, 'error');
+                    } catch (e) { showToast('Lỗi kết nối tới Cloud!', 'error'); }
+                    isSyncing.value = false;
+                };
+                window.addEventListener('message', ev => {
+                    if (!cho || ev.source !== cho.w) return;
+                    const t = ev.data && ev.data.type;
+                    if (t === 'cdtt-san-sang') { cho.sanSang = true; cho.daGui = false; guiNeuDu(); }
+                    else if (t === 'cdtt-da-nhan') { cho.xong = true; showToast('Web đã nhận bài – bấm "Lưu & trình chiếu ngay" trên trang web'); }
+                });
+
+                return {
+                    data, toasts,
+                    showLib, timLib, moLoi, choXoa, libRows, libGroups, kiemHienTai, maBai, luuThuVien, moBai, baiMoi, nhanBan, xoaBai, taiTepChuan, xuatTatCa, nhapNhieuTep,
+                    webUrl, luuWebUrl, guiLenWeb, guiTuCloud,
+                    importJSON, exportJSON, exportExamJSON, autoFormatLatex,
+                    addStringItem, removeStringItem, addBaiGiang, addViDu, addTracNghiem, addDungSai, addTraLoiNgan, addFigure, removeFigure,
+                    // Variables and functions for Cloud Modal
+                    scriptUrl, showCloudModal, cloudLessons, isSyncing, groupedLessons, openGroups, toggleGroup,
+                    updateUrl, openCloudModal, saveToCloud, loadListFromCloud, loadLesson
+                };
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>
