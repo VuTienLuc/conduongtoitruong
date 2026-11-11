@@ -142,18 +142,30 @@ def main():
     ds = [x for x in ds if x.strip()]
     if any(re.search(r'\ttai-lieu/(?!.*README\.md$)', x) for x in ds):
         run(['git', 'reset', '-q'], show=False); raise SystemExit('✗ Có tệp trong tai-lieu/ sắp bị đưa lên – đã dừng (tài liệu gốc chỉ giữ trên máy).')
-    if not ds:
+    # bản đã lưu (commit) ở lần trước mà chưa đẩy được (mất mạng, sai tài khoản GitHub) → lần này đẩy luôn
+    cho = run(['git', 'rev-list', '--count', 'origin/main..HEAD'], show=False)
+    cho = int(cho.stdout.strip() or 0) if cho.returncode == 0 else 0
+    if not ds and not cho:
         print('   Không có gì mới để đẩy. Web đã là bản mới nhất.'); return 0
-    print(f'   {len(ds)} tệp thay đổi:'); [print('     ' + x.replace('\t', ' ')) for x in ds[:25]]
-    if len(ds) > 25: print(f'     … và {len(ds) - 25} tệp khác')
-    tom = ', '.join(sorted({re.sub(r'^[A-Z]\d*\t', '', x).split('/')[0] for x in ds}))[:120]
-    msg = a.msg or (hoi('   Ghi chú lần cập nhật (Enter để dùng ghi chú tự động): ') if not a.khong_hoi else '')
-    msg = msg or f'Cập nhật từ máy thầy {datetime.datetime.now():%d/%m/%Y %H:%M}: {tom}'
-    run(['git', 'commit', '-q', '-m', msg], check=True)
+    if not ds:
+        print(f'   Không có thay đổi mới; còn {cho} lần lưu trước chưa đẩy lên – đẩy ngay.')
+    else:
+        print(f'   {len(ds)} tệp thay đổi:'); [print('     ' + x.replace('\t', ' ')) for x in ds[:25]]
+        if len(ds) > 25: print(f'     … và {len(ds) - 25} tệp khác')
+        tom = ', '.join(sorted({re.sub(r'^[A-Z]\d*\t', '', x).split('/')[0] for x in ds}))[:120]
+        msg = a.msg or (hoi('   Ghi chú lần cập nhật (Enter để dùng ghi chú tự động): ') if not a.khong_hoi else '')
+        msg = msg or f'Cập nhật từ máy thầy {datetime.datetime.now():%d/%m/%Y %H:%M}: {tom}'
+        run(['git', 'commit', '-q', '-m', msg], check=True)
     if a.khong_day:
         print('   (chế độ thử: đã lưu commit trên máy, chưa đẩy lên)'); return 0
     r = run(['git', 'push', 'origin', 'HEAD:main'])
     if r.returncode:
+        m = re.search(r'denied to ([\w.-]+)', r.stderr or '')
+        if m or ' 403' in (r.stderr or ''):
+            print(f'✗ GitHub từ chối: máy đang đăng nhập GitHub bằng tài khoản "{m.group(1) if m else "?"}" – tài khoản này không có quyền ghi vào kho VuTienLuc/conduongtoitruong.\n'
+                  '   Sửa một lần: Terminal gõ  gh auth login  (chọn GitHub.com → HTTPS → đăng nhập bằng trình duyệt với tài khoản VuTienLuc), rồi  gh auth setup-git ,\n'
+                  '   sau đó chạy lại lệnh Đăng. Bản đã lưu trên máy (commit) vẫn còn, lần chạy sau tự đẩy lên.')
+            return 1
         print('✗ Chưa đẩy lên được. Thường do: (1) mất mạng; (2) máy chưa đăng nhập GitHub – mở GitHub Desktop đăng nhập, '
               'hoặc Terminal gõ  gh auth login ; (3) trên GitHub có bản mới hơn – chạy lại lệnh này.')
         return 1

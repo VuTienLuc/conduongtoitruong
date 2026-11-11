@@ -19,3 +19,8 @@
 ## 11/11/2026 – Máy thầy: "require is not defined in ES module scope"
 - Nguyên nhân: `/Users/tienluc/package.json` (của dự án khác) có `"type": "module"` → Node coi `tools/*.js` là ES module.
 - Sửa: thêm `tools/package.json` với `"type": "commonjs"` (Node lấy package.json gần nhất). Không sửa ~/package.json của thầy.
+
+## 11/11/2026 – Đăng web báo 403 "Permission … denied to mrvubinhminh"
+- Máy Mac lưu đăng nhập GitHub của tài khoản khác (mrvubinhminh) → không có quyền ghi kho VuTienLuc/conduongtoitruong.
+- Cách đưa bản đã commit trên máy lên khi máy không đẩy được: trên máy `git bundle create .chuyen/x.bundle <sha-origin>..HEAD` → stage về cloud → `git fetch <bundle> HEAD; git merge --ff-only FETCH_HEAD; git push` (giữ đúng mã commit, máy thầy không lệch).
+- Sửa gốc: thầy chạy `gh auth login` (tài khoản VuTienLuc) + `gh auth setup-git`. day-len.py nay báo rõ lỗi này và tự đẩy commit còn chờ ở lần chạy sau.
