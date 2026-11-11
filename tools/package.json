@@ -1,0 +1,5 @@
+{
+  "//": "Chỉ để Node chạy các tệp tools/*.js kiểu CommonJS (require). Máy thầy có ~/package.json \"type\": \"module\" làm kiem-tra.js lỗi. Dự án không dùng npm.",
+  "private": true,
+  "type": "commonjs"
+}

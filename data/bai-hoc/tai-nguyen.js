@@ -18,3 +18,8 @@ BaiHoc.taiNguyen(10, 10, [
     mo_ta: "Bài trình chiếu Toán 10 – Bài 10 SGK Kết nối tri thức: tọa độ của điểm, của vectơ và biểu thức tọa độ các phép toán vectơ, có hình động, ví dụ giải từng bước và luyện tập theo định dạng đề mới.",
     file: 'tuong-tac/lop10-b10-vecto-trong-mat-phang-toa-do.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
 ]);
+BaiHoc.taiNguyen(11, 12, [
+  { ten: "Đường thẳng và mặt phẳng song song",
+    mo_ta: "Bài trình chiếu Toán 11 – Bài 12 SGK Kết nối tri thức: đường thẳng và mặt phẳng song song, dấu hiệu nhận biết và tính chất giao tuyến, có hình động, ví dụ giải từng bước và luyện tập theo định dạng đề mới.",
+    file: 'tuong-tac/lop11-b12-duong-thang-va-mat-phang-song-song.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
+]);
