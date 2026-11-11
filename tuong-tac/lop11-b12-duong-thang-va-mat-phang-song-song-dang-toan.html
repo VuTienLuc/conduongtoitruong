@@ -297,6 +297,22 @@ ol.cl li::before{content:counter(c);width:44px;height:44px;box-sizing:border-box
 .hc-cap{font-size:42px}
 .hc-t{font-size:31px;color:var(--ink-2)}
 .khfig{align-self:center}
+/* ---- phóng to hình ---- */
+.slide .fig[data-fig]{cursor:zoom-in;position:relative}
+.slide .fig[data-fig]::after{content:"Bấm để phóng to";position:absolute;right:4px;bottom:-4px;font:500 15px var(--f-display);color:var(--ink-2);opacity:.75}
+.slide .fig[data-d3]::after{content:"Bấm để phóng to, xoay hình"}
+.zoom{position:absolute;inset:0 0 40px 0;z-index:25;background:var(--paper);display:flex;flex-direction:column;gap:10px;padding:18px 40px 14px}
+.zoom .zm-fig{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;cursor:zoom-out;touch-action:none;user-select:none}
+.zoom .zm-fig svg{width:100%;height:100%;max-height:none}
+.zoom .zp{fill-opacity:.85}
+.zoom text.zl{font:italic 38px var(--f-pt);fill:var(--ink)}
+.zoom text.tx{font:500 28px var(--f-body);fill:var(--ink-2)}
+.zm-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.zm-bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.zm-bar button{font:600 20px var(--f-display);color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:6px;min-height:52px;padding:0 20px;cursor:pointer}
+.zm-bar button:hover{border-color:var(--ink-2)}
+.zm-bar button.on{color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.zm-hint{font:500 18px var(--f-display);color:var(--ink-2);text-align:center;margin:0}
 @media (prefers-reduced-motion:reduce){.frag{transition:none;transform:none}}
 </style>
 </head>
@@ -308,6 +324,14 @@ ol.cl li::before{content:counter(c);width:44px;height:44px;box-sizing:border-box
       <div id="slides"></div>
       <canvas id="ink" width="1422" height="800"></canvas>
       <div id="timer" hidden title="Bấm để dừng"></div>
+      <div class="zoom" id="zoom" hidden>
+        <div class="fig zm-fig" id="zmFig"></div>
+        <div class="zm-bar" id="zmBar">
+          <button data-v="auto">Tự xoay</button><button data-v="goc">Góc ban đầu</button>
+          <button data-v="tren">Nhìn từ trên</button><button data-v="ngang">Nhìn ngang</button><button data-v="thu">Thu nhỏ</button>
+        </div>
+        <p class="zm-hint" id="zmHint"></p>
+      </div>
       <div class="foot">
         <div class="sign">Toán 11 · KNTT · Bài 12 · Dạng toán</div>
         <div class="prog" id="prog"></div>
@@ -649,6 +673,49 @@ const FIG={
 };
 
 /* =========================================================
+   MÔ HÌNH 3D (z hướng lên) – dùng khi bấm phóng to để xoay hình
+   ========================================================= */
+const mid3=(p,q,t=.5)=>p.map((v,i)=>+(v+(q[i]-v)*t).toFixed(4));
+const PLN=(x0,x1,y0,y1,z=0)=>[[x0,y0,z],[x1,y0,z],[x1,y1,z],[x0,y1,z]];
+const TDF=[['A','B','C'],['A','C','D'],['A','B','D'],['B','C','D']];
+const CHF=[['S','A','B'],['S','B','C'],['S','C','D'],['S','D','A'],['A','B','C','D']];
+const CHE=[['S','A'],['S','B'],['S','C'],['S','D'],['A','B'],['B','C'],['C','D'],['D','A']];
+const chop3=()=>({S:[3,1.5,4],A:[0,3,0],B:[6,3,0],C:[4.8,0,0],D:[1.2,0,0]});
+const FIG3D={
+  tdMNP:(()=>{const p={A:[2,0.6,3.4],B:[0,1,0],C:[2,-1,0],D:[4,1.2,0]};
+    p.M=mid3(p.A,p.B);p.N=mid3(p.B,p.C);p.P=mid3(p.C,p.D);
+    return{solid:true,view:[-15,18],pts:p,faces:TDF,show:['A','B','C','D','M','N','P'],
+      segs:[['A','B'],['A','C','mk'],['A','D'],['B','C'],['B','D','mk'],['C','D'],['M','N','ac'],['N','P','ac'],['M','P','ac']],
+      polys:[[['M','N','P'],'sec']]};})(),
+  thangGT:(()=>{const p=chop3();p.d1=[-0.5,1.5,4];p.d2=[6.5,1.5,4];
+    return{solid:true,view:[-10,20],pts:p,faces:CHF,show:['S','A','B','C','D'],off:{S:[0,-44]},
+      segs:[...CHE,['A','B','mk'],['C','D','mk'],['d1','d2','ac','free']],labels:[[p.d2,'d',24,10]]};})(),
+  thangEFGH:(()=>{const p=chop3();p.E=mid3(p.S,p.A,.4);p.H=mid3(p.S,p.B,.4);p.F=mid3(p.A,p.D,.6);p.G=mid3(p.B,p.C,.6);
+    return{solid:true,view:[-10,20],pts:p,faces:CHF,show:['S','A','B','C','D','E','F','G','H'],
+      segs:[...CHE,['E','F','ac'],['E','H','ac'],['F','G','ac'],['H','G','ac']],polys:[[['E','F','G','H'],'sec']]};})(),
+  tc1:{view:[-12,22],planes:[[PLN(0,8,0,5),'plane']],
+    lines:[[[0.6,2.5,0],[7.4,2.5,0],'mk'],[[0.6,2.5,2.2],[7.4,2.5,2.2],'ac'],[[0.6,2.5,2.2],[0.6,2.5,0],'so dash'],[[7.4,2.5,2.2],[7.4,2.5,0],'so dash']],
+    labels:[[[7.4,2.5,2.2],'a',26,10],[[7.4,2.5,0],'b',26,10],[[0.6,0.5,0],'(P)',0,0]]},
+  tc2:{view:[-12,24],planes:[[PLN(0,8,0,5),'plane'],[[[1,2.5,0],[7,2.5,0],[7,2.5,3],[1,2.5,3]],'wall']],
+    lines:[[[0.3,2.5,0],[7.7,2.5,0],'mk'],[[1.6,2.5,2.1],[6.4,2.5,2.1],'ac']],
+    labels:[[[6.4,2.5,2.1],'a',26,10],[[7.7,2.5,0],'b',26,10],[[0.6,0.5,0],'(P)',0,0],[[1.5,2.5,2.7],'(Q)',0,10]]},
+  tc3:{view:[-12,22],planes:[[PLN(0,8,0,5),'plane']],
+    lines:[[[0.5,1.5,0],[7.5,1.5,0],'ac'],[[1.5,0,0],[6.5,3,0],'mk dash'],[[1.5,0,2.2],[6.5,3,2.2],'mk'],[[4,1.5,2.2],[4,1.5,0],'so dash']],
+    dots:[[[4,1.5,0]]],
+    labels:[[[7.5,1.5,0],'a',26,10],[[6.5,3,2.2],'b',26,6],[[6.5,3,0],"b'",28,6],[[7.4,0.4,0],'(P)',0,0]]},
+  vt1:{view:[-12,22],planes:[[PLN(0,6,0,4),'plane']],lines:[[[0.5,2,1.8],[5.5,2,1.8],'ac']],labels:[[[5.5,2,1.8],'d',24,10],[[0.6,0.5,0],'α',0,0]]},
+  vt2:(()=>{const M=[3.2,2,0],u=[0.35,-0.45,1],at=t=>M.map((v,i)=>v+u[i]*t);
+    return{view:[-12,22],planes:[[PLN(0,6,0,4),'plane']],lines:[[M,at(2.4),'ac'],[M,at(-1.4),'ac dash']],
+      dots:[[M,'M',30,0]],labels:[[at(2.4),'d',22,0],[[0.6,0.5,0],'α',0,0]]};})(),
+  vt3:{view:[-12,22],planes:[[PLN(0,6,0,4),'plane']],lines:[[[0.8,0.8,0],[5.2,3.2,0],'ac']],
+    dots:[[[2.2,1.564,0]],[[4,2.545,0]]],labels:[[[5.2,3.2,0],'d',22,-12],[[0.6,0.5,0],'α',0,0]]},
+  phong:{view:[-15,20],planes:[[PLN(0,9,0,5),'plane']],
+    lines:[[[0.5,2.5,0],[8.5,2.5,0],'mk dash'],[[0.5,2.5,3.2],[8.5,2.5,3.2],'ac'],[[0.5,2.5,3.2],[0.5,2.5,0],'so dash'],[[8.5,2.5,3.2],[8.5,2.5,0],'so dash']],
+    labels:[[[4.5,2.5,3.2],'Thanh đèn',0,-22,'tx'],[[4.5,2.5,0],'Ron gạch',0,-16,'tx'],[[7.5,0.6,0],'Mặt sàn',0,0,'tx']]}
+};
+FIG3D.cover=FIG3D.tc1;
+
+/* =========================================================
    DỰNG SLIDE THEO LOẠI
    ========================================================= */
 const CH=BAI.chang_ds||[['kd','Khởi động'],['ht','Hình thành kiến thức'],['lt','Luyện tập'],['vd','Vận dụng'],['tk','Tổng kết']];
@@ -661,11 +728,11 @@ const RENDER={
       <div class="meta">Toán ${BAI.lop} · ${BAI.sach} · ${BAI.chuong}</div>
       <div class="bai">${BAI.bai}</div><h1>${BAI.ten}</h1>
       <div class="goals"><div class="goals-h">Sau tiết học, em</div><ul class="sq">${BAI.muc_tieu.map(m=>`<li>${m}</li>`).join('')}</ul></div>
-    </div><div class="fig">${FIG.cover()}</div></div>`,
+    </div><div class="fig" data-fig="cover">${FIG.cover()}</div></div>`,
 
   'cau-hoi':s=>head(s)+`<div class="body two"><div class="col"><p>${s.de}</p>
       <ol class="qs">${s.hoi.map(h=>`<li class="frag"><div>${h.q}</div><div class="ans frag">${h.a}</div></li>`).join('')}</ol>
-    </div><div class="fig">${FIG[s.hinh]()}</div></div>`,
+    </div><div class="fig" data-fig="${s.hinh}">${FIG[s.hinh]()}</div></div>`,
 
   'nho-lai':s=>head(s)+`<div class="body"><div class="nl-grid">${s.items.map((it,i)=>`<div class="nl"><div class="q"><b>${i+1}.</b> ${it[0]}</div><div class="a frag">${it[1]}</div></div>`).join('')}</div></div>`,
 
@@ -681,12 +748,12 @@ const RENDER={
     ${s.loi?`<p class="loi-l frag"><span class="k">Lỗi hay gặp</span><span>${s.loi}</span></p>`:''}`,
 
   'hinh-cot':s=>head(s)+`<div class="body" style="gap:18px">${s.mo?`<p>${s.mo}</p>`:''}
-    <div class="hc-grid" style="grid-template-columns:repeat(${s.cot.length},1fr)">${s.cot.map(c=>`<div class="hc"><div class="fig">${FIG[c.hinh]()}</div><div class="hc-cap">${c.cap}</div><div class="hc-t frag">${c.t}</div></div>`).join('')}</div></div>`,
+    <div class="hc-grid" style="grid-template-columns:repeat(${s.cot.length},1fr)">${s.cot.map(c=>`<div class="hc"><div class="fig" data-fig="${c.hinh}">${FIG[c.hinh]()}</div><div class="hc-cap">${c.cap}</div><div class="hc-t frag">${c.t}</div></div>`).join('')}</div></div>`,
 
   'khung-hinh':s=>head(s)+`<div class="body two" style="grid-template-columns:1.05fr .95fr;gap:40px"><div class="col" style="gap:20px">
       <div class="khung ${s.kieu==='dl'?'dl':''}"><div class="lbl">${s.lbl}</div>${s.nd}</div>
       ${s.them?`<div class="col" style="gap:10px"><div class="notes-h frag">${s.them_lbl}</div><ul class="sq notes">${s.them.map(t=>`<li class="frag">${t}</li>`).join('')}</ul></div>`:''}
-    </div><div class="fig khfig">${FIG[s.hinh]()}</div></div>`,
+    </div><div class="fig khfig" data-fig="${s.hinh}">${FIG[s.hinh]()}</div></div>`,
 
   'luyen':s=>head(s)+`<div class="body" style="gap:18px">${s.de?`<p>${s.de}</p>`:''}
     <div class="lx-grid${s.cot===1?' c1':''}">${s.items.map((it,i)=>`<div class="lx"><div class="lq"><b>${'abcdef'[i]})</b>${it[0]}</div><div class="la frag">${it[1]}</div></div>`).join('')}</div></div>`,
@@ -700,7 +767,7 @@ const RENDER={
       <p><span class="de-lbl">${s.nhan}.</span>${s.de}</p>
       <ol class="steps">${s.buoc.map(b=>`<li class="frag"><span>${b[0]}</span>${b[1]?`<span class="why">${b[1]}</span>`:''}</li>`).join('')}</ol>
       <p class="ket frag">${s.ket}</p>
-    </div>${s.hinh?`<div class="fig">${FIG[s.hinh]()}</div>`:''}</div>`,
+    </div>${s.hinh?`<div class="fig" data-fig="${s.hinh}">${FIG[s.hinh]()}</div>`:''}</div>`,
 
   'bang':s=>head(s)+`<div class="body" style="gap:20px"><p>${s.mo}</p>
       <table class="tc">${s.dong.map(d=>`<tr class="frag"><td>${d[0]}</td><td>${d[1]}</td></tr>`).join('')}</table>
@@ -751,6 +818,7 @@ function go(n,revealAll=false){
   slides[cur].classList.remove('active');
   cur=n;const s=slides[cur];s.classList.add('active');
   frags(s).forEach(f=>setFrag(f,revealAll));
+  try{if(zName)closeZoom();}catch(_){}
   autoFit(s);updateFoot();redrawInk();
 }
 /* đo chiều cao thật của nội dung (kể cả các bước chưa hiện) và thu nhỏ nếu tràn xuống thanh dưới */
@@ -892,6 +960,7 @@ addEventListener('pointerdown',peekBar);
 /* bàn phím */
 addEventListener('keydown',e=>{
   if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(!zoom.hidden){zoomKey(e);return;}
   const k=e.key,inRange=e.target&&e.target.type==='range';
   if(k==='Escape'){gridOvl.hidden=helpOvl.hidden=true;blk.hidden=true;togglePen(false);return;}
   if(!gridOvl.hidden||!helpOvl.hidden){if(k==='g'||k==='G'||k==='?')gridOvl.hidden=helpOvl.hidden=true;return;}
@@ -916,9 +985,106 @@ addEventListener('keydown',e=>{
 
 /* vuốt trên điện thoại / máy tính bảng */
 let sw=null;
-stage.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'&&!stage.classList.contains('pen')&&!e.target.closest('button,input'))sw=[e.clientX,e.clientY];});
+stage.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'&&!stage.classList.contains('pen')&&!e.target.closest('button,input,.zoom'))sw=[e.clientX,e.clientY];});
 stage.addEventListener('pointerup',e=>{if(!sw)return;const dx=e.clientX-sw[0],dy=e.clientY-sw[1];sw=null;
   if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))dx<0?next():prev();});
+
+/* =========================================================
+   PHÓNG TO HÌNH · XOAY HÌNH KHÔNG GIAN
+   FIG3D (nếu bài có) chứa mô hình 3D: bấm hình để phóng to, kéo để xoay
+   ========================================================= */
+const M3=(typeof FIG3D!=='undefined')?FIG3D:{};
+const zoom=document.getElementById('zoom'),zmFig=document.getElementById('zmFig'),zmBar=document.getElementById('zmBar'),zmHint=document.getElementById('zmHint');
+let zName=null,zYaw=0,zPitch=0,zAuto=false,zRaf=0;
+host.querySelectorAll('.fig[data-fig]').forEach(f=>{if(M3[f.dataset.fig])f.dataset.d3='1';});
+
+function render3D(m,yaw,pitch){
+  const r2=Math.PI/180,ct=Math.cos(yaw*r2),st=Math.sin(yaw*r2),cp=Math.cos(pitch*r2),sp=Math.sin(pitch*r2);
+  const P3=n=>typeof n==='string'?m.pts[n]:n;
+  const all=[...Object.values(m.pts||{}),...(m.lines||[]).flatMap(l=>[l[0],l[1]]),...(m.planes||[]).flatMap(p=>p[0])];
+  const c=[0,1,2].map(i=>all.reduce((s,p)=>s+p[i],0)/all.length);
+  const R=Math.max(...all.map(p=>Math.hypot(p[0]-c[0],p[1]-c[1],p[2]-c[2])))||1,k=335/R;
+  const rot=p=>{const x=p[0]-c[0],y=p[1]-c[1],z=p[2]-c[2];return[x*ct-y*st,x*st+y*ct,z];};
+  const sc=p=>{const q=rot(p);return[+(q[0]*k).toFixed(1),+(-(q[1]*sp+q[2]*cp)*k).toFixed(1)];};
+  const depth=p=>{const q=rot(p);return -q[1]*cp+q[2]*sp;};
+  const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const cross=(u,v)=>[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]];
+  /* mặt của khối: pháp tuyến hướng ra ngoài, mặt nào quay về phía người nhìn */
+  const fp=[...new Set((m.faces||[]).flat())].map(P3);
+  const g=fp.length?[0,1,2].map(i=>fp.reduce((s,p)=>s+p[i],0)/fp.length):c;
+  const faces=(m.faces||[]).map(f=>{
+    const a=P3(f[0]);let n=cross(sub(P3(f[1]),a),sub(P3(f[2]),a));
+    if(dot(n,sub(a,g))<0)n=n.map(v=>-v);
+    const rn=[n[0]*ct-n[1]*st,n[0]*st+n[1]*ct,n[2]];
+    return{a,n,len:Math.hypot(...n),front:-rn[1]*cp+rn[2]*sp>1e-9};
+  });
+  const onF=(p,f)=>Math.abs(dot(f.n,sub(p,f.a)))/f.len<1e-6*(1+R);
+  const W=(a,b,cls)=>`<path class="seg ${cls}" d="M${sc(a)} L${sc(b)}"/>`;
+  let s=`<svg viewBox="-460 -350 920 700">`;
+  (m.planes||[]).forEach(p=>{s+=`<path class="${p[1]||'plane'} zp" d="M${p[0].map(sc).join(' L')} Z"/>`;});
+  (m.polys||[]).forEach(p=>{s+=`<path class="${p[1]||'sec'} zp" d="M${p[0].map(n=>sc(P3(n))).join(' L')} Z"/>`;});
+  (m.lines||[]).forEach(l=>{s+=W(l[0],l[1],l[2]||'');});
+  const segs=(m.segs||[]).map(e=>{
+    const a=P3(e[0]),b=P3(e[1]),cls=e[2]||'';let vis=true;
+    if(e[3]!=='free'){const fs=faces.filter(f=>onF(a,f)&&onF(b,f));vis=fs.length?fs.some(f=>f.front):!m.solid;}
+    return{a,b,cls:vis?cls:(cls?cls+' dash':'so dash'),vis,d:(depth(a)+depth(b))/2};
+  });
+  segs.filter(e=>!e.vis).forEach(e=>{s+=W(e.a,e.b,e.cls);});
+  segs.filter(e=>e.vis).forEach(e=>{s+=W(e.a,e.b,e.cls);});
+  const gs=sc(g);
+  (m.show||[]).forEach(n=>{
+    const q=sc(P3(n)),o=(m.off&&m.off[n])||null;
+    let dx,dy;if(o){[dx,dy]=o;}else{const vx=q[0]-gs[0],vy=q[1]-gs[1],L=Math.hypot(vx,vy)||1;dx=vx/L*40;dy=vy/L*40;}
+    s+=`<circle class="pt" cx="${q[0]}" cy="${q[1]}" r="7"/><text class="zl" x="${q[0]+dx}" y="${q[1]+dy+12}" text-anchor="middle">${n}</text>`;
+  });
+  (m.dots||[]).forEach(d=>{const q=sc(d[0]);s+=`<circle class="pt" cx="${q[0]}" cy="${q[1]}" r="7"/>`;if(d[1])s+=`<text class="zl" x="${q[0]+(d[2]||0)}" y="${q[1]+(d[3]||0)}" text-anchor="middle">${d[1]}</text>`;});
+  (m.labels||[]).forEach(l=>{const q=sc(l[0]);s+=`<text class="${l[4]||'zl'}" x="${q[0]+(l[2]||0)}" y="${q[1]+(l[3]||0)}" text-anchor="middle">${l[1]}</text>`;});
+  return s+`</svg>`;
+}
+const pLim=()=>M3[zName]&&M3[zName].solid?[-70,85]:[6,85];
+function draw3(){const[a,b]=pLim();zPitch=Math.max(a,Math.min(b,zPitch));zmFig.innerHTML=render3D(M3[zName],zYaw,zPitch);}
+function setAuto(on){zAuto=on;cancelAnimationFrame(zRaf);zmBar.querySelector('[data-v="auto"]').classList.toggle('on',on);
+  if(on){const step=()=>{zYaw+=0.45;draw3();zRaf=requestAnimationFrame(step);};zRaf=requestAnimationFrame(step);}}
+function openZoom(name){
+  zName=name;zoom.hidden=false;const m=M3[name];
+  if(m){[zYaw,zPitch]=m.view||[-25,22];draw3();zmBar.hidden=false;zmHint.textContent='Kéo trên hình để xoay · Bấm vào hình để thu nhỏ';}
+  else{zmFig.innerHTML=FIG[name]();zmBar.hidden=true;zmHint.textContent='Bấm vào hình để thu nhỏ';}
+}
+function closeZoom(){if(zAuto)setAuto(false);zoom.hidden=true;zName=null;zmFig.innerHTML='';}
+host.addEventListener('click',e=>{
+  if(stage.classList.contains('pen'))return;
+  const f=e.target.closest('.fig[data-fig]');if(f){e.stopPropagation();openZoom(f.dataset.fig);}
+},true);
+let zDrag=null;
+zmFig.addEventListener('pointerdown',e=>{zDrag={x:e.clientX,y:e.clientY,moved:false};try{zmFig.setPointerCapture(e.pointerId);}catch(_){}});
+zmFig.addEventListener('pointermove',e=>{
+  if(!zDrag||!M3[zName])return;
+  const dx=e.clientX-zDrag.x,dy=e.clientY-zDrag.y;
+  if(!zDrag.moved&&Math.hypot(dx,dy)<6)return;
+  if(!zDrag.moved){zDrag.moved=true;if(zAuto)setAuto(false);}
+  zYaw-=dx*0.5;zPitch+=dy*0.4;zDrag.x=e.clientX;zDrag.y=e.clientY;draw3();
+});
+zmFig.addEventListener('pointerup',()=>{const d=zDrag;zDrag=null;if(d&&!d.moved)closeZoom();});
+zmBar.addEventListener('click',e=>{
+  const b=e.target.closest('[data-v]');if(!b||!M3[zName])return;const v=b.dataset.v,m=M3[zName];
+  if(v==='auto')setAuto(!zAuto);
+  else if(v==='goc'){if(zAuto)setAuto(false);[zYaw,zPitch]=m.view||[-25,22];draw3();}
+  else if(v==='tren'){zPitch=84;draw3();}
+  else if(v==='ngang'){zPitch=m.solid?4:8;draw3();}
+  else if(v==='thu')closeZoom();
+  b.blur();
+});
+function zoomKey(e){
+  const k=e.key;e.preventDefault();
+  if(k==='Escape'||k==='Enter'||k==='z'||k==='Z'){closeZoom();return;}
+  if(!M3[zName])return;
+  if(k==='ArrowLeft'){zYaw+=10;draw3();}
+  else if(k==='ArrowRight'){zYaw-=10;draw3();}
+  else if(k==='ArrowUp'){zPitch+=6;draw3();}
+  else if(k==='ArrowDown'){zPitch-=6;draw3();}
+  else if(k===' ')setAuto(!zAuto);
+  else if(k==='r'||k==='R'){[zYaw,zPitch]=M3[zName].view||[-25,22];draw3();}
+}
 
 go(0);
 
