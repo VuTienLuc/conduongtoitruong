@@ -312,6 +312,32 @@ h3.sub{margin:22px 0 0}
   #print-root .sheet{font-size:12pt}
 }
 
+/* ---------- In tiết kiệm (Kiểu in ở mọi phiếu, đề – trừ Sổ tay): html.in-eco = chữ 10, dòng sát, lề hẹp, các phần in liền nhau;
+   html.in-eco2 = thêm bỏ khung ô li, dòng kẻ (học sinh làm ra giấy riêng). Đáp án (.sh-dapan) luôn sang trang mới để cắt rời. ---------- */
+@page ecoA4{size:A4;margin:7mm 8mm}
+html.in-eco .sheet:not(.st-sheet){font-size:10pt;line-height:1.22}
+html.in-eco .paper-wrap .sheet:not(.st-sheet) .sh-page{padding:8mm 8mm}
+html.in-eco .sheet:not(.st-sheet) p{margin-top:1px;margin-bottom:2px}
+html.in-eco .sheet:not(.st-sheet) .sh-head{font-size:7.5pt;padding-bottom:1px;margin-bottom:2px}
+html.in-eco .sheet:not(.st-sheet) .sh-title{font-size:11.5pt;margin:1px 0 0}
+html.in-eco .sheet:not(.st-sheet) .sh-sub{font-size:9.5pt;margin:0 0 2px}
+html.in-eco .sheet:not(.st-sheet) .sh-info{font-size:9.5pt;margin:1px 0 2px}
+html.in-eco .sheet:not(.st-sheet) .sh-q{margin-top:3px}
+html.in-eco .sheet:not(.st-sheet) :is(.sh-remind,.sh-check,.sh-ai,.ld-ask,.ld-howto,.ld-nac,.ld-the-mini,.van-vb,.van-dy,.van-tip,.van-mau,.van-khung,.van-tu,.sh-steps,.ld-src){font-size:9pt;line-height:1.2;margin-top:2px;margin-bottom:3px}
+html.in-eco .sheet:not(.st-sheet) :is(.sh-remind,.ld-ask,.ld-nac,.van-vb,.van-dy,.sh-ai){padding:2px 6px}
+html.in-eco .sheet:not(.st-sheet) .sh-fig{margin:2px 0}
+html.in-eco .sheet:not(.st-sheet) .sh-fig .fig{max-width:48mm;max-height:44mm;width:auto}
+html.in-eco .sheet:not(.st-sheet) table td,html.in-eco .sheet:not(.st-sheet) table th{padding:1px 5px;font-size:9.5pt}
+html.in-eco .sheet:not(.st-sheet) .van-tho p{margin:0 0 2px;line-height:1.3}
+html.in-eco2 .sheet:not(.st-sheet) :is(.sh-write,.sh-lines){display:none}
+@media print{
+  html.in-eco #print-root .sheet:not(.st-sheet){font-size:10pt;page:ecoA4}
+  html.in-eco #print-root .sheet:not(.st-sheet) > .sh-page{break-after:auto;page-break-after:auto;break-inside:avoid-page}
+  html.in-eco #print-root .sheet:not(.st-sheet) > .sh-page:not(:first-child):not(.sh-dapan){border-top:1px dashed #888;margin-top:2.5mm;padding-top:2mm}
+  html.in-eco #print-root .sheet:not(.st-sheet) > .sh-page.sh-dapan{break-before:page;page-break-before:always}
+  html.in-eco #print-root .sheet:not(.st-sheet) > .sh-dapan + .sh-dapan{break-before:auto;page-break-before:auto;border-top:1px dashed #888;margin-top:2.5mm;padding-top:2mm}
+}
+
 /* ---------- Luyện đề (vào 10) ---------- */
 .ld-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:10px 0}
 .ld-item{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border:1.5px solid var(--grid);border-radius:10px;text-decoration:none;color:inherit;background:var(--card,transparent)}
@@ -707,3 +733,5 @@ table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align
 .qs:not(.qs-trang) .qs-b,.qs:not(.qs-trang) .qs-nho{break-inside:auto}
 .qs-b h3{break-after:avoid}
 .qs table,.qs .fig-hang,.qs-hinh{break-inside:avoid}
+.kieu-in{flex-wrap:wrap}
+.kieu-in select{max-width:100%;font-size:15px}

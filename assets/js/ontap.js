@@ -42,7 +42,7 @@ const OnTap = (() => {
         <span>Thời gian làm: ............ phút · Số bài đúng: ......../${allBai(e).length}</span></div></section>`;
   }
   function pageLoiGiai(e) {
-    return `<section class="sh-page ot-page">${head('ĐÁP ÁN – LỜI GIẢI', `${esc(e.ma)} · đợt ${e.dot}`)}<h1 class="sh-title">LỜI GIẢI PHIẾU ÔN TẬP</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]}</p>
+    return `<section class="sh-page ot-page sh-dapan">${head('ĐÁP ÁN – LỜI GIẢI', `${esc(e.ma)} · đợt ${e.dot}`)}<h1 class="sh-title">LỜI GIẢI PHIẾU ÔN TẬP</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]}</p>
       ${e.phan.map((p, k) => `<h2 class="sh-h">PHẦN ${CHU[k]} – ${p.muc.toUpperCase()}</h2>${p.bai.map(b => `<div class="sh-vd"><p><b>Bài ${b.so}.</b> <b>Đáp số:</b> ${b.dap}</p>
         ${b.can ? `<p class="ot-can">🔑 Kiến thức dùng: ${b.can}</p>` : ''}<ol class="sh-lg">${b.lg.map(x => `<li>${x}</li>`).join('')}</ol>${b.nguon ? `<p class="ld-src">Nguồn: ${b.nguon}</p>` : ''}</div>`).join('')}`).join('')}</section>`;
   }
@@ -97,7 +97,7 @@ const OnTap = (() => {
   function phieuPage(e) {
     view().innerHTML = `${App.topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/on-tap">← Phiếu ôn tập</a></div>
       <section class="card sheet-tools"><h2>${esc(e.ma)} · đợt ${e.dot}</h2><p class="lead">${e.chu_de || TEN[e.bai]} – ${e.phan.map(p => `${p.muc} ${p.phut} phút`).join(' → ')}.</p>
-        <div class="opts-row"><label class="tog"><input type="checkbox" id="oKey"> Kèm lời giải (trang sau)</label><label class="tog"><input type="checkbox" id="oXong" ${U.get(doneKey(e.ma), false) ? 'checked' : ''}> Em đã làm xong phiếu này</label></div>
+        <div class="opts-row"><label class="tog"><input type="checkbox" id="oKey"> Kèm lời giải (trang sau)</label><label class="tog"><input type="checkbox" id="oXong" ${U.get(doneKey(e.ma), false) ? 'checked' : ''}> Em đã làm xong phiếu này</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="oIn">🖨️ In / Lưu PDF</button><button class="btn" type="button" id="oMd">⬇️ Tải Markdown (.md)</button><a class="btn" href="#/cd/${e.id}/lt">📘 Học lại chủ đề</a></div></section>
       <div class="paper-wrap" id="paper"></div></main>`;
     const $i = id => document.getElementById(id);

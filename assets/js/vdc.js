@@ -159,7 +159,7 @@ const Vdc = (() => {
       <div class="card sheet-tools"><h2>Phiếu luyện tập · ${t.title}</h2>
         <p class="lead">Phiếu A4: kiến thức trọng tâm, ${allBt(t).length} bài vận dụng có dòng kẻ để làm, cuối phiếu là gợi ý phương pháp và mã QR lời giải từng bài.</p>
         <div class="opts-row"><label class="tog"><input type="checkbox" id="oVd" ${o.vd ? 'checked' : ''}> Kèm ví dụ mẫu có lời giải</label>
-        <label class="tog"><input type="checkbox" id="oQr" ${o.qr ? 'checked' : ''}> In mã QR lời giải</label></div>
+        <label class="tog"><input type="checkbox" id="oQr" ${o.qr ? 'checked' : ''}> In mã QR lời giải</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ In / Lưu PDF</button></div></div>
       <div class="paper-wrap" id="paper"></div></main>`;
     const draw = () => { $('#paper').innerHTML = sheetHTML(t, sget('vdcSheet', o)); };

@@ -68,7 +68,7 @@ const LuyenDe = (() => {
   }
   function pageKey(t, L, k) {
     const d = L.de[k - 1];
-    return `<section class="sh-page ld-page">
+    return `<section class="sh-page ld-page sh-dapan">
       <div class="sh-head"><span>ĐÁP ÁN – HƯỚNG DẪN CHẤM</span><span>Đề số ${k}/${L.de.length} · ${baiOf(t)}</span></div>
       <h1 class="sh-title">ĐÁP ÁN ĐỀ LUYỆN SỐ ${k}</h1><p class="sh-sub">${d.ten}</p>
       <div class="sh-key"><p><b>Đáp số:</b> ${d.ans}</p>${d.fig ? `<div class="sh-fig">${d.fig}</div>` : ''}
@@ -83,7 +83,10 @@ const LuyenDe = (() => {
   function sheetHTML(t, o = {}, ks, L0) {
     const L = L0 || get(t.id); if (!L) return '';
     ks = ks || L.de.map((_, i) => i + 1);
-    return `<div class="sheet math">${ks.map(k => pageDe(t, L, k) + (o.goi !== false && L.de[k - 1].goi ? pageGoi(t, L, k) : '') + (o.key ? pageKey(t, L, k) : '')).join('')}</div>`;
+    const goi = k => o.goi !== false && L.de[k - 1].goi ? pageGoi(t, L, k) : '';
+    // In tiết kiệm (o.eco): các đề in liền nhau, đáp án dồn về cuối để cắt rời phát cho học sinh
+    if (o.eco) return `<div class="sheet math">${ks.map(k => pageDe(t, L, k) + goi(k)).join('')}${o.key ? ks.map(k => pageKey(t, L, k)).join('') : ''}</div>`;
+    return `<div class="sheet math">${ks.map(k => pageDe(t, L, k) + goi(k) + (o.key ? pageKey(t, L, k) : '')).join('')}</div>`;
   }
   // Thẻ công cụ in một trang (dán vào vở)
   function theHTML(t) {
@@ -129,15 +132,16 @@ const LuyenDe = (() => {
         <p class="chips"><span class="chip">Đã làm ${done}/${total}</span></p>${otLink}
         <div class="ld-list">${L.de.map((x, i) => `<a class="ld-item${i + 1 === k ? ' on' : ''}${isDone(t.id, i + 1) ? ' ok' : ''}" href="#/cd/${t.id}/de/${i + 1}"><b>Đề ${i + 1}${x.nhap ? (x.may ? ' <i class="ld-may" title="Nhập từ AI, chỉ trên máy này">· máy này</i>' : ' <i class="ld-may" title="Nhập từ AI">· AI</i>') : ''}</b><span>${x.ten}</span></a>`).join('')}</div>
         <div class="opts-row">${hasGoi ? '<label class="tog"><input type="checkbox" id="ldGoi" checked> Kèm trang gợi ý từng nấc</label>' : ''}<label class="tog"><input type="checkbox" id="ldKey"> Kèm đáp án – hướng dẫn chấm (trang cuối mỗi đề)</label>
-          <label class="tog"><input type="checkbox" id="ldDone" ${isDone(t.id, k) ? 'checked' : ''}> Em đã làm xong Đề ${k}</label></div>
+          <label class="tog"><input type="checkbox" id="ldDone" ${isDone(t.id, k) ? 'checked' : ''}> Em đã làm xong Đề ${k}</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="ldOne">🖨️ In / Lưu PDF Đề ${k}</button><button class="btn" type="button" id="ldAll">🖨️ In cả ${total} đề</button></div></div>
       ${d.goi ? `<div class="card ld-hint"><h3>💡 Gợi ý từng nấc cho Đề ${k}</h3><p class="muted">Tự làm ít nhất 5 phút rồi mới mở. Đề này có ${nac(L, k)} nấc${L.giam ? ` (${nacNote(L)})` : ''}.</p><div id="ldNac"></div><button class="btn" type="button" id="ldNext">Mở Nấc 1 – ${NAC[0]}</button></div>` : ''}
       <div class="paper-wrap" id="paper"></div>`;
     const $i = id => document.getElementById(id);
-    const opt = () => ({ key: $i('ldKey').checked, goi: $i('ldGoi') ? $i('ldGoi').checked : false });
+    const opt = () => ({ key: $i('ldKey').checked, goi: $i('ldGoi') ? $i('ldGoi').checked : false, eco: U.kieuIn() > 0 });
     const draw = () => { $i('paper').innerHTML = sheetHTML(t, opt(), [k]); };
     draw();
     $i('ldKey').addEventListener('change', draw);
+    el.querySelector('.js-kieu-in').addEventListener('change', draw);
     if ($i('ldGoi')) $i('ldGoi').addEventListener('change', draw);
     $i('ldDone').addEventListener('change', e => { setDone(t.id, k, e.target.checked); pane(t, el, k); });
     $i('ldOne').addEventListener('click', e => printHTML(sheetHTML(t, opt(), [k]), e.currentTarget));

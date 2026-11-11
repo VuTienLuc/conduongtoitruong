@@ -68,5 +68,25 @@ const U = (() => {
 
   // Dòng tên in ở đầu mọi phiếu, đề PDF (sửa ở config.js → tenPhieu)
   const tenPhieu = () => (typeof window !== 'undefined' && window.CONFIG && window.CONFIG.tenPhieu) || 'LỚP TOÁN – THẦY VŨ TIẾN LỰC';
-  return { esc, $, $$, h, get, set, shuffle, pt, sum, plain, copy, toast, tenPhieu };
+
+  // Kiểu in dùng chung mọi phiếu, đề (trừ Sổ tay – có kiểu in riêng): 0 chuẩn · 1 tiết kiệm · 2 siêu tiết kiệm.
+  // Đặt lớp in-eco (và in-eco2) trên <html>; CSS mục "In tiết kiệm" lo phần còn lại, xem trước trên màn hình cũng đổi theo.
+  // Tiết kiệm: chữ 10, dòng sát, lề hẹp, các phần in liền · Siêu tiết kiệm: thêm bỏ khung ô li, dòng kẻ (làm ra giấy riêng)
+  const KIEU_IN = ['Chuẩn – chữ 12', 'Tiết kiệm – chữ 10, giữ chỗ làm', 'Siêu tiết kiệm – chữ 10, bỏ chỗ làm'];
+  const kieuIn = () => { const v = +get('in:kieu', 0); return v === 1 || v === 2 ? v : 0; };
+  function apKieuIn(v) {
+    const r = document.documentElement; if (!r) return;
+    r.classList.toggle('in-eco', v > 0); r.classList.toggle('in-eco2', v === 2);
+  }
+  const kieuInHTML = () => `<label class="tog kieu-in">Kiểu in <select class="js-kieu-in" aria-label="Kiểu in">${KIEU_IN.map((x, i) => `<option value="${i}" ${kieuIn() === i ? 'selected' : ''}>${x}</option>`).join('')}</select></label>`;
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    apKieuIn(kieuIn());
+    document.addEventListener('change', e => {
+      if (!e.target || !e.target.classList || !e.target.classList.contains('js-kieu-in')) return;
+      const v = +e.target.value; set('in:kieu', v); apKieuIn(v);
+      document.querySelectorAll('.js-kieu-in').forEach(x => { if (x !== e.target) x.value = String(v); });
+      document.dispatchEvent(new CustomEvent('kieu-in', { detail: v }));
+    });
+  }
+  return { esc, $, $$, h, get, set, shuffle, pt, sum, plain, copy, toast, tenPhieu, kieuIn, kieuInHTML };
 })();

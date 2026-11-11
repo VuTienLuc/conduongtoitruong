@@ -92,7 +92,7 @@ const Van = (() => {
     const row = (lab, dap, cham) => `<tr class="van-row-h"><td><b>${lab}</b></td><td colspan="2">${dap}</td></tr>${cham.map(([s, p]) => `<tr><td></td><td>${s}</td><td class="num">${pt(p)}</td></tr>`).join('')}`;
     const dv = e.dh.dv, vt = e.viet;
     const loi = [...dv.loi, ...vt.loi];
-    return `<section class="sh-page van-page">${head('HƯỚNG DẪN CHẤM', `Đề ${esc(e.ma)}`)}
+    return `<section class="sh-page van-page sh-dapan">${head('HƯỚNG DẪN CHẤM', `Đề ${esc(e.ma)}`)}
       <h1 class="sh-title">HƯỚNG DẪN CHẤM – ĐỀ ${esc(e.ma)}</h1>
       <table class="sh-barem van-barem"><thead><tr><th>Câu</th><th>Đáp án – ý cần đạt</th><th>Điểm</th></tr></thead><tbody>
         <tr class="van-row-p"><td colspan="3"><b>PHẦN I. ĐỌC HIỂU (${pt1(e.dh.diem)} điểm)</b></td></tr>
@@ -176,7 +176,7 @@ const Van = (() => {
         <p class="lead">In ra làm trên giấy: trang <b>Đề</b>, trang <b>Bài làm có gợi ý</b> (viết thẳng vào dòng kẻ) và <b>Hướng dẫn chấm</b> để tự chấm sau khi làm xong.</p>
         <div class="opts-row"><label class="tog">Mức gợi ý <select id="vMuc"><option value="${auto}">Tự động (${MUC[auto]})</option><option value="day">Đầy đủ</option><option value="vua">Vừa</option><option value="it">Ít</option></select></label>
           <label class="tog"><input type="checkbox" id="vDe" checked> Đề</label><label class="tog"><input type="checkbox" id="vGoi" checked> Bài làm có gợi ý</label><label class="tog"><input type="checkbox" id="vCham"> Hướng dẫn chấm</label>
-          <label class="tog"><input type="checkbox" id="vXong" ${d ? 'checked' : ''}> Em đã làm xong đề này</label></div>
+          <label class="tog"><input type="checkbox" id="vXong" ${d ? 'checked' : ''}> Em đã làm xong đề này</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="vIn">🖨️ In / Lưu PDF</button></div></section>
       <div class="paper-wrap" id="paper"></div></main>`;
     const $i = id => document.getElementById(id);

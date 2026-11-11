@@ -282,7 +282,7 @@ const App = (() => {
         <div class="sh-write" style="height:${p.h || 60}mm"></div></div>`).join('')}
       <div class="sh-check"><b>Tự soát trước khi chụp ảnh nộp:</b> ${t.present.slice(0, 4).map(x => `<span>☐ ${plainShort(x)}</span>`).join('')}</div>
       <div class="sh-ai">🤖 <b>Làm xong:</b> chụp ảnh rõ từng trang → mở web <b>Toán vào 10</b> → Chủ đề ${t.no} → mục <b>Nhờ AI nhận xét</b> → bấm <b>Sao chép prompt</b> → dán vào ChatGPT / Gemini / Claude cùng ảnh bài làm.</div></section>`;
-    const keyPage = o.key ? `<section class="sh-page">${head}<h1 class="sh-title">ĐÁP ÁN – HƯỚNG DẪN CHẤM</h1><p class="sh-sub">${t.title}</p>
+    const keyPage = o.key ? `<section class="sh-page sh-dapan">${head}<h1 class="sh-title">ĐÁP ÁN – HƯỚNG DẪN CHẤM</h1><p class="sh-sub">${t.title}</p>
       ${t.practice.map((p, i) => `<div class="sh-key"><p><b>Bài ${i + 1} (${pt(p.pts)} điểm).</b> Đáp số: ${p.ans}</p>${p.fig ? `<div class="sh-fig">${p.fig}</div>` : ''}
         <table class="sh-barem"><tbody>${p.barem.map(([s, x]) => `<tr><td>${s}</td><td class="num">${pt(x)}</td></tr>`).join('')}</tbody></table></div>`).join('')}</section>` : '';
     return `<div class="sheet math">${modelPage}${work}${keyPage}</div>`;
@@ -294,7 +294,7 @@ const App = (() => {
     pane.innerHTML = `<div class="card sheet-tools">
         <p class="lead">Phiếu A4 gồm <b>nhắc nhanh</b>, <b>${t.practice.length} bài</b> (cơ bản → khá → nâng cao) và khung ô li để làm ngay trên giấy. Bấm <b>In / Lưu PDF</b>; trên iPad chọn Chia sẻ → In.</p>
         <div class="opts-row"><label class="tog"><input type="checkbox" id="oModel" ${o.model ? 'checked' : ''}> Kèm trang bài mẫu (in trước)</label>
-        <label class="tog"><input type="checkbox" id="oKey" ${o.key ? 'checked' : ''}> Kèm đáp án – hướng dẫn chấm (trang cuối, cho phụ huynh/thầy cô)</label></div>
+        <label class="tog"><input type="checkbox" id="oKey" ${o.key ? 'checked' : ''}> Kèm đáp án – hướng dẫn chấm (trang cuối, cho phụ huynh/thầy cô)</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ In / Lưu PDF</button></div></div>
       <div class="paper-wrap" id="paper"></div>`;
     const draw = () => { $('#paper').innerHTML = sheetHTML(t, get('sheetOpt', o)); };

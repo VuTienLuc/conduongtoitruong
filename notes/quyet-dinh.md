@@ -25,3 +25,4 @@
 | 11/11/2026 | Sổ tay công thức tra cứu vào 10: Menu prompt soạn theo chủ đề (nền, Bài 1–7), dữ liệu so_tay_toan, trang #/so-tay (tìm, in PDF); nhập thêm chỉ thêm dạng mới | Thầy yêu cầu |
 | 11/11/2026 | In sổ tay công thức thành một quyển (vào 10 hoặc 10–11–12) từ dữ liệu sẵn có: bìa, mục lục, màu chủ đề, mã mục, bảng A–Z, 4 kiểu in (tiết kiệm/cân đối/A5/chữ to) | Thầy yêu cầu |
 | 11/11/2026 | Sổ tay vào 10: thêm hình minh họa trực quan cho phần kiến thức (hinh-minh-hoa.js) và lưu ý trình bày đạt điểm tối đa (trang quy tắc chung + khung mỗi chủ đề + trường trinh_bay cho dạng) | Thầy yêu cầu |
+| 11/11/2026 | Ô "Kiểu in" chung cho mọi phiếu, đề (trừ Sổ tay): Chuẩn · Tiết kiệm (chữ 10, dòng sát, lề 7–8 mm, các phần in liền, giữ chỗ làm) · Siêu tiết kiệm (bỏ khung ô li, dòng kẻ). Đáp án (.sh-dapan) luôn sang trang mới; Luyện đề dồn đáp án về cuối. Lưu `in:kieu`, lớp `in-eco/in-eco2` trên html. Xuất PDF de-luyen/ vẫn kiểu chuẩn | Thầy yêu cầu |

@@ -440,7 +440,7 @@ const BaiHoc = (() => {
       ${e.tln.map((q, k) => `<div class="sh-q"><div class="sh-de"><b>Câu ${k + 1}.</b> ${q.q}</div><p>Đáp số: <span class="bh-tl-o"><i></i><i></i><i></i><i></i></span></p>${o.dong ? `<div class="sh-lines">${'<i></i>'.repeat(o.dong)}</div>` : ''}</div>`).join('')}`;
     s1 += `<div class="sh-check"><b>Tự đánh giá:</b><span>Phần I: ......../${tn.length}</span>${e.ds.length ? `<span>Phần II: ......../${e.ds.length * 4} ý</span>` : ''}${e.tln.length ? `<span>Phần III: ......../${e.tln.length}</span>` : ''}<span>☐ Câu sai đã xem lại lời giải</span></div></section>`;
     if (!o.dapAn) return `<div class="sheet math">${s1}</div>`;
-    const s2 = `<section class="sh-page">${head(`ĐÁP ÁN · Mã ${ma}`)}<h1 class="sh-title">ĐÁP ÁN PHIẾU LÀM BÀI</h1><p class="sh-sub">Toán ${e.lop} – ${ten} · Mã ${ma}</p>
+    const s2 = `<section class="sh-page sh-dapan">${head(`ĐÁP ÁN · Mã ${ma}`)}<h1 class="sh-title">ĐÁP ÁN PHIẾU LÀM BÀI</h1><p class="sh-sub">Toán ${e.lop} – ${ten} · Mã ${ma}</p>
       ${tn.length ? `<h2 class="sh-h">PHẦN I</h2><table class="bh-key"><tr><th>Câu</th>${tn.map((_, k) => `<th>${k + 1}</th>`).join('')}</tr><tr><th>Đáp án</th>${tn.map(x => `<td><b>${'ABCD'[x.good]}</b></td>`).join('')}</tr></table>
         ${o.giai ? tn.map((x, k) => x.q.why ? `<div class="sh-vd"><p><b>Câu ${k + 1} (${'ABCD'[x.good]}).</b> ${doiChu(x.q, x.opts)}</p></div>` : '').join('') : ''}` : ''}
       ${e.ds.length ? `<h2 class="sh-h">PHẦN II</h2><table class="bh-key"><tr><th>Câu</th><th>a</th><th>b</th><th>c</th><th>d</th></tr>${e.ds.map((q, k) => `<tr><th>${k + 1}</th>${q.y.map(y => `<td><b>${y[1] ? 'Đ' : 'S'}</b></td>`).join('')}</tr>`).join('')}</table>
@@ -461,7 +461,7 @@ const BaiHoc = (() => {
         <label class="tog"><input type="checkbox" id="pCan" ${st.canNho ? 'checked' : ''}> In phần Cần nhớ</label>
         ${e.tln.length ? `<label class="tog">Dòng kẻ mỗi câu trả lời ngắn <select id="pDong">${[0, 2, 3, 5].map(n => `<option ${st.dong === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
         <label class="tog"><input type="checkbox" id="pDa" ${st.dapAn ? 'checked' : ''}> Kèm trang đáp án (cho thầy cô)</label>
-        <label class="tog"><input type="checkbox" id="pGiai" ${st.giai ? 'checked' : ''}> Đáp án kèm lời giải thích</label></div>
+        <label class="tog"><input type="checkbox" id="pGiai" ${st.giai ? 'checked' : ''}> Đáp án kèm lời giải thích</label>${U.kieuInHTML()}</div>
       <div class="row"><button class="btn primary" type="button" id="pIn">🖨️ In / Lưu PDF</button>${typeof Xlsx !== 'undefined' ? `<button class="btn" type="button" id="pXls">📊 Xuất Excel đáp án (UNT)</button>
         <label class="tog">gồm <select id="pSoMa">${[1, 2, 3, 4].map(n => `<option value="${n}" ${st.soMa === n ? 'selected' : ''}>${n}</option>`).join('')}</select> mã đề</label>` : ''}</div>
       <p class="muted small">Lưu PDF: trong hộp thoại in chọn “Lưu dưới dạng PDF” (Save as PDF), khổ A4. Excel đáp án: mỗi mã đề một cột, câu đánh số liên tục (Phần I: A–D · Phần II: ĐSĐS · Phần III: đáp số, dấu chấm) – nạp vào phần mềm chấm.</p></section>

@@ -325,6 +325,32 @@ h3.sub{margin:22px 0 0}
   #print-root .sheet{font-size:12pt}
 }
 
+/* ---------- In tiết kiệm (Kiểu in ở mọi phiếu, đề – trừ Sổ tay): html.in-eco = chữ 10, dòng sát, lề hẹp, các phần in liền nhau;
+   html.in-eco2 = thêm bỏ khung ô li, dòng kẻ (học sinh làm ra giấy riêng). Đáp án (.sh-dapan) luôn sang trang mới để cắt rời. ---------- */
+@page ecoA4{size:A4;margin:7mm 8mm}
+html.in-eco .sheet:not(.st-sheet){font-size:10pt;line-height:1.22}
+html.in-eco .paper-wrap .sheet:not(.st-sheet) .sh-page{padding:8mm 8mm}
+html.in-eco .sheet:not(.st-sheet) p{margin-top:1px;margin-bottom:2px}
+html.in-eco .sheet:not(.st-sheet) .sh-head{font-size:7.5pt;padding-bottom:1px;margin-bottom:2px}
+html.in-eco .sheet:not(.st-sheet) .sh-title{font-size:11.5pt;margin:1px 0 0}
+html.in-eco .sheet:not(.st-sheet) .sh-sub{font-size:9.5pt;margin:0 0 2px}
+html.in-eco .sheet:not(.st-sheet) .sh-info{font-size:9.5pt;margin:1px 0 2px}
+html.in-eco .sheet:not(.st-sheet) .sh-q{margin-top:3px}
+html.in-eco .sheet:not(.st-sheet) :is(.sh-remind,.sh-check,.sh-ai,.ld-ask,.ld-howto,.ld-nac,.ld-the-mini,.van-vb,.van-dy,.van-tip,.van-mau,.van-khung,.van-tu,.sh-steps,.ld-src){font-size:9pt;line-height:1.2;margin-top:2px;margin-bottom:3px}
+html.in-eco .sheet:not(.st-sheet) :is(.sh-remind,.ld-ask,.ld-nac,.van-vb,.van-dy,.sh-ai){padding:2px 6px}
+html.in-eco .sheet:not(.st-sheet) .sh-fig{margin:2px 0}
+html.in-eco .sheet:not(.st-sheet) .sh-fig .fig{max-width:48mm;max-height:44mm;width:auto}
+html.in-eco .sheet:not(.st-sheet) table td,html.in-eco .sheet:not(.st-sheet) table th{padding:1px 5px;font-size:9.5pt}
+html.in-eco .sheet:not(.st-sheet) .van-tho p{margin:0 0 2px;line-height:1.3}
+html.in-eco2 .sheet:not(.st-sheet) :is(.sh-write,.sh-lines){display:none}
+@media print{
+  html.in-eco #print-root .sheet:not(.st-sheet){font-size:10pt;page:ecoA4}
+  html.in-eco #print-root .sheet:not(.st-sheet) > .sh-page{break-after:auto;page-break-after:auto;break-inside:avoid-page}
+  html.in-eco #print-root .sheet:not(.st-sheet) > .sh-page:not(:first-child):not(.sh-dapan){border-top:1px dashed #888;margin-top:2.5mm;padding-top:2mm}
+  html.in-eco #print-root .sheet:not(.st-sheet) > .sh-page.sh-dapan{break-before:page;page-break-before:always}
+  html.in-eco #print-root .sheet:not(.st-sheet) > .sh-dapan + .sh-dapan{break-before:auto;page-break-before:auto;border-top:1px dashed #888;margin-top:2.5mm;padding-top:2mm}
+}
+
 /* ---------- Luyện đề (vào 10) ---------- */
 .ld-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:10px 0}
 .ld-item{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border:1.5px solid var(--grid);border-radius:10px;text-decoration:none;color:inherit;background:var(--card,transparent)}
@@ -720,6 +746,8 @@ table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align
 .qs:not(.qs-trang) .qs-b,.qs:not(.qs-trang) .qs-nho{break-inside:auto}
 .qs-b h3{break-after:avoid}
 .qs table,.qs .fig-hang,.qs-hinh{break-inside:avoid}
+.kieu-in{flex-wrap:wrap}
+.kieu-in select{max-width:100%;font-size:15px}
 
 </style>
 </head>
@@ -829,7 +857,27 @@ const U = (() => {
 
   // Dòng tên in ở đầu mọi phiếu, đề PDF (sửa ở config.js → tenPhieu)
   const tenPhieu = () => (typeof window !== 'undefined' && window.CONFIG && window.CONFIG.tenPhieu) || 'LỚP TOÁN – THẦY VŨ TIẾN LỰC';
-  return { esc, $, $$, h, get, set, shuffle, pt, sum, plain, copy, toast, tenPhieu };
+
+  // Kiểu in dùng chung mọi phiếu, đề (trừ Sổ tay – có kiểu in riêng): 0 chuẩn · 1 tiết kiệm · 2 siêu tiết kiệm.
+  // Đặt lớp in-eco (và in-eco2) trên <html>; CSS mục "In tiết kiệm" lo phần còn lại, xem trước trên màn hình cũng đổi theo.
+  // Tiết kiệm: chữ 10, dòng sát, lề hẹp, các phần in liền · Siêu tiết kiệm: thêm bỏ khung ô li, dòng kẻ (làm ra giấy riêng)
+  const KIEU_IN = ['Chuẩn – chữ 12', 'Tiết kiệm – chữ 10, giữ chỗ làm', 'Siêu tiết kiệm – chữ 10, bỏ chỗ làm'];
+  const kieuIn = () => { const v = +get('in:kieu', 0); return v === 1 || v === 2 ? v : 0; };
+  function apKieuIn(v) {
+    const r = document.documentElement; if (!r) return;
+    r.classList.toggle('in-eco', v > 0); r.classList.toggle('in-eco2', v === 2);
+  }
+  const kieuInHTML = () => `<label class="tog kieu-in">Kiểu in <select class="js-kieu-in" aria-label="Kiểu in">${KIEU_IN.map((x, i) => `<option value="${i}" ${kieuIn() === i ? 'selected' : ''}>${x}</option>`).join('')}</select></label>`;
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    apKieuIn(kieuIn());
+    document.addEventListener('change', e => {
+      if (!e.target || !e.target.classList || !e.target.classList.contains('js-kieu-in')) return;
+      const v = +e.target.value; set('in:kieu', v); apKieuIn(v);
+      document.querySelectorAll('.js-kieu-in').forEach(x => { if (x !== e.target) x.value = String(v); });
+      document.dispatchEvent(new CustomEvent('kieu-in', { detail: v }));
+    });
+  }
+  return { esc, $, $$, h, get, set, shuffle, pt, sum, plain, copy, toast, tenPhieu, kieuIn, kieuInHTML };
 })();
 
 </script>
@@ -3545,7 +3593,7 @@ const Vdc = (() => {
       <div class="card sheet-tools"><h2>Phiếu luyện tập · ${t.title}</h2>
         <p class="lead">Phiếu A4: kiến thức trọng tâm, ${allBt(t).length} bài vận dụng có dòng kẻ để làm, cuối phiếu là gợi ý phương pháp và mã QR lời giải từng bài.</p>
         <div class="opts-row"><label class="tog"><input type="checkbox" id="oVd" ${o.vd ? 'checked' : ''}> Kèm ví dụ mẫu có lời giải</label>
-        <label class="tog"><input type="checkbox" id="oQr" ${o.qr ? 'checked' : ''}> In mã QR lời giải</label></div>
+        <label class="tog"><input type="checkbox" id="oQr" ${o.qr ? 'checked' : ''}> In mã QR lời giải</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ In / Lưu PDF</button></div></div>
       <div class="paper-wrap" id="paper"></div></main>`;
     const draw = () => { $('#paper').innerHTML = sheetHTML(t, sget('vdcSheet', o)); };
@@ -3649,7 +3697,7 @@ const LuyenDe = (() => {
   }
   function pageKey(t, L, k) {
     const d = L.de[k - 1];
-    return `<section class="sh-page ld-page">
+    return `<section class="sh-page ld-page sh-dapan">
       <div class="sh-head"><span>ĐÁP ÁN – HƯỚNG DẪN CHẤM</span><span>Đề số ${k}/${L.de.length} · ${baiOf(t)}</span></div>
       <h1 class="sh-title">ĐÁP ÁN ĐỀ LUYỆN SỐ ${k}</h1><p class="sh-sub">${d.ten}</p>
       <div class="sh-key"><p><b>Đáp số:</b> ${d.ans}</p>${d.fig ? `<div class="sh-fig">${d.fig}</div>` : ''}
@@ -3664,7 +3712,10 @@ const LuyenDe = (() => {
   function sheetHTML(t, o = {}, ks, L0) {
     const L = L0 || get(t.id); if (!L) return '';
     ks = ks || L.de.map((_, i) => i + 1);
-    return `<div class="sheet math">${ks.map(k => pageDe(t, L, k) + (o.goi !== false && L.de[k - 1].goi ? pageGoi(t, L, k) : '') + (o.key ? pageKey(t, L, k) : '')).join('')}</div>`;
+    const goi = k => o.goi !== false && L.de[k - 1].goi ? pageGoi(t, L, k) : '';
+    // In tiết kiệm (o.eco): các đề in liền nhau, đáp án dồn về cuối để cắt rời phát cho học sinh
+    if (o.eco) return `<div class="sheet math">${ks.map(k => pageDe(t, L, k) + goi(k)).join('')}${o.key ? ks.map(k => pageKey(t, L, k)).join('') : ''}</div>`;
+    return `<div class="sheet math">${ks.map(k => pageDe(t, L, k) + goi(k) + (o.key ? pageKey(t, L, k) : '')).join('')}</div>`;
   }
   // Thẻ công cụ in một trang (dán vào vở)
   function theHTML(t) {
@@ -3710,15 +3761,16 @@ const LuyenDe = (() => {
         <p class="chips"><span class="chip">Đã làm ${done}/${total}</span></p>${otLink}
         <div class="ld-list">${L.de.map((x, i) => `<a class="ld-item${i + 1 === k ? ' on' : ''}${isDone(t.id, i + 1) ? ' ok' : ''}" href="#/cd/${t.id}/de/${i + 1}"><b>Đề ${i + 1}${x.nhap ? (x.may ? ' <i class="ld-may" title="Nhập từ AI, chỉ trên máy này">· máy này</i>' : ' <i class="ld-may" title="Nhập từ AI">· AI</i>') : ''}</b><span>${x.ten}</span></a>`).join('')}</div>
         <div class="opts-row">${hasGoi ? '<label class="tog"><input type="checkbox" id="ldGoi" checked> Kèm trang gợi ý từng nấc</label>' : ''}<label class="tog"><input type="checkbox" id="ldKey"> Kèm đáp án – hướng dẫn chấm (trang cuối mỗi đề)</label>
-          <label class="tog"><input type="checkbox" id="ldDone" ${isDone(t.id, k) ? 'checked' : ''}> Em đã làm xong Đề ${k}</label></div>
+          <label class="tog"><input type="checkbox" id="ldDone" ${isDone(t.id, k) ? 'checked' : ''}> Em đã làm xong Đề ${k}</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="ldOne">🖨️ In / Lưu PDF Đề ${k}</button><button class="btn" type="button" id="ldAll">🖨️ In cả ${total} đề</button></div></div>
       ${d.goi ? `<div class="card ld-hint"><h3>💡 Gợi ý từng nấc cho Đề ${k}</h3><p class="muted">Tự làm ít nhất 5 phút rồi mới mở. Đề này có ${nac(L, k)} nấc${L.giam ? ` (${nacNote(L)})` : ''}.</p><div id="ldNac"></div><button class="btn" type="button" id="ldNext">Mở Nấc 1 – ${NAC[0]}</button></div>` : ''}
       <div class="paper-wrap" id="paper"></div>`;
     const $i = id => document.getElementById(id);
-    const opt = () => ({ key: $i('ldKey').checked, goi: $i('ldGoi') ? $i('ldGoi').checked : false });
+    const opt = () => ({ key: $i('ldKey').checked, goi: $i('ldGoi') ? $i('ldGoi').checked : false, eco: U.kieuIn() > 0 });
     const draw = () => { $i('paper').innerHTML = sheetHTML(t, opt(), [k]); };
     draw();
     $i('ldKey').addEventListener('change', draw);
+    el.querySelector('.js-kieu-in').addEventListener('change', draw);
     if ($i('ldGoi')) $i('ldGoi').addEventListener('change', draw);
     $i('ldDone').addEventListener('change', e => { setDone(t.id, k, e.target.checked); pane(t, el, k); });
     $i('ldOne').addEventListener('click', e => printHTML(sheetHTML(t, opt(), [k]), e.currentTarget));
@@ -3920,7 +3972,7 @@ const Van = (() => {
     const row = (lab, dap, cham) => `<tr class="van-row-h"><td><b>${lab}</b></td><td colspan="2">${dap}</td></tr>${cham.map(([s, p]) => `<tr><td></td><td>${s}</td><td class="num">${pt(p)}</td></tr>`).join('')}`;
     const dv = e.dh.dv, vt = e.viet;
     const loi = [...dv.loi, ...vt.loi];
-    return `<section class="sh-page van-page">${head('HƯỚNG DẪN CHẤM', `Đề ${esc(e.ma)}`)}
+    return `<section class="sh-page van-page sh-dapan">${head('HƯỚNG DẪN CHẤM', `Đề ${esc(e.ma)}`)}
       <h1 class="sh-title">HƯỚNG DẪN CHẤM – ĐỀ ${esc(e.ma)}</h1>
       <table class="sh-barem van-barem"><thead><tr><th>Câu</th><th>Đáp án – ý cần đạt</th><th>Điểm</th></tr></thead><tbody>
         <tr class="van-row-p"><td colspan="3"><b>PHẦN I. ĐỌC HIỂU (${pt1(e.dh.diem)} điểm)</b></td></tr>
@@ -4004,7 +4056,7 @@ const Van = (() => {
         <p class="lead">In ra làm trên giấy: trang <b>Đề</b>, trang <b>Bài làm có gợi ý</b> (viết thẳng vào dòng kẻ) và <b>Hướng dẫn chấm</b> để tự chấm sau khi làm xong.</p>
         <div class="opts-row"><label class="tog">Mức gợi ý <select id="vMuc"><option value="${auto}">Tự động (${MUC[auto]})</option><option value="day">Đầy đủ</option><option value="vua">Vừa</option><option value="it">Ít</option></select></label>
           <label class="tog"><input type="checkbox" id="vDe" checked> Đề</label><label class="tog"><input type="checkbox" id="vGoi" checked> Bài làm có gợi ý</label><label class="tog"><input type="checkbox" id="vCham"> Hướng dẫn chấm</label>
-          <label class="tog"><input type="checkbox" id="vXong" ${d ? 'checked' : ''}> Em đã làm xong đề này</label></div>
+          <label class="tog"><input type="checkbox" id="vXong" ${d ? 'checked' : ''}> Em đã làm xong đề này</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="vIn">🖨️ In / Lưu PDF</button></div></section>
       <div class="paper-wrap" id="paper"></div></main>`;
     const $i = id => document.getElementById(id);
@@ -4072,7 +4124,7 @@ const OnTap = (() => {
         <span>Thời gian làm: ............ phút · Số bài đúng: ......../${allBai(e).length}</span></div></section>`;
   }
   function pageLoiGiai(e) {
-    return `<section class="sh-page ot-page">${head('ĐÁP ÁN – LỜI GIẢI', `${esc(e.ma)} · đợt ${e.dot}`)}<h1 class="sh-title">LỜI GIẢI PHIẾU ÔN TẬP</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]}</p>
+    return `<section class="sh-page ot-page sh-dapan">${head('ĐÁP ÁN – LỜI GIẢI', `${esc(e.ma)} · đợt ${e.dot}`)}<h1 class="sh-title">LỜI GIẢI PHIẾU ÔN TẬP</h1><p class="sh-sub">${e.chu_de || TEN[e.bai]}</p>
       ${e.phan.map((p, k) => `<h2 class="sh-h">PHẦN ${CHU[k]} – ${p.muc.toUpperCase()}</h2>${p.bai.map(b => `<div class="sh-vd"><p><b>Bài ${b.so}.</b> <b>Đáp số:</b> ${b.dap}</p>
         ${b.can ? `<p class="ot-can">🔑 Kiến thức dùng: ${b.can}</p>` : ''}<ol class="sh-lg">${b.lg.map(x => `<li>${x}</li>`).join('')}</ol>${b.nguon ? `<p class="ld-src">Nguồn: ${b.nguon}</p>` : ''}</div>`).join('')}`).join('')}</section>`;
   }
@@ -4127,7 +4179,7 @@ const OnTap = (() => {
   function phieuPage(e) {
     view().innerHTML = `${App.topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/on-tap">← Phiếu ôn tập</a></div>
       <section class="card sheet-tools"><h2>${esc(e.ma)} · đợt ${e.dot}</h2><p class="lead">${e.chu_de || TEN[e.bai]} – ${e.phan.map(p => `${p.muc} ${p.phut} phút`).join(' → ')}.</p>
-        <div class="opts-row"><label class="tog"><input type="checkbox" id="oKey"> Kèm lời giải (trang sau)</label><label class="tog"><input type="checkbox" id="oXong" ${U.get(doneKey(e.ma), false) ? 'checked' : ''}> Em đã làm xong phiếu này</label></div>
+        <div class="opts-row"><label class="tog"><input type="checkbox" id="oKey"> Kèm lời giải (trang sau)</label><label class="tog"><input type="checkbox" id="oXong" ${U.get(doneKey(e.ma), false) ? 'checked' : ''}> Em đã làm xong phiếu này</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="oIn">🖨️ In / Lưu PDF</button><button class="btn" type="button" id="oMd">⬇️ Tải Markdown (.md)</button><a class="btn" href="#/cd/${e.id}/lt">📘 Học lại chủ đề</a></div></section>
       <div class="paper-wrap" id="paper"></div></main>`;
     const $i = id => document.getElementById(id);
@@ -4962,7 +5014,7 @@ const BaiHoc = (() => {
       ${e.tln.map((q, k) => `<div class="sh-q"><div class="sh-de"><b>Câu ${k + 1}.</b> ${q.q}</div><p>Đáp số: <span class="bh-tl-o"><i></i><i></i><i></i><i></i></span></p>${o.dong ? `<div class="sh-lines">${'<i></i>'.repeat(o.dong)}</div>` : ''}</div>`).join('')}`;
     s1 += `<div class="sh-check"><b>Tự đánh giá:</b><span>Phần I: ......../${tn.length}</span>${e.ds.length ? `<span>Phần II: ......../${e.ds.length * 4} ý</span>` : ''}${e.tln.length ? `<span>Phần III: ......../${e.tln.length}</span>` : ''}<span>☐ Câu sai đã xem lại lời giải</span></div></section>`;
     if (!o.dapAn) return `<div class="sheet math">${s1}</div>`;
-    const s2 = `<section class="sh-page">${head(`ĐÁP ÁN · Mã ${ma}`)}<h1 class="sh-title">ĐÁP ÁN PHIẾU LÀM BÀI</h1><p class="sh-sub">Toán ${e.lop} – ${ten} · Mã ${ma}</p>
+    const s2 = `<section class="sh-page sh-dapan">${head(`ĐÁP ÁN · Mã ${ma}`)}<h1 class="sh-title">ĐÁP ÁN PHIẾU LÀM BÀI</h1><p class="sh-sub">Toán ${e.lop} – ${ten} · Mã ${ma}</p>
       ${tn.length ? `<h2 class="sh-h">PHẦN I</h2><table class="bh-key"><tr><th>Câu</th>${tn.map((_, k) => `<th>${k + 1}</th>`).join('')}</tr><tr><th>Đáp án</th>${tn.map(x => `<td><b>${'ABCD'[x.good]}</b></td>`).join('')}</tr></table>
         ${o.giai ? tn.map((x, k) => x.q.why ? `<div class="sh-vd"><p><b>Câu ${k + 1} (${'ABCD'[x.good]}).</b> ${doiChu(x.q, x.opts)}</p></div>` : '').join('') : ''}` : ''}
       ${e.ds.length ? `<h2 class="sh-h">PHẦN II</h2><table class="bh-key"><tr><th>Câu</th><th>a</th><th>b</th><th>c</th><th>d</th></tr>${e.ds.map((q, k) => `<tr><th>${k + 1}</th>${q.y.map(y => `<td><b>${y[1] ? 'Đ' : 'S'}</b></td>`).join('')}</tr>`).join('')}</table>
@@ -4983,7 +5035,7 @@ const BaiHoc = (() => {
         <label class="tog"><input type="checkbox" id="pCan" ${st.canNho ? 'checked' : ''}> In phần Cần nhớ</label>
         ${e.tln.length ? `<label class="tog">Dòng kẻ mỗi câu trả lời ngắn <select id="pDong">${[0, 2, 3, 5].map(n => `<option ${st.dong === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
         <label class="tog"><input type="checkbox" id="pDa" ${st.dapAn ? 'checked' : ''}> Kèm trang đáp án (cho thầy cô)</label>
-        <label class="tog"><input type="checkbox" id="pGiai" ${st.giai ? 'checked' : ''}> Đáp án kèm lời giải thích</label></div>
+        <label class="tog"><input type="checkbox" id="pGiai" ${st.giai ? 'checked' : ''}> Đáp án kèm lời giải thích</label>${U.kieuInHTML()}</div>
       <div class="row"><button class="btn primary" type="button" id="pIn">🖨️ In / Lưu PDF</button>${typeof Xlsx !== 'undefined' ? `<button class="btn" type="button" id="pXls">📊 Xuất Excel đáp án (UNT)</button>
         <label class="tog">gồm <select id="pSoMa">${[1, 2, 3, 4].map(n => `<option value="${n}" ${st.soMa === n ? 'selected' : ''}>${n}</option>`).join('')}</select> mã đề</label>` : ''}</div>
       <p class="muted small">Lưu PDF: trong hộp thoại in chọn “Lưu dưới dạng PDF” (Save as PDF), khổ A4. Excel đáp án: mỗi mã đề một cột, câu đánh số liên tục (Phần I: A–D · Phần II: ĐSĐS · Phần III: đáp số, dấu chấm) – nạp vào phần mềm chấm.</p></section>
@@ -11930,7 +11982,7 @@ const App = (() => {
         <div class="sh-write" style="height:${p.h || 60}mm"></div></div>`).join('')}
       <div class="sh-check"><b>Tự soát trước khi chụp ảnh nộp:</b> ${t.present.slice(0, 4).map(x => `<span>☐ ${plainShort(x)}</span>`).join('')}</div>
       <div class="sh-ai">🤖 <b>Làm xong:</b> chụp ảnh rõ từng trang → mở web <b>Toán vào 10</b> → Chủ đề ${t.no} → mục <b>Nhờ AI nhận xét</b> → bấm <b>Sao chép prompt</b> → dán vào ChatGPT / Gemini / Claude cùng ảnh bài làm.</div></section>`;
-    const keyPage = o.key ? `<section class="sh-page">${head}<h1 class="sh-title">ĐÁP ÁN – HƯỚNG DẪN CHẤM</h1><p class="sh-sub">${t.title}</p>
+    const keyPage = o.key ? `<section class="sh-page sh-dapan">${head}<h1 class="sh-title">ĐÁP ÁN – HƯỚNG DẪN CHẤM</h1><p class="sh-sub">${t.title}</p>
       ${t.practice.map((p, i) => `<div class="sh-key"><p><b>Bài ${i + 1} (${pt(p.pts)} điểm).</b> Đáp số: ${p.ans}</p>${p.fig ? `<div class="sh-fig">${p.fig}</div>` : ''}
         <table class="sh-barem"><tbody>${p.barem.map(([s, x]) => `<tr><td>${s}</td><td class="num">${pt(x)}</td></tr>`).join('')}</tbody></table></div>`).join('')}</section>` : '';
     return `<div class="sheet math">${modelPage}${work}${keyPage}</div>`;
@@ -11942,7 +11994,7 @@ const App = (() => {
     pane.innerHTML = `<div class="card sheet-tools">
         <p class="lead">Phiếu A4 gồm <b>nhắc nhanh</b>, <b>${t.practice.length} bài</b> (cơ bản → khá → nâng cao) và khung ô li để làm ngay trên giấy. Bấm <b>In / Lưu PDF</b>; trên iPad chọn Chia sẻ → In.</p>
         <div class="opts-row"><label class="tog"><input type="checkbox" id="oModel" ${o.model ? 'checked' : ''}> Kèm trang bài mẫu (in trước)</label>
-        <label class="tog"><input type="checkbox" id="oKey" ${o.key ? 'checked' : ''}> Kèm đáp án – hướng dẫn chấm (trang cuối, cho phụ huynh/thầy cô)</label></div>
+        <label class="tog"><input type="checkbox" id="oKey" ${o.key ? 'checked' : ''}> Kèm đáp án – hướng dẫn chấm (trang cuối, cho phụ huynh/thầy cô)</label>${U.kieuInHTML()}</div>
         <div class="row"><button class="btn primary" type="button" id="printBtn">🖨️ In / Lưu PDF</button></div></div>
       <div class="paper-wrap" id="paper"></div>`;
     const draw = () => { $('#paper').innerHTML = sheetHTML(t, get('sheetOpt', o)); };
