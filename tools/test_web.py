@@ -340,6 +340,17 @@ async def main():
         home_card = await pg.evaluate("(() => { location.hash = '#/vao-10'; return new Promise(r => setTimeout(() => r(!!document.querySelector('a[href=\"#/so-tay\"]')), 300)); })()")
         if nl != 8 or 'QUY ĐỊNH CHẤM' not in l7 or '"chu_de":"7"' not in l7 or 'so_tay_toan' not in hd or not okst or nd != 3 or hien != 1 or hien2 != 1 or not home_card:
             fails.append(f'sổ tay công thức: lệnh {nl} {"QUY ĐỊNH CHẤM" in l7}, nhập {okst}, dạng {nd}, tìm {hien} {hien2}, thẻ {home_card}')
+        # 📕 In sổ tay thành một quyển: vào 10 (10 chủ đề Topics) và Toán 10 – 11 – 12 (theo chương), có bìa, mục lục, mã mục, bảng A–Z
+        await pg.goto(base + '#/so-tay/in'); await pg.wait_for_timeout(500)
+        await pg.check('[name=qLoai][value=vao10]'); await pg.wait_for_timeout(300)
+        q1 = await pg.evaluate("[document.querySelectorAll('#qXem .qs-cd').length, !!document.querySelector('#qXem .qs-bia'), !!document.querySelector('#qXem .qs-mluc'), document.querySelectorAll('#qXem .qs-az p').length, document.querySelectorAll('#qXem .qs-ma').length]")
+        await pg.goto(base + '#/so-tay/in?thpt'); await pg.wait_for_timeout(500)
+        q2 = await pg.evaluate("[document.querySelector('[name=qLoai]:checked').value, document.querySelectorAll('#qXem .qs-cd').length, [...document.querySelectorAll('#qXem .qs-phan')].map(x => x.textContent).join('|')]")
+        await pg.select_option('#qKieu', 'a5'); await pg.wait_for_timeout(300)
+        q3 = await pg.evaluate("!!document.querySelector('#qXem .qs-a5.qs-c1')")
+        if q1[0] != len(await pg.evaluate("Topics.list.map(t => t.id)")) or not q1[1] or not q1[2] or q1[3] < 20 or q1[4] < 20 or q2[0] != 'thpt' or q2[1] < 4 or 'TOÁN 10' not in q2[2] or not q3:
+            fails.append(f'in sổ tay thành quyển: {q1}, {q2}, {q3}')
+        await pg.evaluate("localStorage.removeItem((CONFIG.storeKey || 'vao10') + ':sotay:in')")
         await pg.evaluate("NhapDL.local().filter(x => x.key.startsWith('sotay-')).forEach(x => NhapDL.removeLocal(x.key)); localStorage.removeItem((CONFIG.storeKey || 'vao10') + ':xuong:prompt')")
         for i in ids:
             # Trắc nghiệm: chọn phương án A mọi câu, điểm phải bằng số câu chọn đúng.

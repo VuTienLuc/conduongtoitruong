@@ -150,7 +150,7 @@ const App = (() => {
         <a class="card link-card" href="#/lo-trinh"><span class="big">📅</span><b>Lộ trình 26 tuần</b><span>30/11/2026 – 30/5/2027, tuần nào học chủ đề nào</span></a>
       </div>
       <a class="card link-card" href="#/on-tap"><span class="big">🗂️</span><b>Phiếu ôn tập 90 phút theo chủ đề</b><span>Từ cơ bản đến nâng cao, mỗi đợt một phiếu mới${typeof OnTap !== 'undefined' && OnTap.list().length ? ` · ${OnTap.list().length} phiếu` : ''}</span></a>
-      ${typeof SoTay !== 'undefined' && SoTay.list().length ? `<a class="card link-card" href="#/so-tay"><span class="big">📒</span><b>Sổ tay công thức tra cứu</b><span>Công thức, cách làm, mẹo nhớ, lỗi hay sai theo từng dạng · ${SoTay.list().reduce((t, e) => t + e.dang.length, 0)} dạng</span></a>` : ''}</main>`;
+      ${typeof SoTay !== 'undefined' ? `<a class="card link-card" href="${SoTay.list().length ? '#/so-tay' : '#/so-tay/in'}"><span class="big">📒</span><b>Sổ tay công thức tra cứu</b><span>Công thức, cách làm, mẹo nhớ theo từng chủ đề – in thành một quyển (bìa, mục lục, tra cứu A–Z)${SoTay.list().length ? ` · ${SoTay.list().reduce((t, e) => t + e.dang.length, 0)} dạng` : ''}</span></a>` : ''}</main>`;
   }
 
   /* ---------- Lộ trình ---------- */

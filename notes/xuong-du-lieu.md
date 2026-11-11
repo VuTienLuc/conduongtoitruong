@@ -29,6 +29,8 @@
 - Dữ liệu `"loai":"so_tay_toan"`: `chu_de` ("nen", 1…7), `nguon`, `tong_quan`, `tra_nhanh[{hoi, dap}]`, `dang[{ten, muc, nhan_dien, cong_thuc[{ten, ct, dieu_kien, ghi_chu}], cach_lam[], meo_nho, loi_hay_sai[], vi_du{de, loi_giai[], dap_so}}]`. Kiểm: ≥ 3 dạng, mỗi dạng có công thức hoặc cách làm. Nhập thêm cùng chủ đề: chỉ thêm dạng mới (so tên dạng). Tệp `so-tay-<cd>-<ngày>.json`. Mẫu thử: `docs/mau-nhap/so-tay-chu-de-2-mau.json`.
 - Trang `#/so-tay` (`assets/js/sotay.js`): tìm không dấu, chip chủ đề, mục lục dạng, in PDF 2 cột (`SoTay.sheetHTML`); thẻ 📒 ở trang Toán vào 10 chỉ hiện khi đã có dữ liệu. Ví dụ trong sổ tay chưa có kiểm đáp số tự động – nhập xong nhờ Claude kiểm (thay số bằng Python).
 
+- 📕 In thành một quyển (`#/so-tay/in`, thầy yêu cầu 11/11/2026): Toán vào 10 (Topics: nhớ nhanh, kiến thức, mẹo; + dạng SoTay; + Thẻ công cụ 7a–c) hoặc Toán 10 – 11 – 12 (Vdc: kiến thức trọng tâm, phương pháp dạng; + BaiHoc cần nhớ; theo chương, bỏ mau:true). Bìa, mục lục (mã mục), mỗi chủ đề một màu, mã mục 2.3 / 11-I.4, bảng tra A–Z, số trang chân trang (@page qsA4/qsA5 margin box – Chrome). Kiểu in: tiết kiệm (A4 2 cột 9,5pt nối tiếp, ~12 trang vào 10) · cân đối (A4 2 cột 10,5pt, mỗi chủ đề trang mới, ~15 trang) · A5 1 cột · chữ to. Công thức dài: mục trải 2 cột (`qs-rong`) hoặc thu nhỏ vừa cột (`vuaCongThuc`, đo ở khổ giấy thật trước khi in). Lối vào: thẻ 📒 trang Toán vào 10, nút trên trang lớp 10/11/12 (`#/so-tay/in?thpt`).
+
 ## Lưu ý
 - Web không vẽ hình từ "hinh" (chỉ in mô tả). Đề hình học nhập từ AI cần thầy kiểm và bổ sung hình nếu cần.
 - AI có thể ra đề và đáp án lệch nhau: khi thầy gửi JSON nhờ kiểm, thay số kiểm từng đáp số bằng Python trước khi nhập.

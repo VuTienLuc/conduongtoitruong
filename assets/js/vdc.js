@@ -73,7 +73,7 @@ const Vdc = (() => {
     }).join('');
     view().innerHTML = `${App.topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/">← Chọn lớp</a></div>
       <section class="card hero"><p class="pill">🎯 ${esc(G.name)} · Vận dụng – Vận dụng cao</p><h2>Lấy điểm cao giữa kì và cuối kì</h2>
-      <p>Dành cho học sinh khá, giỏi. Mỗi chủ đề gồm các <b>dạng</b> hay ra ở phần vận dụng: đọc <b>kiến thức trọng tâm</b>, xem <b>ví dụ mẫu</b>, tự làm <b>bài tương tự</b>; in <b>phiếu PDF</b> làm trên giấy, bí thì xem <b>gợi ý</b> cuối phiếu, làm xong <b>quét mã QR</b> để so lời giải.</p></section>
+      <p>Dành cho học sinh khá, giỏi. Mỗi chủ đề gồm các <b>dạng</b> hay ra ở phần vận dụng: đọc <b>kiến thức trọng tâm</b>, xem <b>ví dụ mẫu</b>, tự làm <b>bài tương tự</b>; in <b>phiếu PDF</b> làm trên giấy, bí thì xem <b>gợi ý</b> cuối phiếu, làm xong <b>quét mã QR</b> để so lời giải.</p>${typeof SoTay !== 'undefined' ? `<div class="row"><a class="btn" href="#/so-tay/in?thpt">📕 In sổ tay công thức Toán 10 – 11 – 12 thành một quyển</a></div>` : ''}</section>
       ${sec}</main>`;
   }
 

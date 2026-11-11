@@ -23,3 +23,4 @@
 | 09/11/2026 | Phiếu làm bài bài giảng: mã đề in 3 chữ số (mặc định 001–004) + nút Xuất Excel đáp án dạng UNT (Câu liên tục, mỗi mã một cột, ĐS ghép 4 chữ, TLN dấu chấm) | Thầy gửi mẫu Excel UNT |
 | 10/11/2026 | Trình soạn thảo bài học của thầy đưa vào `cong-cu/`: thêm Quản lý JSON (thư viện trên máy), nút Đưa lên web để trình chiếu (postMessage, khoá bh-gui thay bản trước), web hiện hình SVG figures; lệnh Đăng nhận cả tệp .json | Thầy yêu cầu |
 | 11/11/2026 | Sổ tay công thức tra cứu vào 10: Menu prompt soạn theo chủ đề (nền, Bài 1–7), dữ liệu so_tay_toan, trang #/so-tay (tìm, in PDF); nhập thêm chỉ thêm dạng mới | Thầy yêu cầu |
+| 11/11/2026 | In sổ tay công thức thành một quyển (vào 10 hoặc 10–11–12) từ dữ liệu sẵn có: bìa, mục lục, màu chủ đề, mã mục, bảng A–Z, 4 kiểu in (tiết kiệm/cân đối/A5/chữ to) | Thầy yêu cầu |
