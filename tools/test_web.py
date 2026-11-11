@@ -321,6 +321,26 @@ async def main():
         if 'Đúng mẫu' not in g1 or not nhan or hinh != [True, False] or not await w2.locator('#gTC').count():
             fails.append(f'nhận bài từ Trình soạn thảo: {g1!r}, {nhan}, {hinh}')
         await w2.close()
+        # 📒 Sổ tay công thức vào 10: lệnh (8 chủ đề, chủ đề 7 có quy định chấm), nhập mẫu → lưu → trang #/so-tay, tìm không dấu
+        await pg.goto(base + '#/xuong/prompt'); await pg.wait_for_timeout(200)
+        await pg.check('[name=xLoai][value=sotay]'); await pg.select_option('#sCd', 'tat'); await pg.wait_for_timeout(200)
+        nl = await pg.locator('#xOut textarea[id^=xL]').count()
+        l7 = await pg.input_value('#xL7') if nl >= 8 else ''
+        hd = await pg.input_value('#xHd') if await pg.locator('#xHd').count() else ''
+        await pg.goto(base + '#/xuong/nhap'); await pg.wait_for_timeout(200)
+        await pg.fill('#nIn', open(os.path.join(ROOT, 'docs/mau-nhap/so-tay-chu-de-2-mau.json'), encoding='utf-8').read()); await pg.click('#nGo'); await pg.wait_for_timeout(300)
+        okst = await pg.locator('.xw-res.ok').count()
+        await pg.click('[data-save="0"]'); await pg.wait_for_timeout(1200)
+        await pg.goto(base + '#/so-tay'); await pg.wait_for_timeout(400)
+        nd = await pg.locator('.st-dang').count()
+        await pg.fill('#stTim', 'viete'); await pg.wait_for_timeout(150)
+        hien = await pg.evaluate("document.querySelectorAll('.st-dang:not([hidden])').length")
+        await pg.fill('#stTim', 'tong va tich'); await pg.wait_for_timeout(150)
+        hien2 = await pg.evaluate("document.querySelectorAll('.st-dang:not([hidden])').length")
+        home_card = await pg.evaluate("(() => { location.hash = '#/vao-10'; return new Promise(r => setTimeout(() => r(!!document.querySelector('a[href=\"#/so-tay\"]')), 300)); })()")
+        if nl != 8 or 'QUY ĐỊNH CHẤM' not in l7 or '"chu_de":"7"' not in l7 or 'so_tay_toan' not in hd or not okst or nd != 3 or hien != 1 or hien2 != 1 or not home_card:
+            fails.append(f'sổ tay công thức: lệnh {nl} {"QUY ĐỊNH CHẤM" in l7}, nhập {okst}, dạng {nd}, tìm {hien} {hien2}, thẻ {home_card}')
+        await pg.evaluate("NhapDL.local().filter(x => x.key.startsWith('sotay-')).forEach(x => NhapDL.removeLocal(x.key)); localStorage.removeItem((CONFIG.storeKey || 'vao10') + ':xuong:prompt')")
         for i in ids:
             # Trắc nghiệm: chọn phương án A mọi câu, điểm phải bằng số câu chọn đúng.
             await pg.goto(base + f'#/cd/{i}/hieu'); await pg.wait_for_timeout(200)

@@ -4,6 +4,7 @@
    #/xuong/prompt   menu prompt: hướng dẫn Gem (dán một lần), lệnh từng đề, lệnh sửa JSON
                     – Ngữ văn đề luyện · Toán đề luyện theo bài · Toán phiếu ôn tập 90 phút (JSON hoặc Markdown, đợt sau tránh bài đợt trước)
                     – Bài giảng – luyện tập online lớp 9–12 theo mục lục SGK KNTT (BaiHoc)
+                    – Sổ tay công thức tra cứu Toán vào 10: công thức, cách làm, mẹo nhớ, lỗi hay sai theo từng dạng (SoTay)
    #/xuong/nhap     nhập dữ liệu: dán câu trả lời AI hoặc kéo tệp .json → kiểm → xem trước, in → lưu máy này / tải tệp chuẩn
    Mẫu JSON ở đây phải khớp với NhapDL.check (assets/js/nhap.js). Sửa mẫu thì sửa cả hai.
    ===================================================================== */
@@ -235,12 +236,81 @@ Sai ở đâu thì sửa rồi mới xuất.`;
       `Trả về đúng một khối ${BT}json theo mẫu trong hướng dẫn ("loai":"bai_hoc", "lop":${o.lop}, "bai":${b.so}, "ten_bai":"${b.ten}").`].filter(Boolean).join('\n');
   }
 
+  /* ---------- Sổ tay công thức tra cứu Toán vào 10 (thầy yêu cầu 11/11/2026) ---------- */
+  const MAU_SOTAY = S`{"loai":"so_tay_toan","chu_de":"2","nguon":"SGK Toán 9 KNTT tập 2 – Chương VI; đề tuyển sinh 10 TP.HCM các năm trong notebook",
+ "tong_quan":"Đề TP.HCM: Bài 2 (1 điểm) – thường hỏi chứng minh phương trình có nghiệm rồi tính giá trị biểu thức của hai nghiệm.",
+ "tra_nhanh":[{"hoi":"Đề hỏi $x_1^2 + x_2^2$","dap":"Viết thành $(x_1 + x_2)^2 - 2x_1x_2$ rồi thay tổng, tích theo Viète"},{"hoi":"Thấy $a$ và $c$ trái dấu","dap":"$ac \\lt 0$ nên phương trình luôn có hai nghiệm phân biệt (trái dấu)"}],
+ "dang":[{"ten":"Dạng 1. Tính giá trị biểu thức đối xứng của hai nghiệm","muc":"co_ban",
+   "nhan_dien":"Cho phương trình bậc hai, yêu cầu tính biểu thức của $x_1, x_2$ mà không giải phương trình",
+   "cong_thuc":[{"ten":"Định lí Viète","ct":"$x_1 + x_2 = -\\dfrac{b}{a}$; $x_1x_2 = \\dfrac{c}{a}$","dieu_kien":"phương trình có hai nghiệm: $a \\ne 0$, $\\Delta \\ge 0$","ghi_chu":"tổng đổi dấu $b$, tích giữ dấu $c$"},
+     {"ten":"Tổng bình phương","ct":"$x_1^2 + x_2^2 = (x_1 + x_2)^2 - 2x_1x_2$","dieu_kien":"","ghi_chu":""}],
+   "cach_lam":["Chứng tỏ phương trình có hai nghiệm ($\\Delta \\ge 0$ hoặc $ac \\lt 0$)","Viết tổng $S$, tích $P$ theo Viète","Biến đổi biểu thức về $S$, $P$ rồi thay số"],
+   "meo_nho":"Tổng đổi dấu, tích giữ nguyên: $S = -\\dfrac{b}{a}$, $P = \\dfrac{c}{a}$.",
+   "loi_hay_sai":["Không kiểm tra phương trình có nghiệm trước khi dùng Viète (bị trừ điểm)","Quên dấu trừ ở tổng $-\\dfrac{b}{a}$"],
+   "vi_du":{"de":"Cho $x^2 - 5x + 3 = 0$ có hai nghiệm $x_1, x_2$. Tính $x_1^2 + x_2^2$.","loi_giai":["$\\Delta = 13 \\gt 0$ nên phương trình có hai nghiệm phân biệt","$S = 5$, $P = 3$","$x_1^2 + x_2^2 = S^2 - 2P = 25 - 6 = 19$"],"dap_so":"19"}}]}`;
+  // Phạm vi gợi ý cho từng chủ đề (AI vẫn phải rà thêm mọi dạng thấy trong đề tuyển sinh)
+  const GOI_Y_SOTAY = {
+    nen: S`căn bậc hai, căn bậc ba và các phép biến đổi; hằng đẳng thức đáng nhớ; phân tích đa thức thành nhân tử; rút gọn biểu thức; phương trình, bất phương trình bậc nhất một ẩn; làm tròn số; đổi đơn vị đo (độ dài, diện tích, thể tích, khối lượng, thời gian, vận tốc); tỉ lệ thức, tỉ lệ thuận – nghịch, phần trăm`,
+    1: S`hàm số $y = ax^2$ ($a \ne 0$): tính chất, bảng giá trị, vẽ đồ thị; điểm thuộc đồ thị, tìm hệ số $a$; đường thẳng $y = ax + b$ (hệ số góc, vị trí tương đối); tọa độ giao điểm parabol – đường thẳng bằng phép tính; bài toán thực tế dùng $y = ax^2$`,
+    2: S`công thức nghiệm, công thức nghiệm thu gọn; nhẩm nghiệm ($a + b + c = 0$, $a - b + c = 0$); định lí Viète và biểu thức đối xứng; tìm hai số biết tổng và tích; điều kiện có nghiệm, dấu các nghiệm; phương trình quy về bậc hai (tích, chứa ẩn ở mẫu, trùng phương); bài có tham số $m$ (nếu đề tuyển sinh có)`,
+    3: S`phép thử, không gian mẫu, biến cố; xác suất của biến cố (kết quả đồng khả năng); liệt kê bằng bảng, sơ đồ cây; bảng tần số, tần số tương đối, biểu đồ; bảng ghép nhóm; xác suất thực nghiệm`,
+    4: S`phần trăm, tăng giảm phần trăm liên tiếp, giảm giá, thuế, lãi suất; hàm số bậc nhất trong thực tế (cước phí, giá điện bậc thang, nhiệt độ); chuyển động, năng suất, nồng độ; tỉ lệ bản đồ; hình học thực tế (định lí Pythagore, tỉ số lượng giác đo chiều cao, khoảng cách, diện tích, chu vi)`,
+    5: S`hình trụ, hình nón, hình cầu (diện tích xung quanh, diện tích toàn phần, thể tích); hình lăng trụ đứng, hình chóp đều (nếu đề có); đổi lít – dm³ – cm³ – m³; bài đổ nước, nhúng vật, tính số lượng vật liệu; làm tròn, giá trị $\pi$ lấy theo đề`,
+    6: S`hệ hai phương trình bậc nhất hai ẩn (thế, cộng đại số, máy tính cầm tay); các bước giải bài toán bằng cách lập hệ; dạng chuyển động (xuôi – ngược dòng), năng suất, phần trăm, mua bán, tìm số, hình học; đặt điều kiện ẩn, đối chiếu, kết luận`,
+    7: S`đường tròn, tiếp tuyến và tính chất hai tiếp tuyến cắt nhau; góc ở tâm, góc nội tiếp và các hệ quả; tứ giác nội tiếp (chỉ cách chứng minh được phép); tam giác đồng dạng và hệ thức tích đoạn thẳng; hệ thức lượng, tỉ số lượng giác trong tam giác vuông (lưu ý phải chứng minh lại); đường tròn ngoại tiếp, nội tiếp tam giác, đa giác đều; độ dài cung, diện tích hình quạt, hình vành khuyên; chiến lược câu a – b – c (câu sau dùng kết quả câu trước)`,
+  };
+  const HD_SOTAY = S`VAI TRÒ
+Em là giáo viên Toán THCS giỏi, nhiều năm luyện thi vào lớp 10 TP.HCM. Dựa vào tài liệu trong notebook NotebookLM đã gắn (SGK Toán 6–9 Kết nối tri thức với cuộc sống, các đề tuyển sinh 10 TP.HCM, đề tham khảo của Sở GD&ĐT, đề các quận, huyện, tài liệu ôn thi của thầy cô) để soạn MỘT CHỦ ĐỀ của SỔ TAY CÔNG THỨC TRA CỨU cho học sinh ôn thi vào 10, trả về dạng JSON.
+
+CÁCH SOẠN – ĐẦY ĐỦ VÀ CÓ HỆ THỐNG
+1. Rà toàn bộ đề tuyển sinh và tài liệu trong notebook, liệt kê MỌI DẠNG BÀI của chủ đề đã ra hoặc có thể ra; gộp dạng giống nhau; xếp từ cơ bản → khá → nâng cao. Mỗi dạng là một phần tử "dang", tên ngắn, đánh số "Dạng 1. …". Không bỏ sót dạng nào đã có trong đề tuyển sinh.
+2. "nhan_dien": dấu hiệu trong đề cho biết bài thuộc dạng này (câu hỏi, từ khoá hay gặp).
+3. "cong_thuc": đủ MỌI công thức, định lí, quy tắc dùng trong dạng; mỗi mục có "ten", "ct" (công thức trong $...$), "dieu_kien" (khi nào được dùng; bỏ trống nếu không có), "ghi_chu" (đơn vị, trường hợp đặc biệt, cách nhớ chiều biến đổi). Đúng kí hiệu, thuật ngữ SGK chương trình 2018; không ghi kiến thức đã bỏ khỏi chương trình.
+4. "cach_lam": các bước giải ngắn gọn, đúng trình tự học sinh trình bày trong bài thi.
+5. "meo_nho": MỘT câu mẹo nhớ ngắn, dễ thuộc (câu vần, hình ảnh, liên tưởng). Mẹo phải đúng toán học, không làm học sinh hiểu sai.
+6. "loi_hay_sai": 2–4 lỗi học sinh hay mắc ở dạng này (bị trừ điểm vì đâu).
+7. "vi_du" (khi lệnh yêu cầu): một ví dụ ngắn, đổi số liệu từ đề thật; "loi_giai" chia bước; "dap_so". Giải lại để chắc đáp số đúng.
+8. "muc": "co_ban", "kha" hoặc "nang_cao".
+9. "tra_nhanh": 6–15 dòng "thấy gì trong đề – dùng gì" để học sinh tra khi bí.
+10. "tong_quan": 1–2 câu cho biết chủ đề này chiếm bao nhiêu điểm, thường hỏi gì trong đề tuyển sinh TP.HCM (chỉ ghi điều thấy trong nguồn).
+11. Viết lại ngắn gọn bằng lời của em, KHÔNG chép nguyên văn đoạn dài của sách hay tài liệu. "nguon": tên các tài liệu đã dựa vào; không bịa số trang, năm đề, số bài nếu không thấy rõ trong nguồn.
+
+HÌNH HỌC PHẲNG: theo quy định chấm thống nhất của Sở GD&ĐT TP.HCM ghi trong lệnh. Kiến thức "phải chứng minh lại" vẫn ghi vào sổ tay nhưng "ghi_chu" phải nói rõ "phải chứng minh lại khi dùng" kèm cách chứng minh ngắn; kiến thức "không được dùng" chỉ ghi trong "loi_hay_sai" như một lỗi cần tránh.
+
+ĐẦU RA BẮT BUỘC
+- Chỉ trả lời bằng MỘT khối code ${BT}json duy nhất chứa toàn bộ JSON. Không viết chữ nào trước hay sau khối code. Không dùng Canvas. Không chèn số trích dẫn [1].
+- Giữ nguyên tên trường như MẪU, không thêm, không đổi tên trường.
+- Mọi công thức đặt trong $...$, trong chuỗi JSON viết HAI dấu gạch: "$\\dfrac{3}{8}$", "$x \\neq 3$", "$\\sqrt{2}$". Không viết dấu < > trần trong công thức: dùng "$\\lt$", "$\\gt$", "$\\le$", "$\\ge$". Xuống dòng bằng \n.
+MẪU (chỉ minh họa một dạng – bài thật phải đủ mọi dạng):
+${MAU_SOTAY}
+
+TỰ KIỂM trước khi xuất
+1. Thử từng công thức bằng một bộ số cụ thể; điều kiện dùng đầy đủ; đơn vị đúng.
+2. Mẹo nhớ không sai toán học. Ví dụ đúng đáp số.
+3. Đối chiếu từng đề tuyển sinh trong notebook: mọi câu thuộc chủ đề này đều rơi vào một dạng trong sổ tay. Thiếu thì bổ sung dạng.
+4. Không có hai dạng trùng nhau; không chép nguyên văn sách.
+Sai ở đâu thì sửa rồi mới xuất.`;
+  function lenhSoTay(o, cd) {
+    const ten = SoTay.TEN[cd], co = SoTay.tenDang(cd);
+    const rules = cd === '7' && typeof App !== 'undefined' && App.RULES ? `QUY ĐỊNH CHẤM THỐNG NHẤT CỦA SỞ GD&ĐT TP.HCM\nKhông được dùng trực tiếp (dùng là trừ điểm bước đó):\n${App.RULES.no.map(x => '- ' + x).join('\n')}\nĐược dùng trực tiếp:\n${App.RULES.yes.map(x => '- ' + x).join('\n')}` : '';
+    return [`Sổ tay công thức tra cứu Toán vào 10 TP.HCM | Chủ đề: ${ten} | "chu_de":"${cd}"`,
+      `Học sinh dùng: ${{ TB: 'lực học trung bình – viết thật dễ hiểu, nhiều dạng cơ bản', KHA: 'lực học khá – đủ cơ bản đến nâng cao', GIOI: 'lực học khá, giỏi – thêm các dạng nâng cao, câu hỏi phân loại' }[o.muc] || o.muc}.`,
+      `Phạm vi cần rà (không giới hạn ở đây, thêm mọi dạng thấy trong đề tuyển sinh): ${GOI_Y_SOTAY[cd]}.`,
+      `Tối thiểu ${o.min} dạng, càng đầy đủ càng tốt; mỗi dạng đủ nhận diện, công thức, cách làm, mẹo nhớ, lỗi hay sai.`,
+      o.vd ? '- Mỗi dạng có một "vi_du" ngắn kèm lời giải chia bước.' : '- Không cần "vi_du" (bỏ trường này) để sổ tay gọn.',
+      '- "tra_nhanh": 6–15 dòng "thấy gì – dùng gì".',
+      rules,
+      o.rieng ? `Yêu cầu riêng: ${o.rieng}` : '',
+      co.length ? `Sổ tay ĐÃ CÓ các dạng sau – CHỈ soạn các dạng CÒN THIẾU (dạng trùng tên sẽ bị bỏ khi nhập):\n${co.map(x => '- ' + x).join('\n')}` : '',
+      `Trả về đúng một khối ${BT}json theo mẫu trong hướng dẫn ("loai":"so_tay_toan", "chu_de":"${cd}").`].filter(Boolean).join('\n');
+  }
+
   const SUA = (loai, loi) => S`Câu trả lời vừa rồi chưa đúng mẫu hoặc còn lỗi. Giữ nguyên nội dung vừa soạn (không đổi văn bản, số liệu), sửa các lỗi sau rồi viết lại TOÀN BỘ thành MỘT khối ${BT}json đúng mẫu:
 ${loi && loi.length ? loi.map(x => '- ' + x).join('\n') : '- Sai tên trường, thiếu phần chấm điểm hoặc thiếu dấu \\\\ của công thức.'}
 
 ${DAU_RA}
 MẪU:
-${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'bai_hoc' ? MAU_BAIHOC : MAU_TOAN}`;
+${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'bai_hoc' ? MAU_BAIHOC : loai === 'so_tay_toan' ? MAU_SOTAY : MAU_TOAN}`;
 
   function lenhVan(o, k) {
     const ma = o.tien + String(o.so + k).padStart(2, '0');
@@ -301,7 +371,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
         <li><b>Gửi lệnh</b> trong Gem, bấm nút sao chép của khối ${BT}json.</li>
         <li><b>Nhập dữ liệu:</b> dán vào đây → web tự sửa lỗi hay gặp, kiểm điểm, cho xem trước và in PDF → <i>Lưu trên máy này</i>.</li>
         <li><b>Đưa lên hệ thống cho mọi học sinh:</b> bấm <i>Tải tệp chuẩn</i>, chép tệp vào thư mục <code>nhap/</code> của dự án rồi chạy <code>python3 tools/nhap-du-lieu.py</code> (hoặc nhắn Claude "nhập dữ liệu mới"), đẩy lên GitHub.</li></ol></section>
-      <div class="two"><a class="card link-card" href="#/xuong/prompt"><span class="big">🧾</span><b>Menu prompt</b><span>Ngữ văn vào 10 · Toán luyện đề theo bài · Phiếu ôn tập 90 phút · Bài giảng lớp 9–12</span></a>
+      <div class="two"><a class="card link-card" href="#/xuong/prompt"><span class="big">🧾</span><b>Menu prompt</b><span>Ngữ văn vào 10 · Toán luyện đề theo bài · Phiếu ôn tập 90 phút · Sổ tay công thức vào 10 · Bài giảng lớp 9–12</span></a>
         <a class="card link-card" href="#/xuong/nhap"><span class="big">📥</span><b>Nhập dữ liệu</b><span>Dán câu trả lời AI hoặc kéo tệp .json</span></a></div>
       ${/^https?:$/.test(location.protocol) ? `<div class="two"><a class="card link-card" href="cong-cu/soan-bai-hoc.html" target="_blank" rel="noopener"><span class="big">✏️</span><b>Trình soạn thảo bài học</b><span>Soạn, quản lý JSON bài giảng, đồng bộ Google Sheets, đưa bài lên web để trình chiếu</span></a></div>` : ''}
       <h2 class="sec">Đã lưu trên máy này (${loc.length})</h2>
@@ -321,6 +391,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
         <div class="opts-row"><label class="tog"><input type="radio" name="xLoai" value="van" ${st.loai === 'van' ? 'checked' : ''}> 📖 Ngữ văn vào 10 – đề luyện</label>
           <label class="tog"><input type="radio" name="xLoai" value="toan" ${st.loai === 'toan' ? 'checked' : ''}> 📐 Toán vào 10 – đề luyện theo bài</label>
           <label class="tog"><input type="radio" name="xLoai" value="ontap" ${st.loai === 'ontap' ? 'checked' : ''}> 🗂️ Toán vào 10 – phiếu ôn tập 90 phút theo chủ đề</label>
+          <label class="tog"><input type="radio" name="xLoai" value="sotay" ${st.loai === 'sotay' ? 'checked' : ''}> 📒 Toán vào 10 – sổ tay công thức, mẹo nhớ theo dạng</label>
           <label class="tog"><input type="radio" name="xLoai" value="baihoc" ${st.loai === 'baihoc' ? 'checked' : ''}> 📚 Bài giảng – luyện tập online lớp 9–12 (SGK KNTT)</label></div>
         <div class="opts-row"><label class="tog"><input type="radio" name="xNoi" value="gem" ${st.noi === 'gem' ? 'checked' : ''}> Gem có gắn notebook (lệnh ngắn)</label>
           <label class="tog"><input type="radio" name="xNoi" value="nb" ${st.noi === 'nb' ? 'checked' : ''}> Dán thẳng vào NotebookLM (lệnh đầy đủ)</label></div>
@@ -360,13 +431,20 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
             <label>Đúng – sai: số câu <input id="bN2" type="number" min="1" max="6" value="${st.bN2 || 2}"></label>
             <label>Trả lời ngắn: số câu <input id="bN3" type="number" min="1" max="10" value="${st.bN3 || 4}"></label></div>
           <p class="muted" id="bCo"></p></div>
+        <div id="xSoTay">
+          <div class="xw-grid">
+            <label class="xw-wide2">Chủ đề <select id="sCd"><option value="tat" ${st.sCd === 'tat' ? 'selected' : ''}>Tất cả 8 chủ đề (mỗi chủ đề một lệnh)</option>${SoTay.CHU.map(([k, t]) => `<option value="${k}" ${st.sCd === k ? 'selected' : ''}>${esc(t)}${SoTay.get(k) ? ` ✓ ${SoTay.get(k).dang.length} dạng` : ''}</option>`).join('')}</select></label>
+            <label>Tối thiểu số dạng <input id="sMin" type="number" min="3" max="30" value="${st.sMin || 8}"></label>
+            <label>Học sinh <select id="sMuc"><option value="TB" ${st.sMuc === 'TB' ? 'selected' : ''}>Trung bình</option><option value="KHA" ${!st.sMuc || st.sMuc === 'KHA' ? 'selected' : ''}>Khá</option><option value="GIOI" ${st.sMuc === 'GIOI' ? 'selected' : ''}>Khá, giỏi</option></select></label>
+            <label>Ví dụ minh họa <select id="sVd"><option value="co" ${st.sVd !== 'khong' ? 'selected' : ''}>Mỗi dạng một ví dụ</option><option value="khong" ${st.sVd === 'khong' ? 'selected' : ''}>Không (sổ tay gọn)</option></select></label></div>
+          <p class="muted" id="sCo"></p></div>
         <label class="xw-wide">Cấu trúc theo (tên đề trong notebook, bỏ trống nếu theo cấu trúc chung) <input id="xTheo" value="${esc(st.theo)}"></label>
         <label class="xw-wide">Yêu cầu riêng (lỗi học sinh hay mắc, chủ đề muốn có…) <input id="xRieng" value="${esc(st.rieng)}"></label>
       </div><div id="xOut"></div>`);
     const draw = () => {
       const loai = document.querySelector('[name=xLoai]:checked').value, noi = document.querySelector('[name=xNoi]:checked').value;
-      $i('xVan').hidden = loai !== 'van'; $i('xToan').hidden = loai !== 'toan'; $i('xOnTap').hidden = loai !== 'ontap'; $i('xBaiHoc').hidden = loai !== 'baihoc';
-      $i('xTheo').parentElement.hidden = loai === 'ontap' || loai === 'baihoc';
+      $i('xVan').hidden = loai !== 'van'; $i('xToan').hidden = loai !== 'toan'; $i('xOnTap').hidden = loai !== 'ontap'; $i('xBaiHoc').hidden = loai !== 'baihoc'; $i('xSoTay').hidden = loai !== 'sotay';
+      $i('xTheo').parentElement.hidden = loai === 'ontap' || loai === 'baihoc' || loai === 'sotay';
       const bLop = $i('bLop').value;
       if ($i('bLop').dataset.last !== bLop) {
         const want = $i('bLop').dataset.last ? '' : String(st.bhBai || '');
@@ -380,6 +458,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
         oBai, oN: Math.min(+$i('oN').value || 1, 5), oDd: $i('oDd').value, oGoc: $i('oGoc').value,
         bhLop: bLop, bhBai: $i('bBai').value, bN: Math.min(+$i('bN').value || 1, 10), bMuc: $i('bMuc').value,
         bN1: Math.min(Math.max(+$i('bN1').value || 8, 4), 20), bN2: Math.min(+$i('bN2').value || 2, 6), bN3: Math.min(+$i('bN3').value || 4, 10),
+        sCd: $i('sCd').value, sMin: Math.min(Math.max(+$i('sMin').value || 8, 3), 30), sMuc: $i('sMuc').value, sVd: $i('sVd').value,
         n1: +$i('oN1').value || 4, n2: +$i('oN2').value || 4, n3: +$i('oN3').value || 2, p1: +$i('oP1').value || 25, p2: +$i('oP2').value || 35, p3: +$i('oP3').value || 25 };
       U.set('xuong:prompt', o); U.set('xuong:tailieu', $i('oTl').value); U.set('xuong:them:' + oBai, $i('oThem').value);
       const soat = 90 - o.p1 - o.p2 - o.p3;
@@ -387,17 +466,20 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
       $i('oDung').textContent = `Đã dùng ở các phiếu ${OnTap.TEN[oBai] ? 'của chủ đề này' : ''} trong web: ${OnTap.daDung(oBai).length} bài – lệnh tự đưa vào danh sách "Đã dùng" để đợt mới không lặp.`;
       const coBH = BaiHoc.all(+bLop).filter(b => BaiHoc.get(+bLop, b.so));
       $i('bCo').textContent = `Toán ${bLop}: ${coBH.length}/${BaiHoc.all(+bLop).length} bài đã có bài giảng trên web (đánh dấu ✓). Bài đã có thì lệnh tự liệt kê câu cũ để AI soạn câu mới; nhập bản mới sẽ thay bản cũ.`;
-      const hd = loai === 'van' ? HD_VAN : loai === 'ontap' ? HD_ONTAP(o.oDd === 'md') : loai === 'baihoc' ? HD_BAIHOC : HD_TOAN;
+      const daSo = SoTay.list();
+      $i('sCo').textContent = `Sổ tay trên web: ${daSo.length}/8 chủ đề, ${daSo.reduce((t, e) => t + e.dang.length, 0)} dạng. Chủ đề đã có thì lệnh tự liệt kê các dạng đã có để AI chỉ soạn dạng còn thiếu. Nhập vào: Xưởng → Nhập dữ liệu; xem ở #/so-tay.`;
+      const hd = loai === 'van' ? HD_VAN : loai === 'ontap' ? HD_ONTAP(o.oDd === 'md') : loai === 'baihoc' ? HD_BAIHOC : loai === 'sotay' ? HD_SOTAY : HD_TOAN;
       const ls = loai === 'van' ? Array.from({ length: o.n }, (_, k) => lenhVan(o, k))
         : loai === 'ontap' ? Array.from({ length: o.oN }, (_, k) => lenhOnTap({ bai: oBai, dot: +$i('oDot').value || 1, dd: o.oDd, goc: o.oGoc, n1: o.n1, n2: o.n2, n3: o.n3, p1: o.p1, p2: o.p2, p3: o.p3, rieng: o.rieng, them: $i('oThem').value, tl: $i('oTl').value }, k))
+        : loai === 'sotay' ? (o.sCd === 'tat' ? SoTay.CHU.map(c => c[0]) : [o.sCd]).map(cd => lenhSoTay({ muc: o.sMuc, min: o.sMin, vd: o.sVd !== 'khong', rieng: o.rieng }, cd))
         : loai === 'baihoc' ? Array.from({ length: o.bN }, (_, k) => lenhBaiHoc({ lop: bLop, bai: o.bhBai, muc: o.bMuc, n1: o.bN1, n2: o.bN2, n3: o.bN3, rieng: o.rieng }, k)).filter(Boolean)
         : Array.from({ length: o.lan }, (_, k) => lenhToan({ ...o, muc: o.mucT }, k));
       const full = l => noi === 'nb' ? `${hd}\n\n=== LỆNH ===\n${l}` : l;
       $i('xOut').innerHTML = (noi === 'gem' ? box('xHd', '① Hướng dẫn Gem (dán một lần vào mục Hướng dẫn của Gem)', hd, 'Mục Kiến thức của Gem: thêm notebook NotebookLM chứa tài liệu.') : '')
-        + `<div class="card xw-box"><div class="xw-h"><b>${noi === 'gem' ? '②' : '①'} Lệnh ${loai === 'ontap' ? 'từng phiếu' : loai === 'baihoc' ? 'từng bài' : 'từng đề'} (${ls.length})</b><button class="btn" type="button" id="xAll">⬇️ Tải tất cả lệnh (.txt)</button></div>
+        + `<div class="card xw-box"><div class="xw-h"><b>${noi === 'gem' ? '②' : '①'} Lệnh ${loai === 'ontap' ? 'từng phiếu' : loai === 'baihoc' ? 'từng bài' : loai === 'sotay' ? 'từng chủ đề' : 'từng đề'} (${ls.length})</b><button class="btn" type="button" id="xAll">⬇️ Tải tất cả lệnh (.txt)</button></div>
           <p class="muted">${noi === 'gem' ? 'Mỗi lệnh gửi trong một cuộc trò chuyện mới của Gem.' : 'NotebookLM có thể cắt câu trả lời dài: nếu JSON bị cụt, dùng Gem hoặc giảm số đề mỗi lệnh.'}</p>
           ${ls.map((l, i) => `<div class="xw-h"><span>Lệnh ${i + 1}</span><button class="btn ghost" type="button" data-copy="xL${i}">📋 Chép lệnh ${i + 1}</button></div><textarea id="xL${i}" class="xw-ta" readonly rows="${noi === 'nb' ? 6 : 5}">${esc(full(l))}</textarea>`).join('')}</div>`
-        + box('xSua', `${noi === 'gem' ? '③' : '②'} Lệnh sửa (khi AI trả về sai mẫu, thiếu chấm điểm)`, SUA(loai === 'van' ? 'de_van' : loai === 'ontap' ? 'on_tap_toan' : loai === 'baihoc' ? 'bai_hoc' : 'luyen_de_toan'), 'Trang Nhập dữ liệu tự tạo lệnh sửa kèm danh sách lỗi cụ thể (cả bài bị trùng đợt trước).');
+        + box('xSua', `${noi === 'gem' ? '③' : '②'} Lệnh sửa (khi AI trả về sai mẫu, thiếu chấm điểm)`, SUA(loai === 'van' ? 'de_van' : loai === 'ontap' ? 'on_tap_toan' : loai === 'baihoc' ? 'bai_hoc' : loai === 'sotay' ? 'so_tay_toan' : 'luyen_de_toan'), 'Trang Nhập dữ liệu tự tạo lệnh sửa kèm danh sách lỗi cụ thể (cả bài bị trùng đợt trước).');
       bindCopy($i('xOut'));
       $i('xAll').addEventListener('click', () => download(`lenh-${loai}-${new Date().toISOString().slice(0, 10)}.txt`, ls.map(full).join('\n=====\n'), 'text/plain'));
     };
@@ -410,6 +492,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
     if (r.loai === 'de_van') return Van.sheetHTML(NhapDL.vanEntry(j, 'xem'), { muc: 'day' });
     if (r.loai === 'on_tap_toan') return OnTap.sheetHTML(NhapDL.onTapEntry(j, 'xem'), { key: true });
     if (r.loai === 'bai_hoc') return BaiHoc.previewHTML(NhapDL.bhEntry(j, 'xem'));
+    if (r.loai === 'so_tay_toan') return SoTay.sheetHTML([NhapDL.soTayEntry(j, 'xem')]);
     const t = Topics.get(r.id) || { id: r.id, bai: 'Bài', title: '' };
     return LuyenDe.sheetHTML(t, { key: true }, null, { phut: 12, de: NhapDL.toanItems(j, 'xem') });
   }
@@ -444,7 +527,7 @@ ${loai === 'de_van' ? MAU_VAN : loai === 'on_tap_toan' ? MAU_ONTAP : loai === 'b
       srcs.forEach((s, i) => { if (s.r && !s.r.errs.length) $i(`nPre${i}`).innerHTML = previewHTML(s.res.data, s.r); });
       const S_ = i => srcs[+i];
       $i('nOut').querySelectorAll('[data-fix]').forEach(b => b.addEventListener('click', async () => {
-        const s = S_(b.dataset.fix), loai = s.r ? s.r.loai : (/doc_hieu|de_van/.test(s.text) ? 'de_van' : /on_tap_toan/.test(s.text) ? 'on_tap_toan' : /bai_hoc/.test(s.text) ? 'bai_hoc' : 'luyen_de_toan');
+        const s = S_(b.dataset.fix), loai = s.r ? s.r.loai : (/doc_hieu|de_van/.test(s.text) ? 'de_van' : /on_tap_toan/.test(s.text) ? 'on_tap_toan' : /bai_hoc/.test(s.text) ? 'bai_hoc' : /so_tay_toan/.test(s.text) ? 'so_tay_toan' : 'luyen_de_toan');
         const ok = await U.copy(SUA(loai, s.r ? [...s.r.errs, ...s.r.warns] : ['JSON sai cú pháp, không đọc được']));
         U.toast(ok ? 'Đã chép lệnh sửa. Dán vào đúng cuộc trò chuyện với AI vừa rồi.' : 'Không chép được.');
       }));

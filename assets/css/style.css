@@ -567,3 +567,26 @@ table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align
 .bh-hinh svg{max-width:100%;height:auto;max-height:260px}
 .tc-slide .bh-hinh svg{max-height:38vh}
 .sheet .bh-hinh svg{max-height:5.5cm}
+/* Sổ tay công thức tra cứu vào 10 (#/so-tay) */
+.st-tools{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.st-tools input{flex:1 1 260px;font:inherit;padding:9px 12px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.st-chips .chip.on{background:var(--primary-soft);border-color:var(--primary)}
+.st-chips .chip.muted{opacity:.55}
+.st-muc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 12px;font-size:14px}
+.st-dang h3{margin:0 0 6px}
+.st-dang p,.st-dang ol,.st-dang ul{margin:6px 0}
+.st-ct{width:100%;border-collapse:collapse;margin:8px 0}
+.st-ct th,.st-ct td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+.st-ct th{width:28%;font-weight:700;background:var(--primary-soft)}
+.st-dk{font-size:.9em;color:var(--muted);margin-top:3px}
+.st-meo{background:var(--warn-soft);padding:6px 10px;border-radius:8px}
+.st-loi{color:var(--ink)}
+.st-tra table{width:100%;border-collapse:collapse;margin-top:6px}
+.st-tra th,.st-tra td{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.st-tra th{width:45%;font-weight:600}
+.sheet .st-cot{column-count:2;column-gap:7mm;font-size:10.5pt}
+.sheet .st-in-dang{break-inside:avoid;margin:0 0 3mm}
+.sheet .st-in-dang h3{font-size:11pt;margin:0 0 1mm}
+.sheet .st-in-dang p{margin:.5mm 0}
+.sheet table.st-tra-in td{text-align:left;font-size:10pt}
+.card.st-tra table th,.card.st-tra table td,.card.st-dang table.st-ct th,.card.st-dang table.st-ct td{text-align:left}

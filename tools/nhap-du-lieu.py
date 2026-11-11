@@ -17,13 +17,14 @@ const fs = require('fs'), vm = require('vm');
 const ctx = { console, window: {} }; vm.createContext(ctx);
 // cùng thứ tự với index.html: core (U) → baihoc + mục lục SGK (để kiểm số bài) → nhap
 const R = process.argv[1].replace(/assets\/js\/nhap\.js$/, '');
-['assets/js/core.js', 'assets/js/baihoc.js', 'data/bai-hoc/muc-luc-kntt.js'].forEach(f => vm.runInContext(fs.readFileSync(R + f, 'utf8'), ctx));
+['assets/js/core.js', 'assets/js/baihoc.js', 'data/bai-hoc/muc-luc-kntt.js', 'assets/js/sotay.js'].forEach(f => vm.runInContext(fs.readFileSync(R + f, 'utf8'), ctx));
 vm.runInContext(fs.readFileSync(process.argv[1], 'utf8') + '\n;globalThis.NhapDL = NhapDL;', ctx);
-const BH = vm.runInContext('BaiHoc', ctx);
+const BH = vm.runInContext('BaiHoc', ctx), ST = vm.runInContext('SoTay', ctx);
 const out = JSON.parse(fs.readFileSync(0, 'utf8')).map(([name, text]) => {
   try { const { data, notes } = ctx.NhapDL.parse(text); const r = ctx.NhapDL.check(data);
     // bài giảng trùng lớp + bài với tệp trước → Bộ 2, 3… (giữ bài giảng tệp đầu), báo số câu thêm / bỏ vì trùng
-    let ghep = null; try { if (!r.errs.length && r.loai === 'bai_hoc') ghep = BH.add(ctx.NhapDL.bhEntry(data, 'he-thong')); } catch (e) { ghep = null; }
+    let ghep = null; try { if (!r.errs.length && r.loai === 'bai_hoc') ghep = BH.add(ctx.NhapDL.bhEntry(data, 'he-thong'));
+      if (!r.errs.length && r.loai === 'so_tay_toan') ghep = { sotay: 1, ...ST.add(ctx.NhapDL.soTayEntry(data, 'he-thong')) }; } catch (e) { ghep = null; }
     return { name, ok: !r.errs.length, errs: r.errs, warns: r.warns, notes, ten: r.ten, data, ghep }; }
   catch (e) { return { name, ok: false, errs: [e.message], warns: [], notes: [] }; }
 });
@@ -53,7 +54,9 @@ def main():
             f.write('NhapDL.add(' + json.dumps(r['data'], ensure_ascii=False, indent=1) + f", 'nhap/{r['name']}');\n")
         keep.append(js)
         g = r.get('ghep') or {}
-        if g.get('thay_mau'): r['warns'].insert(0, 'bài này đang là bài MẪU → bản này thay hẳn bài mẫu')
+        if g.get('sotay'):
+            if not g.get('moi'): r['warns'].insert(0, f"chủ đề đã có ở tệp trước → thêm {g['them']} dạng mới, bỏ {g['bo_qua']} dạng trùng tên")
+        elif g.get('thay_mau'): r['warns'].insert(0, 'bài này đang là bài MẪU → bản này thay hẳn bài mẫu')
         elif g and g.get('bo', 1) > 1: r['warns'].insert(0, f"bài đã có ở tệp trước → thành Bộ {g['bo']} phần luyện tập: thêm {g['them']} câu, bỏ {g['bo_qua']} câu trùng (bài giảng giữ bản đầu)")
         elif g and not g.get('bo'): r['warns'].insert(0, f"MỌI câu đều trùng tệp trước – không thêm gì (xoá tệp này hoặc nhờ AI soạn câu mới)")
         print(f"✓ {r['name']} → {js} ({r['ten']})" + ''.join(f"\n   ! {w}" for w in r['warns']) + ''.join(f"\n   · {n}" for n in r['notes']))

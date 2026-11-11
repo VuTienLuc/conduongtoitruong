@@ -24,6 +24,11 @@
 - Menu prompt → "📚 Bài giảng – luyện tập online": chọn lớp, bài (theo mục lục SGK KNTT, ✓ = đã có), số bài liên tiếp, số câu trắc nghiệm / đúng – sai / trả lời ngắn (mặc định 8/2/4), mức học sinh. Hướng dẫn `Xuong.HD_BAIHOC`: bám đúng thứ tự mục của bài SGK, viết lại ngắn (không chép nguyên văn sách), ví dụ có lời giải, `can_nho` 4–8 mục bắt buộc, ba dạng câu hỏi thi THPT, đáp số trả lời ngắn ≤ 4 kí tự.
 - Bài đã có trên web: lệnh tự liệt kê câu cũ để AI soạn câu mới. Chi tiết trang, kiểm: notes/bai-giang-online.md. Nhập bản đó vào thì thành Bộ 2, 3… (giữ bài giảng cũ, bỏ câu trùng; tệp tên `…-bo2.json`).
 
+## Sổ tay công thức tra cứu Toán vào 10 (thầy yêu cầu 11/11/2026)
+- Menu prompt → "📒 Toán vào 10 – sổ tay công thức, mẹo nhớ theo dạng": chọn chủ đề (Kiến thức nền, Bài 1 … Bài 7 – hình phẳng gộp 7a/b/c) hoặc "Tất cả 8 chủ đề" (mỗi chủ đề một lệnh), tối thiểu số dạng (mặc định 8), mức học sinh, có/không ví dụ. Hướng dẫn `HD_SOTAY`: rà mọi đề tuyển sinh, liệt kê đủ dạng cơ bản → nâng cao; mỗi dạng: nhận diện, công thức (+ điều kiện, ghi chú), cách làm, mẹo nhớ (đúng toán), lỗi hay sai, ví dụ; "tra_nhanh" thấy gì – dùng gì. Chủ đề 7 kèm quy định chấm thống nhất (`App.RULES`): kiến thức phải chứng minh lại ghi rõ trong ghi chú. Chủ đề đã có: lệnh liệt kê dạng đã có để AI chỉ soạn dạng thiếu.
+- Dữ liệu `"loai":"so_tay_toan"`: `chu_de` ("nen", 1…7), `nguon`, `tong_quan`, `tra_nhanh[{hoi, dap}]`, `dang[{ten, muc, nhan_dien, cong_thuc[{ten, ct, dieu_kien, ghi_chu}], cach_lam[], meo_nho, loi_hay_sai[], vi_du{de, loi_giai[], dap_so}}]`. Kiểm: ≥ 3 dạng, mỗi dạng có công thức hoặc cách làm. Nhập thêm cùng chủ đề: chỉ thêm dạng mới (so tên dạng). Tệp `so-tay-<cd>-<ngày>.json`. Mẫu thử: `docs/mau-nhap/so-tay-chu-de-2-mau.json`.
+- Trang `#/so-tay` (`assets/js/sotay.js`): tìm không dấu, chip chủ đề, mục lục dạng, in PDF 2 cột (`SoTay.sheetHTML`); thẻ 📒 ở trang Toán vào 10 chỉ hiện khi đã có dữ liệu. Ví dụ trong sổ tay chưa có kiểm đáp số tự động – nhập xong nhờ Claude kiểm (thay số bằng Python).
+
 ## Lưu ý
 - Web không vẽ hình từ "hinh" (chỉ in mô tả). Đề hình học nhập từ AI cần thầy kiểm và bổ sung hình nếu cần.
 - AI có thể ra đề và đáp án lệch nhau: khi thầy gửi JSON nhờ kiểm, thay số kiểm từng đáp số bằng Python trước khi nhập.

@@ -149,7 +149,8 @@ const App = (() => {
         <a class="card link-card" href="#/cd/kien-thuc-thong-nhat/lt"><span class="big">📜</span><b>Luật chơi</b><span>Kiến thức được dùng ngay và phải chứng minh lại</span></a>
         <a class="card link-card" href="#/lo-trinh"><span class="big">📅</span><b>Lộ trình 26 tuần</b><span>30/11/2026 – 30/5/2027, tuần nào học chủ đề nào</span></a>
       </div>
-      <a class="card link-card" href="#/on-tap"><span class="big">🗂️</span><b>Phiếu ôn tập 90 phút theo chủ đề</b><span>Từ cơ bản đến nâng cao, mỗi đợt một phiếu mới${typeof OnTap !== 'undefined' && OnTap.list().length ? ` · ${OnTap.list().length} phiếu` : ''}</span></a></main>`;
+      <a class="card link-card" href="#/on-tap"><span class="big">🗂️</span><b>Phiếu ôn tập 90 phút theo chủ đề</b><span>Từ cơ bản đến nâng cao, mỗi đợt một phiếu mới${typeof OnTap !== 'undefined' && OnTap.list().length ? ` · ${OnTap.list().length} phiếu` : ''}</span></a>
+      ${typeof SoTay !== 'undefined' && SoTay.list().length ? `<a class="card link-card" href="#/so-tay"><span class="big">📒</span><b>Sổ tay công thức tra cứu</b><span>Công thức, cách làm, mẹo nhớ, lỗi hay sai theo từng dạng · ${SoTay.list().reduce((t, e) => t + e.dang.length, 0)} dạng</span></a>` : ''}</main>`;
   }
 
   /* ---------- Lộ trình ---------- */
@@ -380,6 +381,7 @@ THẦY HÃY
     else if (typeof Vdc !== 'undefined' && Vdc.route(parts)) { /* lớp 10, 11, 12 */ }
     else if (typeof Van !== 'undefined' && Van.route(parts)) { /* Ngữ văn vào 10 */ }
     else if (typeof OnTap !== 'undefined' && OnTap.route(parts)) { /* phiếu ôn tập 90 phút */ }
+    else if (typeof SoTay !== 'undefined' && SoTay.route(parts)) { /* sổ tay công thức tra cứu vào 10 */ }
     else if (typeof BaiHoc !== 'undefined' && BaiHoc.route(parts)) { /* bài giảng – luyện tập online lớp 9–12 */ }
     else if (typeof Xuong !== 'undefined' && Xuong.route(parts)) { /* Xưởng dữ liệu */ }
     else picker();
