@@ -13,3 +13,8 @@ BaiHoc.taiNguyen(10, 9, [
     mo_ta: "Bài trình chiếu Toán 10 – Bài 9 SGK Kết nối tri thức: tích của một vectơ với một số, có hình động, ví dụ giải từng bước và luyện tập theo định dạng đề mới.",
     file: 'tuong-tac/lop10-b9-tich-vecto-voi-mot-so.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
 ]);
+BaiHoc.taiNguyen(10, 10, [
+  { ten: "Vectơ trong mặt phẳng tọa độ",
+    mo_ta: "Bài trình chiếu Toán 10 – Bài 10 SGK Kết nối tri thức: tọa độ của điểm, của vectơ và biểu thức tọa độ các phép toán vectơ, có hình động, ví dụ giải từng bước và luyện tập theo định dạng đề mới.",
+    file: 'tuong-tac/lop10-b10-vecto-trong-mat-phang-toa-do.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
+]);

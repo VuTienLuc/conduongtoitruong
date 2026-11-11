@@ -72,7 +72,12 @@ def main():
         open(idx, 'w', encoding='utf-8').write(html2)
     print(f'Đã nhập {len(keep)} tệp' + (f', {bad} tệp lỗi (sửa bằng "Chép lệnh sửa" ở web)' if bad else '') + '. Kiểm tra toàn bộ:')
     k = subprocess.run(['node', os.path.join(ROOT, 'tools/kiem-tra.js')], capture_output=True, text=True)
-    print('\n'.join(k.stdout.strip().split('\n')[-4:]))
+    out = k.stdout.strip().split('\n')
+    if k.returncode:   # có lỗi: in hết các dòng ✗ (và lỗi của node nếu có) để thầy chép gửi Claude
+        print('\n'.join([l for l in out if l.startswith('✗')][:30] + out[-1:]))
+        if k.stderr.strip(): print('Lỗi node:\n' + '\n'.join(k.stderr.strip().split('\n')[-12:]))
+        if not k.stdout.strip(): print('(node ' + subprocess.run(['node', '-v'], capture_output=True, text=True).stdout.strip() + ')')
+    else: print('\n'.join(out[-4:]))
     return 1 if (bad or k.returncode) else 0
 
 

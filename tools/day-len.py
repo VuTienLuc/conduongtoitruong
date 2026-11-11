@@ -24,7 +24,8 @@ G = importlib.util.module_from_spec(spec); spec.loader.exec_module(G)
 def run(cmd, show=True, check=False):
     r = subprocess.run(cmd, capture_output=True, text=True)
     if show and (r.stdout.strip() or r.stderr.strip()):
-        print('\n'.join('   ' + l for l in (r.stdout + r.stderr).strip().split('\n')[-12:]))
+        n = 45 if r.returncode else 12   # lỗi thì in nhiều dòng hơn để thấy dòng ✗
+        print('\n'.join('   ' + l for l in (r.stdout + r.stderr).strip().split('\n')[-n:]))
     if check and r.returncode: raise SystemExit(f'✗ Lệnh lỗi: {" ".join(cmd)} – chưa đẩy gì lên. Sửa lỗi ở trên rồi chạy lại.')
     return r
 

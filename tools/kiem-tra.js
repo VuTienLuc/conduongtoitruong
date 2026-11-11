@@ -213,5 +213,5 @@ console.log(`Ngữ văn vào 10: ${ctx.Van ? ctx.Van.list().length : 0} đề ·
 if (BH) console.log(`Bài giảng – luyện tập online: mục lục ${BH.LOP.map(l => `Toán ${l} ${BH.all(l).length} bài`).join(', ')}; ${BH.list().length} bài có nội dung, ${Object.keys(BH.TN).length} bài có trình chiếu, ${sum(BH.list().map(e => e.tn.length + e.ds.length + e.tln.length))} câu luyện tập.`);
 console.log(`Lớp 10–12 (VD–VDC): ${V.length} chủ đề, ${sum(V.map(t => t.dang.length))} dạng, ${sum(V.map(t => sum(t.dang.map(d => d.bt.length))))} bài tương tự.`);
 warns.forEach(w => console.log('! ' + w));
-if (errs.length) { errs.forEach(e => console.log(e)); console.log(`KẾT QUẢ: CHƯA ĐẠT ✗ (${errs.length} lỗi)`); process.exit(1); }
+if (errs.length) { errs.forEach(e => console.log(e)); console.log(`KẾT QUẢ: CHƯA ĐẠT ✗ (${errs.length} lỗi)`); process.exitCode = 1; }   // không process.exit(): trên macOS đầu ra qua ống (pipe) bị cắt mất, lệnh Đăng không hiện được lỗi
 console.log('KẾT QUẢ: ĐẠT ✓');
