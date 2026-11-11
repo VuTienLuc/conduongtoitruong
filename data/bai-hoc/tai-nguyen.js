@@ -23,3 +23,8 @@ BaiHoc.taiNguyen(11, 12, [
     mo_ta: "Bài trình chiếu Toán 11 – Bài 12 SGK Kết nối tri thức: đường thẳng và mặt phẳng song song, dấu hiệu nhận biết và tính chất giao tuyến, có hình động, ví dụ giải từng bước và luyện tập theo định dạng đề mới.",
     file: 'tuong-tac/lop11-b12-duong-thang-va-mat-phang-song-song.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
 ]);
+BaiHoc.taiNguyen(11, 12, [
+  { ten: "Dạng toán đường thẳng song song mặt phẳng",
+    mo_ta: "Bài trình chiếu ôn dạng toán Toán 11 – Bài 12 SGK Kết nối tri thức: đường thẳng và mặt phẳng song song, kiến thức trọng tâm có hình minh hoạ, 3 dạng toán có cách làm, ví dụ và luyện tập ngay.",
+    file: 'tuong-tac/lop11-b12-duong-thang-va-mat-phang-song-song-dang-toan.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
+]);
