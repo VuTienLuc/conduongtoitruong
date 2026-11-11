@@ -8,3 +8,8 @@ BaiHoc.taiNguyen(11, 11, [
     mo_ta: 'Ô chữ khởi động, hình không gian xoay được, ví dụ và luyện tập, phản biện câu trả lời của trợ lí AI, trắc nghiệm củng cố, vận dụng. Bấm → (hoặc phím cách) để hiện từng bước; kéo hình để xoay, chạm vào hình để phóng to.',
     file: 'tuong-tac/lop11-b11-hai-duong-thang-song-song-tiet1.html', nguon: 'Bài dạy của thầy Vũ Tiến Lực' },
 ]);
+BaiHoc.taiNguyen(10, 9, [
+  { ten: "Tích vectơ với một số",
+    mo_ta: "Bài trình chiếu Toán 10 – Bài 9 SGK Kết nối tri thức: tích của một vectơ với một số, có hình động, ví dụ giải từng bước và luyện tập theo định dạng đề mới.",
+    file: 'tuong-tac/lop10-b9-tich-vecto-voi-mot-so.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
+]);

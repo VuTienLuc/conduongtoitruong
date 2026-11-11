@@ -1,0 +1,99 @@
+{
+  "loai": "luyen_de_toan",
+  "bai": 3,
+  "de": [
+    {
+      "ten": "Rút lần lượt không hoàn lại 2 thẻ – số chia hết cho 3",
+      "nguon": "Phóng tác từ SGK Toán 9 (Chuyên đề đếm số)",
+      "diem": 1.5,
+      "de": "Một hộp chứa $5$ tấm thẻ cùng loại được ghi các chữ số: $1; 2; 3; 4; 5$. Rút ngẫu nhiên một tấm thẻ từ hộp làm chữ số hàng chục, KHÔNG TRẢ LẠI hộp, sau đó rút tiếp một tấm thẻ nữa làm chữ số hàng đơn vị để tạo thành một số tự nhiên có hai chữ số.\na) (0,75 điểm) Hãy xác định số phần tử của không gian mẫu của phép thử trên.\nb) (0,75 điểm) Tính xác suất của biến cố $A$: “Số tự nhiên được tạo thành chia hết cho 3”.",
+      "dap_so": "a) $n(\\Omega) = 20$; b) $P(A) = \\dfrac{2}{5}$",
+      "loi_giai": [
+        { "buoc": "Rút tấm thẻ thứ nhất làm chữ số hàng chục có 5 cách chọn. Do không hoàn lại nên rút tấm thẻ thứ hai làm chữ số hàng đơn vị có 4 cách chọn", "diem": 0.5 },
+        { "buoc": "Số phần tử của không gian mẫu: $n(\\Omega) = 5 \\cdot 4 = 20$ (số)", "diem": 0.25 },
+        { "buoc": "Số tự nhiên chia hết cho 3 khi tổng các chữ số chia hết cho 3. Các cặp chữ số có tổng chia hết cho 3 là: {1; 2}, {1; 5}, {2; 4}, {4; 5}", "diem": 0.25 },
+        { "buoc": "Các số tạo thành là: 12, 21, 15, 51, 24, 42, 45, 54 (có 8 số), suy ra $n(A) = 8$", "diem": 0.25 },
+        { "buoc": "Xác suất biến cố $A$: $P(A) = \\dfrac{8}{20} = \\dfrac{2}{5}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Tính nhầm không gian mẫu có hoàn lại (5 · 5 = 25)",
+        "Bỏ sót các cặp số như {1; 5} hoặc {4; 5}",
+        "Chưa rút gọn phân số 8/20"
+      ]
+    },
+    {
+      "ten": "Chọn ngẫu nhiên 2 học sinh – có ít nhất 1 học sinh nữ",
+      "nguon": "Phóng tác từ cấu trúc đề thi tuyển sinh 10 (Dạng chọn người)",
+      "diem": 1.5,
+      "de": "Đội tình nguyện Mùa hè xanh của một lớp 9 gồm $7$ học sinh xuất sắc, trong đó có $4$ nam và $3$ nữ. Giáo viên chủ nhiệm cần chọn ngẫu nhiên ĐỒNG THỜI $2$ học sinh từ đội tình nguyện trên để phân công nhiệm vụ.\na) (0,5 điểm) Có bao nhiêu cách chọn ra 2 học sinh từ đội tình nguyện đó? (Xác định số phần tử của không gian mẫu).\nb) (1,0 điểm) Tính xác suất của biến cố $B$: “Trong 2 học sinh được chọn, có ít nhất 1 học sinh nữ”.",
+      "dap_so": "a) $n(\\Omega) = 21$; b) $P(B) = \\dfrac{5}{7}$",
+      "loi_giai": [
+        { "buoc": "Số cách chọn đồng thời 2 học sinh từ 7 học sinh: $n(\\Omega) = \\dfrac{7 \\cdot 6}{2} = 21$", "diem": 0.5 },
+        { "buoc": "Xét biến cố đối $\\overline{B}$: “Trong 2 học sinh được chọn không có học sinh nữ nào” (tức là chọn được 2 học sinh nam)", "diem": 0.25 },
+        { "buoc": "Số cách chọn 2 nam từ 4 nam: $n(\\overline{B}) = \\dfrac{4 \\cdot 3}{2} = 6$ (cách)", "diem": 0.25 },
+        { "buoc": "Số kết quả thuận lợi cho $B$: $n(B) = n(\\Omega) - n(\\overline{B}) = 21 - 6 = 15$ (kết quả)", "diem": 0.25 },
+        { "buoc": "Xác suất của biến cố $B$: $P(B) = \\dfrac{15}{21} = \\dfrac{5}{7}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Tính không gian mẫu có thứ tự: 7 · 6 = 42 thay vì 21",
+        "Bỏ sót trường hợp cả 2 bạn đều là nữ khi tính trực tiếp",
+        "Chưa rút gọn phân số 15/21"
+      ]
+    },
+    {
+      "ten": "Vòng quay may mắn – kim chỉ vào ô số nguyên tố",
+      "nguon": "Phóng tác từ SGK Toán 9 (Chuyên đề Vòng quay)",
+      "diem": 1.5,
+      "de": "Một đĩa tròn bằng bìa cứng được chia làm $8$ hình quạt bằng nhau và ghi các số $1; 2; 3; 4; 5; 6; 7; 8$. Chiếc kim được gắn cố định vào trục quay ở tâm của đĩa. Xét phép thử “Quay đĩa tròn một lần” (giả sử kim không bao giờ dừng lại ở vạch chia giữa 2 ô).\na) (0,75 điểm) Hãy mô tả không gian mẫu của phép thử và cho biết số phần tử của không gian mẫu.\nb) (0,75 điểm) Tính xác suất của biến cố $C$: “Kim chỉ vào ô ghi số nguyên tố”.",
+      "dap_so": "a) $n(\\Omega) = 8$; b) $P(C) = \\dfrac{1}{2}$",
+      "loi_giai": [
+        { "buoc": "Không gian mẫu: $\\Omega = \\{1; 2; 3; 4; 5; 6; 7; 8\\}$", "diem": 0.5 },
+        { "buoc": "Số phần tử của không gian mẫu là $n(\\Omega) = 8$", "diem": 0.25 },
+        { "buoc": "Các số nguyên tố từ 1 đến 8 là: 2, 3, 5, 7", "diem": 0.25 },
+        { "buoc": "Các kết quả thuận lợi cho $C$ là $\\{2; 3; 5; 7\\}$. Số kết quả thuận lợi là $n(C) = 4$", "diem": 0.25 },
+        { "buoc": "Xác suất của biến cố $C$: $P(C) = \\dfrac{4}{8} = \\dfrac{1}{2}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Tính cả số 1 là số nguyên tố dẫn đến n(C) = 5",
+        "Bỏ sót số nguyên tố chẵn 2"
+      ]
+    },
+    {
+      "ten": "Gieo 2 con xúc xắc – hiệu số chấm bằng 2",
+      "nguon": "Phóng tác từ bài tập Xác suất gieo xúc xắc nâng cao",
+      "diem": 1.5,
+      "de": "Bạn An gieo đồng thời hai con xúc xắc cân đối và đồng chất.\na) (0,5 điểm) Phép thử trên có bao nhiêu kết quả có thể xảy ra?\nb) (1,0 điểm) Tính xác suất của biến cố $D$: “Số chấm xuất hiện trên 2 con xúc xắc chênh lệch nhau đúng 2 chấm”.",
+      "dap_so": "a) $n(\\Omega) = 36$; b) $P(D) = \\dfrac{2}{9}$",
+      "loi_giai": [
+        { "buoc": "Khi gieo đồng thời 2 con xúc xắc, số phần tử của không gian mẫu là: $n(\\Omega) = 6 \\cdot 6 = 36$", "diem": 0.5 },
+        { "buoc": "Gọi kết quả gieo là cặp $(i; j)$ với $i, j \\in \\{1; 2; 3; 4; 5; 6\\}$. Biến cố $D$ xảy ra khi $|i - j| = 2$", "diem": 0.25 },
+        { "buoc": "Các cặp số có hiệu bằng 2: (1; 3), (2; 4), (3; 5), (4; 6) và đảo vị trí: (3; 1), (4; 2), (5; 3), (6; 4)", "diem": 0.25 },
+        { "buoc": "Tổng cộng có 8 kết quả thuận lợi: $n(D) = 8$", "diem": 0.25 },
+        { "buoc": "Xác suất của biến cố $D$: $P(D) = \\dfrac{8}{36} = \\dfrac{2}{9}$", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Quên các cặp đảo vị trí như (1; 3) và (3; 1)",
+        "Chưa rút gọn phân số 8/36"
+      ]
+    },
+    {
+      "ten": "Xác suất thực nghiệm – khảo sát phương tiện đến trường",
+      "nguon": "Phóng tác từ Đề khảo sát thực tế Toán 9",
+      "diem": 1.5,
+      "de": "Trường THCS A tiến hành khảo sát phương tiện đi đến trường của $50$ học sinh khối 9. Kết quả được ghi nhận ở bảng sau:\na) (0,5 điểm) Hãy xác định tổng số học sinh đã được khảo sát để lấy số liệu cho bảng trên (nêu phép tính minh họa).\nb) (1,0 điểm) Chọn ngẫu nhiên 1 học sinh trong 50 học sinh trên. Tính xác suất thực nghiệm của biến cố $E$: “Học sinh được chọn đến trường bằng xe buýt hoặc đi bộ”.",
+      "bang": [["Phương tiện", "Xe buýt", "Xe đạp", "Đi bộ", "Phụ huynh chở"], ["Số học sinh", "15", "12", "8", "15"]],
+      "dap_so": "a) $50$ học sinh; b) $P(E) = \\dfrac{23}{50}$",
+      "loi_giai": [
+        { "buoc": "Tổng số học sinh tham gia khảo sát là: $15 + 12 + 8 + 15 = 50$ (học sinh). Đây cũng là số lần thực hiện phép thử", "diem": 0.5 },
+        { "buoc": "Số học sinh đến trường bằng xe buýt là 15; số học sinh đi bộ là 8", "diem": 0.25 },
+        { "buoc": "Số kết quả thuận lợi cho biến cố $E$ (đi xe buýt hoặc đi bộ) là: $15 + 8 = 23$", "diem": 0.5 },
+        { "buoc": "Xác suất thực nghiệm của biến cố $E$: $P(E) = \\dfrac{23}{50}$ (hay 46%)", "diem": 0.25 }
+      ],
+      "loi_hay_sai": [
+        "Cộng thiếu một nhóm phương tiện khi tính tổng học sinh",
+        "Tính nhầm số học sinh đi xe buýt hoặc đi bộ"
+      ]
+    }
+  ]
+}
+

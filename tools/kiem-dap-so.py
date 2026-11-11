@@ -82,6 +82,17 @@ fl_all = list(combinations(['H']*4 + ['T']*3, 2))
 chk('CĐ3 LD4: n(Ω) hoa', len(fl_all), 21)
 chk('CĐ3 LD4: P(cùng màu)', Fr(sum(a == b for a, b in fl_all), len(fl_all)), Fr(3, 7))
 chk('CĐ3 LD5: P thực nghiệm', Fr(13 + 12, 50), Fr(1, 2))
+card_pairs = list(permutations(range(1, 6), 2))
+chk('CĐ3 LD6: n(Ω) ghép số', len(card_pairs), 20)
+div3 = [a * 10 + b for a, b in card_pairs if (a + b) % 3 == 0]
+chk('CĐ3 LD6: P(chia hết 3)', Fr(len(div3), 20), Fr(2, 5))
+team = ['nam'] * 4 + ['nu'] * 3
+team_pairs = list(combinations(team, 2))
+chk('CĐ3 LD7: n(Ω) đội', len(team_pairs), 21)
+chk('CĐ3 LD7: P(ít nhất 1 nữ)', Fr(sum('nu' in p for p in team_pairs), 21), Fr(5, 7))
+chk('CĐ3 LD8: P(nguyên tố)', Fr(4, 8), Fr(1, 2))
+chk('CĐ3 LD9: P(hiệu 2 chấm)', Fr(sum(abs(a - b) == 2 for a, b in d2), 36), Fr(2, 9))
+chk('CĐ3 LD10: P(buýt hoặc bộ)', Fr(15 + 8, 50), Fr(23, 50))
 
 # ---------- Chủ đề 4 ----------
 chk('CĐ4 mẫu 1: 7π ≈', round(7 * 3.14, 2), 21.98)

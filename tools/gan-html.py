@@ -82,7 +82,7 @@ def gan(src, lop, bai, ten=None, mo_ta=None, nguon=None, ten_tep=None, quiet=Fal
     ten = ten or title_of(text) or os.path.splitext(os.path.basename(src))[0]
     mo_ta = mo_ta if mo_ta is not None else desc_of(text)
     base = os.path.splitext(os.path.basename(src))[0]
-    m = re.match(rf'^lop{lop}-b{bai}-(.+)$', base)
+    m = re.match(r'^lop0*' + str(lop) + r'-b0*' + str(bai) + r'-(.+)$', base, re.I)   # nhận cả b09 lẫn b9
     duoi = slug(ten_tep or (m.group(1) if m else base if not re.match(r'^[0-9a-f]{6,}-', base) else ten))
     rel = f'tuong-tac/lop{lop}-b{bai}-{duoi}.html'
     os.makedirs(os.path.join(ROOT, 'tuong-tac'), exist_ok=True)
