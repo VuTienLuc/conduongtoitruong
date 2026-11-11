@@ -12,3 +12,4 @@
 - Đề trùng trong một bộ luyện đề (JSON trong `nhap/` + viết tay `ld*.js`) → `kiem-tra.js` báo TRÙNG, lệnh đăng web dừng (09/11/2026).
 - Lời giải thích trắc nghiệm ghi "Phương án D sai…" nhưng web đảo phương án → chữ cái lệch. Sửa: giữ thứ tự gốc (`goc`) và đổi chữ cái khi hiển thị (`BaiHoc.doiChu`) (09/11/2026).
 - Công cụ trong iframe tự bật toàn màn hình → document.fullscreenElement là iframe con → trình chiếu tưởng đã thoát nên đóng, mở lại về trang đầu. Sửa: coi phần tử con của khung là vẫn đang chiếu; nhớ trang đang chiếu (09/11/2026).
+- 11/11/2026: Kéo bản mới về máy thầy (qua công cụ máy, chưa xin quyền xoá) bằng `git pull --autostash` → "could not reset --hard", kẹt `.git/index.lock`. Mỗi phiên mới: xin quyền xoá thư mục Documents trước rồi mới pull; kẹt thì xoá `.git/index.lock` rồi pull lại (thay đổi dở của máy vẫn còn nguyên).
