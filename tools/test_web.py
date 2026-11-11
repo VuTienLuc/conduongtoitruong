@@ -343,7 +343,7 @@ async def main():
         # 📕 In sổ tay thành một quyển: vào 10 (10 chủ đề Topics) và Toán 10 – 11 – 12 (theo chương), có bìa, mục lục, mã mục, bảng A–Z
         await pg.goto(base + '#/so-tay/in'); await pg.wait_for_timeout(500)
         await pg.check('[name=qLoai][value=vao10]'); await pg.wait_for_timeout(300)
-        q1 = await pg.evaluate("[document.querySelectorAll('#qXem .qs-cd').length, !!document.querySelector('#qXem .qs-bia'), !!document.querySelector('#qXem .qs-mluc'), document.querySelectorAll('#qXem .qs-az p').length, document.querySelectorAll('#qXem .qs-ma').length]")
+        q1 = await pg.evaluate("[document.querySelectorAll('#qXem .qs-cd:not(.qs-qt)').length, !!document.querySelector('#qXem .qs-bia'), !!document.querySelector('#qXem .qs-mluc'), document.querySelectorAll('#qXem .qs-az p').length, document.querySelectorAll('#qXem .qs-ma').length]")
         await pg.goto(base + '#/so-tay/in?thpt'); await pg.wait_for_timeout(500)
         q2 = await pg.evaluate("[document.querySelector('[name=qLoai]:checked').value, document.querySelectorAll('#qXem .qs-cd').length, [...document.querySelectorAll('#qXem .qs-phan')].map(x => x.textContent).join('|')]")
         await pg.select_option('#qKieu', 'a5'); await pg.wait_for_timeout(300)

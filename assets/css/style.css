@@ -672,3 +672,38 @@ table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align
 }
 .qs-trang .qs-phan + .qs-cd{break-before:auto}
 .qs-c2 .qs-rong{column-span:all;border-left-width:2.2pt}
+/* hàng nhiều hình nhỏ có chú thích (Fig.hang) */
+.fig-hang{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;width:100%}
+.fig-hang figure{margin:0;flex:1 1 120px;max-width:200px;text-align:center}
+.fig-hang figcaption{font-size:13px;color:var(--muted);margin-top:2px}
+/* hình trong quyển sổ tay in: nét đậm rõ, đường cong theo màu chủ đề */
+.qs-hinh{display:flex;justify-content:center;margin:1.2mm 0 .4mm;break-inside:avoid}
+.qs-hinh .fig{max-width:58mm;max-height:32mm;width:auto}
+.qs-a5 .qs-hinh .fig,.qs-c1 .qs-hinh .fig{max-width:70mm}
+.qs-hinh .fig-hang{gap:1mm 3mm}
+.qs-hinh .fig-hang figure{flex:1 1 0;max-width:46mm}
+.qs-hinh .fig-hang .fig{max-height:22mm;max-width:100%}
+.qs-hinh figcaption{font-size:.82em;color:#333;line-height:1.25}
+.qs .fig .f-grid line{stroke:#e2e2e2}
+.qs .fig .f-stroke,.qs .fig .f-thin,.qs .fig .f-axis line,.qs .fig .f-axis{stroke:#1a1a1a}
+.qs .fig .f-lab,.qs .fig .f-num,.qs .fig .f-fill,.qs .fig .f-dot{fill:#1a1a1a}
+.qs .fig .f-dash{stroke:#666}
+.qs .fig .f-curve{stroke:var(--qc)}
+.qs .fig .f-line2{stroke:#c0392b}
+.qs .fig .f-acc{fill:#c0392b}
+.qs .fig .f-shade{fill:color-mix(in srgb,var(--qc) 22%,#fff)}
+/* lưu ý trình bày đạt điểm tối đa */
+.st-tb{background:var(--ok-soft);padding:6px 10px;border-radius:8px;margin:6px 0}
+.st-tb ul{margin:4px 0}
+.qs-tb{border-left-color:#17804a;background:#eef8f1;border-radius:0 1.5mm 1.5mm 0;padding-right:2mm}
+.qs-tb h3{color:#14633a}
+.qs-check{list-style:none;padding-left:0}
+.qs-check li{padding-left:4.2mm;position:relative}
+.qs-check li::before{content:"☐";position:absolute;left:0;color:#17804a}
+.qs-tb1{color:#14633a;margin:.6mm 0}
+.qs-qt .qs-band{background:#1a1a1a}
+.qs-qt .qs-so{font-size:.95em}
+/* kiểu "tiết kiệm": cho phép một mục ngắt sang cột/trang sau (chỉ giữ tiêu đề đi cùng nội dung, hình không bị cắt) để không bỏ trống trang */
+.qs:not(.qs-trang) .qs-b,.qs:not(.qs-trang) .qs-nho{break-inside:auto}
+.qs-b h3{break-after:avoid}
+.qs table,.qs .fig-hang,.qs-hinh{break-inside:avoid}

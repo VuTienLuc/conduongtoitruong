@@ -55,6 +55,7 @@ const SoTay = (() => {
       ${d.ct.length ? `<table class="st-ct"><tbody>${d.ct.map(c => `<tr><th scope="row">${c.ten}</th><td>${c.ct}${c.dk || c.gc ? `<div class="st-dk">${c.dk ? `Điều kiện: ${c.dk}` : ''}${c.dk && c.gc ? ' · ' : ''}${c.gc}</div>` : ''}</td></tr>`).join('')}</tbody></table>` : ''}
       ${d.cach.length ? `<div class="st-cach"><b>Cách làm:</b><ol>${d.cach.map(x => `<li>${x}</li>`).join('')}</ol></div>` : ''}
       ${d.meo ? `<p class="st-meo">💡 <b>Mẹo nhớ:</b> ${d.meo}</p>` : ''}
+      ${d.tb && d.tb.length ? `<div class="st-tb">✍️ <b>Trình bày để đạt điểm tối đa:</b><ul>${d.tb.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
       ${d.loi.length ? `<div class="st-loi">⚠️ <b>Lỗi hay sai:</b><ul>${d.loi.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
       ${d.vd ? `<details class="st-vd"><summary>Ví dụ minh họa</summary><p>${d.vd.de}</p>${d.vd.lg.length ? `<ol>${d.vd.lg.map(x => `<li>${x}</li>`).join('')}</ol>` : ''}${d.vd.ds ? `<p><b>Đáp số:</b> ${d.vd.ds}</p>` : ''}</details>` : ''}
     </article>`;
@@ -73,7 +74,7 @@ const SoTay = (() => {
       <div class="st-cot">${e.dang.map(d => `<div class="st-in-dang"><h3>${d.ten}</h3>${d.nd ? `<p><i>Nhận ra:</i> ${d.nd}</p>` : ''}
         ${d.ct.map(c => `<p class="st-in-ct"><b>${c.ten}:</b> ${c.ct}${c.dk ? ` <i>(${c.dk})</i>` : ''}${c.gc ? ` – ${c.gc}` : ''}</p>`).join('')}
         ${d.cach.length ? `<p><i>Cách làm:</i> ${d.cach.map((x, i) => `(${i + 1}) ${x}`).join(' ')}</p>` : ''}
-        ${d.meo ? `<p>💡 ${d.meo}</p>` : ''}${d.loi.length ? `<p>⚠️ ${d.loi.join('; ')}</p>` : ''}</div>`).join('')}</div></section>`).join('')}</div>`;
+        ${d.meo ? `<p>💡 ${d.meo}</p>` : ''}${d.tb && d.tb.length ? `<p>✍️ ${d.tb.join('; ')}</p>` : ''}${d.loi.length ? `<p>⚠️ ${d.loi.join('; ')}</p>` : ''}</div>`).join('')}</div></section>`).join('')}</div>`;
   }
 
   function page(cd) {
@@ -117,6 +118,7 @@ const SoTay = (() => {
       ${d.ct.map(c => `<p class="qs-ct"><b>${c.ten}:</b> ${c.ct}${c.dk ? ` <span class="qs-dk">(${c.dk})</span>` : ''}${c.gc ? ` – ${c.gc}` : ''}</p>`).join('')}
       ${d.cach.length ? `<p><i>Cách làm:</i> ${d.cach.map((x, i) => `<b>${i + 1}</b>) ${x}`).join(' ')}</p>` : ''}
       ${o.meo && d.meo ? `<p class="qs-meo">💡 ${d.meo}</p>` : ''}
+      ${o.trinhbay !== false && d.tb && d.tb.length ? `<p class="qs-tb1">✍️ ${d.tb.join('; ')}</p>` : ''}
       ${o.vd && d.vd ? `<div class="qs-vd"><i>Ví dụ:</i> ${d.vd.de} ${d.vd.lg.length ? `<br>${d.vd.lg.join('; ')}` : ''}${d.vd.ds ? ` <b>Đáp số:</b> ${d.vd.ds}` : ''}</div>` : ''}`,
       w: o.luuy && d.loi.length ? d.loi.join('; ') : '' };
   }
@@ -126,13 +128,13 @@ const SoTay = (() => {
     if (store.nen) ds.push({ so: '0', ten: TEN.nen, phu: 'Dùng cho mọi bài', nho: [], muc: store.nen.dang.map((d, k) => dangSoTay(d, `0.${k + 1}`, o)), meo: [], tra: store.nen.tra });
     (typeof Topics !== 'undefined' ? Topics.list : []).forEach(t => {
       const so = String(t.no), muc = [];
-      (t.theory || []).forEach(x => muc.push({ ma: `${so}.${muc.length + 1}`, t: x.t, b: x.b, w: o.luuy ? x.warn || '' : '', loai: 'kt' }));
+      (t.theory || []).forEach(x => muc.push({ ma: `${so}.${muc.length + 1}`, t: x.t, b: x.b + (o.hinh !== false && x.fig ? `<div class="qs-hinh">${x.fig}</div>` : ''), w: o.luuy ? x.warn || '' : '', loai: 'kt' }));
       const st = store[cdOf[t.no]];
       if (st) st.dang.forEach(d => muc.push(dangSoTay(d, `${so}.${muc.length + 1}`, o)));
       const L = typeof LuyenDe !== 'undefined' && LuyenDe.get(t.id);
       if (L && L.the && t.no === 7) muc.push({ ma: `${so}.${muc.length + 1}`, t: 'Thẻ công cụ – nhìn kết luận, chọn công cụ (dùng cho 7a, 7b, 7c)', loai: 'the',
         b: `<table class="qs-the">${L.the.map(x => `<tr><th>${x.ten}</th><td>${x.cc}</td></tr>`).join('')}</table>` });
-      ds.push({ so, ten: t.title, phu: t.bai, nho: t.remind || [], muc, meo: o.meo ? (t.tips || []) : [], tra: st ? st.tra : [] });
+      ds.push({ so, ten: t.title, phu: t.bai, nho: t.remind || [], muc, meo: o.meo ? (t.tips || []) : [], tra: st ? st.tra : [], tb: o.trinhbay !== false ? (t.present || []) : [] });
     });
     return [{ ten: '', cd: ds }];
   }
@@ -150,7 +152,7 @@ const SoTay = (() => {
         const la = (c.chuong.match(/Chương\s+([IVX]+)/) || [])[1] || '•', muc = [], nho = [];
         c.nguon.forEach(n => {
           if (n.vdc) {
-            n.vdc.kt.forEach(x => muc.push({ ma: `${lop}-${la}.${muc.length + 1}`, t: x.t, b: x.b + (x.fig ? `<div class="qs-hinh">${x.fig}</div>` : ''), loai: 'kt', nhom: bo(n.vdc.title) }));
+            n.vdc.kt.forEach(x => muc.push({ ma: `${lop}-${la}.${muc.length + 1}`, t: x.t, b: x.b + (o.hinh !== false && x.fig ? `<div class="qs-hinh">${x.fig}</div>` : ''), loai: 'kt', nhom: bo(n.vdc.title) }));
             n.vdc.dang.forEach(d => muc.push({ ma: `${lop}-${la}.${muc.length + 1}`, t: `Dạng: ${d.ten}`, loai: 'dang', nhom: bo(n.vdc.title),
               b: `<ol class="qs-pp">${d.pp.map(x => `<li>${x}</li>`).join('')}</ol>${o.vd && d.vd && d.vd[0] ? `<div class="qs-vd"><i>Ví dụ:</i> ${d.vd[0].de}<br>${d.vd[0].lg.join(' ')} ${d.vd[0].ds ? `<b>Đáp số:</b> ${d.vd[0].ds}` : ''}</div>` : ''}` }));
           } else {
@@ -163,6 +165,21 @@ const SoTay = (() => {
       return { ten: `TOÁN ${lop}`, lop, cd };
     }).filter(p => p.cd.length);
   }
+  /* Quy tắc trình bày chung để đạt điểm tối đa (tổng hợp từ barem các bài mẫu, mục "Trình bày" của 10 chủ đề và quy định chấm thống nhất – App.RULES) */
+  const QUY_TAC = [
+    ['Làm đúng thứ tự, ghi rõ câu', 'Ghi “Bài 1a)”, “Bài 7b)”… trước mỗi phần; làm câu nào xong câu đó. Gạch phần sai bằng một nét gọn.'],
+    ['Công thức trước, thay số sau', 'Viết công thức (hoặc định lí) rồi mới thay số. Barem chấm theo từng bước: không nhảy bước, không chỉ ghi kết quả bấm máy.'],
+    ['Kết quả đúng dạng', 'Để phân số tối giản, giữ căn, giữ π; chỉ làm tròn khi đề yêu cầu và làm tròn đúng số chữ số đề cho.'],
+    ['Có đơn vị và câu kết luận', 'Bài thực tế, hình học: kết luận một câu trả lời đúng câu hỏi, có đơn vị (m, cm², lít, đồng, giờ…).'],
+    ['Đặt ẩn và điều kiện', 'Bài lập phương trình, hệ phương trình: “Gọi … (đơn vị), điều kiện …”; mỗi phương trình nói rõ lập từ dữ kiện nào; đối chiếu điều kiện rồi mới trả lời.'],
+    ['Nêu căn cứ trước khi dùng công thức', 'Dùng Viète phải viết phương trình có nghiệm (Δ ≥ 0 hoặc a·c < 0); xác suất phải viết n(Ω), n(A).'],
+    ['Hình vẽ', 'Vẽ hình bằng thước, compa, đủ tên điểm và kí hiệu (góc vuông, đoạn bằng nhau). Hình vẽ phải đúng với đề.'],
+    ['Lập luận hình học', 'Mỗi khẳng định có lí do ngay sau “vì / do”. Tam giác đồng dạng ghi đúng thứ tự đỉnh tương ứng và trường hợp (g.g). Được dùng kết quả câu trước: ghi “theo câu a)”.'],
+    ['Kiến thức bị cấm', 'Không viện dẫn kiến thức trong danh sách “không được dùng”; cần thì chứng minh lại ngắn (xem chủ đề Luật chơi).'],
+  ];
+  const quyTacHTML = () => `<section class="qs-cd qs-qt" style="--qc:#1a1a1a"><header class="qs-band"><span class="qs-so">✍️</span><div><b>Trình bày bài thi để đạt điểm tối đa</b><small>Áp dụng cho mọi bài · đọc kĩ trước khi làm đề</small></div></header>
+    <div class="qs-cols">${QUY_TAC.map(([t, b], i) => `<div class="qs-b"><h3><span class="qs-ma">${i + 1}</span> ${t}</h3><div class="qs-nd">${esc(b)}</div></div>`).join('')}
+    ${typeof App !== 'undefined' && App.RULES ? `<div class="qs-b"><h3><span class="qs-ma">${QUY_TAC.length + 1}</span> Hình học – không được dùng trực tiếp</h3><ul>${App.RULES.no.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}</div></section>`;
   function quyenHTML(loai, o) {
     const k = KIEU[o.kieu] || KIEU.candoi, vao10 = loai === 'vao10';
     const lops = loai === 'thpt' ? [10, 11, 12] : [];
@@ -180,11 +197,12 @@ const SoTay = (() => {
       <p class="qs-bia-ten">Họ và tên: ................................................ Lớp: ..........</p></div></section>
       <section class="qs-mluc"><h2>MỤC LỤC</h2>${phan.map(p => `${p.ten ? `<h3 class="qs-ml-phan">${p.ten}</h3>` : ''}<div class="qs-ml">${p.cd.map(c => `<div class="qs-ml-cd" style="--qc:${c.mau}">
         <p class="qs-ml-t"><span class="qs-so">${esc(c.so)}</span> ${bo(c.ten)}</p><p class="qs-ml-m">${c.muc.map(m => `<span><b>${m.ma}</b> ${bo(m.t)}</span>`).join(' · ')}</p></div>`).join('')}</div>`).join('')}</section>` : '';
-    const than = phan.map(p => `${p.ten ? `<h2 class="qs-phan">${p.ten}</h2>` : ''}${p.cd.map(c => `<section class="qs-cd" style="--qc:${c.mau}">
+    const than = (vao10 && o.trinhbay !== false ? quyTacHTML() : '') + phan.map(p => `${p.ten ? `<h2 class="qs-phan">${p.ten}</h2>` : ''}${p.cd.map(c => `<section class="qs-cd" style="--qc:${c.mau}">
       <header class="qs-band"><span class="qs-so">${esc(c.so)}</span><div><b>${c.ten}</b>${c.phu ? `<small>${esc(c.phu)}</small>` : ''}</div></header>
       <div class="qs-cols">
         ${c.nho.length ? `<div class="qs-nho"><b>★ Nhớ nhanh</b><ul>${c.nho.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
         ${c.muc.map((m, i) => `${m.nhom && (i === 0 || c.muc[i - 1].nhom !== m.nhom) ? `<p class="qs-nhom">${esc(m.nhom)}</p>` : ''}<div class="qs-b qs-${m.loai}"><h3><span class="qs-ma">${m.ma}</span> ${m.t}</h3><div class="qs-nd">${m.b}</div>${m.w ? `<p class="qs-w">⚠ ${m.w}</p>` : ''}</div>`).join('')}
+        ${c.tb && c.tb.length ? `<div class="qs-b qs-tb"><h3>✍️ Trình bày để đạt điểm tối đa</h3><ul class="qs-check">${c.tb.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
         ${c.meo.length ? `<div class="qs-b qs-meo-ds"><h3>💡 Mẹo nhớ</h3><ul>${c.meo.map(x => `<li><b>${x.t}:</b> ${x.b}</li>`).join('')}</ul></div>` : ''}
         ${c.tra.length ? `<div class="qs-b"><h3>🔎 Thấy gì – dùng gì</h3><table class="qs-tra">${c.tra.map(x => `<tr><td>${x.hoi}</td><td>${x.dap}</td></tr>`).join('')}</table></div>` : ''}
       </div></section>`).join('')}`).join('');
@@ -230,7 +248,7 @@ const SoTay = (() => {
   }
 
   function inPage() {
-    const st = Object.assign({ loai: 'vao10', kieu: 'candoi', meo: true, luuy: true, vd: false, bia: true, az: true }, U.get('sotay:in', {}));
+    const st = Object.assign({ loai: 'vao10', kieu: 'candoi', hinh: true, trinhbay: true, meo: true, luuy: true, vd: false, bia: true, az: true }, U.get('sotay:in', {}));
     view().innerHTML = `${App.topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/so-tay">← Sổ tay công thức</a></div>
       <section class="card hero"><p class="pill">📕 In thành một quyển</p><h2>Sổ tay công thức – in thành quyển</h2>
         <p>Gộp mọi chủ đề thành một quyển: bìa, mục lục, mỗi chủ đề một màu, mỗi mục một mã để tra, bảng tra cứu A–Z cuối quyển, số trang ở chân trang.</p></section>
@@ -238,7 +256,7 @@ const SoTay = (() => {
         <div class="opts-row"><label class="tog"><input type="radio" name="qLoai" value="vao10" ${st.loai !== 'thpt' ? 'checked' : ''}> Toán vào 10</label>
           <label class="tog"><input type="radio" name="qLoai" value="thpt" ${st.loai === 'thpt' ? 'checked' : ''}> Toán 10 – 11 – 12</label></div>
         <label class="xw-wide">Kiểu in <select id="qKieu">${Object.entries(KIEU).map(([v, x]) => `<option value="${v}" ${st.kieu === v ? 'selected' : ''}>${x.ten}</option>`).join('')}</select></label>
-        <div class="opts-row"><label class="tog"><input type="checkbox" id="qMeo" ${st.meo ? 'checked' : ''}> Mẹo nhớ</label>
+        <div class="opts-row"><label class="tog"><input type="checkbox" id="qHinh" ${st.hinh !== false ? 'checked' : ''}> Hình minh họa</label><label class="tog"><input type="checkbox" id="qTb" ${st.trinhbay !== false ? 'checked' : ''}> Trình bày đạt điểm tối đa</label><label class="tog"><input type="checkbox" id="qMeo" ${st.meo ? 'checked' : ''}> Mẹo nhớ</label>
           <label class="tog"><input type="checkbox" id="qLuu" ${st.luuy ? 'checked' : ''}> Lưu ý, lỗi hay sai</label>
           <label class="tog"><input type="checkbox" id="qVd" ${st.vd ? 'checked' : ''}> Ví dụ minh họa (dày hơn)</label>
           <label class="tog"><input type="checkbox" id="qBia" ${st.bia ? 'checked' : ''}> Bìa + mục lục</label>
@@ -247,7 +265,7 @@ const SoTay = (() => {
         <p class="muted small" id="qTom"></p>
         <p class="muted small">Hộp thoại in: chọn <b>Lưu dưới dạng PDF</b>, bật <b>Đồ họa nền</b> (Background graphics) để in màu chủ đề, Lề: <b>Mặc định</b>. Quyển nhỏ A5: in ra giấy A4 chọn “Tập sách nhỏ” (Booklet) nếu máy in hỗ trợ.</p></div>
       <div class="paper-wrap qs-xem" id="qXem"></div></main>`;
-    const opt = () => ({ loai: document.querySelector('[name=qLoai]:checked').value, kieu: $i('qKieu').value, meo: $i('qMeo').checked, luuy: $i('qLuu').checked, vd: $i('qVd').checked, bia: $i('qBia').checked, az: $i('qAz').checked });
+    const opt = () => ({ loai: document.querySelector('[name=qLoai]:checked').value, kieu: $i('qKieu').value, hinh: $i('qHinh').checked, trinhbay: $i('qTb').checked, meo: $i('qMeo').checked, luuy: $i('qLuu').checked, vd: $i('qVd').checked, bia: $i('qBia').checked, az: $i('qAz').checked });
     const ve = () => {
       const o = opt(); U.set('sotay:in', o);
       const h = quyenHTML(o.loai, o);

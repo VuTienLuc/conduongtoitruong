@@ -212,6 +212,7 @@ const NhapDL = (() => {
         ct.forEach((c, k) => { if (!c || !c.ten || !c.ct) errs.push(`${w}: công thức ${k + 1} thiếu "ten" hoặc "ct"`); });
         if (!d.nhan_dien) warns.push(`${w}: chưa có "nhan_dien" (dấu hiệu nhận ra dạng trong đề)`);
         if (!d.meo_nho) warns.push(`${w}: chưa có "meo_nho"`);
+        if (!(Array.isArray(d.trinh_bay) ? d.trinh_bay.length : d.trinh_bay)) warns.push(`${w}: chưa có "trinh_bay" (lưu ý trình bày để đạt điểm tối đa)`);
         if (!(Array.isArray(d.loi_hay_sai) ? d.loi_hay_sai.length : d.loi_hay_sai)) warns.push(`${w}: chưa có "loi_hay_sai"`);
         if (d.muc && !['co_ban', 'kha', 'nang_cao'].includes(d.muc)) warns.push(`${w}: "muc" nên là co_ban, kha hoặc nang_cao`);
         if (d.vi_du && (!d.vi_du.de || !(Array.isArray(d.vi_du.loi_giai) ? d.vi_du.loi_giai.length : d.vi_du.loi_giai))) warns.push(`${w}: ví dụ thiếu "de" hoặc "loi_giai"`);
@@ -341,7 +342,7 @@ const NhapDL = (() => {
       tra: (Array.isArray(j.tra_nhanh) ? j.tra_nhanh : []).filter(x => x && x.hoi && x.dap).map(x => ({ hoi: norm(x.hoi), dap: norm(x.dap) })),
       dang: (j.dang || []).filter(d => d && d.ten).map(d => ({ ten: norm(d.ten), muc: d.muc || '', nd: norm(d.nhan_dien),
         ct: (Array.isArray(d.cong_thuc) ? d.cong_thuc : []).filter(c => c && c.ten && c.ct).map(c => ({ ten: norm(c.ten), ct: norm(c.ct), dk: norm(c.dieu_kien), gc: norm(c.ghi_chu) })),
-        cach: ds(d.cach_lam), meo: norm(d.meo_nho), loi: ds(d.loi_hay_sai),
+        cach: ds(d.cach_lam), meo: norm(d.meo_nho), loi: ds(d.loi_hay_sai), tb: ds(d.trinh_bay),
         vd: d.vi_du && d.vi_du.de ? { de: normBlock(d.vi_du.de), lg: ds(d.vi_du.loi_giai), ds: norm(d.vi_du.dap_so) } : null })) };
   }
   /* Hình SVG kèm câu hỏi (Trình soạn thảo bài học: "figures":[{"id":"hinh1","svg":"<svg…>"}], trong lời đề ghi [[svg:hinh1]]).

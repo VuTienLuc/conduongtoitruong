@@ -246,6 +246,7 @@ Sai ở đâu thì sửa rồi mới xuất.`;
      {"ten":"Tổng bình phương","ct":"$x_1^2 + x_2^2 = (x_1 + x_2)^2 - 2x_1x_2$","dieu_kien":"","ghi_chu":""}],
    "cach_lam":["Chứng tỏ phương trình có hai nghiệm ($\\Delta \\ge 0$ hoặc $ac \\lt 0$)","Viết tổng $S$, tích $P$ theo Viète","Biến đổi biểu thức về $S$, $P$ rồi thay số"],
    "meo_nho":"Tổng đổi dấu, tích giữ nguyên: $S = -\\dfrac{b}{a}$, $P = \\dfrac{c}{a}$.",
+   "trinh_bay":["Viết một câu: phương trình có hai nghiệm vì $\\Delta \\gt 0$ (hoặc $ac \\lt 0$)","Ghi rõ “Theo định lí Viète: $S = …$, $P = …$” trước khi biến đổi","Biến đổi về $S$, $P$ từng bước; kết quả là phân số tối giản"],
    "loi_hay_sai":["Không kiểm tra phương trình có nghiệm trước khi dùng Viète (bị trừ điểm)","Quên dấu trừ ở tổng $-\\dfrac{b}{a}$"],
    "vi_du":{"de":"Cho $x^2 - 5x + 3 = 0$ có hai nghiệm $x_1, x_2$. Tính $x_1^2 + x_2^2$.","loi_giai":["$\\Delta = 13 \\gt 0$ nên phương trình có hai nghiệm phân biệt","$S = 5$, $P = 3$","$x_1^2 + x_2^2 = S^2 - 2P = 25 - 6 = 19$"],"dap_so":"19"}}]}`;
   // Phạm vi gợi ý cho từng chủ đề (AI vẫn phải rà thêm mọi dạng thấy trong đề tuyển sinh)
@@ -269,6 +270,7 @@ CÁCH SOẠN – ĐẦY ĐỦ VÀ CÓ HỆ THỐNG
 4. "cach_lam": các bước giải ngắn gọn, đúng trình tự học sinh trình bày trong bài thi.
 5. "meo_nho": MỘT câu mẹo nhớ ngắn, dễ thuộc (câu vần, hình ảnh, liên tưởng). Mẹo phải đúng toán học, không làm học sinh hiểu sai.
 6. "loi_hay_sai": 2–4 lỗi học sinh hay mắc ở dạng này (bị trừ điểm vì đâu).
+6b. "trinh_bay": 2–4 lưu ý TRÌNH BÀY để đạt điểm tối đa theo hướng dẫn chấm tuyển sinh 10 TP.HCM trong notebook (bước nào có điểm, câu kết luận, đơn vị, điều kiện, lí do từng bước hình học, dạng kết quả). Chỉ ghi điều có trong hướng dẫn chấm hoặc quy định của Sở; không bịa.
 7. "vi_du" (khi lệnh yêu cầu): một ví dụ ngắn, đổi số liệu từ đề thật; "loi_giai" chia bước; "dap_so". Giải lại để chắc đáp số đúng.
 8. "muc": "co_ban", "kha" hoặc "nang_cao".
 9. "tra_nhanh": 6–15 dòng "thấy gì trong đề – dùng gì" để học sinh tra khi bí.
@@ -296,7 +298,7 @@ Sai ở đâu thì sửa rồi mới xuất.`;
     return [`Sổ tay công thức tra cứu Toán vào 10 TP.HCM | Chủ đề: ${ten} | "chu_de":"${cd}"`,
       `Học sinh dùng: ${{ TB: 'lực học trung bình – viết thật dễ hiểu, nhiều dạng cơ bản', KHA: 'lực học khá – đủ cơ bản đến nâng cao', GIOI: 'lực học khá, giỏi – thêm các dạng nâng cao, câu hỏi phân loại' }[o.muc] || o.muc}.`,
       `Phạm vi cần rà (không giới hạn ở đây, thêm mọi dạng thấy trong đề tuyển sinh): ${GOI_Y_SOTAY[cd]}.`,
-      `Tối thiểu ${o.min} dạng, càng đầy đủ càng tốt; mỗi dạng đủ nhận diện, công thức, cách làm, mẹo nhớ, lỗi hay sai.`,
+      `Tối thiểu ${o.min} dạng, càng đầy đủ càng tốt; mỗi dạng đủ nhận diện, công thức, cách làm, mẹo nhớ, lưu ý trình bày đạt điểm tối đa, lỗi hay sai.`,
       o.vd ? '- Mỗi dạng có một "vi_du" ngắn kèm lời giải chia bước.' : '- Không cần "vi_du" (bỏ trường này) để sổ tay gọn.',
       '- "tra_nhanh": 6–15 dòng "thấy gì – dùng gì".',
       rules,

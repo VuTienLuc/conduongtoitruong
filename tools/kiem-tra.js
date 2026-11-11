@@ -172,6 +172,7 @@ if (ctx.OnTap) ctx.OnTap.list().forEach(e => walkStr(`Phiếu ôn tập ${e.ma}`
 
 // 2d) Bài giảng – luyện tập online: mục lục SGK KNTT đủ bài, đánh số liên tục; mỗi bài học trỏ đúng bài trong mục lục.
 const BH = ctx.BaiHoc, SO_BAI = { 9: 32, 10: 27, 11: 33, 12: 19 };
+(globalThis.Topics && globalThis.Topics.hinhThieu || []).forEach(x => err('hinh-minh-hoa.js', `không tìm thấy mục lý thuyết để gắn hình: ${x}`));
 if (!BH) err('baihoc.js', 'không nạp được BaiHoc');
 else {
   BH.LOP.forEach(l => {

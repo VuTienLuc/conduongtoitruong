@@ -685,6 +685,41 @@ table.bh-key td,table.bh-key th{border:1px solid #888;padding:2px 7px;text-align
 }
 .qs-trang .qs-phan + .qs-cd{break-before:auto}
 .qs-c2 .qs-rong{column-span:all;border-left-width:2.2pt}
+/* hàng nhiều hình nhỏ có chú thích (Fig.hang) */
+.fig-hang{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;width:100%}
+.fig-hang figure{margin:0;flex:1 1 120px;max-width:200px;text-align:center}
+.fig-hang figcaption{font-size:13px;color:var(--muted);margin-top:2px}
+/* hình trong quyển sổ tay in: nét đậm rõ, đường cong theo màu chủ đề */
+.qs-hinh{display:flex;justify-content:center;margin:1.2mm 0 .4mm;break-inside:avoid}
+.qs-hinh .fig{max-width:58mm;max-height:32mm;width:auto}
+.qs-a5 .qs-hinh .fig,.qs-c1 .qs-hinh .fig{max-width:70mm}
+.qs-hinh .fig-hang{gap:1mm 3mm}
+.qs-hinh .fig-hang figure{flex:1 1 0;max-width:46mm}
+.qs-hinh .fig-hang .fig{max-height:22mm;max-width:100%}
+.qs-hinh figcaption{font-size:.82em;color:#333;line-height:1.25}
+.qs .fig .f-grid line{stroke:#e2e2e2}
+.qs .fig .f-stroke,.qs .fig .f-thin,.qs .fig .f-axis line,.qs .fig .f-axis{stroke:#1a1a1a}
+.qs .fig .f-lab,.qs .fig .f-num,.qs .fig .f-fill,.qs .fig .f-dot{fill:#1a1a1a}
+.qs .fig .f-dash{stroke:#666}
+.qs .fig .f-curve{stroke:var(--qc)}
+.qs .fig .f-line2{stroke:#c0392b}
+.qs .fig .f-acc{fill:#c0392b}
+.qs .fig .f-shade{fill:color-mix(in srgb,var(--qc) 22%,#fff)}
+/* lưu ý trình bày đạt điểm tối đa */
+.st-tb{background:var(--ok-soft);padding:6px 10px;border-radius:8px;margin:6px 0}
+.st-tb ul{margin:4px 0}
+.qs-tb{border-left-color:#17804a;background:#eef8f1;border-radius:0 1.5mm 1.5mm 0;padding-right:2mm}
+.qs-tb h3{color:#14633a}
+.qs-check{list-style:none;padding-left:0}
+.qs-check li{padding-left:4.2mm;position:relative}
+.qs-check li::before{content:"☐";position:absolute;left:0;color:#17804a}
+.qs-tb1{color:#14633a;margin:.6mm 0}
+.qs-qt .qs-band{background:#1a1a1a}
+.qs-qt .qs-so{font-size:.95em}
+/* kiểu "tiết kiệm": cho phép một mục ngắt sang cột/trang sau (chỉ giữ tiêu đề đi cùng nội dung, hình không bị cắt) để không bỏ trống trang */
+.qs:not(.qs-trang) .qs-b,.qs:not(.qs-trang) .qs-nho{break-inside:auto}
+.qs-b h3{break-after:avoid}
+.qs table,.qs .fig-hang,.qs-hinh{break-inside:avoid}
 
 </style>
 </head>
@@ -1019,7 +1054,32 @@ const Fig = (() => {
     return s + '</svg>';
   }
 
-  return { parab, geo, solid, plane, venn, func };
+  /* ---------- Sơ đồ cây (liệt kê không gian mẫu) ----------
+     o = { tang:[['S','N'], ['S','N']] (nhánh mỗi tầng), ten:['Lần 1','Lần 2'], w } → lá ghi kết quả ghép (SS, SN…) */
+  function tree(o) {
+    const T = o.tang, n = T.length, la = T.reduce((t, x) => t * x.length, 1);
+    const W = o.w || 300, dx = (W - 90) / n, hang = 26, H = la * hang + 30;
+    let s = `<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.label || 'Sơ đồ cây'}">`;
+    (o.ten || []).forEach((t, i) => { s += `<text class="f-num" x="${f2(14 + dx * (i + 1))}" y="12" text-anchor="middle">${t}</text>`; });
+    const ve = (lv, x, y0, y1, nhan) => {
+      const ym = (y0 + y1) / 2;
+      if (lv === n) { s += `<text class="f-lab f-acc" x="${f2(x + 12)}" y="${f2(ym + 5)}">${nhan}</text>`; return; }
+      const k = T[lv].length, h = (y1 - y0) / k;
+      T[lv].forEach((b, j) => {
+        const yy = y0 + h * (j + 0.5), xx = 14 + dx * (lv + 1);
+        s += `<line class="f-stroke" x1="${f2(x + 4)}" y1="${f2(ym)}" x2="${f2(xx - 10)}" y2="${f2(yy)}"/><text class="f-lab" x="${f2(xx)}" y="${f2(yy + 5)}" text-anchor="middle">${b}</text>`;
+        ve(lv + 1, xx, y0 + h * j, y0 + h * (j + 1), nhan + b);
+      });
+    };
+    s += '<circle class="f-dot" cx="10" cy="' + f2(20 + la * hang / 2) + '" r="3.2"/>';
+    ve(0, 6, 20, 20 + la * hang, '');
+    return s + '</svg>';
+  }
+
+  /* ---------- Hàng nhiều hình nhỏ có chú thích: [[svg, 'chú thích'], …] ---------- */
+  const hang = ds => `<div class="fig-hang">${ds.map(([g, c]) => `<figure>${g}${c ? `<figcaption>${c}</figcaption>` : ''}</figure>`).join('')}</div>`;
+
+  return { parab, geo, solid, plane, venn, func, tree, hang };
 })();
 
 </script>
@@ -4146,6 +4206,7 @@ const SoTay = (() => {
       ${d.ct.length ? `<table class="st-ct"><tbody>${d.ct.map(c => `<tr><th scope="row">${c.ten}</th><td>${c.ct}${c.dk || c.gc ? `<div class="st-dk">${c.dk ? `Điều kiện: ${c.dk}` : ''}${c.dk && c.gc ? ' · ' : ''}${c.gc}</div>` : ''}</td></tr>`).join('')}</tbody></table>` : ''}
       ${d.cach.length ? `<div class="st-cach"><b>Cách làm:</b><ol>${d.cach.map(x => `<li>${x}</li>`).join('')}</ol></div>` : ''}
       ${d.meo ? `<p class="st-meo">💡 <b>Mẹo nhớ:</b> ${d.meo}</p>` : ''}
+      ${d.tb && d.tb.length ? `<div class="st-tb">✍️ <b>Trình bày để đạt điểm tối đa:</b><ul>${d.tb.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
       ${d.loi.length ? `<div class="st-loi">⚠️ <b>Lỗi hay sai:</b><ul>${d.loi.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
       ${d.vd ? `<details class="st-vd"><summary>Ví dụ minh họa</summary><p>${d.vd.de}</p>${d.vd.lg.length ? `<ol>${d.vd.lg.map(x => `<li>${x}</li>`).join('')}</ol>` : ''}${d.vd.ds ? `<p><b>Đáp số:</b> ${d.vd.ds}</p>` : ''}</details>` : ''}
     </article>`;
@@ -4164,7 +4225,7 @@ const SoTay = (() => {
       <div class="st-cot">${e.dang.map(d => `<div class="st-in-dang"><h3>${d.ten}</h3>${d.nd ? `<p><i>Nhận ra:</i> ${d.nd}</p>` : ''}
         ${d.ct.map(c => `<p class="st-in-ct"><b>${c.ten}:</b> ${c.ct}${c.dk ? ` <i>(${c.dk})</i>` : ''}${c.gc ? ` – ${c.gc}` : ''}</p>`).join('')}
         ${d.cach.length ? `<p><i>Cách làm:</i> ${d.cach.map((x, i) => `(${i + 1}) ${x}`).join(' ')}</p>` : ''}
-        ${d.meo ? `<p>💡 ${d.meo}</p>` : ''}${d.loi.length ? `<p>⚠️ ${d.loi.join('; ')}</p>` : ''}</div>`).join('')}</div></section>`).join('')}</div>`;
+        ${d.meo ? `<p>💡 ${d.meo}</p>` : ''}${d.tb && d.tb.length ? `<p>✍️ ${d.tb.join('; ')}</p>` : ''}${d.loi.length ? `<p>⚠️ ${d.loi.join('; ')}</p>` : ''}</div>`).join('')}</div></section>`).join('')}</div>`;
   }
 
   function page(cd) {
@@ -4208,6 +4269,7 @@ const SoTay = (() => {
       ${d.ct.map(c => `<p class="qs-ct"><b>${c.ten}:</b> ${c.ct}${c.dk ? ` <span class="qs-dk">(${c.dk})</span>` : ''}${c.gc ? ` – ${c.gc}` : ''}</p>`).join('')}
       ${d.cach.length ? `<p><i>Cách làm:</i> ${d.cach.map((x, i) => `<b>${i + 1}</b>) ${x}`).join(' ')}</p>` : ''}
       ${o.meo && d.meo ? `<p class="qs-meo">💡 ${d.meo}</p>` : ''}
+      ${o.trinhbay !== false && d.tb && d.tb.length ? `<p class="qs-tb1">✍️ ${d.tb.join('; ')}</p>` : ''}
       ${o.vd && d.vd ? `<div class="qs-vd"><i>Ví dụ:</i> ${d.vd.de} ${d.vd.lg.length ? `<br>${d.vd.lg.join('; ')}` : ''}${d.vd.ds ? ` <b>Đáp số:</b> ${d.vd.ds}` : ''}</div>` : ''}`,
       w: o.luuy && d.loi.length ? d.loi.join('; ') : '' };
   }
@@ -4217,13 +4279,13 @@ const SoTay = (() => {
     if (store.nen) ds.push({ so: '0', ten: TEN.nen, phu: 'Dùng cho mọi bài', nho: [], muc: store.nen.dang.map((d, k) => dangSoTay(d, `0.${k + 1}`, o)), meo: [], tra: store.nen.tra });
     (typeof Topics !== 'undefined' ? Topics.list : []).forEach(t => {
       const so = String(t.no), muc = [];
-      (t.theory || []).forEach(x => muc.push({ ma: `${so}.${muc.length + 1}`, t: x.t, b: x.b, w: o.luuy ? x.warn || '' : '', loai: 'kt' }));
+      (t.theory || []).forEach(x => muc.push({ ma: `${so}.${muc.length + 1}`, t: x.t, b: x.b + (o.hinh !== false && x.fig ? `<div class="qs-hinh">${x.fig}</div>` : ''), w: o.luuy ? x.warn || '' : '', loai: 'kt' }));
       const st = store[cdOf[t.no]];
       if (st) st.dang.forEach(d => muc.push(dangSoTay(d, `${so}.${muc.length + 1}`, o)));
       const L = typeof LuyenDe !== 'undefined' && LuyenDe.get(t.id);
       if (L && L.the && t.no === 7) muc.push({ ma: `${so}.${muc.length + 1}`, t: 'Thẻ công cụ – nhìn kết luận, chọn công cụ (dùng cho 7a, 7b, 7c)', loai: 'the',
         b: `<table class="qs-the">${L.the.map(x => `<tr><th>${x.ten}</th><td>${x.cc}</td></tr>`).join('')}</table>` });
-      ds.push({ so, ten: t.title, phu: t.bai, nho: t.remind || [], muc, meo: o.meo ? (t.tips || []) : [], tra: st ? st.tra : [] });
+      ds.push({ so, ten: t.title, phu: t.bai, nho: t.remind || [], muc, meo: o.meo ? (t.tips || []) : [], tra: st ? st.tra : [], tb: o.trinhbay !== false ? (t.present || []) : [] });
     });
     return [{ ten: '', cd: ds }];
   }
@@ -4241,7 +4303,7 @@ const SoTay = (() => {
         const la = (c.chuong.match(/Chương\s+([IVX]+)/) || [])[1] || '•', muc = [], nho = [];
         c.nguon.forEach(n => {
           if (n.vdc) {
-            n.vdc.kt.forEach(x => muc.push({ ma: `${lop}-${la}.${muc.length + 1}`, t: x.t, b: x.b + (x.fig ? `<div class="qs-hinh">${x.fig}</div>` : ''), loai: 'kt', nhom: bo(n.vdc.title) }));
+            n.vdc.kt.forEach(x => muc.push({ ma: `${lop}-${la}.${muc.length + 1}`, t: x.t, b: x.b + (o.hinh !== false && x.fig ? `<div class="qs-hinh">${x.fig}</div>` : ''), loai: 'kt', nhom: bo(n.vdc.title) }));
             n.vdc.dang.forEach(d => muc.push({ ma: `${lop}-${la}.${muc.length + 1}`, t: `Dạng: ${d.ten}`, loai: 'dang', nhom: bo(n.vdc.title),
               b: `<ol class="qs-pp">${d.pp.map(x => `<li>${x}</li>`).join('')}</ol>${o.vd && d.vd && d.vd[0] ? `<div class="qs-vd"><i>Ví dụ:</i> ${d.vd[0].de}<br>${d.vd[0].lg.join(' ')} ${d.vd[0].ds ? `<b>Đáp số:</b> ${d.vd[0].ds}` : ''}</div>` : ''}` }));
           } else {
@@ -4254,6 +4316,21 @@ const SoTay = (() => {
       return { ten: `TOÁN ${lop}`, lop, cd };
     }).filter(p => p.cd.length);
   }
+  /* Quy tắc trình bày chung để đạt điểm tối đa (tổng hợp từ barem các bài mẫu, mục "Trình bày" của 10 chủ đề và quy định chấm thống nhất – App.RULES) */
+  const QUY_TAC = [
+    ['Làm đúng thứ tự, ghi rõ câu', 'Ghi “Bài 1a)”, “Bài 7b)”… trước mỗi phần; làm câu nào xong câu đó. Gạch phần sai bằng một nét gọn.'],
+    ['Công thức trước, thay số sau', 'Viết công thức (hoặc định lí) rồi mới thay số. Barem chấm theo từng bước: không nhảy bước, không chỉ ghi kết quả bấm máy.'],
+    ['Kết quả đúng dạng', 'Để phân số tối giản, giữ căn, giữ π; chỉ làm tròn khi đề yêu cầu và làm tròn đúng số chữ số đề cho.'],
+    ['Có đơn vị và câu kết luận', 'Bài thực tế, hình học: kết luận một câu trả lời đúng câu hỏi, có đơn vị (m, cm², lít, đồng, giờ…).'],
+    ['Đặt ẩn và điều kiện', 'Bài lập phương trình, hệ phương trình: “Gọi … (đơn vị), điều kiện …”; mỗi phương trình nói rõ lập từ dữ kiện nào; đối chiếu điều kiện rồi mới trả lời.'],
+    ['Nêu căn cứ trước khi dùng công thức', 'Dùng Viète phải viết phương trình có nghiệm (Δ ≥ 0 hoặc a·c < 0); xác suất phải viết n(Ω), n(A).'],
+    ['Hình vẽ', 'Vẽ hình bằng thước, compa, đủ tên điểm và kí hiệu (góc vuông, đoạn bằng nhau). Hình vẽ phải đúng với đề.'],
+    ['Lập luận hình học', 'Mỗi khẳng định có lí do ngay sau “vì / do”. Tam giác đồng dạng ghi đúng thứ tự đỉnh tương ứng và trường hợp (g.g). Được dùng kết quả câu trước: ghi “theo câu a)”.'],
+    ['Kiến thức bị cấm', 'Không viện dẫn kiến thức trong danh sách “không được dùng”; cần thì chứng minh lại ngắn (xem chủ đề Luật chơi).'],
+  ];
+  const quyTacHTML = () => `<section class="qs-cd qs-qt" style="--qc:#1a1a1a"><header class="qs-band"><span class="qs-so">✍️</span><div><b>Trình bày bài thi để đạt điểm tối đa</b><small>Áp dụng cho mọi bài · đọc kĩ trước khi làm đề</small></div></header>
+    <div class="qs-cols">${QUY_TAC.map(([t, b], i) => `<div class="qs-b"><h3><span class="qs-ma">${i + 1}</span> ${t}</h3><div class="qs-nd">${esc(b)}</div></div>`).join('')}
+    ${typeof App !== 'undefined' && App.RULES ? `<div class="qs-b"><h3><span class="qs-ma">${QUY_TAC.length + 1}</span> Hình học – không được dùng trực tiếp</h3><ul>${App.RULES.no.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}</div></section>`;
   function quyenHTML(loai, o) {
     const k = KIEU[o.kieu] || KIEU.candoi, vao10 = loai === 'vao10';
     const lops = loai === 'thpt' ? [10, 11, 12] : [];
@@ -4271,11 +4348,12 @@ const SoTay = (() => {
       <p class="qs-bia-ten">Họ và tên: ................................................ Lớp: ..........</p></div></section>
       <section class="qs-mluc"><h2>MỤC LỤC</h2>${phan.map(p => `${p.ten ? `<h3 class="qs-ml-phan">${p.ten}</h3>` : ''}<div class="qs-ml">${p.cd.map(c => `<div class="qs-ml-cd" style="--qc:${c.mau}">
         <p class="qs-ml-t"><span class="qs-so">${esc(c.so)}</span> ${bo(c.ten)}</p><p class="qs-ml-m">${c.muc.map(m => `<span><b>${m.ma}</b> ${bo(m.t)}</span>`).join(' · ')}</p></div>`).join('')}</div>`).join('')}</section>` : '';
-    const than = phan.map(p => `${p.ten ? `<h2 class="qs-phan">${p.ten}</h2>` : ''}${p.cd.map(c => `<section class="qs-cd" style="--qc:${c.mau}">
+    const than = (vao10 && o.trinhbay !== false ? quyTacHTML() : '') + phan.map(p => `${p.ten ? `<h2 class="qs-phan">${p.ten}</h2>` : ''}${p.cd.map(c => `<section class="qs-cd" style="--qc:${c.mau}">
       <header class="qs-band"><span class="qs-so">${esc(c.so)}</span><div><b>${c.ten}</b>${c.phu ? `<small>${esc(c.phu)}</small>` : ''}</div></header>
       <div class="qs-cols">
         ${c.nho.length ? `<div class="qs-nho"><b>★ Nhớ nhanh</b><ul>${c.nho.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
         ${c.muc.map((m, i) => `${m.nhom && (i === 0 || c.muc[i - 1].nhom !== m.nhom) ? `<p class="qs-nhom">${esc(m.nhom)}</p>` : ''}<div class="qs-b qs-${m.loai}"><h3><span class="qs-ma">${m.ma}</span> ${m.t}</h3><div class="qs-nd">${m.b}</div>${m.w ? `<p class="qs-w">⚠ ${m.w}</p>` : ''}</div>`).join('')}
+        ${c.tb && c.tb.length ? `<div class="qs-b qs-tb"><h3>✍️ Trình bày để đạt điểm tối đa</h3><ul class="qs-check">${c.tb.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
         ${c.meo.length ? `<div class="qs-b qs-meo-ds"><h3>💡 Mẹo nhớ</h3><ul>${c.meo.map(x => `<li><b>${x.t}:</b> ${x.b}</li>`).join('')}</ul></div>` : ''}
         ${c.tra.length ? `<div class="qs-b"><h3>🔎 Thấy gì – dùng gì</h3><table class="qs-tra">${c.tra.map(x => `<tr><td>${x.hoi}</td><td>${x.dap}</td></tr>`).join('')}</table></div>` : ''}
       </div></section>`).join('')}`).join('');
@@ -4321,7 +4399,7 @@ const SoTay = (() => {
   }
 
   function inPage() {
-    const st = Object.assign({ loai: 'vao10', kieu: 'candoi', meo: true, luuy: true, vd: false, bia: true, az: true }, U.get('sotay:in', {}));
+    const st = Object.assign({ loai: 'vao10', kieu: 'candoi', hinh: true, trinhbay: true, meo: true, luuy: true, vd: false, bia: true, az: true }, U.get('sotay:in', {}));
     view().innerHTML = `${App.topBar()}<main class="wrap"><div class="toolbar"><a class="back" href="#/so-tay">← Sổ tay công thức</a></div>
       <section class="card hero"><p class="pill">📕 In thành một quyển</p><h2>Sổ tay công thức – in thành quyển</h2>
         <p>Gộp mọi chủ đề thành một quyển: bìa, mục lục, mỗi chủ đề một màu, mỗi mục một mã để tra, bảng tra cứu A–Z cuối quyển, số trang ở chân trang.</p></section>
@@ -4329,7 +4407,7 @@ const SoTay = (() => {
         <div class="opts-row"><label class="tog"><input type="radio" name="qLoai" value="vao10" ${st.loai !== 'thpt' ? 'checked' : ''}> Toán vào 10</label>
           <label class="tog"><input type="radio" name="qLoai" value="thpt" ${st.loai === 'thpt' ? 'checked' : ''}> Toán 10 – 11 – 12</label></div>
         <label class="xw-wide">Kiểu in <select id="qKieu">${Object.entries(KIEU).map(([v, x]) => `<option value="${v}" ${st.kieu === v ? 'selected' : ''}>${x.ten}</option>`).join('')}</select></label>
-        <div class="opts-row"><label class="tog"><input type="checkbox" id="qMeo" ${st.meo ? 'checked' : ''}> Mẹo nhớ</label>
+        <div class="opts-row"><label class="tog"><input type="checkbox" id="qHinh" ${st.hinh !== false ? 'checked' : ''}> Hình minh họa</label><label class="tog"><input type="checkbox" id="qTb" ${st.trinhbay !== false ? 'checked' : ''}> Trình bày đạt điểm tối đa</label><label class="tog"><input type="checkbox" id="qMeo" ${st.meo ? 'checked' : ''}> Mẹo nhớ</label>
           <label class="tog"><input type="checkbox" id="qLuu" ${st.luuy ? 'checked' : ''}> Lưu ý, lỗi hay sai</label>
           <label class="tog"><input type="checkbox" id="qVd" ${st.vd ? 'checked' : ''}> Ví dụ minh họa (dày hơn)</label>
           <label class="tog"><input type="checkbox" id="qBia" ${st.bia ? 'checked' : ''}> Bìa + mục lục</label>
@@ -4338,7 +4416,7 @@ const SoTay = (() => {
         <p class="muted small" id="qTom"></p>
         <p class="muted small">Hộp thoại in: chọn <b>Lưu dưới dạng PDF</b>, bật <b>Đồ họa nền</b> (Background graphics) để in màu chủ đề, Lề: <b>Mặc định</b>. Quyển nhỏ A5: in ra giấy A4 chọn “Tập sách nhỏ” (Booklet) nếu máy in hỗ trợ.</p></div>
       <div class="paper-wrap qs-xem" id="qXem"></div></main>`;
-    const opt = () => ({ loai: document.querySelector('[name=qLoai]:checked').value, kieu: $i('qKieu').value, meo: $i('qMeo').checked, luuy: $i('qLuu').checked, vd: $i('qVd').checked, bia: $i('qBia').checked, az: $i('qAz').checked });
+    const opt = () => ({ loai: document.querySelector('[name=qLoai]:checked').value, kieu: $i('qKieu').value, hinh: $i('qHinh').checked, trinhbay: $i('qTb').checked, meo: $i('qMeo').checked, luuy: $i('qLuu').checked, vd: $i('qVd').checked, bia: $i('qBia').checked, az: $i('qAz').checked });
     const ve = () => {
       const o = opt(); U.set('sotay:in', o);
       const h = quyenHTML(o.loai, o);
@@ -5323,6 +5401,7 @@ const NhapDL = (() => {
         ct.forEach((c, k) => { if (!c || !c.ten || !c.ct) errs.push(`${w}: công thức ${k + 1} thiếu "ten" hoặc "ct"`); });
         if (!d.nhan_dien) warns.push(`${w}: chưa có "nhan_dien" (dấu hiệu nhận ra dạng trong đề)`);
         if (!d.meo_nho) warns.push(`${w}: chưa có "meo_nho"`);
+        if (!(Array.isArray(d.trinh_bay) ? d.trinh_bay.length : d.trinh_bay)) warns.push(`${w}: chưa có "trinh_bay" (lưu ý trình bày để đạt điểm tối đa)`);
         if (!(Array.isArray(d.loi_hay_sai) ? d.loi_hay_sai.length : d.loi_hay_sai)) warns.push(`${w}: chưa có "loi_hay_sai"`);
         if (d.muc && !['co_ban', 'kha', 'nang_cao'].includes(d.muc)) warns.push(`${w}: "muc" nên là co_ban, kha hoặc nang_cao`);
         if (d.vi_du && (!d.vi_du.de || !(Array.isArray(d.vi_du.loi_giai) ? d.vi_du.loi_giai.length : d.vi_du.loi_giai))) warns.push(`${w}: ví dụ thiếu "de" hoặc "loi_giai"`);
@@ -5452,7 +5531,7 @@ const NhapDL = (() => {
       tra: (Array.isArray(j.tra_nhanh) ? j.tra_nhanh : []).filter(x => x && x.hoi && x.dap).map(x => ({ hoi: norm(x.hoi), dap: norm(x.dap) })),
       dang: (j.dang || []).filter(d => d && d.ten).map(d => ({ ten: norm(d.ten), muc: d.muc || '', nd: norm(d.nhan_dien),
         ct: (Array.isArray(d.cong_thuc) ? d.cong_thuc : []).filter(c => c && c.ten && c.ct).map(c => ({ ten: norm(c.ten), ct: norm(c.ct), dk: norm(c.dieu_kien), gc: norm(c.ghi_chu) })),
-        cach: ds(d.cach_lam), meo: norm(d.meo_nho), loi: ds(d.loi_hay_sai),
+        cach: ds(d.cach_lam), meo: norm(d.meo_nho), loi: ds(d.loi_hay_sai), tb: ds(d.trinh_bay),
         vd: d.vi_du && d.vi_du.de ? { de: normBlock(d.vi_du.de), lg: ds(d.vi_du.loi_giai), ds: norm(d.vi_du.dap_so) } : null })) };
   }
   /* Hình SVG kèm câu hỏi (Trình soạn thảo bài học: "figures":[{"id":"hinh1","svg":"<svg…>"}], trong lời đề ghi [[svg:hinh1]]).
@@ -5790,6 +5869,7 @@ Sai ở đâu thì sửa rồi mới xuất.`;
      {"ten":"Tổng bình phương","ct":"$x_1^2 + x_2^2 = (x_1 + x_2)^2 - 2x_1x_2$","dieu_kien":"","ghi_chu":""}],
    "cach_lam":["Chứng tỏ phương trình có hai nghiệm ($\\Delta \\ge 0$ hoặc $ac \\lt 0$)","Viết tổng $S$, tích $P$ theo Viète","Biến đổi biểu thức về $S$, $P$ rồi thay số"],
    "meo_nho":"Tổng đổi dấu, tích giữ nguyên: $S = -\\dfrac{b}{a}$, $P = \\dfrac{c}{a}$.",
+   "trinh_bay":["Viết một câu: phương trình có hai nghiệm vì $\\Delta \\gt 0$ (hoặc $ac \\lt 0$)","Ghi rõ “Theo định lí Viète: $S = …$, $P = …$” trước khi biến đổi","Biến đổi về $S$, $P$ từng bước; kết quả là phân số tối giản"],
    "loi_hay_sai":["Không kiểm tra phương trình có nghiệm trước khi dùng Viète (bị trừ điểm)","Quên dấu trừ ở tổng $-\\dfrac{b}{a}$"],
    "vi_du":{"de":"Cho $x^2 - 5x + 3 = 0$ có hai nghiệm $x_1, x_2$. Tính $x_1^2 + x_2^2$.","loi_giai":["$\\Delta = 13 \\gt 0$ nên phương trình có hai nghiệm phân biệt","$S = 5$, $P = 3$","$x_1^2 + x_2^2 = S^2 - 2P = 25 - 6 = 19$"],"dap_so":"19"}}]}`;
   // Phạm vi gợi ý cho từng chủ đề (AI vẫn phải rà thêm mọi dạng thấy trong đề tuyển sinh)
@@ -5813,6 +5893,7 @@ CÁCH SOẠN – ĐẦY ĐỦ VÀ CÓ HỆ THỐNG
 4. "cach_lam": các bước giải ngắn gọn, đúng trình tự học sinh trình bày trong bài thi.
 5. "meo_nho": MỘT câu mẹo nhớ ngắn, dễ thuộc (câu vần, hình ảnh, liên tưởng). Mẹo phải đúng toán học, không làm học sinh hiểu sai.
 6. "loi_hay_sai": 2–4 lỗi học sinh hay mắc ở dạng này (bị trừ điểm vì đâu).
+6b. "trinh_bay": 2–4 lưu ý TRÌNH BÀY để đạt điểm tối đa theo hướng dẫn chấm tuyển sinh 10 TP.HCM trong notebook (bước nào có điểm, câu kết luận, đơn vị, điều kiện, lí do từng bước hình học, dạng kết quả). Chỉ ghi điều có trong hướng dẫn chấm hoặc quy định của Sở; không bịa.
 7. "vi_du" (khi lệnh yêu cầu): một ví dụ ngắn, đổi số liệu từ đề thật; "loi_giai" chia bước; "dap_so". Giải lại để chắc đáp số đúng.
 8. "muc": "co_ban", "kha" hoặc "nang_cao".
 9. "tra_nhanh": 6–15 dòng "thấy gì trong đề – dùng gì" để học sinh tra khi bí.
@@ -5840,7 +5921,7 @@ Sai ở đâu thì sửa rồi mới xuất.`;
     return [`Sổ tay công thức tra cứu Toán vào 10 TP.HCM | Chủ đề: ${ten} | "chu_de":"${cd}"`,
       `Học sinh dùng: ${{ TB: 'lực học trung bình – viết thật dễ hiểu, nhiều dạng cơ bản', KHA: 'lực học khá – đủ cơ bản đến nâng cao', GIOI: 'lực học khá, giỏi – thêm các dạng nâng cao, câu hỏi phân loại' }[o.muc] || o.muc}.`,
       `Phạm vi cần rà (không giới hạn ở đây, thêm mọi dạng thấy trong đề tuyển sinh): ${GOI_Y_SOTAY[cd]}.`,
-      `Tối thiểu ${o.min} dạng, càng đầy đủ càng tốt; mỗi dạng đủ nhận diện, công thức, cách làm, mẹo nhớ, lỗi hay sai.`,
+      `Tối thiểu ${o.min} dạng, càng đầy đủ càng tốt; mỗi dạng đủ nhận diện, công thức, cách làm, mẹo nhớ, lưu ý trình bày đạt điểm tối đa, lỗi hay sai.`,
       o.vd ? '- Mỗi dạng có một "vi_du" ngắn kèm lời giải chia bước.' : '- Không cần "vi_du" (bỏ trường này) để sổ tay gọn.',
       '- "tra_nhanh": 6–15 dòng "thấy gì – dùng gì".',
       rules,
@@ -7191,6 +7272,97 @@ Topics.add({
         barem: [[S`\(BC = \sqrt{81 + 144} = 15\) cm`, 0.25], [S`\(\triangle HBA \backsim \triangle ABC\) (g.g: \(\widehat{B}\) chung, góc vuông)`, 0.25], [S`\(BH = \dfrac{AB^2}{BC} = \dfrac{81}{15} = 5{,}4\) cm; \(HC = 15 - 5{,}4 = 9{,}6\) cm`, 0.25], [S`\(AH = \dfrac{AB \cdot AC}{BC} = \dfrac{108}{15} = 7{,}2\) cm (hai cách tính diện tích)`, 0.25]] },
     ],
   });
+})();
+
+</script>
+<script>/* data/vao-10/hinh-minh-hoa.js */
+/* Hình minh họa trực quan cho phần KIẾN THỨC của các chủ đề Toán vào 10 (thầy yêu cầu 11/11/2026: sổ tay công thức cần hình vẽ).
+   Gắn thêm "fig" vào mục lý thuyết theo đúng tiêu đề; hiện ở trang chủ đề (📘 Kiến thức) và trong quyển Sổ tay công thức in.
+   Mọi toạ độ đã tính đúng (điểm trên đường tròn, chân đường cao, giao điểm); kiem-tra.js báo lỗi nếu không tìm thấy mục để gắn.
+   Hình học phẳng: chỉ minh họa kiến thức được dùng, không vẽ dấu hiệu tứ giác nội tiếp (bị cấm). */
+(() => {
+  const thieu = [];
+  const gan = (id, t, fig) => {
+    const tp = Topics.get(id), x = tp && (tp.theory || []).find(y => y.t === t);
+    if (!x) { thieu.push(`${id}: ${t}`); return; }
+    if (!x.fig) x.fig = fig;
+  };
+  const s3 = Math.sqrt(3);
+  const tren = (r, d) => [+(r * Math.cos(d * Math.PI / 180)).toFixed(3), +(r * Math.sin(d * Math.PI / 180)).toFixed(3)];   // điểm trên đường tròn tâm O
+
+  /* Bài 1 – giao điểm parabol y = x² và đường thẳng y = x + 2: x² = x + 2 ⇔ x = −1 hoặc x = 2 → A(−1; 1), B(2; 4) */
+  gan('ham-so-parabol', 'Giao điểm của parabol và đường thẳng',
+    Fig.parab({ a: 1, xr: [-3, 3.2], yr: [-0.6, 7], w: 250, ticksX: [-1, 2], ticksY: [1, 4], line: { m: 1, n: 2 }, lineLabel: [2.55, 5.3, 'd'],
+      pts: [[-1, 1, 'A', -16, -6], [2, 4, 'B', 8, 4]], name: [-2.9, 6.3, '(P)'], label: 'Parabol y = x² cắt đường thẳng y = x + 2 tại A(−1; 1) và B(2; 4)' }));
+  gan('ham-so-parabol', 'Lập bảng giá trị để vẽ',
+    Fig.hang([[Fig.parab({ a: 1, xr: [-2.6, 2.6], yr: [-0.5, 5], w: 150, ticksX: [-2, 2], ticksY: [4], label: 'a > 0: bề lõm hướng lên' }), S`\(a \gt 0\): quay lên, O thấp nhất`],
+      [Fig.parab({ a: -1, xr: [-2.6, 2.6], yr: [-5, 0.5], w: 150, ticksX: [-2, 2], ticksY: [-4], label: 'a < 0: bề lõm hướng xuống' }), S`\(a \lt 0\): quay xuống, O cao nhất`]]));
+
+  /* Bài 2 – số giao điểm của y = ax² + bx + c với Ox ứng với dấu của Δ */
+  const mini = (f, lab, pts) => Fig.func({ f, xr: [-2, 2], yr: [-1.4, 3.5], w: 140, h: 100, pts, label: lab });
+  gan('pt-bac-hai-viete', 'Số nghiệm theo biệt thức',
+    Fig.hang([[mini(x => 0.7 * x * x - 1, 'Δ > 0', [[-1.195, 0], [1.195, 0]]), S`\(\Delta \gt 0\): cắt Ox tại 2 điểm`],
+      [mini(x => 0.7 * x * x, 'Δ = 0', [[0, 0]]), S`\(\Delta = 0\): tiếp xúc Ox`],
+      [mini(x => 0.7 * x * x + 0.6, 'Δ < 0', []), S`\(\Delta \lt 0\): không cắt Ox`]]));
+
+  /* Bài 3 – sơ đồ cây: gieo một đồng xu hai lần, S = sấp, N = ngửa → Ω = {SS; SN; NS; NN} */
+  gan('xac-suat', 'Cách liệt kê không gian mẫu',
+    Fig.tree({ tang: [['S', 'N'], ['S', 'N']], ten: ['Lần 1', 'Lần 2'], w: 220, label: 'Sơ đồ cây gieo đồng xu hai lần: 4 kết quả SS, SN, NS, NN' }));
+
+  /* Bài 4 – hình thang (đáy a, b, chiều cao h) và hình quạt n°: cung AB, bán kính R */
+  gan('thuc-te-dai-so-hinh-hoc', 'Công thức hình phẳng cần thuộc',
+    Fig.hang([[Fig.geo({ pts: { A: [0, 0], B: [6, 0], C: [4.5, 3], D: [1, 3], H: [1, 0] }, segs: 'A-B B-C C-D D-A', dash: 'D-H', rights: [['A', 'H', 'D']], rs: 0.45,
+        texts: [[3, -0.55, 'a'], [2.75, 3.35, 'b'], [1.35, 1.6, 'h']], w: 180, label: 'Hình thang đáy a, b, chiều cao h' }), S`Hình thang: \(S = \dfrac{(a + b)h}{2}\)`],
+      [Fig.geo({ pts: { A: [-2, 0], B: [0, -1.2], C: [2, 0], D: [0, 1.2], I: [0, 0] }, segs: 'A-B B-C C-D D-A', dash: 'A-C B-D', rights: [['C', 'I', 'D']], rs: 0.3, hide: 'I',
+        texts: [[1, 0.25, 'd₁'], [0.35, -0.6, 'd₂']], w: 170, label: 'Hình thoi hai đường chéo d1, d2' }), S`Hình thoi: \(S = \dfrac{d_1 d_2}{2}\)`]]));
+  const A20 = tren(3, 20), B100 = tren(3, 100);
+  gan('thuc-te-dai-so-hinh-hoc', 'Đường tròn, cung, hình quạt',
+    Fig.geo({ pts: { O: [0, 0], A: A20, B: B100 }, circles: [{ c: 'O', r: 3, dash: true }], segs: 'O-A O-B', dots: 'O',
+      fill: [(X, Y, P, u) => `M${X(0)} ${Y(0)}L${X(A20[0])} ${Y(A20[1])}A${3 * u} ${3 * u} 0 0 0 ${X(B100[0])} ${Y(B100[1])}Z`],
+      texts: [[0.15, 0.75, 'n°'], [1.6, 0.12, 'R'], [1.75, 3.05, 'ℓ']], w: 200, label: 'Hình quạt tròn bán kính R, góc ở tâm n°, cung AB dài ℓ' }));
+
+  /* Bài 6 – nghiệm của hệ là giao điểm hai đường thẳng: x + y = 5, x − y = 1 → (3; 2) */
+  gan('he-phuong-trinh-thuc-te', 'Giải hệ nhanh bằng cộng đại số',
+    Fig.plane({ xr: [-1, 6], yr: [-1.5, 5.5], w: 210, lines: [{ a: 1, b: 1, c: 5, lab: [0.3, 4.9, 'x + y = 5'] }, { a: 1, b: -1, c: 1, lab: [3.6, 3.6, 'x − y = 1'] }],
+      pts: [[3, 2, 'M(3; 2)', 8, 14]], label: 'Hai đường thẳng x + y = 5 và x − y = 1 cắt nhau tại M(3; 2): nghiệm của hệ' }));
+
+  /* 7a – hai góc vuông cùng nhìn đoạn XY: A, B thuộc đường tròn tâm I (trung điểm XY), bán kính XY/2 */
+  gan('hinh-7a', 'Bốn điểm cùng thuộc một đường tròn – cách được chấm điểm',
+    Fig.geo({ pts: { X: [-3, 0], Y: [3, 0], I: [0, 0], A: tren(3, 125), B: tren(3, 55) }, circles: [{ c: 'I', r: 3, dash: true }],
+      segs: 'X-Y X-A A-Y X-B B-Y', dash: 'I-A I-B', rights: [['X', 'A', 'Y'], ['X', 'B', 'Y']], rs: 0.38, dots: 'I', lab: { I: [0, 16] }, w: 230,
+      label: 'Góc XAY và XBY vuông: IA = IB = IX = IY = XY/2 nên X, Y, A, B cùng thuộc đường tròn tâm I' }));
+  /* 7a – góc nội tiếp chắn nửa đường tròn là góc vuông; tiếp tuyến Bx vuông góc với bán kính OB */
+  gan('hinh-7a', 'Kiến thức về đường tròn được dùng trực tiếp',
+    Fig.geo({ pts: { A: [-3, 0], B: [3, 0], O: [0, 0], C: [-1, 2.828], x: [3, 2.8] }, circles: [{ c: 'O', r: 3 }], segs: 'A-B A-C C-B', acc: 'B-x',
+      rights: [['A', 'C', 'B'], ['O', 'B', 'x']], rs: 0.38, dots: 'O', lab: { O: [0, 16], x: [12, 4] }, w: 220,
+      label: 'AB là đường kính nên góc ACB = 90°; Bx là tiếp tuyến tại B nên Bx vuông góc OB' }));
+  /* 7a – hai tiếp tuyến MA, MB; AB cắt MO tại H: MA² = MH·MO (R = 2, MO = 5: MA² = 21 = 4,2·5) */
+  gan('hinh-7a', 'Hệ thức – tam giác đồng dạng',
+    Fig.geo({ pts: { O: [0, 0], M: [5, 0], A: [0.8, 1.833], B: [0.8, -1.833], H: [0.8, 0] }, circles: [{ c: 'O', r: 2 }], segs: 'M-A M-B O-A O-M', acc: 'A-B',
+      rights: [['O', 'A', 'M'], ['A', 'H', 'M']], rs: 0.28, dots: 'O H', lab: { O: [-4, 16], H: [10, 16] }, w: 230,
+      label: 'Hai tiếp tuyến MA, MB; AB vuông góc MO tại H: tam giác MAH đồng dạng tam giác MOA nên MA² = MH·MO' }));
+
+  /* 7b – ba đường cao AF, BD, CE đồng quy tại trực tâm H. A(1; 4), B(0; 0), C(5; 0): F(1; 0), D(2,5; 2,5), E(0,294; 1,176), H(1; 1) */
+  gan('hinh-7b', 'Chứng minh ba đường đồng quy',
+    Fig.geo({ pts: { A: [1, 4], B: [0, 0], C: [5, 0], F: [1, 0], D: [2.5, 2.5], E: [0.294, 1.176], H: [1, 1] }, segs: 'A-B B-C C-A A-F B-D C-E',
+      rights: [['A', 'F', 'C'], ['B', 'D', 'C'], ['C', 'E', 'A']], rs: 0.3, dots: 'H', lab: { H: [12, 2], F: [0, 16], E: [-12, 0], D: [12, -2] }, w: 220,
+      label: 'Ba đường cao AF, BD, CE cùng đi qua trực tâm H' }));
+
+  /* 7c – tam giác ABC vuông tại A, đường cao AH: AB = 4, AC = 3, BC = 5, H(1,44; 1,92) */
+  gan('hinh-7c', 'Tính độ dài: Pythagore + đồng dạng',
+    Fig.geo({ pts: { A: [0, 0], B: [4, 0], C: [0, 3], H: [1.44, 1.92] }, segs: 'A-B A-C B-C', acc: 'A-H', rights: [['B', 'A', 'C'], ['A', 'H', 'B']], rs: 0.3,
+      texts: [[2, -0.45, '4'], [-0.35, 1.5, '3'], [2.35, 1.7, '5']], w: 200, label: 'Tam giác vuông ABC, đường cao AH: tam giác HBA đồng dạng tam giác ABC' }));
+  /* 7c – góc nội tiếp ACB bằng nửa góc ở tâm AOB cùng chắn cung AB (A ở −30°, B ở 210°, C ở 90°) */
+  gan('hinh-7c', 'Số đo góc',
+    Fig.geo({ pts: { O: [0, 0], A: tren(3, -30), B: tren(3, 210), C: tren(3, 90) }, circles: [{ c: 'O', r: 3 }], segs: 'C-A C-B', acc: 'O-A O-B', dots: 'O',
+      lab: { O: [0, -10] }, w: 200, label: 'Góc nội tiếp ACB bằng nửa góc ở tâm AOB cùng chắn cung AB' }));
+
+  /* Luật chơi – tam giác có trung tuyến AM bằng nửa cạnh BC thì vuông tại A: A(1,8; 2,4) trên đường tròn tâm M bán kính 3 */
+  gan('kien-thuc-thong-nhat', 'Được dùng trực tiếp (không cần chứng minh)',
+    Fig.geo({ pts: { B: [-3, 0], C: [3, 0], M: [0, 0], A: [1.8, 2.4] }, circles: [{ c: 'M', r: 3, dash: true }], segs: 'A-B A-C B-C', acc: 'A-M', rights: [['B', 'A', 'C']], rs: 0.38,
+      dots: 'M', lab: { M: [0, 16] }, w: 210, label: 'Trung tuyến AM bằng nửa cạnh BC thì tam giác ABC vuông tại A' }));
+
+  Topics.hinhThieu = thieu;   // kiem-tra.js: phải rỗng
 })();
 
 </script>

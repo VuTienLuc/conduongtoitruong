@@ -218,5 +218,30 @@ const Fig = (() => {
     return s + '</svg>';
   }
 
-  return { parab, geo, solid, plane, venn, func };
+  /* ---------- Sơ đồ cây (liệt kê không gian mẫu) ----------
+     o = { tang:[['S','N'], ['S','N']] (nhánh mỗi tầng), ten:['Lần 1','Lần 2'], w } → lá ghi kết quả ghép (SS, SN…) */
+  function tree(o) {
+    const T = o.tang, n = T.length, la = T.reduce((t, x) => t * x.length, 1);
+    const W = o.w || 300, dx = (W - 90) / n, hang = 26, H = la * hang + 30;
+    let s = `<svg class="fig" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.label || 'Sơ đồ cây'}">`;
+    (o.ten || []).forEach((t, i) => { s += `<text class="f-num" x="${f2(14 + dx * (i + 1))}" y="12" text-anchor="middle">${t}</text>`; });
+    const ve = (lv, x, y0, y1, nhan) => {
+      const ym = (y0 + y1) / 2;
+      if (lv === n) { s += `<text class="f-lab f-acc" x="${f2(x + 12)}" y="${f2(ym + 5)}">${nhan}</text>`; return; }
+      const k = T[lv].length, h = (y1 - y0) / k;
+      T[lv].forEach((b, j) => {
+        const yy = y0 + h * (j + 0.5), xx = 14 + dx * (lv + 1);
+        s += `<line class="f-stroke" x1="${f2(x + 4)}" y1="${f2(ym)}" x2="${f2(xx - 10)}" y2="${f2(yy)}"/><text class="f-lab" x="${f2(xx)}" y="${f2(yy + 5)}" text-anchor="middle">${b}</text>`;
+        ve(lv + 1, xx, y0 + h * j, y0 + h * (j + 1), nhan + b);
+      });
+    };
+    s += '<circle class="f-dot" cx="10" cy="' + f2(20 + la * hang / 2) + '" r="3.2"/>';
+    ve(0, 6, 20, 20 + la * hang, '');
+    return s + '</svg>';
+  }
+
+  /* ---------- Hàng nhiều hình nhỏ có chú thích: [[svg, 'chú thích'], …] ---------- */
+  const hang = ds => `<div class="fig-hang">${ds.map(([g, c]) => `<figure>${g}${c ? `<figcaption>${c}</figcaption>` : ''}</figure>`).join('')}</div>`;
+
+  return { parab, geo, solid, plane, venn, func, tree, hang };
 })();
