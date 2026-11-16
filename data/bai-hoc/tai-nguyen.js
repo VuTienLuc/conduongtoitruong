@@ -28,3 +28,8 @@ BaiHoc.taiNguyen(11, 12, [
     mo_ta: "Bài trình chiếu ôn dạng toán Toán 11 – Bài 12 SGK Kết nối tri thức: đường thẳng và mặt phẳng song song, kiến thức trọng tâm có hình minh hoạ, 3 dạng toán có cách làm, ví dụ và luyện tập ngay.",
     file: 'tuong-tac/lop11-b12-duong-thang-va-mat-phang-song-song-dang-toan.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
 ]);
+BaiHoc.taiNguyen(10, 11, [
+  { ten: "Dạng toán tích vô hướng",
+    mo_ta: "Bài trình chiếu ôn dạng toán Toán 10 – Bài 11 SGK Kết nối tri thức: tích vô hướng của hai vectơ (không dùng tọa độ), kiến thức có hình minh hoạ, 4 dạng toán có cách làm, ví dụ và luyện tập ngay.",
+    file: 'tuong-tac/lop10-b11-tich-vo-huong-cua-hai-vecto-dang-toan.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
+]);

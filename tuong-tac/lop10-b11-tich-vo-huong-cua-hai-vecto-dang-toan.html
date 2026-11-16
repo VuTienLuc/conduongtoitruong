@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dạng toán tích vô hướng</title>
+<meta name="description" content="Bài trình chiếu ôn dạng toán Toán 10 – Bài 11 SGK Kết nối tri thức: tích vô hướng của hai vectơ (không dùng tọa độ), kiến thức có hình minh hoạ, 4 dạng toán có cách làm, ví dụ và luyện tập ngay.">
+<!-- Phông chữ (có bộ dấu tiếng Việt), cố định phiên bản -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/be-vietnam-pro@5.2.8/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/be-vietnam-pro@5.2.8/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/be-vietnam-pro@5.2.8/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/be-vietnam-pro@5.2.8/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.2.11/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.2.11/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.2.11/700.css">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+/* Hướng thẩm mỹ: sáng = giấy kẻ ô, mực xanh đen, bút đỏ chấm bài; tối = bảng xanh, phấn trắng, phấn vàng.
+   Sân khấu cao 800 đơn vị, bề ngang tự giãn theo tỉ lệ màn hình (4:3 → 21:9) để lấp đầy khi toàn màn hình; nội dung bài nằm trong mảng BAI ở cuối file. */
+:root{
+  --desk:#dde3ec; --paper:#fbfcfd; --grid:rgba(40,80,160,.075);
+  --ink:#16244a; --ink-2:#4e5875; --line:#c6d0e2;
+  --accent:#c8352c; --mark:#1d62c0; --ok:#1b7646; --hl:#fff0a0;
+  --panel:#ffffff; --panel-2:#f0f3f9;
+  --f-display:'Lexend','Be Vietnam Pro',system-ui,sans-serif;
+  --f-body:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-pt:'Times New Roman',Times,serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --desk:#0e1b17; --paper:#1d3a31; --grid:rgba(255,255,255,.045);
+    --ink:#f0ede2; --ink-2:#b3c2b9; --line:rgba(240,237,226,.22);
+    --accent:#f3c75a; --mark:#8cc4ff; --ok:#93e0a4; --hl:rgba(243,199,90,.22);
+    --panel:rgba(0,0,0,.16); --panel-2:rgba(255,255,255,.05); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --desk:#0e1b17; --paper:#1d3a31; --grid:rgba(255,255,255,.045);
+  --ink:#f0ede2; --ink-2:#b3c2b9; --line:rgba(240,237,226,.22);
+  --accent:#f3c75a; --mark:#8cc4ff; --ok:#93e0a4; --hl:rgba(243,199,90,.22);
+  --panel:rgba(0,0,0,.16); --panel-2:rgba(255,255,255,.05); color-scheme:dark;
+}
+html,body{height:100%;margin:0}
+body{background:var(--desk);color:var(--ink);font-family:var(--f-body);overflow:hidden;-webkit-text-size-adjust:100%}
+#app{height:100%;display:flex;flex-direction:column}
+#viewport{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px}
+:root:fullscreen #viewport{padding:0}
+
+/* thanh điều khiển ngoài khung chiếu: kích thước thật, dễ chạm */
+.bar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;
+  padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  background:var(--paper);border-top:1px solid var(--line);z-index:40}
+.bar button{min-height:44px;min-width:44px;padding:0 14px;font:600 15px var(--f-display);color:var(--ink);
+  background:var(--panel);border:1.5px solid var(--line);border-radius:6px;cursor:pointer;touch-action:manipulation}
+.bar button:hover{border-color:var(--ink-2)}
+.bar button.on{color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.bar .main{min-width:96px;font-size:17px}
+.bar .grp{display:flex;gap:6px;align-items:center}
+.bar .grp-lbl{font:600 13px var(--f-display);color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em}
+.bar kbd{font:600 11px var(--f-display);border:1px solid currentColor;border-radius:3px;padding:1px 4px;margin-left:6px;opacity:.6}
+@media (max-width:760px){
+  .bar kbd{display:none}.bar .wide{display:none}
+  .bar{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .bar button{flex:none;padding:0 12px}
+  .bar .main{min-width:72px}
+}
+:root:fullscreen .bar{position:fixed;left:0;right:0;bottom:0;transform:translateY(100%);transition:transform .2s}
+:root:fullscreen .bar.show{transform:none}
+.sizer{position:relative;flex:none}
+#stage{position:absolute;left:0;top:0;width:1422px;height:800px;transform-origin:0 0;overflow:hidden;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.14);
+  font-size:38px;line-height:1.45}
+:root:fullscreen #stage{border-radius:0;box-shadow:none}
+
+/* ---- khung slide ---- */
+.slide{position:absolute;inset:0;padding:30px 60px 58px;box-sizing:border-box;display:none;flex-direction:column;gap:22px}
+.slide.active{display:flex}
+.slide{overflow:hidden}
+/* nội dung tự thu nhỏ để luôn nằm trên thanh công cụ */
+.fitbox{display:flex;flex-direction:column;gap:22px;transform-origin:0 0;flex:none}
+.cover{min-height:712px}
+.eyebrow{font:600 21px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.eyebrow span{color:var(--ink-2)}
+h2.tt{font:700 58px/1.12 var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.body{flex:1;min-height:0;display:grid;gap:56px;align-content:start}
+.two{grid-template-columns:1.15fr .85fr;align-items:start}
+.col{display:flex;flex-direction:column;gap:22px;min-width:0}
+.fig svg{width:100%;height:auto;max-height:560px;display:block;overflow:visible}
+.frag{opacity:0;transform:translateY(8px);transition:opacity .2s ease,transform .2s ease}
+.frag.on{opacity:1;transform:none}
+p{margin:0}
+ul.sq{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+ul.sq li{position:relative;padding-left:34px}
+ul.sq li::before{content:"";position:absolute;left:4px;top:.62em;width:11px;height:11px;background:var(--accent)}
+
+/* ---- trang bìa ---- */
+.cover{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;height:100%;align-items:center}
+.cover .meta{font:600 22px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.cover .bai{font:700 30px var(--f-display);color:var(--accent);margin-top:30px}
+.cover h1{font:700 94px/1.03 var(--f-display);margin:4px 0 40px;letter-spacing:-.02em;text-wrap:balance}
+.goals-h{font:600 24px var(--f-display);color:var(--ink-2);margin-bottom:10px}
+.goals ul{font-size:32px;line-height:1.4}
+
+/* ---- câu hỏi mở đầu / vận dụng ---- */
+ol.qs{margin:0;padding:0;list-style:none;counter-reset:q;display:flex;flex-direction:column;gap:18px}
+ol.qs li{counter-increment:q;position:relative;padding-left:52px}
+ol.qs li::before{content:counter(q);position:absolute;left:0;top:4px;width:36px;height:36px;border:2px solid var(--ink);border-radius:50%;
+  display:grid;place-items:center;font:700 20px var(--f-display)}
+.ans{display:inline-block;background:var(--hl);padding:4px 16px;border-radius:4px;margin-top:6px;font-size:35px}
+
+/* ---- khung định nghĩa / định lí ---- */
+.khung{background:var(--panel);border:1.5px solid var(--line);border-left:8px solid var(--mark);border-radius:6px;padding:26px 40px}
+.khung .lbl{font:700 22px var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--mark);margin-bottom:10px}
+.khung.dl{border-left-color:var(--accent)}
+.khung.dl .lbl{color:var(--accent)}
+.khung .qu{margin-top:14px;padding-top:14px;border-top:1.5px dashed var(--line);font-size:34px}
+.notes-h{font:600 24px var(--f-display);color:var(--ink-2);text-transform:uppercase;letter-spacing:.08em}
+.notes{font-size:36px}
+.hoi{font-weight:600}
+
+/* ---- ví dụ, lời giải từng bước ---- */
+.de-lbl{font-family:var(--f-display);font-weight:700;color:var(--accent);margin-right:10px}
+ol.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;font-size:36px}
+ol.steps li{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:22px;position:relative;padding-left:34px}
+ol.steps li::before{content:"";position:absolute;left:4px;top:.62em;width:13px;height:13px;border-radius:50%;background:var(--mark)}
+.why{font-size:26px;color:var(--ink-2)}
+.why::before{content:"← "}
+.ket{border-top:2px solid var(--ink);padding-top:12px;font-size:36px;font-weight:600}
+
+/* ---- bảng tính chất ---- */
+table.tc{border-collapse:collapse;width:100%}
+table.tc td{padding:14px 22px;border-bottom:1.5px solid var(--line);vertical-align:middle}
+table.tc td:first-child{font-size:28px;color:var(--ink-2);width:36%}
+.foot-note{font-size:30px;color:var(--ink-2)}
+
+/* ---- so sánh sai / đúng ---- */
+.ss{display:grid;grid-template-columns:1fr 1fr;column-gap:40px}
+.ss-h{font:700 24px var(--f-display);letter-spacing:.08em;text-transform:uppercase;padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.ss-h.sai{color:var(--accent)} .ss-h.dung{color:var(--ok)}
+.pair{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;column-gap:40px;padding:16px 0 12px;border-bottom:1.5px solid var(--line)}
+.pair .c{display:flex;gap:16px;align-items:baseline}
+.mk-x{font:700 30px var(--f-display);color:var(--accent);flex:none}
+.mk-v{font:700 30px var(--f-display);color:var(--ok);flex:none}
+.pair .vs{grid-column:1/-1;font-size:28px;color:var(--ink-2);margin-top:4px}
+
+/* ---- trắc nghiệm ---- */
+.stem{font-size:40px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.opt{display:flex;align-items:center;gap:22px;padding:20px 28px;border:2px solid var(--line);border-radius:6px;background:var(--panel);
+  font:inherit;color:inherit;text-align:left;cursor:pointer;min-height:96px}
+.opt .k{width:56px;height:56px;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center;font:700 26px var(--f-display);flex:none}
+.opt.chosen{border-color:var(--mark);box-shadow:inset 0 0 0 2px var(--mark)}
+.revealed .opt:not(.correct){opacity:.5}
+.revealed .opt.correct{border-color:var(--ok);box-shadow:inset 0 0 0 2px var(--ok)}
+.revealed .opt.correct .k{background:var(--ok);border-color:var(--ok);color:var(--paper)}
+.giai{font-size:32px;border-left:5px solid var(--ok);padding:4px 0 4px 22px}
+
+/* ---- đúng sai ---- */
+.ds-row{display:grid;grid-template-columns:56px 1fr 470px;gap:20px;align-items:center;padding:14px 6px;border-bottom:1.5px solid var(--line);cursor:pointer}
+.ds-l{font:700 30px var(--f-display)}
+.ds-v{display:flex;gap:16px;align-items:center;font-size:26px;line-height:1.35;color:var(--ink-2)}
+.badge{flex:none;width:58px;height:58px;border-radius:6px;display:grid;place-items:center;font:700 28px var(--f-display);color:var(--paper)}
+.badge.d{background:var(--ok)} .badge.s{background:var(--accent)}
+
+/* ---- trả lời ngắn ---- */
+.tln{display:flex;align-items:center;gap:26px;font:600 30px var(--f-display)}
+.tln-slot{min-width:240px;height:100px;border:2.5px dashed var(--ink-2);border-radius:6px;display:grid;place-items:center}
+.tln-slot span{font:700 60px var(--f-display);color:var(--accent)}
+
+/* ---- khám phá k·a ---- */
+.lab-box{border:1.5px solid var(--line);border-radius:6px;background:var(--panel-2)}
+.v{position:relative;display:inline-block;font-family:var(--f-pt);font-style:italic}
+.v::after{content:"→";position:absolute;left:-2px;right:-2px;top:-.72em;font-size:.72em;font-style:normal;text-align:center;line-height:1}
+.kbig{font:600 34px var(--f-display)}
+.kbig b{font-size:84px;color:var(--accent);font-variant-numeric:tabular-nums;margin-left:12px}
+#kDir{font-size:36px;font-weight:600}
+#kDir.mk{color:var(--mark)} #kDir.ac{color:var(--accent)}
+#kLen{font-size:31px}
+input[type=range]{width:100%;height:72px;accent-color:var(--accent);margin:0}
+.presets{display:flex;flex-wrap:wrap;gap:10px}
+.presets button{font:600 26px var(--f-display);color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:4px;
+  min-width:84px;height:72px;cursor:pointer;font-variant-numeric:tabular-nums}
+.presets button:hover{border-color:var(--ink-2)}
+.task{font-size:29px;color:var(--ink-2);border-top:1.5px dashed var(--line);padding-top:14px}
+
+/* ---- tổng kết ---- */
+.mm-c{justify-self:center;border:2.5px solid var(--ink);border-radius:6px;padding:12px 40px;font:700 38px var(--f-display);background:var(--panel)}
+.mm{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;padding-top:40px}
+.mm::before{content:"";position:absolute;top:0;left:12.5%;right:12.5%;height:20px;border:2px solid var(--ink-2);border-bottom:0}
+.mm-b{background:var(--panel);border:1.5px solid var(--line);border-top:6px solid var(--mark);border-radius:6px;padding:16px 20px;font-size:29px;line-height:1.4}
+.mm-b h3{font:700 30px var(--f-display);margin:0 0 8px}
+.dando{font-size:31px;background:var(--hl);padding:10px 22px;border-radius:4px;justify-self:start}
+
+/* ---- hình SVG ---- */
+.fig text{fill:var(--ink);font:italic 32px var(--f-pt)}
+.fig text .co{font-style:normal}
+.fig text.tx{font:500 25px var(--f-body);fill:var(--ink-2)}
+.fig line{stroke:var(--ink);stroke-linecap:round}
+.fig polygon{fill:var(--ink)}
+.fig .mk line{stroke:var(--mark)} .fig .mk polygon,.fig text.mk{fill:var(--mark)}
+.fig .ac line{stroke:var(--accent)} .fig .ac polygon,.fig text.ac{fill:var(--accent)}
+.fig .so line{stroke:var(--ink-2)} .fig .so polygon{fill:var(--ink-2)}
+.fig .tri{fill:none;stroke:var(--ink-2);stroke-width:3}
+.fig .dash{stroke-dasharray:10 10}
+.fig .pt{fill:var(--ink)}
+.fig .map{fill:var(--panel-2);stroke:var(--line);stroke-width:2}
+.fig .street{fill:none;stroke:var(--line);stroke-width:12;stroke-linecap:round}
+.fig .pin{fill:var(--ink)}
+.fig .guide{stroke:var(--ink-2);stroke-width:2;stroke-dasharray:6 10;opacity:.7}
+.fig .dot{fill:var(--ink-2)}
+.fig .seg{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.fig .seg.ac{stroke:var(--accent);stroke-width:5}
+.fig .seg.mk{stroke:var(--mark);stroke-width:5}
+.fig .seg.so{stroke:var(--ink-2);stroke-width:2}
+.fig .plane{fill:var(--panel-2);stroke:var(--ink-2);stroke-width:2.5}
+.fig .wall{fill:var(--panel);stroke:var(--ink-2);stroke-width:2.5}
+.fig .sec{fill:var(--hl);stroke:none}
+.fig line.gl{stroke:var(--line);stroke-width:1.2}
+.fig text.tk{font:500 18px var(--f-body);font-style:normal;fill:var(--ink-2)}
+.rl{font:600 22px var(--f-display);color:var(--ink-2);margin-bottom:-10px}
+#uSum{font-size:36px;font-weight:600}
+#uWalk{font-size:27px;color:var(--ink-2)}
+.kbig b{margin-left:0;font-size:72px}
+
+/* ---- chân trang & công cụ ---- */
+.foot{position:absolute;left:0;right:0;bottom:0;height:40px;padding:0 28px;box-sizing:border-box;display:flex;align-items:center;gap:20px;
+  border-top:1.5px solid var(--line);background:var(--paper);z-index:6}
+.sign{font:500 15px var(--f-display);color:var(--ink-2);white-space:nowrap}
+.prog{flex:1;display:flex;gap:6px;min-width:0}
+.pseg{flex:1;display:flex;flex-direction:column;gap:4px;font:500 12px/1 var(--f-display);color:var(--ink-2);white-space:nowrap;overflow:hidden}
+.pseg i{display:block;height:4px;border-radius:2px;background:var(--line)}
+.pseg.done i{background:var(--ink-2)}
+.pseg.cur{color:var(--ink);font-weight:700}
+.pseg.cur i{background:var(--accent)}
+kbd{font:600 13px var(--f-display);border:1px solid currentColor;border-radius:3px;padding:1px 5px;margin-left:5px;opacity:.75}
+.num{font:600 15px var(--f-display);font-variant-numeric:tabular-nums;min-width:56px;text-align:right}
+button:focus-visible,input:focus-visible,.ds-row:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+
+/* ---- lớp phủ ---- */
+#ink{position:absolute;inset:0;width:100%;height:100%;z-index:8;pointer-events:none;touch-action:none}
+#stage.pen #ink{pointer-events:auto;cursor:crosshair}
+#blackout{position:absolute;inset:0;background:#000;z-index:30}
+#timer{position:absolute;top:26px;right:36px;z-index:12;background:var(--panel);border:2px solid var(--ink);border-radius:6px;padding:4px 22px;
+  font:700 60px/1.2 var(--f-display);font-variant-numeric:tabular-nums;cursor:pointer}
+#timer.het{color:var(--accent);border-color:var(--accent)}
+.ovl{position:absolute;inset:0;z-index:20;background:var(--paper);padding:48px 72px;box-sizing:border-box;display:flex;flex-direction:column;gap:24px}
+.ovl h3{font:700 40px var(--f-display);margin:0}
+.ovl .x{position:absolute;top:36px;right:56px;font:600 20px var(--f-display);color:var(--ink-2);background:none;border:1.5px solid var(--line);border-radius:4px;height:44px;padding:0 16px;cursor:pointer}
+.gl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;overflow:auto}
+.gl button{display:grid;grid-template-columns:48px 1fr;gap:4px 12px;text-align:left;padding:12px 16px;border:1.5px solid var(--line);border-radius:6px;
+  background:var(--panel);color:var(--ink);font:500 22px/1.3 var(--f-body);cursor:pointer;min-height:84px;align-items:start}
+.gl button.cur{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.gl .n{grid-row:1/3;font:700 30px var(--f-display);color:var(--ink-2)}
+.gl .c{font:600 14px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.keys{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 60px;font-size:27px}
+.keys div{display:flex;gap:18px;align-items:baseline;border-bottom:1.5px solid var(--line);padding-bottom:8px}
+.keys kbd{font-size:20px;padding:2px 10px;margin:0;opacity:1;min-width:120px;text-align:center}
+/* ---- mẫu dạng toán ---- */
+.fig .uc{fill:none;stroke:var(--ink);stroke-width:3}
+.fig .arc{fill:none;stroke:var(--accent);stroke-width:3}
+.fig .arc.mk{stroke:var(--mark)}
+.nl-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.nl{border:1.5px solid var(--line);border-radius:6px;background:var(--panel);padding:20px 28px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.nl .q{font-size:40px}
+.nl .q b{font-family:var(--f-display);color:var(--accent);margin-right:6px}
+.nl .a{align-self:flex-start;background:var(--hl);padding:4px 18px;border-radius:4px;font-size:42px;font-weight:600}
+.bd{display:flex;flex-direction:column;gap:14px}
+.bd-row{display:grid;grid-template-columns:76px 1fr;gap:4px 24px;align-items:center;text-align:left;font:inherit;color:inherit;
+  background:var(--panel);border:1.5px solid var(--line);border-radius:6px;padding:14px 24px;cursor:pointer}
+.bd-row:hover{border-color:var(--ink-2)}
+.bd-n{grid-row:1/3;width:66px;height:66px;border-radius:50%;background:var(--accent);color:var(--paper);display:grid;place-items:center;font:700 34px var(--f-display)}
+.bd-t{font:700 36px/1.2 var(--f-display)}
+.bd-d{font-size:29px;color:var(--ink-2)}
+.dnum{display:inline-grid;place-items:center;width:1.2em;height:1.2em;border-radius:50%;background:var(--accent);color:var(--paper);font-size:.82em;margin-right:18px;vertical-align:.06em}
+.body.dang{grid-template-columns:.9fr 1.1fr;gap:44px;align-items:start}
+.body.dang .khung p{font-size:34px}
+ol.cl{list-style:none;counter-reset:c;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;font-size:36px}
+ol.cl li{counter-increment:c;display:grid;grid-template-columns:50px 1fr;gap:14px;align-items:start}
+ol.cl li::before{content:counter(c);width:44px;height:44px;box-sizing:border-box;border:2.5px solid var(--mark);color:var(--mark);border-radius:50%;
+  display:grid;place-items:center;font:700 24px var(--f-display);margin-top:4px}
+.meo{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 22px;background:var(--hl);border-radius:6px;padding:12px 26px;font-size:33px}
+.meo .k,.loi-l .k{font:700 22px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.loi-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 22px;font-size:30px;color:var(--ink-2);padding:0 26px}
+.lx-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 48px}
+.lx-grid.c1{grid-template-columns:1fr;gap:16px}
+.lx{border-bottom:1.5px solid var(--line);padding-bottom:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.lq{font-size:44px}
+.c1 .lq{font-size:38px}
+.lq b{font-family:var(--f-display);color:var(--accent);margin-right:14px}
+.la{align-self:flex-start;background:var(--hl);padding:4px 18px;border-radius:4px;font-size:34px}
+.hc-grid{display:grid;gap:30px;align-items:start}
+.hc{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;min-width:0}
+.hc .fig{width:100%}
+.hc-cap{font-size:42px}
+.hc-t{font-size:31px;color:var(--ink-2)}
+.khfig{align-self:center}
+/* ---- phóng to hình ---- */
+.slide .fig[data-fig]{cursor:zoom-in;position:relative}
+.slide .fig[data-fig]::after{content:"Bấm để phóng to";position:absolute;right:4px;bottom:-4px;font:500 15px var(--f-display);color:var(--ink-2);opacity:.75}
+.slide .fig[data-d3]::after{content:"Bấm để phóng to, xoay hình"}
+.zoom{position:absolute;inset:0 0 40px 0;z-index:25;background:var(--paper);display:flex;flex-direction:column;gap:10px;padding:18px 40px 14px}
+.zoom .zm-fig{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;cursor:zoom-out;touch-action:none;user-select:none}
+.zoom .zm-fig svg{width:100%;height:100%;max-height:none}
+.zoom .zp{fill-opacity:.85}
+.zoom text.zl{font:italic 38px var(--f-pt);fill:var(--ink)}
+.zoom text.tx{font:500 28px var(--f-body);fill:var(--ink-2)}
+.zm-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.zm-bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.zm-bar button{font:600 20px var(--f-display);color:var(--ink);background:var(--panel);border:1.5px solid var(--line);border-radius:6px;min-height:52px;padding:0 20px;cursor:pointer}
+.zm-bar button:hover{border-color:var(--ink-2)}
+.zm-bar button.on{color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.zm-hint{font:500 18px var(--f-display);color:var(--ink-2);text-align:center;margin:0}
+@media (prefers-reduced-motion:reduce){.frag{transition:none;transform:none}}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="viewport">
+  <div class="sizer" id="sizer">
+    <div id="stage">
+      <div id="slides"></div>
+      <canvas id="ink" width="1422" height="800"></canvas>
+      <div id="timer" hidden title="Bấm để dừng"></div>
+      <div class="zoom" id="zoom" hidden>
+        <div class="fig zm-fig" id="zmFig"></div>
+        <div class="zm-bar" id="zmBar">
+          <button data-v="auto">Tự xoay</button><button data-v="goc">Góc ban đầu</button>
+          <button data-v="tren">Nhìn từ trên</button><button data-v="ngang">Nhìn ngang</button><button data-v="thu">Thu nhỏ</button>
+        </div>
+        <p class="zm-hint" id="zmHint"></p>
+      </div>
+      <div class="foot">
+        <div class="sign">Toán 10 · KNTT · Bài 11 · Dạng toán</div>
+        <div class="prog" id="prog"></div>
+        <div class="num" id="num">1 / 1</div>
+      </div>
+      <div class="ovl" id="gridOvl" hidden>
+        <h3>Mục lục bài học</h3>
+        <button class="x" data-close>Đóng · Esc</button>
+        <div class="gl" id="gl"></div>
+      </div>
+      <div class="ovl" id="helpOvl" hidden>
+        <h3>Phím điều khiển</h3>
+        <button class="x" data-close>Đóng · Esc</button>
+        <div class="keys">
+          <div><kbd>→ Space</kbd>Hiện bước tiếp, hết bước thì sang slide sau</div>
+          <div><kbd>←</kbd>Lùi một bước</div>
+          <div><kbd>1 2 3 4</kbd>Chọn phương án A, B, C, D</div>
+          <div><kbd>P</kbd>Bật/tắt bút vẽ, <kbd>C</kbd> xóa nét</div>
+          <div><kbd>T</kbd>Đồng hồ đếm ngược</div>
+          <div><kbd>B</kbd>Tắt màn hình (đen)</div>
+          <div><kbd>G</kbd>Mục lục, nhảy tới slide bất kì</div>
+          <div><kbd>D</kbd>Đổi bảng phấn / giấy kẻ ô</div>
+          <div><kbd>F</kbd>Toàn màn hình</div>
+          <div><kbd>Home End</kbd>Về đầu / cuối bài</div>
+        </div>
+        <p class="foot-note">Bút trình chiếu (nút lên/xuống trang) dùng được ngay. Trên điện thoại, vuốt ngang để chuyển slide.</p>
+      </div>
+      <div id="blackout" hidden></div>
+    </div>
+  </div>
+</div>
+<nav class="bar" id="bar" aria-label="Điều khiển trình chiếu">
+  <button id="bPrev" class="main" aria-label="Lùi lại">‹ Lùi</button>
+  <button id="bNext" class="main" aria-label="Bước tiếp">Tiếp ›</button>
+  <div class="grp" id="barOpts" hidden><span class="grp-lbl">Chọn</span>
+    <button data-opt="0">A</button><button data-opt="1">B</button><button data-opt="2">C</button><button data-opt="3">D</button>
+  </div>
+  <button id="bPen">Bút vẽ<kbd>P</kbd></button>
+  <button id="bClear">Xóa nét<kbd>C</kbd></button>
+  <button id="bTimer">Đồng hồ<kbd>T</kbd></button>
+  <button id="bGrid">Mục lục<kbd>G</kbd></button>
+  <button id="bTheme">Bảng / Giấy<kbd>D</kbd></button>
+  <button id="bFull" class="wide">Toàn màn hình<kbd>F</kbd></button>
+  <button id="bHelp" aria-label="Phím tắt">?</button>
+</nav>
+</div>
+
+<script>
+window.MathJax={
+  tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']],macros:{vec:['\\overrightarrow{#1}',1]}},
+  svg:{fontCache:'global'},
+  startup:{typeset:false}
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<script>
+(function(){
+const R=String.raw;
+
+/* =========================================================
+   NỘI DUNG BÀI HỌC – chỉ cần thay mảng này cho bài khác
+   ========================================================= */
+const BAI={
+  lop:10, sach:'Kết nối tri thức', chuong:'Chương IV. Vectơ',
+  bai:'Bài 11', ten:'Tích vô hướng<br>của hai vectơ',
+  chang_ds:[['kd','Khởi động'],['kt','Kiến thức trọng tâm'],['dt','Dạng toán'],['lt','Luyện tập'],['tk','Tổng kết']],
+  muc_tieu:[
+    R`Xác định được góc giữa hai vectơ.`,
+    R`Tính được tích vô hướng bằng định nghĩa và tính chất.`,
+    R`Dùng tích vô hướng để tính độ dài, góc và công của lực.`
+  ],
+  slides:[
+  {loai:'bia',chang:'kd'},
+
+  {loai:'nho-lai',chang:'kd',nhan:'Nhớ lại',timer:120,
+   tieu_de:'Bốn câu hỏi trước khi vào bài',
+   items:[
+    [R`Độ dài của $\vec{AB}$ là gì?`,R`Độ dài đoạn $AB$: $|\vec{AB}|=AB$`],
+    [R`$\cos60^\circ=\;?$ $\quad\cos120^\circ=\;?$`,R`$\tfrac12$ và $-\tfrac12$`],
+    [R`$\cos90^\circ=\;?$ $\quad\cos180^\circ=\;?$`,R`$0$ và $-1$`],
+    [R`$\vec{BA}$ và $\vec{AB}$ liên hệ thế nào?`,R`Ngược hướng, cùng độ dài: $\vec{BA}=-\vec{AB}$`]
+   ]},
+
+  {loai:'cau-hoi',chang:'kd',nhan:'Đặt vấn đề',timer:120,hinh:'keo',
+   tieu_de:'Kéo vali trên sân trường',
+   de:R`Em kéo vali bằng lực $\vec F$ hợp với hướng di chuyển một góc $\alpha$. Vali có độ dời $\vec d$. Trong Vật lí, công của lực là $A=\vec F\cdot\vec d=|\vec F|\cdot|\vec d|\cdot\cos\alpha$.`,
+   hoi:[
+    {q:R`Kéo thẳng theo hướng đi ($\alpha=0^\circ$), công bằng bao nhiêu?`,a:R`$A=|\vec F|\cdot|\vec d|$, lớn nhất.`},
+    {q:R`Lực vuông góc với hướng đi ($\alpha=90^\circ$) thì sao?`,a:R`$A=0$: lực không sinh công.`},
+    {q:'Công phụ thuộc những yếu tố nào?',a:'Lực, quãng đường và góc giữa chúng: đó là tích vô hướng.'}
+   ]},
+
+  /* ---------- KIẾN THỨC TRỌNG TÂM ---------- */
+  {loai:'khung-hinh',kieu:'dn',chang:'kt',nhan:'1. Góc giữa hai vectơ',hinh:'goc',
+   tieu_de:'Đưa hai vectơ về chung gốc',lbl:'Định nghĩa',
+   nd:R`<p>Cho $\vec a$, $\vec b$ khác $\vec 0$. Từ điểm $O$ vẽ $\vec{OA}=\vec a$, $\vec{OB}=\vec b$. Góc $\widehat{AOB}$ là góc giữa $\vec a$ và $\vec b$, kí hiệu $(\vec a,\vec b)$.</p>
+     <p class="qu">$0^\circ\le(\vec a,\vec b)\le180^\circ$.</p>`,
+   them_lbl:'Nhận xét',
+   them:[R`$(\vec a,\vec b)=0^\circ$: cùng hướng; $\;(\vec a,\vec b)=180^\circ$: ngược hướng.`,
+         R`$(\vec a,\vec b)=90^\circ$: $\vec a\perp\vec b$.`]},
+
+  {loai:'khung-hinh',kieu:'dl',chang:'kt',nhan:'2. Tích vô hướng',hinh:'cover',
+   tieu_de:'Tích vô hướng là một số',lbl:'Định nghĩa',
+   nd:R`<p>Tích vô hướng của hai vectơ $\vec a$ và $\vec b$ là một số, kí hiệu $\vec a\cdot\vec b$:</p>
+     <p style="text-align:center;font-size:42px;margin-top:10px">$\vec a\cdot\vec b=|\vec a|\cdot|\vec b|\cdot\cos(\vec a,\vec b)$</p>`,
+   them_lbl:'Chú ý',
+   them:[R`$\vec a\perp\vec b\iff\vec a\cdot\vec b=0$.`,
+         R`$\vec a\cdot\vec a=\vec a^{\,2}=|\vec a|^2$ (bình phương vô hướng).`]},
+
+  {loai:'hinh-cot',chang:'kt',nhan:'2. Tích vô hướng',
+   tieu_de:'Dấu của tích vô hướng theo góc',
+   cot:[
+    {hinh:'goc1',cap:R`$\vec a\cdot\vec b\gt 0$`,t:'Góc nhọn'},
+    {hinh:'goc2',cap:R`$\vec a\cdot\vec b=0$`,t:'Góc vuông'},
+    {hinh:'goc3',cap:R`$\vec a\cdot\vec b\lt 0$`,t:'Góc tù'}
+   ]},
+
+  {loai:'bang',chang:'kt',nhan:'3. Tính chất',
+   tieu_de:'Tính như nhân đa thức',
+   mo:R`Với ba vectơ $\vec a,\vec b,\vec c$ bất kì và mọi số thực $k$:`,
+   dong:[
+    ['Giao hoán',R`$\vec a\cdot\vec b=\vec b\cdot\vec a$`],
+    ['Phân phối',R`$\vec a\cdot(\vec b+\vec c)=\vec a\cdot\vec b+\vec a\cdot\vec c$`],
+    ['Nhân với số',R`$(k\vec a)\cdot\vec b=k(\vec a\cdot\vec b)=\vec a\cdot(k\vec b)$`],
+    ['Hệ quả',R`$(\vec a\pm\vec b)^2=\vec a^{\,2}\pm2\,\vec a\cdot\vec b+\vec b^{\,2}$`]
+   ],
+   cuoi:R`Muốn tính độ dài $|\vec a+\vec b|$: bình phương lên, khai triển, rồi lấy căn.`},
+
+  {loai:'ban-do',chang:'dt',nhan:'Bản đồ dạng toán',
+   tieu_de:'Bốn dạng toán của bài',
+   dang:[
+    ['Xác định góc giữa hai vectơ',R`“Tính $(\vec{AB},\vec{BC})$” trong tam giác, hình vuông`],
+    ['Tính tích vô hướng bằng định nghĩa',R`“Tính $\vec{AB}\cdot\vec{AC}$” khi biết cạnh và góc`],
+    ['Tính độ dài, góc nhờ bình phương vô hướng',R`“Tính $|\vec a+\vec b|$”, “tìm góc $(\vec a,\vec b)$”`],
+    ['Ứng dụng: công của lực',R`$A=\vec F\cdot\vec d$`]
+   ]},
+
+  /* ---------- DẠNG 1 ---------- */
+  {loai:'dang',chang:'dt',so:1,nhan:'Dạng 1',
+   tieu_de:'Xác định góc giữa hai vectơ',
+   nhan_dang:R`<p>Đề hỏi $(\vec{AB},\vec{CD})$ trong một hình có sẵn góc: tam giác đều, tam giác vuông, hình vuông.</p>`,
+   buoc:['Xem hai vectơ đã chung gốc chưa.',
+         'Nếu chưa, tịnh tiến một vectơ để hai vectơ cùng xuất phát từ một điểm.',
+         'Đọc góc tạo bởi hai tia, nhớ lấy góc từ 0° đến 180°.'],
+   meo:'Chung gốc mới đọc góc. Đầu nối đuôi thì lấy góc bù.',
+   loi:R`Đọc $(\vec{AB},\vec{BC})$ thành $\widehat{ABC}$, quên lấy góc bù.`},
+
+  {loai:'vi-du',chang:'dt',nhan:'Dạng 1 · Ví dụ',hinh:'vuong30',
+   tieu_de:'Tam giác vuông có góc 30°',
+   de:R`Tam giác $ABC$ vuông tại $A$, $\widehat B=30^\circ$. Tính các góc $(\vec{BA},\vec{BC})$, $(\vec{AB},\vec{BC})$ và $(\vec{CA},\vec{CB})$`,
+   buoc:[
+    [R`$\vec{BA}$, $\vec{BC}$ chung gốc $B$: $(\vec{BA},\vec{BC})=\widehat{ABC}=30^\circ$`],
+    [R`$\vec{AB}$, $\vec{BC}$ đầu nối đuôi: kéo dài $AB$ qua $B$`,'chưa chung gốc'],
+    [R`$(\vec{AB},\vec{BC})=180^\circ-30^\circ=150^\circ$`,'góc bù'],
+    [R`$(\vec{CA},\vec{CB})=\widehat{ACB}=60^\circ$`]
+   ],
+   ket:R`Vậy các góc lần lượt là $30^\circ$, $150^\circ$, $60^\circ$.`},
+
+  {loai:'luyen',chang:'dt',nhan:'Dạng 1 · Em làm ngay',timer:180,
+   tieu_de:R`Hình vuông $ABCD$ tâm $O$`,
+   items:[
+    [R`$(\vec{AB},\vec{AC})$`,R`$45^\circ$`],
+    [R`$(\vec{AB},\vec{CD})$`,R`$180^\circ$ (ngược hướng)`],
+    [R`$(\vec{AB},\vec{BD})$`,R`$135^\circ$, không phải $45^\circ$`],
+    [R`$(\vec{OA},\vec{OB})$`,R`$90^\circ$`]
+   ]},
+
+  /* ---------- DẠNG 2 ---------- */
+  {loai:'dang',chang:'dt',so:2,nhan:'Dạng 2',
+   tieu_de:'Tính tích vô hướng bằng định nghĩa',
+   nhan_dang:R`<p>Biết độ dài hai vectơ và góc giữa chúng (hoặc tìm được góc từ hình). Đề hỏi $\vec{AB}\cdot\vec{AC}$, $\vec{AB}\cdot\vec{BC}$…</p>`,
+   buoc:['Tính độ dài hai vectơ.',
+         'Xác định góc giữa hai vectơ (Dạng 1).',
+         R`Áp dụng $\vec a\cdot\vec b=|\vec a|\cdot|\vec b|\cdot\cos(\vec a,\vec b)$.`],
+   meo:R`Vuông góc thì bằng $0$; cùng hướng thì bằng tích độ dài; ngược hướng thì thêm dấu trừ.`,
+   loi:'Dùng góc của tam giác thay cho góc giữa hai vectơ nên sai dấu.'},
+
+  {loai:'vi-du',chang:'dt',nhan:'Dạng 2 · Ví dụ',hinh:'deu',
+   tieu_de:'Tam giác đều cạnh a',
+   de:R`Tam giác $ABC$ đều cạnh $a$. Tính $\vec{AB}\cdot\vec{AC}$ và $\vec{AB}\cdot\vec{BC}$.`,
+   buoc:[
+    [R`$(\vec{AB},\vec{AC})=60^\circ$: $\vec{AB}\cdot\vec{AC}=a\cdot a\cdot\cos60^\circ=\tfrac{a^2}{2}$`],
+    [R`$(\vec{AB},\vec{BC})=180^\circ-60^\circ=120^\circ$`,'đầu nối đuôi'],
+    [R`$\vec{AB}\cdot\vec{BC}=a\cdot a\cdot\cos120^\circ=-\tfrac{a^2}{2}$`]
+   ],
+   ket:R`Vậy $\vec{AB}\cdot\vec{AC}=\tfrac{a^2}{2}$ và $\vec{AB}\cdot\vec{BC}=-\tfrac{a^2}{2}$.`},
+
+  {loai:'luyen',chang:'dt',nhan:'Dạng 2 · Em làm ngay',timer:180,
+   tieu_de:R`Hình vuông $ABCD$ cạnh 2`,
+   items:[
+    [R`$\vec{AB}\cdot\vec{AD}$`,R`$0$ (vuông góc)`],
+    [R`$\vec{AB}\cdot\vec{AC}$`,R`$2\cdot2\sqrt2\cdot\cos45^\circ=4$`],
+    [R`$\vec{AB}\cdot\vec{CD}$`,R`$2\cdot2\cdot\cos180^\circ=-4$`],
+    [R`$\vec{AC}\cdot\vec{BD}$`,R`$0$ (hai đường chéo vuông góc)`]
+   ]},
+
+  /* ---------- DẠNG 3 ---------- */
+  {loai:'dang',chang:'dt',so:3,nhan:'Dạng 3',
+   tieu_de:'Tính độ dài, góc nhờ bình phương vô hướng',
+   nhan_dang:R`<p>Đề hỏi độ dài $|\vec a+\vec b|$, $|\vec a-\vec b|$, hoặc góc $(\vec a,\vec b)$ khi biết các độ dài và tích vô hướng.</p>`,
+   buoc:[R`Độ dài: tính $|\vec a\pm\vec b|^2=\vec a^{\,2}\pm2\,\vec a\cdot\vec b+\vec b^{\,2}$.`,
+         'Lấy căn bậc hai để được độ dài.',
+         R`Góc: $\cos(\vec a,\vec b)=\dfrac{\vec a\cdot\vec b}{|\vec a|\cdot|\vec b|}$, rồi suy ra góc.`],
+   meo:'Gặp độ dài của tổng, hiệu thì bình phương lên.',
+   loi:R`Viết $|\vec a+\vec b|=|\vec a|+|\vec b|$.`},
+
+  {loai:'vi-du',chang:'dt',nhan:'Dạng 3 · Ví dụ',
+   tieu_de:'Độ dài của tổng hai vectơ',
+   de:R`Cho $|\vec a|=3$, $|\vec b|=4$, $(\vec a,\vec b)=60^\circ$. Tính $\vec a\cdot\vec b$ và $|\vec a+\vec b|$.`,
+   buoc:[
+    [R`$\vec a\cdot\vec b=3\cdot4\cdot\cos60^\circ=6$`],
+    [R`$|\vec a+\vec b|^2=\vec a^{\,2}+2\,\vec a\cdot\vec b+\vec b^{\,2}=9+12+16=37$`,'bình phương lên'],
+    [R`$|\vec a+\vec b|=\sqrt{37}$`]
+   ],
+   ket:R`Vậy $\vec a\cdot\vec b=6$ và $|\vec a+\vec b|=\sqrt{37}$.`},
+
+  {loai:'luyen',chang:'dt',nhan:'Dạng 3 · Em làm ngay',timer:240,cot:1,
+   tieu_de:'Độ dài và góc',
+   items:[
+    [R`$|\vec a|=3$, $|\vec b|=4$, $(\vec a,\vec b)=60^\circ$. Tính $|\vec a-\vec b|$`,R`$9-12+16=13$, nên $|\vec a-\vec b|=\sqrt{13}$.`],
+    [R`$|\vec a|=2$, $|\vec b|=3$, $\vec a\cdot\vec b=-3$. Tìm $(\vec a,\vec b)$`,R`$\cos(\vec a,\vec b)=\tfrac{-3}{6}=-\tfrac12$, nên góc bằng $120^\circ$.`],
+    [R`$|\vec a|=|\vec b|=1$, $\vec a\perp\vec b$. Tính $|2\vec a+\vec b|$`,R`$4+0+1=5$, nên $|2\vec a+\vec b|=\sqrt5$, không phải $3$.`]
+   ]},
+
+  /* ---------- DẠNG 4 ---------- */
+  {loai:'dang',chang:'dt',so:4,nhan:'Dạng 4',
+   tieu_de:'Ứng dụng: công của lực',
+   nhan_dang:R`<p>Một lực $\vec F$ làm vật dời theo $\vec d$; đề hỏi công $A$, hoặc cho công và hỏi góc kéo.</p>`,
+   buoc:[R`Xác định $F$ (N), $d$ (m) và góc $\alpha=(\vec F,\vec d)$.`,
+         R`Tính $A=\vec F\cdot\vec d=|\vec F|\cdot|\vec d|\cdot\cos\alpha$ (J).`,
+         R`Hỏi góc thì tính $\cos\alpha=\dfrac{A}{|\vec F|\cdot|\vec d|}$.`],
+   meo:'Công là tích vô hướng của lực và độ dời.',
+   loi:'Lấy góc giữa lực và phương thẳng đứng thay cho góc với hướng di chuyển.'},
+
+  {loai:'vi-du',chang:'dt',nhan:'Dạng 4 · Ví dụ',hinh:'keo',
+   tieu_de:'Kéo thùng hàng',
+   de:R`Một người kéo thùng hàng bằng lực $F=50$&nbsp;N, hợp với hướng di chuyển góc $30^\circ$, thùng dời được 10&nbsp;m. Tính công của lực.`,
+   buoc:[
+    [R`$A=\vec F\cdot\vec d=|\vec F|\cdot|\vec d|\cdot\cos30^\circ$`],
+    [R`$A=50\cdot10\cdot\tfrac{\sqrt3}{2}=250\sqrt3$`],
+    [R`$250\sqrt3\approx433$`,'làm tròn đến hàng đơn vị']
+   ],
+   ket:R`Vậy công của lực khoảng 433&nbsp;J.`},
+
+  {loai:'luyen',chang:'dt',nhan:'Dạng 4 · Em làm ngay',timer:240,cot:1,
+   tieu_de:'Tính công, tìm góc kéo',
+   items:[
+    [R`$F=20$&nbsp;N, góc $60^\circ$, dời 5&nbsp;m. Công bằng bao nhiêu?`,R`$20\cdot5\cdot\tfrac12=50$&nbsp;J.`],
+    [R`Lực vuông góc với hướng di chuyển, $F=30$&nbsp;N, dời 8&nbsp;m.`,R`$\cos90^\circ=0$: công bằng 0&nbsp;J.`],
+    [R`$F=100$&nbsp;N, dời 12&nbsp;m, công 600&nbsp;J. Góc kéo bằng bao nhiêu?`,R`$\cos\alpha=\tfrac{600}{1200}=\tfrac12$, nên $\alpha=60^\circ$.`]
+   ]},
+
+  /* ---------- LUYỆN TẬP TỔNG HỢP ---------- */
+  {loai:'trac-nghiem',chang:'lt',nhan:'Phần I · Trắc nghiệm',tieu_de:'Câu 1',
+   de:R`Cho $|\vec a|=2$, $|\vec b|=5$, $(\vec a,\vec b)=120^\circ$. Khi đó $\vec a\cdot\vec b$ bằng`,
+   pa:[R`$-5$`,R`$5$`,R`$-10$`,R`$5\sqrt3$`],dap:0,
+   giai:R`Chọn A: $2\cdot5\cdot\cos120^\circ=-5$. B quên dấu của $\cos120^\circ$; C quên nhân $\cos$; D dùng $\sin120^\circ$.`},
+
+  {loai:'trac-nghiem',chang:'lt',nhan:'Phần I · Trắc nghiệm',tieu_de:'Câu 2',
+   de:R`Tam giác $ABC$ đều cạnh 4. Tích vô hướng $\vec{AB}\cdot\vec{BC}$ bằng`,
+   pa:[R`$8$`,R`$16$`,R`$-8$`,R`$-16$`],dap:2,
+   giai:R`Chọn C: $(\vec{AB},\vec{BC})=120^\circ$, nên $4\cdot4\cdot(-\tfrac12)=-8$. A dùng nhầm góc $60^\circ$; B, D quên nhân $\cos$.`},
+
+  {loai:'dung-sai',chang:'lt',nhan:'Phần II · Đúng – Sai',tieu_de:'Câu 3',
+   de:R`Cho hình vuông $ABCD$ cạnh $a$.`,
+   y:[
+    [R`$\vec{AB}\cdot\vec{AD}=0$`,true,R`$AB\perp AD$.`],
+    [R`$\vec{AB}\cdot\vec{AC}=a^2$`,true,R`$a\cdot a\sqrt2\cdot\cos45^\circ=a^2$.`],
+    [R`$\vec{AB}\cdot\vec{CD}=a^2$`,false,R`Ngược hướng: $\vec{AB}\cdot\vec{CD}=-a^2$.`],
+    [R`$|\vec{AB}+\vec{AD}|=2a$`,false,R`$\vec{AB}+\vec{AD}=\vec{AC}$, độ dài $a\sqrt2$.`]
+   ]},
+
+  {loai:'tra-loi-ngan',chang:'lt',nhan:'Phần III · Trả lời ngắn',tieu_de:'Câu 4',
+   de:R`Cho $|\vec a|=3$, $|\vec b|=5$ và $|\vec a+\vec b|=7$. Góc giữa $\vec a$ và $\vec b$ bằng bao nhiêu độ?`,
+   dap:'60',
+   buoc:[
+    R`$49=9+2\,\vec a\cdot\vec b+25$, nên $\vec a\cdot\vec b=\tfrac{15}{2}$`,
+    R`$\cos(\vec a,\vec b)=\dfrac{15/2}{3\cdot5}=\tfrac12$`,
+    R`Góc bằng $60^\circ$.`
+   ]},
+
+  {loai:'tong-ket',chang:'tk',nhan:'Tổng kết',tieu_de:'Nhớ bốn dạng',
+   tam:R`$\vec a\cdot\vec b=|\vec a|\cdot|\vec b|\cdot\cos(\vec a,\vec b)$`,
+   nhanh:[
+    ['Dạng 1 · Góc','Đưa về chung gốc; đầu nối đuôi thì lấy góc bù.'],
+    ['Dạng 2 · Tích vô hướng','Độ dài nhân độ dài nhân cos góc.'],
+    ['Dạng 3 · Độ dài, góc',R`Bình phương $|\vec a\pm\vec b|$; góc từ $\cos=\tfrac{\vec a\cdot\vec b}{|\vec a||\vec b|}$.`],
+    ['Dạng 4 · Công',R`$A=\vec F\cdot\vec d=|\vec F|\cdot|\vec d|\cdot\cos\alpha$, đơn vị J.`]
+   ],
+   dan_do:'Về nhà: làm các bài tập cuối Bài 11 không dùng tọa độ, mỗi dạng thêm ít nhất 2 bài; chuẩn bị Bài tập cuối chương IV.'}
+  ]
+};
+
+/* =========================================================
+   HÌNH VẼ (SVG)
+   ========================================================= */
+function A(x1,y1,x2,y2,cls='',w=4,h=20,hw=9){
+  const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bx=x2-ux*h,by=y2-uy*h;
+  return `<g class="${cls}"><line x1="${x1}" y1="${y1}" x2="${bx}" y2="${by}" stroke-width="${w}"/>`+
+    `<polygon points="${x2},${y2} ${bx-uy*hw},${by+ux*hw} ${bx+uy*hw},${by-ux*hw}"/></g>`;
+}
+const P=(x,y)=>`<circle class="pt" cx="${x}" cy="${y}" r="6"/>`;
+const L=(x,y,t,a='middle')=>`<text x="${x}" y="${y}" text-anchor="${a}">${t}</text>`;
+const T=(x,y,t,a='start')=>`<text class="tx" x="${x}" y="${y}" text-anchor="${a}">${t}</text>`;
+function V(x,y,main,o={}){
+  const pre=o.pre||'',sub=o.sub||'',cls=o.cls||'';
+  const px=x+pre.length*15, mw=main.length*16+(sub?12:0);
+  return `<text x="${x}" y="${y}" class="${cls}"><tspan class="co">${pre}</tspan><tspan>${main}</tspan>${sub?`<tspan dy="9" font-size="21" class="co">${sub}</tspan>`:''}</text>`+
+    A(px-1,y-29,px+mw+2,y-29,'lab '+cls,2,8,4);
+}
+const SG=(a,b,cls='')=>`<path class="seg ${cls}" d="M${a} L${b}"/>`;
+const PG=(pts,cls='plane')=>`<path class="${cls}" d="M${pts.join(' L')} Z"/>`;
+const PT=(q,t,dx=0,dy=0,an='middle')=>P(q[0],q[1])+L(q[0]+dx,q[1]+dy,t,an);
+const mix=(a,b,t)=>[+(a[0]+(b[0]-a[0])*t).toFixed(1),+(a[1]+(b[1]-a[1])*t).toFixed(1)];
+/* điểm theo góc (độ, chiều dương ngược kim đồng hồ), cung góc, kí hiệu góc vuông */
+const at=(c,deg,r)=>[+(c[0]+r*Math.cos(deg*Math.PI/180)).toFixed(1),+(c[1]-r*Math.sin(deg*Math.PI/180)).toFixed(1)];
+const ARC=(c,r,t1,t2,cls='')=>`<path class="arc ${cls}" d="M${at(c,t1,r)} A${r} ${r} 0 ${t2-t1>180?1:0} 0 ${at(c,t2,r)}"/>`;
+const RA=(c,t1,t2,s=22)=>{const p=at(c,t1,s),q=at(c,t2,s),m=[+(p[0]+q[0]-c[0]).toFixed(1),+(p[1]+q[1]-c[1]).toFixed(1)];return `<path class="arc" d="M${p} L${m} L${q}"/>`;};
+const AV=(c,deg,r,cls)=>{const e=at(c,deg,r);return A(c[0],c[1],e[0],e[1],cls,5);};
+function gocFig(deg,lbl){
+  const O=[170,215],a=at(O,0,165),b=at(O,deg,150);
+  return `<svg viewBox="0 0 360 260">`+AV(O,0,165,'mk')+AV(O,deg,150,'ac')+
+    (deg===90?RA(O,0,90,26):ARC(O,40,0,deg))+P(O[0],O[1])+L(O[0]-6,O[1]+34,'O')+
+    V(a[0]-26,a[1]-14,'a',{cls:'mk'})+V(b[0]+(deg>90?-34:14),b[1]+4,'b',{cls:'ac'})+
+    T(at(O,deg/2,62)[0],at(O,deg/2,62)[1]+8,lbl,'middle')+`</svg>`;
+}
+const FIG={
+  cover(){
+    const O=[120,330],a=at(O,8,400),b=at(O,52,300);
+    return `<svg viewBox="40 40 560 340">`+AV(O,8,400,'mk')+AV(O,52,300,'ac')+ARC(O,70,8,52)+
+      P(O[0],O[1])+L(O[0]-14,O[1]+30,'O','end')+V(a[0]-30,a[1]+48,'a',{cls:'mk'})+V(b[0]+16,b[1]+10,'b',{cls:'ac'})+
+      L(at(O,30,104)[0],at(O,30,104)[1]+10,'α')+`</svg>`;
+  },
+  goc(){
+    const a1=[30,300],a2=[200,250],b1=[90,190],b2=[160,70],O=[350,310];
+    const A_=[O[0]+170,O[1]-50],B_=[O[0]+70,O[1]-120];
+    return `<svg viewBox="0 30 620 340">`+A(a1[0],a1[1],a2[0],a2[1],'mk',5)+A(b1[0],b1[1],b2[0],b2[1],'ac',5)+
+      V(108,250,'a',{cls:'mk'})+V(140,140,'b',{cls:'ac'})+
+      SG([260,60],[260,340],'so dash')+
+      A(O[0],O[1],A_[0],A_[1],'mk',5)+A(O[0],O[1],B_[0],B_[1],'ac',5)+ARC(O,52,16.4,59.7)+
+      PT(O,'O',-16,26,'end')+L(A_[0]+18,A_[1]+8,'A','start')+L(B_[0]+10,B_[1]-12,'B','start')+`</svg>`;
+  },
+  goc1(){return gocFig(50,'');},
+  goc2(){return gocFig(90,'');},
+  goc3(){return gocFig(140,'');},
+  vuong30(){
+    const A_=[80,330],B=[480,330],C=[80,99],E=[620,330];
+    return `<svg viewBox="20 60 660 320">`+PG([A_,B,C],'tri')+SG(B,E,'so dash')+RA(A_,0,90,24)+
+      ARC(B,70,150,180,'mk')+ARC(B,44,0,150)+
+      T(at(B,165,112)[0],at(B,165,112)[1]+8,'30°','middle')+T(at(B,75,70)[0],at(B,75,70)[1],'150°','middle')+
+      PT(A_,'A',-14,26,'end')+PT(B,'B',4,36)+PT(C,'C',-14,0,'end')+`</svg>`;
+  },
+  deu(){
+    const A_=[90,330],B=[390,330],C=[240,70.2],E=[540,330];
+    return `<svg viewBox="40 40 560 330">`+PG([A_,B,C],'tri')+SG(B,E,'so dash')+
+      ARC(A_,50,0,60,'mk')+ARC(B,44,0,120)+
+      T(at(A_,30,78)[0],at(A_,30,78)[1]+8,'60°','middle')+T(at(B,60,72)[0]+6,at(B,60,72)[1],'120°','middle')+
+      PT(A_,'A',-14,26,'end')+PT(B,'B',0,36)+PT(C,'C',0,-16)+`</svg>`;
+  },
+  keo(){
+    const G=[[40,330],[600,330]],box=[[140,230],[280,230],[280,330],[140,330]],P0=[280,265];
+    const Fe=at(P0,30,210);
+    return `<svg viewBox="20 80 620 320">`+SG(G[0],G[1],'so')+PG(box,'wall')+SG(P0,[500,265],'so dash')+
+      A(P0[0],P0[1],Fe[0],Fe[1],'ac',5)+ARC(P0,70,0,30)+A(140,365,520,365,'mk',5)+
+      V(Fe[0]+12,Fe[1]+10,'F',{cls:'ac'})+V(330,355,'d',{cls:'mk'})+L(at(P0,15,96)[0],at(P0,15,96)[1]+10,'α')+
+      T(210,288,'vali','middle')+`</svg>`;
+  }
+};
+
+/* =========================================================
+   DỰNG SLIDE THEO LOẠI
+   ========================================================= */
+const CH=BAI.chang_ds||[['kd','Khởi động'],['ht','Hình thành kiến thức'],['lt','Luyện tập'],['vd','Vận dụng'],['tk','Tổng kết']];
+const chName=k=>(CH.find(c=>c[0]===k)||['',''])[1];
+const head=s=>`<div class="eyebrow">${chName(s.chang)}${s.nhan?`<span> · ${s.nhan}</span>`:''}</div><h2 class="tt">${s.tieu_de}</h2>`;
+const LET='ABCD';
+
+const RENDER={
+  'bia':()=>`<div class="cover"><div>
+      <div class="meta">Toán ${BAI.lop} · ${BAI.sach} · ${BAI.chuong}</div>
+      <div class="bai">${BAI.bai}</div><h1>${BAI.ten}</h1>
+      <div class="goals"><div class="goals-h">Sau tiết học, em</div><ul class="sq">${BAI.muc_tieu.map(m=>`<li>${m}</li>`).join('')}</ul></div>
+    </div><div class="fig" data-fig="cover">${FIG.cover()}</div></div>`,
+
+  'cau-hoi':s=>head(s)+`<div class="body two"><div class="col"><p>${s.de}</p>
+      <ol class="qs">${s.hoi.map(h=>`<li class="frag"><div>${h.q}</div><div class="ans frag">${h.a}</div></li>`).join('')}</ol>
+    </div><div class="fig" data-fig="${s.hinh}">${FIG[s.hinh]()}</div></div>`,
+
+  'nho-lai':s=>head(s)+`<div class="body"><div class="nl-grid">${s.items.map((it,i)=>`<div class="nl"><div class="q"><b>${i+1}.</b> ${it[0]}</div><div class="a frag">${it[1]}</div></div>`).join('')}</div></div>`,
+
+  'ban-do':s=>head(s)+`<div class="body"><div class="bd">${s.dang.map((d,i)=>{
+      const j=BAI.slides.findIndex(x=>x.loai==='dang'&&x.so===i+1);
+      return `<button class="bd-row" data-jump="${j}"><span class="bd-n">${i+1}</span><span class="bd-t">${d[0]}</span><span class="bd-d">${d[1]}</span></button>`;}).join('')}
+    </div><p class="foot-note">Bấm vào một dạng để đi thẳng tới dạng đó.</p></div>`,
+
+  'dang':s=>`<div class="eyebrow">${chName(s.chang)}<span> · ${s.nhan}</span></div><h2 class="tt"><span class="dnum">${s.so}</span>${s.tieu_de}</h2>
+    <div class="body dang"><div class="khung"><div class="lbl">Nhận dạng</div>${s.nhan_dang}</div>
+      <div class="col" style="gap:12px"><div class="notes-h">Cách làm</div><ol class="cl">${s.buoc.map(b=>`<li class="frag"><span>${b}</span></li>`).join('')}</ol></div></div>
+    ${s.meo?`<div class="meo frag"><span class="k">Mẹo nhớ</span><span>${s.meo}</span></div>`:''}
+    ${s.loi?`<p class="loi-l frag"><span class="k">Lỗi hay gặp</span><span>${s.loi}</span></p>`:''}`,
+
+  'hinh-cot':s=>head(s)+`<div class="body" style="gap:18px">${s.mo?`<p>${s.mo}</p>`:''}
+    <div class="hc-grid" style="grid-template-columns:repeat(${s.cot.length},1fr)">${s.cot.map(c=>`<div class="hc"><div class="fig" data-fig="${c.hinh}">${FIG[c.hinh]()}</div><div class="hc-cap">${c.cap}</div><div class="hc-t frag">${c.t}</div></div>`).join('')}</div></div>`,
+
+  'khung-hinh':s=>head(s)+`<div class="body two" style="grid-template-columns:1.05fr .95fr;gap:40px"><div class="col" style="gap:20px">
+      <div class="khung ${s.kieu==='dl'?'dl':''}"><div class="lbl">${s.lbl}</div>${s.nd}</div>
+      ${s.them?`<div class="col" style="gap:10px"><div class="notes-h frag">${s.them_lbl}</div><ul class="sq notes">${s.them.map(t=>`<li class="frag">${t}</li>`).join('')}</ul></div>`:''}
+    </div><div class="fig khfig" data-fig="${s.hinh}">${FIG[s.hinh]()}</div></div>`,
+
+  'luyen':s=>head(s)+`<div class="body" style="gap:18px">${s.de?`<p>${s.de}</p>`:''}
+    <div class="lx-grid${s.cot===1?' c1':''}">${s.items.map((it,i)=>`<div class="lx"><div class="lq"><b>${'abcdef'[i]})</b>${it[0]}</div><div class="la frag">${it[1]}</div></div>`).join('')}</div></div>`,
+
+  'khung':s=>head(s)+`<div class="body" style="gap:26px">
+      <div class="khung ${s.kieu==='dl'?'dl':''}"><div class="lbl">${s.lbl}</div>${s.nd}</div>
+      ${s.them?`<div class="col" style="gap:12px"><div class="notes-h frag">${s.them_lbl}</div><ul class="sq notes">${s.them.map(t=>typeof t==='string'?`<li class="frag">${t}</li>`:`<li class="frag hoi">${t.q}<br><span class="ans frag">${t.a}</span></li>`).join('')}</ul></div>`:''}
+    </div>`,
+
+  'vi-du':s=>head(s)+`<div class="body${s.hinh?' two':''}"><div class="col">
+      <p><span class="de-lbl">${s.nhan}.</span>${s.de}</p>
+      <ol class="steps">${s.buoc.map(b=>`<li class="frag"><span>${b[0]}</span>${b[1]?`<span class="why">${b[1]}</span>`:''}</li>`).join('')}</ol>
+      <p class="ket frag">${s.ket}</p>
+    </div>${s.hinh?`<div class="fig" data-fig="${s.hinh}">${FIG[s.hinh]()}</div>`:''}</div>`,
+
+  'bang':s=>head(s)+`<div class="body" style="gap:20px"><p>${s.mo}</p>
+      <table class="tc">${s.dong.map(d=>`<tr class="frag"><td>${d[0]}</td><td>${d[1]}</td></tr>`).join('')}</table>
+      <p class="foot-note frag">${s.cuoi}</p></div>`,
+
+  'so-sanh':s=>head(s)+`<div class="body"><div class="ss">
+      <div class="ss-h sai">Bài làm sai</div><div class="ss-h dung">Sửa lại</div>
+      ${s.cap.map(c=>`<div class="pair frag"><div class="c"><span class="mk-x">✗</span><span>${c[0]}</span></div><div class="c"><span class="mk-v">✓</span><span>${c[1]}</span></div><div class="vs">${c[2]}</div></div>`).join('')}
+    </div></div>`,
+
+  'trac-nghiem':s=>head(s)+`<div class="body" style="gap:28px"><p class="stem">${s.de}</p>
+      <div class="opts">${s.pa.map((p,i)=>`<button class="opt${i===s.dap?' correct':''}" data-i="${i}"><span class="k">${LET[i]}</span><span>${p}</span></button>`).join('')}</div>
+      <p class="giai frag" data-hook="quiz">${s.giai}</p></div>`,
+
+  'dung-sai':s=>head(s)+`<div class="body" style="gap:14px"><p class="stem">${s.de}</p><div>
+      ${s.y.map((y,i)=>`<div class="ds-row" tabindex="0"><span class="ds-l">${'abcd'[i]})</span><span>${y[0]}</span>
+        <span class="ds-v frag"><span class="badge ${y[1]?'d':'s'}">${y[1]?'Đ':'S'}</span><span>${y[2]}</span></span></div>`).join('')}
+    </div></div>`,
+
+  'tra-loi-ngan':s=>head(s)+`<div class="body two" style="grid-template-columns:1.25fr .75fr"><div class="col">
+      <p class="stem">${s.de}</p>
+      <ol class="steps">${s.buoc.map(b=>`<li class="frag"><span>${b}</span></li>`).join('')}</ol>
+    </div><div class="col" style="align-items:flex-start;padding-top:12px">
+      <div class="tln">Đáp số<div class="tln-slot"><span class="frag">${s.dap}</span></div></div></div></div>`,
+
+  'tong-ket':s=>head(s)+`<div class="body" style="gap:0">
+      <div class="mm-c">${s.tam}</div>
+      <div class="mm">${s.nhanh.map(n=>`<div class="mm-b frag"><h3>${n[0]}</h3>${n[1]}</div>`).join('')}</div>
+      <p class="dando frag" style="margin-top:28px">${s.dan_do}</p></div>`
+};
+
+const host=document.getElementById('slides');
+host.innerHTML=BAI.slides.map((s,i)=>`<section class="slide" data-i="${i}"${s.timer?` data-timer="${s.timer}"`:''}><div class="fitbox">${RENDER[s.loai](s)}</div></section>`).join('');
+const slides=[...host.querySelectorAll('.slide')];
+const N=slides.length;
+
+/* =========================================================
+   ĐIỀU HƯỚNG TỪNG BƯỚC
+   ========================================================= */
+let cur=0;
+const frags=s=>[...s.querySelectorAll('.frag')];
+function setFrag(f,on){
+  f.classList.toggle('on',on);
+  if(f.dataset.hook==='quiz')f.closest('.slide').classList.toggle('revealed',on);
+}
+function go(n,revealAll=false){
+  n=Math.max(0,Math.min(N-1,n));
+  slides[cur].classList.remove('active');
+  cur=n;const s=slides[cur];s.classList.add('active');
+  frags(s).forEach(f=>setFrag(f,revealAll));
+  try{if(zName)closeZoom();}catch(_){}
+  autoFit(s);updateFoot();redrawInk();
+}
+/* đo chiều cao thật của nội dung (kể cả các bước chưa hiện) và thu nhỏ nếu tràn xuống thanh dưới */
+function autoFit(s){
+  const box=s.firstElementChild;if(!box)return;
+  const cs=getComputedStyle(s);
+  const aw=s.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  const ah=s.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+  box.style.transform='';
+  const fits=k=>{box.style.width=aw/k+'px';return box.offsetHeight*k<=ah+1;};
+  let k=1;
+  if(!fits(1)){
+    /* tìm hệ số lớn nhất (0,6–1) để nội dung vừa khung: chữ to nhất có thể */
+    let lo=.6,hi=1;
+    for(let i=0;i<7;i++){const m=(lo+hi)/2;if(fits(m))lo=m;else hi=m;}
+    k=lo;fits(k);
+  }
+  box.style.transform=k<1?`scale(${k})`:'';
+}
+function next(){
+  const h=frags(slides[cur]).find(f=>!f.classList.contains('on'));
+  if(h){setFrag(h,true);if(h.parentElement.closest('.frag:not(.on)'))setFrag(h.parentElement.closest('.frag'),true);}
+  else if(cur<N-1)go(cur+1);
+}
+function prev(){
+  const on=frags(slides[cur]).filter(f=>f.classList.contains('on'));
+  if(on.length)setFrag(on[on.length-1],false);
+  else if(cur>0)go(cur-1,true);
+}
+
+/* chân trang */
+const prog=document.getElementById('prog');
+prog.innerHTML=CH.map(c=>`<div class="pseg" data-c="${c[0]}"><i></i>${c[1]}</div>`).join('');
+function updateFoot(){
+  const ci=CH.findIndex(c=>c[0]===BAI.slides[cur].chang);
+  [...prog.children].forEach((e,i)=>{e.classList.toggle('done',i<ci);e.classList.toggle('cur',i===ci);});
+  document.getElementById('num').textContent=`${cur+1} / ${N}`;
+  document.getElementById('barOpts').hidden=!slides[cur].querySelector('.opt');
+}
+
+/* trắc nghiệm + đúng sai */
+host.addEventListener('click',e=>{
+  const jp=e.target.closest('[data-jump]');if(jp){go(+jp.dataset.jump);return;}
+  const o=e.target.closest('.opt');
+  if(o){o.parentElement.querySelectorAll('.opt').forEach(x=>x.classList.toggle('chosen',x===o&&!x.classList.contains('chosen')));return;}
+  const r=e.target.closest('.ds-row');
+  if(r){const v=r.querySelector('.ds-v');setFrag(v,!v.classList.contains('on'));}
+});
+host.addEventListener('keydown',e=>{
+  const r=e.target.closest&&e.target.closest('.ds-row');
+  if(r&&(e.key==='Enter')){e.preventDefault();e.stopPropagation();r.click();}
+});
+
+/* =========================================================
+   CO GIÃN SÂN KHẤU
+   ========================================================= */
+const vp=document.getElementById('viewport'),sizer=document.getElementById('sizer'),stage=document.getElementById('stage');
+let SW=1422;const SH=800;
+function fit(){
+  const cs=getComputedStyle(vp);
+  const w=vp.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  const h=vp.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+  if(w<=0||h<=0)return;
+  /* bề ngang logic theo tỉ lệ màn hình: 4:3 (1067) tới 21:9 (1867) */
+  SW=Math.round(Math.min(1867,Math.max(1067,SH*w/h)));
+  const k=Math.max(.1,Math.min(w/SW,h/SH));
+  stage.style.width=SW+'px';stage.style.height=SH+'px';
+  stage.style.transform=`scale(${k})`;sizer.style.width=SW*k+'px';sizer.style.height=SH*k+'px';
+  try{if(ink.width!==SW){ink.width=SW;ink.height=SH;redrawInk();}}catch(e){}
+  if(slides[cur])autoFit(slides[cur]);
+}
+addEventListener('resize',fit);document.addEventListener('fullscreenchange',fit);fit();
+
+/* =========================================================
+   BÚT VẼ
+   ========================================================= */
+const ink=document.getElementById('ink'),ctx=ink.getContext('2d');
+const strokes={};let drawing=null;
+const inkColor=()=>getComputedStyle(stage).getPropertyValue('--accent').trim()||'#c8352c';
+function pt(e){const r=stage.getBoundingClientRect();return[(e.clientX-r.left)/r.width*SW,(e.clientY-r.top)/r.height*SH];}
+function stroke(pts){if(pts.length<2)return;ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);pts.forEach(p=>ctx.lineTo(p[0],p[1]));ctx.stroke();}
+function redrawInk(){ctx.clearRect(0,0,ink.width,ink.height);ctx.strokeStyle=inkColor();ctx.lineWidth=5;ctx.lineCap=ctx.lineJoin='round';(strokes[cur]||[]).forEach(stroke);}
+ink.addEventListener('pointerdown',e=>{drawing=[pt(e)];(strokes[cur]=strokes[cur]||[]).push(drawing);ink.setPointerCapture(e.pointerId);});
+ink.addEventListener('pointermove',e=>{if(!drawing)return;drawing.push(pt(e));redrawInk();});
+ink.addEventListener('pointerup',()=>{drawing=null;});
+function togglePen(on){on=on??!stage.classList.contains('pen');stage.classList.toggle('pen',on);document.getElementById('bPen').classList.toggle('on',on);}
+function clearInk(){strokes[cur]=[];redrawInk();}
+fit();
+
+/* =========================================================
+   ĐỒNG HỒ, MÀN ĐEN, MỤC LỤC, GIAO DIỆN
+   ========================================================= */
+const tEl=document.getElementById('timer');let tId=null,tLeft=0;
+function showT(){const m=Math.floor(tLeft/60),s=tLeft%60;tEl.textContent=tLeft>0?`${m}:${String(s).padStart(2,'0')}`:'Hết giờ';tEl.classList.toggle('het',tLeft<=0);}
+function toggleTimer(){
+  if(!tEl.hidden){clearInterval(tId);tEl.hidden=true;document.getElementById('bTimer').classList.remove('on');return;}
+  tLeft=+slides[cur].dataset.timer||120;tEl.hidden=false;document.getElementById('bTimer').classList.add('on');showT();
+  tId=setInterval(()=>{tLeft--;showT();if(tLeft<=0)clearInterval(tId);},1000);
+}
+tEl.addEventListener('click',toggleTimer);
+
+const blk=document.getElementById('blackout');
+const toggleBlack=()=>{blk.hidden=!blk.hidden;};
+blk.addEventListener('click',toggleBlack);
+
+const gridOvl=document.getElementById('gridOvl'),helpOvl=document.getElementById('helpOvl'),gl=document.getElementById('gl');
+function openGrid(){
+  gl.innerHTML=slides.map((s,i)=>{const h=s.querySelector('h2.tt,h1');
+    return `<button data-go="${i}" class="${i===cur?'cur':''}"><span class="n">${i+1}</span><span class="c">${chName(BAI.slides[i].chang)}</span><span>${h?h.innerHTML.replace(/<br>/g,' '):''}</span></button>`;}).join('');
+  gridOvl.hidden=false;
+}
+gl.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){gridOvl.hidden=true;go(+b.dataset.go);}});
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>{gridOvl.hidden=helpOvl.hidden=true;});
+
+const root=document.documentElement;
+function isDark(){const t=root.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;}
+function toggleTheme(){const t=isDark()?'light':'dark';root.dataset.theme=t;try{localStorage.setItem('l10b11_theme',t);}catch(e){}setTimeout(redrawInk,30);}
+try{const t=localStorage.getItem('l10b11_theme');if(t)root.dataset.theme=t;}catch(e){}
+
+function toggleFull(){
+  if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+  else if(root.requestFullscreen)root.requestFullscreen().catch(()=>{});
+}
+
+/* nút trên thanh công cụ */
+const on=(id,f)=>document.getElementById(id).addEventListener('click',e=>{f();e.currentTarget.blur();});
+on('bPrev',prev);on('bNext',next);on('bPen',()=>togglePen());on('bTimer',toggleTimer);
+on('bGrid',()=>gridOvl.hidden?openGrid():gridOvl.hidden=true);on('bTheme',toggleTheme);on('bFull',toggleFull);
+on('bHelp',()=>{helpOvl.hidden=!helpOvl.hidden;});
+on('bClear',clearInk);
+document.getElementById('barOpts').addEventListener('click',e=>{const b=e.target.closest('[data-opt]');if(!b)return;
+  const o=slides[cur].querySelectorAll('.opt')[+b.dataset.opt];if(o)o.click();b.blur();});
+/* toàn màn hình: thanh điều khiển ẩn, hiện lại khi rê chuột hoặc chạm */
+const bar=document.getElementById('bar');let barT=null;
+function peekBar(){if(!document.fullscreenElement)return;bar.classList.add('show');clearTimeout(barT);barT=setTimeout(()=>bar.classList.remove('show'),2500);}
+addEventListener('pointermove',e=>{if(e.pointerType==='mouse')peekBar();});
+addEventListener('pointerdown',peekBar);
+
+/* bàn phím */
+addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(!zoom.hidden){zoomKey(e);return;}
+  const k=e.key,inRange=e.target&&e.target.type==='range';
+  if(k==='Escape'){gridOvl.hidden=helpOvl.hidden=true;blk.hidden=true;togglePen(false);return;}
+  if(!gridOvl.hidden||!helpOvl.hidden){if(k==='g'||k==='G'||k==='?')gridOvl.hidden=helpOvl.hidden=true;return;}
+  if(inRange&&k.startsWith('Arrow'))return;
+  const opt=slides[cur].querySelectorAll('.opt');
+  if(/^[1-4]$/.test(k)&&opt.length){opt[+k-1].click();return;}
+  switch(k){
+    case 'ArrowRight':case 'ArrowDown':case 'PageDown':case ' ':case 'Enter':e.preventDefault();next();break;
+    case 'ArrowLeft':case 'ArrowUp':case 'PageUp':case 'Backspace':e.preventDefault();prev();break;
+    case 'Home':go(0);break;
+    case 'End':go(N-1,true);break;
+    case 'f':case 'F':toggleFull();break;
+    case 'b':case 'B':case '.':toggleBlack();break;
+    case 'p':case 'P':togglePen();break;
+    case 'c':case 'C':clearInk();break;
+    case 't':case 'T':toggleTimer();break;
+    case 'g':case 'G':openGrid();break;
+    case 'd':case 'D':toggleTheme();break;
+    case '?':helpOvl.hidden=false;break;
+  }
+});
+
+/* vuốt trên điện thoại / máy tính bảng */
+let sw=null;
+stage.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'&&!stage.classList.contains('pen')&&!e.target.closest('button,input,.zoom'))sw=[e.clientX,e.clientY];});
+stage.addEventListener('pointerup',e=>{if(!sw)return;const dx=e.clientX-sw[0],dy=e.clientY-sw[1];sw=null;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))dx<0?next():prev();});
+
+/* =========================================================
+   PHÓNG TO HÌNH · XOAY HÌNH KHÔNG GIAN
+   FIG3D (nếu bài có) chứa mô hình 3D: bấm hình để phóng to, kéo để xoay
+   ========================================================= */
+const M3=(typeof FIG3D!=='undefined')?FIG3D:{};
+const zoom=document.getElementById('zoom'),zmFig=document.getElementById('zmFig'),zmBar=document.getElementById('zmBar'),zmHint=document.getElementById('zmHint');
+let zName=null,zYaw=0,zPitch=0,zAuto=false,zRaf=0;
+host.querySelectorAll('.fig[data-fig]').forEach(f=>{if(M3[f.dataset.fig])f.dataset.d3='1';});
+
+function render3D(m,yaw,pitch){
+  const r2=Math.PI/180,ct=Math.cos(yaw*r2),st=Math.sin(yaw*r2),cp=Math.cos(pitch*r2),sp=Math.sin(pitch*r2);
+  const P3=n=>typeof n==='string'?m.pts[n]:n;
+  const all=[...Object.values(m.pts||{}),...(m.lines||[]).flatMap(l=>[l[0],l[1]]),...(m.planes||[]).flatMap(p=>p[0])];
+  const c=[0,1,2].map(i=>all.reduce((s,p)=>s+p[i],0)/all.length);
+  const R=Math.max(...all.map(p=>Math.hypot(p[0]-c[0],p[1]-c[1],p[2]-c[2])))||1,k=335/R;
+  const rot=p=>{const x=p[0]-c[0],y=p[1]-c[1],z=p[2]-c[2];return[x*ct-y*st,x*st+y*ct,z];};
+  const sc=p=>{const q=rot(p);return[+(q[0]*k).toFixed(1),+(-(q[1]*sp+q[2]*cp)*k).toFixed(1)];};
+  const depth=p=>{const q=rot(p);return -q[1]*cp+q[2]*sp;};
+  const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const cross=(u,v)=>[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]];
+  /* mặt của khối: pháp tuyến hướng ra ngoài, mặt nào quay về phía người nhìn */
+  const fp=[...new Set((m.faces||[]).flat())].map(P3);
+  const g=fp.length?[0,1,2].map(i=>fp.reduce((s,p)=>s+p[i],0)/fp.length):c;
+  const faces=(m.faces||[]).map(f=>{
+    const a=P3(f[0]);let n=cross(sub(P3(f[1]),a),sub(P3(f[2]),a));
+    if(dot(n,sub(a,g))<0)n=n.map(v=>-v);
+    const rn=[n[0]*ct-n[1]*st,n[0]*st+n[1]*ct,n[2]];
+    return{a,n,len:Math.hypot(...n),front:-rn[1]*cp+rn[2]*sp>1e-9};
+  });
+  const onF=(p,f)=>Math.abs(dot(f.n,sub(p,f.a)))/f.len<1e-6*(1+R);
+  const W=(a,b,cls)=>`<path class="seg ${cls}" d="M${sc(a)} L${sc(b)}"/>`;
+  let s=`<svg viewBox="-460 -350 920 700">`;
+  (m.planes||[]).forEach(p=>{s+=`<path class="${p[1]||'plane'} zp" d="M${p[0].map(sc).join(' L')} Z"/>`;});
+  (m.polys||[]).forEach(p=>{s+=`<path class="${p[1]||'sec'} zp" d="M${p[0].map(n=>sc(P3(n))).join(' L')} Z"/>`;});
+  (m.lines||[]).forEach(l=>{s+=W(l[0],l[1],l[2]||'');});
+  const segs=(m.segs||[]).map(e=>{
+    const a=P3(e[0]),b=P3(e[1]),cls=e[2]||'';let vis=true;
+    if(e[3]!=='free'){const fs=faces.filter(f=>onF(a,f)&&onF(b,f));vis=fs.length?fs.some(f=>f.front):!m.solid;}
+    return{a,b,cls:vis?cls:(cls?cls+' dash':'so dash'),vis,d:(depth(a)+depth(b))/2};
+  });
+  segs.filter(e=>!e.vis).forEach(e=>{s+=W(e.a,e.b,e.cls);});
+  segs.filter(e=>e.vis).forEach(e=>{s+=W(e.a,e.b,e.cls);});
+  const gs=sc(g);
+  (m.show||[]).forEach(n=>{
+    const q=sc(P3(n)),o=(m.off&&m.off[n])||null;
+    let dx,dy;if(o){[dx,dy]=o;}else{const vx=q[0]-gs[0],vy=q[1]-gs[1],L=Math.hypot(vx,vy)||1;dx=vx/L*40;dy=vy/L*40;}
+    s+=`<circle class="pt" cx="${q[0]}" cy="${q[1]}" r="7"/><text class="zl" x="${q[0]+dx}" y="${q[1]+dy+12}" text-anchor="middle">${n}</text>`;
+  });
+  (m.dots||[]).forEach(d=>{const q=sc(d[0]);s+=`<circle class="pt" cx="${q[0]}" cy="${q[1]}" r="7"/>`;if(d[1])s+=`<text class="zl" x="${q[0]+(d[2]||0)}" y="${q[1]+(d[3]||0)}" text-anchor="middle">${d[1]}</text>`;});
+  (m.labels||[]).forEach(l=>{const q=sc(l[0]);s+=`<text class="${l[4]||'zl'}" x="${q[0]+(l[2]||0)}" y="${q[1]+(l[3]||0)}" text-anchor="middle">${l[1]}</text>`;});
+  return s+`</svg>`;
+}
+const pLim=()=>M3[zName]&&M3[zName].solid?[-70,85]:[6,85];
+function draw3(){const[a,b]=pLim();zPitch=Math.max(a,Math.min(b,zPitch));zmFig.innerHTML=render3D(M3[zName],zYaw,zPitch);}
+function setAuto(on){zAuto=on;cancelAnimationFrame(zRaf);zmBar.querySelector('[data-v="auto"]').classList.toggle('on',on);
+  if(on){const step=()=>{zYaw+=0.45;draw3();zRaf=requestAnimationFrame(step);};zRaf=requestAnimationFrame(step);}}
+function openZoom(name){
+  zName=name;zoom.hidden=false;const m=M3[name];
+  if(m){[zYaw,zPitch]=m.view||[-25,22];draw3();zmBar.hidden=false;zmHint.textContent='Kéo trên hình để xoay · Bấm vào hình để thu nhỏ';}
+  else{zmFig.innerHTML=FIG[name]();zmBar.hidden=true;zmHint.textContent='Bấm vào hình để thu nhỏ';}
+}
+function closeZoom(){if(zAuto)setAuto(false);zoom.hidden=true;zName=null;zmFig.innerHTML='';}
+host.addEventListener('click',e=>{
+  if(stage.classList.contains('pen'))return;
+  const f=e.target.closest('.fig[data-fig]');if(f){e.stopPropagation();openZoom(f.dataset.fig);}
+},true);
+let zDrag=null;
+zmFig.addEventListener('pointerdown',e=>{zDrag={x:e.clientX,y:e.clientY,moved:false};try{zmFig.setPointerCapture(e.pointerId);}catch(_){}});
+zmFig.addEventListener('pointermove',e=>{
+  if(!zDrag||!M3[zName])return;
+  const dx=e.clientX-zDrag.x,dy=e.clientY-zDrag.y;
+  if(!zDrag.moved&&Math.hypot(dx,dy)<6)return;
+  if(!zDrag.moved){zDrag.moved=true;if(zAuto)setAuto(false);}
+  zYaw-=dx*0.5;zPitch+=dy*0.4;zDrag.x=e.clientX;zDrag.y=e.clientY;draw3();
+});
+zmFig.addEventListener('pointerup',()=>{const d=zDrag;zDrag=null;if(d&&!d.moved)closeZoom();});
+zmBar.addEventListener('click',e=>{
+  const b=e.target.closest('[data-v]');if(!b||!M3[zName])return;const v=b.dataset.v,m=M3[zName];
+  if(v==='auto')setAuto(!zAuto);
+  else if(v==='goc'){if(zAuto)setAuto(false);[zYaw,zPitch]=m.view||[-25,22];draw3();}
+  else if(v==='tren'){zPitch=84;draw3();}
+  else if(v==='ngang'){zPitch=m.solid?4:8;draw3();}
+  else if(v==='thu')closeZoom();
+  b.blur();
+});
+function zoomKey(e){
+  const k=e.key;e.preventDefault();
+  if(k==='Escape'||k==='Enter'||k==='z'||k==='Z'){closeZoom();return;}
+  if(!M3[zName])return;
+  if(k==='ArrowLeft'){zYaw+=10;draw3();}
+  else if(k==='ArrowRight'){zYaw-=10;draw3();}
+  else if(k==='ArrowUp'){zPitch+=6;draw3();}
+  else if(k==='ArrowDown'){zPitch-=6;draw3();}
+  else if(k===' ')setAuto(!zAuto);
+  else if(k==='r'||k==='R'){[zYaw,zPitch]=M3[zName].view||[-25,22];draw3();}
+}
+
+go(0);
+
+/* công thức */
+if(window.MathJax&&MathJax.startup&&MathJax.startup.promise){
+  MathJax.startup.promise.then(()=>MathJax.typesetPromise([stage])).then(()=>autoFit(slides[cur])).catch(()=>{});
+}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>autoFit(slides[cur]));
+})();
+</script>
+</body>
+</html>
