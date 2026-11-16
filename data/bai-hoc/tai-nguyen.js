@@ -33,3 +33,8 @@ BaiHoc.taiNguyen(10, 11, [
     mo_ta: "Bài trình chiếu ôn dạng toán Toán 10 – Bài 11 SGK Kết nối tri thức: tích vô hướng của hai vectơ (không dùng tọa độ), kiến thức có hình minh hoạ, 4 dạng toán có cách làm, ví dụ và luyện tập ngay.",
     file: 'tuong-tac/lop10-b11-tich-vo-huong-cua-hai-vecto-dang-toan.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
 ]);
+BaiHoc.taiNguyen(11, 13, [
+  { ten: "Dạng toán hai mặt phẳng song song",
+    mo_ta: "Bài trình chiếu ôn dạng toán Toán 11 – Bài 13 SGK Kết nối tri thức: hai mặt phẳng song song, định lí Thalès, hình lăng trụ và hình hộp; kiến thức trọng tâm có hình minh hoạ, 4 dạng toán có cách làm, ví dụ và luyện tập ngay.",
+    file: 'tuong-tac/lop11-b13-hai-mat-phang-song-song-dang-toan.html', nguon: "Bài dạy của thầy Vũ Tiến Lực" },
+]);
